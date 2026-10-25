@@ -4,6 +4,8 @@
 #
 # Uso:  live/prepare-stick.sh diskN            (CANCELLA diskN: deve essere un disco USB esterno)
 #       DRY_RUN=1 live/prepare-stick.sh diskN  (solo controlli, nessuna scrittura)
+#
+# Documentazione: docs/chiavetta-live.md
 
 set -euo pipefail
 

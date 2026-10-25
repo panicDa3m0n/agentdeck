@@ -2,6 +2,8 @@
 # Rifinitura dopo il primo avvio del sistema installato. Si esegue come "agent" via SSH:
 #   ssh agentdeck 'bash -s' < install/post-install.sh
 # Da lanciare solo dopo aver verificato che l'accesso SSH di "agent" funziona.
+#
+# Documentazione: docs/installazione.md
 
 set -euo pipefail
 

@@ -91,3 +91,23 @@
 {"at": "2026-10-25 16:12", "testo": "VERSIONE 0.1.3 (O1.T3)"}
 {"at": "2026-10-25 16:12", "testo": "[-] bash: ~/claude-rules/bin/wf.sh task-close --done \"inetutils installato con pacman (snapshot pre 5 e post 6 da snap-p"}
 {"at": "2026-10-25 16:12", "testo": "[-] Edit  CHANGELOG.md", "task": "-", "tipo": "file", "tool": "Edit", "file": "CHANGELOG.md"}
+{"at": "2026-10-25 16:13", "testo": "[-] bash: printf '0.1.3\\n' > VERSION && git add -A && git commit -q -F - <<'EOF' Versione 0.1.3: comando hostname dispon"}
+{"at": "2026-10-25 16:13", "testo": "TASK APERTA O1.T4 — Documentazione di base del progetto, indicizzata e collegata al codice | perimetro: README.md, docs/, intestazioni degli script in live/ e install/ | gate: README.md con panoramica e link; docs/README.md come indice; documenti per principi, chiavetta live, installazione e accesso alla Deck; ogni script in live/ e install/ rimanda al suo documento e ogni documento rimanda agli script; tutto pubblicato sul remote. | rischio: 5"}
+{"at": "2026-10-25 16:13", "testo": "PERIMETRO ESTESO su O1.T4 (+PRINCIPI.md)"}
+{"at": "2026-10-25 16:14", "testo": "[O1.T4] Write  README.md", "task": "O1.T4", "tipo": "file", "tool": "Write", "file": "README.md"}
+{"at": "2026-10-25 16:14", "testo": "[O1.T4] Write  docs/README.md", "task": "O1.T4", "tipo": "file", "tool": "Write", "file": "docs/README.md"}
+{"at": "2026-10-25 16:14", "testo": "[O1.T4] Write  docs/hardware.md", "task": "O1.T4", "tipo": "file", "tool": "Write", "file": "docs/hardware.md"}
+{"at": "2026-10-25 16:14", "testo": "[O1.T4] Write  docs/chiavetta-live.md", "task": "O1.T4", "tipo": "file", "tool": "Write", "file": "docs/chiavetta-live.md"}
+{"at": "2026-10-25 16:14", "testo": "[O1.T4] Write  docs/installazione.md", "task": "O1.T4", "tipo": "file", "tool": "Write", "file": "docs/installazione.md"}
+{"at": "2026-10-25 16:15", "testo": "[O1.T4] Write  docs/accesso.md", "task": "O1.T4", "tipo": "file", "tool": "Write", "file": "docs/accesso.md"}
+{"at": "2026-10-25 16:15", "testo": "[O1.T4] Write  docs/sviluppo.md", "task": "O1.T4", "tipo": "file", "tool": "Write", "file": "docs/sviluppo.md"}
+{"at": "2026-10-25 16:15", "testo": "[O1.T4] Edit  PRINCIPI.md", "task": "O1.T4", "tipo": "file", "tool": "Edit", "file": "PRINCIPI.md"}
+{"at": "2026-10-25 16:15", "testo": "[O1.T4] Edit  PRINCIPI.md", "task": "O1.T4", "tipo": "file", "tool": "Edit", "file": "PRINCIPI.md"}
+{"at": "2026-10-25 16:15", "testo": "[O1.T4] Edit  PRINCIPI.md", "task": "O1.T4", "tipo": "file", "tool": "Edit", "file": "PRINCIPI.md"}
+{"at": "2026-10-25 16:15", "testo": "[O1.T4] Edit  live/prepare-stick.sh", "task": "O1.T4", "tipo": "file", "tool": "Edit", "file": "live/prepare-stick.sh"}
+{"at": "2026-10-25 16:15", "testo": "[O1.T4] Edit  live/live-setup.sh", "task": "O1.T4", "tipo": "file", "tool": "Edit", "file": "live/live-setup.sh"}
+{"at": "2026-10-25 16:15", "testo": "[O1.T4] Edit  install/install.sh", "task": "O1.T4", "tipo": "file", "tool": "Edit", "file": "install/install.sh"}
+{"at": "2026-10-25 16:15", "testo": "[O1.T4] Edit  install/post-install.sh", "task": "O1.T4", "tipo": "file", "tool": "Edit", "file": "install/post-install.sh"}
+{"at": "2026-10-25 16:15", "testo": "PERIMETRO ESTESO su O1.T4 (+live/*.sh)"}
+{"at": "2026-10-25 16:15", "testo": "PERIMETRO ESTESO su O1.T4 (+install/*.sh)"}
+{"at": "2026-10-25 16:16", "testo": "[O1.T4] bash: bash -c ' broken=0; n=0 for f in README.md PRINCIPI.md CHANGELOG.md docs/*.md; do   d=$(dirname \"$f\")   for l "}

@@ -4,6 +4,8 @@
 # Uso:  install.sh <fase>
 # Fasi, in ordine: check | disk | base | config | boot | verify | finish
 # "check" e "verify" sono in sola lettura. "disk" CANCELLA il disco e richiede CONFIRM=nvme0n1.
+#
+# Documentazione: docs/installazione.md
 
 set -euo pipefail
 

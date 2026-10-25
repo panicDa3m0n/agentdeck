@@ -10,10 +10,11 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O1` Base operativa affidabile per l'agente — 4 task: 3 completate, 0 in corso, 1 da fare, 0 bloccate
-- **Task attiva:** —
+- **Obiettivo attivo:** `O1` Base operativa affidabile per l'agente — 4 task: 3 completate, 1 in corso, 0 da fare, 0 bloccate
+- **Task attiva:** `O1.T4` Documentazione di base del progetto, indicizzata e collegata al codice — in corso · rischio 5/100
 - **Ultima task gestita:** `O1.T3` — completata — inetutils installato con pacman (snapshot pre 5 e post 6 da snap-pac); hostname restituisce agentdeck; pacchetto aggiunto a install/install.sh.
-- **Ultimo aggiornamento:** 2026-10-25 16:12
+- **Fase:** `in_progress`
+- **Ultimo aggiornamento:** 2026-10-25 16:15
 
 ## Richieste attive
 
@@ -35,8 +36,9 @@ _nessuna richiesta in attesa._
 - [x] `O1.T3` Comandi di base attesi dagli agenti — *perimetro:* `pacchetti sulla Deck, install/install.sh`
   *gate previsto:* hostname restituisce agentdeck; il pacchetto è installato con pacman e snapper mostra gli snapshot pre e post dell'installazione; il pacchetto è aggiunto all'elenco di install/install.sh. · *gate confermato:* ✔ inetutils installato con pacman (snapshot pre 5 e post 6 da snap-pac); hostname restituisce agentdeck; pacchetto aggiunto a install/install.sh.
   *rischio:* 10/100 — Installa un piccolo pacchetto ufficiale (inetutils, che fornisce hostname) con pacman: snap-pac crea da solo gli snapshot prima e dopo (INV-3) e non tocca rete, SSH o avvio.
-- [ ] `O1.T4` Documentazione di base del progetto, indicizzata e collegata al codice — *perimetro:* `README.md, docs/, intestazioni degli script in live/ e install/`
+- [~] `O1.T4` Documentazione di base del progetto, indicizzata e collegata al codice — *perimetro:* `README.md, docs/, intestazioni degli script in live/ e install/, PRINCIPI.md, live/*.sh, install/*.sh`
   *gate previsto:* README.md con panoramica e link; docs/README.md come indice; documenti per principi, chiavetta live, installazione e accesso alla Deck; ogni script in live/ e install/ rimanda al suo documento e ogni documento rimanda agli script; tutto pubblicato sul remote.
+  *rischio:* 5/100 — Solo documentazione e commenti di intestazione negli script: nessuna modifica al comportamento del codice né alla Deck.
   *annotazioni:* `N2`, `N3`, `N4`
 
 ### `O2` Protocollo dell'interfaccia agentica: schermate interattive e autoprompting — in corso

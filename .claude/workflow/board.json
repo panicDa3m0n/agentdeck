@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-25 15:54",
-  "updated": "2026-10-25 16:12",
+  "updated": "2026-10-25 16:15",
   "objectives": [
     {
       "id": "O1",
@@ -48,12 +48,12 @@
         {
           "id": "O1.T4",
           "title": "Documentazione di base del progetto, indicizzata e collegata al codice",
-          "scope": "README.md, docs/, intestazioni degli script in live/ e install/",
+          "scope": "README.md, docs/, intestazioni degli script in live/ e install/, PRINCIPI.md, live/*.sh, install/*.sh",
           "gate_pre": "README.md con panoramica e link; docs/README.md come indice; documenti per principi, chiavetta live, installazione e accesso alla Deck; ogni script in live/ e install/ rimanda al suo documento e ogni documento rimanda agli script; tutto pubblicato sul remote.",
           "gate_post": "",
-          "state": "todo",
-          "risk": null,
-          "risk_why": "",
+          "state": "doing",
+          "risk": 5,
+          "risk_why": "Solo documentazione e commenti di intestazione negli script: nessuna modifica al comportamento del codice né alla Deck.",
           "docs": []
         }
       ]
@@ -165,10 +165,10 @@
   ],
   "active": {
     "objective": "O1",
-    "task": "",
-    "phase": "idle",
-    "risk": null,
-    "risk_why": "",
+    "task": "O1.T4",
+    "phase": "in_progress",
+    "risk": 5,
+    "risk_why": "Solo documentazione e commenti di intestazione negli script: nessuna modifica al comportamento del codice né alla Deck.",
     "hold_invariants": "",
     "hold_plan": ""
   },

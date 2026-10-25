@@ -2,6 +2,8 @@
 # Avvio live di Arch sulla Steam Deck: collega il Wi-Fi, abilita SSH con la chiave dell'agente
 # e mostra a schermo come raggiungere la macchina. Non tocca il disco interno.
 # Lo esegue l'ISO ufficiale su tty1 grazie al parametro di boot script=.
+#
+# Documentazione: docs/chiavetta-live.md
 
 set -u
 AGENT_DIR=/run/archiso/bootmnt/agent
