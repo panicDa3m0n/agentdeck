@@ -4,6 +4,18 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.1.12 — 2026-10-25
+
+Ciclo 01, task O3.T3: rollback con anteprima e conferma.
+
+- `deck snapshot rollback id=N` mostra prima un'anteprima: pacchetti rimossi, che tornano o che cambiano
+  versione, controllo dell'accesso SSH e della versione di GRUB nello snapshot di destinazione.
+- Con il codice di conferma: salva lo stato attuale come snapshot, sostituisce il subvolume `@` con una copia
+  dello snapshot (rimettendo subito tutto com'era se un passo fallisce) e riavvia dopo 10 secondi.
+- Rifiuta gli snapshot da cui la Deck ripartirebbe senza accesso SSH o con un GRUB diverso.
+- Prova reale sulla Deck: modifica di prova annullata, Deck tornata in 44 secondi, stato precedente
+  recuperabile nello snapshot 18. 67 test.
+
 ## 0.1.11 — 2026-10-25
 
 Ciclo 01, task O3.T2: componente `deck snapshot`, elenco e creazione.

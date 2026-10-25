@@ -383,3 +383,7 @@
 {"at": "2026-10-25 18:10", "testo": "[O3.T3] Edit  docs/accesso.md", "task": "O3.T3", "tipo": "file", "tool": "Edit", "file": "docs/accesso.md"}
 {"at": "2026-10-25 18:10", "testo": "[O3.T3] Edit  docs/accesso.md", "task": "O3.T3", "tipo": "file", "tool": "Edit", "file": "docs/accesso.md"}
 {"at": "2026-10-25 18:10", "testo": "[O3.T3] Edit  docs/accesso.md", "task": "O3.T3", "tipo": "file", "tool": "Edit", "file": "docs/accesso.md"}
+{"at": "2026-10-25 18:10", "testo": "TASK CHIUSA O3.T3 — completata: Rollback provato: snap 15, modifica di prova, anteprima, conferma, Deck tornata in 44 s senza la modifica; stato prima nello snap 18; 67 test."}
+{"at": "2026-10-25 18:10", "testo": "VERSIONE 0.1.12 (O3.T3)"}
+{"at": "2026-10-25 18:11", "testo": "[-] bash: bash -c 'b=0; for f in README.md PRINCIPI.md CHANGELOG.md docs/*.md; do d=$(dirname \"$f\"); for l in $(grep -oE"}
+{"at": "2026-10-25 18:11", "testo": "[-] Edit  CHANGELOG.md", "task": "-", "tipo": "file", "tool": "Edit", "file": "CHANGELOG.md"}

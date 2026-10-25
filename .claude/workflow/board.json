@@ -138,8 +138,8 @@
           "title": "Rollback con anteprima e conferma",
           "scope": "deck/, componente snapshot, subvolumi Btrfs sulla Deck, docs/deck.md, docs/accesso.md",
           "gate_pre": "Prova reale: dopo snapshot e modifica di prova, il rollback mostra l'anteprima delle conseguenze, si conferma con il codice, la Deck riavvia nello stato salvato, la modifica di prova è sparita e ssh agentdeck funziona; lo stato precedente resta recuperabile come snapshot.",
-          "gate_post": "",
-          "state": "doing",
+          "gate_post": "Rollback provato: snap 15, modifica di prova, anteprima, conferma, Deck tornata in 44 s senza la modifica; stato prima nello snap 18; 67 test.",
+          "state": "done",
           "risk": 60,
           "risk_why": "Sostituisce il subvolume del sistema in uso con uno snapshot e riavvia: un errore può lasciare la Deck non avviabile o senza accesso SSH (INV-1). Mitigazioni: snapshot dello stato attuale prima, scambio con ripristino immediato se un passo fallisce, verifica dell'accesso e di GRUB nello snapshot di destinazione, prova reale su uno snapshot appena creato; chiavetta di recupero pronta.",
           "docs": []
@@ -244,18 +244,18 @@
   ],
   "active": {
     "objective": "O3",
-    "task": "O3.T3",
-    "phase": "in_progress",
-    "risk": 60,
-    "risk_why": "Sostituisce il subvolume del sistema in uso con uno snapshot e riavvia: un errore può lasciare la Deck non avviabile o senza accesso SSH (INV-1). Mitigazioni: snapshot dello stato attuale prima, scambio con ripristino immediato se un passo fallisce, verifica dell'accesso e di GRUB nello snapshot di destinazione, prova reale su uno snapshot appena creato; chiavetta di recupero pronta.",
+    "task": "",
+    "phase": "objective_gate_pending",
+    "risk": null,
+    "risk_why": "",
     "hold_invariants": "",
     "hold_plan": "",
     "gate_done": ""
   },
   "previous": {
-    "task": "O3.T2",
+    "task": "O3.T3",
     "state": "done",
-    "note": "deck snapshot: elenco identico a snapper (1-13), snapshot 14 creato da deck in snapper e nel menu GRUB dopo 7 s; in_grub; 56 test."
+    "note": "Rollback provato: snap 15, modifica di prova, anteprima, conferma, Deck tornata in 44 s senza la modifica; stato prima nello snap 18; 67 test."
   },
   "cycle": {
     "n": 1,
