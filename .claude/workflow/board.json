@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-25 19:02",
-  "updated": "2026-10-25 19:59",
+  "updated": "2026-10-25 20:06",
   "objectives": [
     {
       "id": "O4",
@@ -84,9 +84,9 @@
           "scope": "deck/, componente update, pacchetti sulla Deck, install/install.sh",
           "gate_pre": "deck update elenca gli aggiornamenti disponibili con versione attuale e nuova e segnala kernel e GRUB (riavvio, coerenza di GRUB); l'applicazione con conferma crea gli snapshot, aggiorna, verifica servizi e accesso e indica il rollback se qualcosa non va; provato con un aggiornamento reale sulla Deck, riavvio compreso se richiesto.",
           "gate_post": "",
-          "state": "todo",
-          "risk": null,
-          "risk_why": "",
+          "state": "doing",
+          "risk": 50,
+          "risk_why": "Aggiorna pacchetti, kernel e GRUB della Deck: un aggiornamento difettoso può lasciarla non avviabile o irraggiungibile (INV-1). Mitigato da snapshot prima e dopo avviabili da GRUB, pacman in unità separata, verifica automatica, GRUB reinstallato coerente, rollback indicato; prova solo con un aggiornamento vero (scelta dell'utente).",
           "docs": []
         }
       ]
@@ -180,14 +180,35 @@
       "text": "Emerso in O5.T1 (25/10): gli snapshot creati da deck (prima di llmnr, prefer_5ghz, service enable/disable) sono single senza algoritmo di pulizia: snapper non li toglie mai e si accumulano (oggi 20-26). Serve una regola: cleanup number per quelli automatici, o una pulizia con anteprima in deck snapshot (vicino a O7.T2).",
       "docs": [],
       "created": "2026-10-25 19:50"
+    },
+    {
+      "id": "N16",
+      "task": "O6.T1",
+      "text": "Decisione dell'utente (25/10, 20:00): impostazione di deck update approvata; la prova del gate si fa solo con un aggiornamento vero di Arch (oggi la Deck è già aggiornata: core fermo al 24/10, nessun pacchetto installato con versione nuova). La task resta aperta finché non arriva il primo aggiornamento.",
+      "docs": [],
+      "created": "2026-10-25 20:01"
+    },
+    {
+      "id": "N17",
+      "task": "O6.T1",
+      "text": "Limite emerso in O6.T1 (25/10): /boot (moduli di GRUB) sta in @ e negli snapshot, l'EFI (/efi, grubx64.efi e BOOTX64.EFI) no. Dopo un aggiornamento di grub con grub-install, il rollback di deck allo snapshot di prima viene rifiutato (GRUB diverso, controllo di O3.T3): la rete di sicurezza per gli aggiornamenti di GRUB è solo lo snapshot dopo. Per il futuro: rollback che reinstalla nell'EFI il GRUB dello snapshot di destinazione.",
+      "docs": [],
+      "created": "2026-10-25 20:02"
+    },
+    {
+      "id": "N18",
+      "task": "O6.T1",
+      "text": "Avanzamento O6.T1 (25/10, 20:06): deck update implementato e installato sulla Deck (check, apply, verify, reboot), 149 test. Dal vivo: check reale in 1,4 s senza toccare il database di sistema, 0 aggiornamenti; apply non disponibile con il motivo; verify ok (5 servizi di accesso attivi, sshd -t ok, DNS ok, nessun .pacnew). Manca la prova del gate con il primo aggiornamento vero di Arch.",
+      "docs": [],
+      "created": "2026-10-25 20:06"
     }
   ],
   "active": {
-    "objective": "",
-    "task": "",
-    "phase": "idle",
-    "risk": null,
-    "risk_why": "",
+    "objective": "O6",
+    "task": "O6.T1",
+    "phase": "in_progress",
+    "risk": 50,
+    "risk_why": "Aggiorna pacchetti, kernel e GRUB della Deck: un aggiornamento difettoso può lasciarla non avviabile o irraggiungibile (INV-1). Mitigato da snapshot prima e dopo avviabili da GRUB, pacman in unità separata, verifica automatica, GRUB reinstallato coerente, rollback indicato; prova solo con un aggiornamento vero (scelta dell'utente).",
     "hold_invariants": "",
     "hold_plan": "",
     "gate_done": ""
@@ -206,6 +227,6 @@
     "objective": 7,
     "cycle": 2,
     "request": 2,
-    "note": 15
+    "note": 18
   }
 }

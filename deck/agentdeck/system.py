@@ -545,6 +545,97 @@ def journal(lines: int, include_agent: bool = False, reader=None, **filters) -> 
         fetch = min(fetch * 4, JOURNAL_FETCH_MAX)
 
 
+# ---- Aggiornamenti dei pacchetti (componente /update, task O6.T1)
+
+CHECK_DB = "/tmp/agentdeck-checkupdates"
+UPDATE_LOG = "/var/log/agentdeck/update.log"
+UPDATE_UNIT = "agentdeck-update"
+# Pacchetti che dopo l'aggiornamento chiedono un riavvio: kernel, firmware, microcodice, init, libreria C, bus
+REBOOT_PACKAGES = ("linux", "linux-lts", "amd-ucode", "systemd", "systemd-libs", "glibc", "dbus-broker",
+                   "dbus-broker-units")
+# Pacchetti da cui dipende l'accesso dell'agente (INV-1): dopo l'aggiornamento si verificano per primi
+ACCESS_PACKAGES = ("openssh", "iwd", "systemd", "systemd-libs", "dbus-broker", "openssl", "pam", "glibc")
+# Come in install/install.sh: GRUB nell'EFI con la sua voce e nel percorso di riserva, poi il menu
+GRUB_INSTALL = (["grub-install", "--target=x86_64-efi", "--efi-directory=/efi", "--bootloader-id=GRUB"],
+                ["grub-install", "--target=x86_64-efi", "--efi-directory=/efi", "--removable"],
+                ["grub-mkconfig", "-o", "/boot/grub/grub.cfg"])
+
+
+def deck_state_dir() -> Path:
+    """La cartella di stato di deck dell'utente agent, come per i codici di conferma (agentdeck/confirm.py)."""
+    base = os.environ.get("XDG_STATE_HOME") or str(Path.home() / ".local" / "state")
+    return Path(base) / "agentdeck"
+
+
+def parse_pacman_qu(text: str) -> list:
+    """Righe di `pacman -Qu`: "nome vecchia -> nuova", eventualmente con [ignored]."""
+    out = []
+    for line in text.splitlines():
+        m = re.match(r"(\S+) (\S+) -> (\S+)( \[ignored\])?$", line.strip())
+        if m:
+            out.append({"name": m.group(1), "current": m.group(2), "new": m.group(3), "ignored": bool(m.group(4))})
+    return out
+
+
+def classify_updates(updates: list) -> dict:
+    """Cosa comporta un insieme di aggiornamenti: riavvio, GRUB da reinstallare, pacchetti dell'accesso."""
+    names = {u["name"] for u in updates if not u["ignored"]}
+    reboot = sorted(n for n in names if n in REBOOT_PACKAGES or n.startswith("linux-firmware"))
+    return {"reboot_required": bool(reboot), "reboot_packages": reboot, "grub": "grub" in names,
+            "access_packages": sorted(names & set(ACCESS_PACKAGES)), "count": len(names)}
+
+
+def check_updates() -> Optional[list]:
+    """Gli aggiornamenti disponibili, come checkupdates: sincronizza una copia temporanea del database dei pacchetti,
+    così quello del sistema non cambia. None se il mirror non risponde."""
+    for cmd in (["rm", "-rf", CHECK_DB], ["install", "-d", CHECK_DB], ["ln", "-s", "/var/lib/pacman/local",
+                                                                      f"{CHECK_DB}/local"]):
+        if run(cmd, sudo=True) is None:
+            return None
+    if run(["pacman", "-Sy", "--dbpath", CHECK_DB, "--logfile", "/dev/null"], sudo=True, timeout=180) is None:
+        return None
+    r = subprocess.run(["pacman", "-Qu", "--dbpath", CHECK_DB], capture_output=True, text=True, timeout=60)
+    return parse_pacman_qu(r.stdout)  # pacman -Qu esce con 1 quando non c'è niente da aggiornare
+
+
+def apply_updates() -> tuple:
+    """pacman -Syu in un'unità transitoria, staccata dalla sessione SSH: se SSH cade l'aggiornamento continua.
+    L'output va in UPDATE_LOG, non in una pipe che si romperebbe con la sessione. Restituisce (codice, log)."""
+    run(["install", "-d", "/var/log/agentdeck"], sudo=True)
+    run(["systemctl", "reset-failed", UPDATE_UNIT], sudo=True)
+    r = subprocess.run(["sudo", "-n", "systemd-run", "--quiet", "--wait", "--collect", f"--unit={UPDATE_UNIT}",
+                        "-p", "TimeoutStartSec=3600", "/bin/sh", "-c",
+                        f"pacman -Syu --noconfirm --noprogressbar > {UPDATE_LOG} 2>&1"],
+                       capture_output=True, text=True, timeout=3700)
+    return r.returncode, run(["cat", UPDATE_LOG], sudo=True) or ""
+
+
+def reinstall_grub() -> list:
+    """Reinstalla GRUB nell'EFI e rigenera il menu dopo un aggiornamento di grub: binario e moduli restano coerenti.
+    Restituisce gli esiti dei tre comandi."""
+    out = []
+    for cmd in GRUB_INSTALL:
+        r = subprocess.run(["sudo", "-n", *cmd], capture_output=True, text=True, timeout=300)
+        out.append({"command": " ".join(cmd), "exit": r.returncode, "stderr": r.stderr.strip()[-500:]})
+    return out
+
+
+def running_kernel_modules_present() -> bool:
+    """Falso dopo un aggiornamento del kernel: i moduli del kernel in esecuzione non ci sono più, serve un riavvio."""
+    return Path(f"/usr/lib/modules/{os.uname().release}").is_dir()
+
+
+def pacnew_files() -> Optional[list]:
+    out = run(["find", "/etc", "-xdev", "-name", "*.pacnew"], sudo=True, timeout=30)
+    return sorted(out.split()) if out is not None else None
+
+
+def access_state() -> dict:
+    """I servizi dell'accesso attivi, la configurazione di sshd valida, il DNS che risponde."""
+    active = {u: (run(["systemctl", "is-active", u]) or "").strip() == "active" for u in ACCESS_SERVICES}
+    return {"services_active": active, "sshd_config_ok": sshd_config_ok(), "dns_works": dns_works()}
+
+
 def snapshots() -> Optional[dict]:
     text = run(["snapper", "--jsonout", "list"], sudo=True)
     return parse_snapper(text) if text else None
@@ -677,9 +768,9 @@ def rollback_root(snapshot_id: int, stamp: str) -> str:
     return f"@old-{stamp}"
 
 
-def schedule_reboot(seconds: int) -> bool:
+def schedule_reboot(seconds: int, unit: str = "agentdeck-rollback-reboot") -> bool:
     """Riavvia la Deck fra qualche secondo, così la risposta di deck arriva prima."""
-    return run(["systemd-run", "--quiet", f"--on-active={int(seconds)}", "--unit=agentdeck-rollback-reboot",
+    return run(["systemd-run", "--quiet", f"--on-active={int(seconds)}", f"--unit={unit}",
                 "systemctl", "reboot"], sudo=True) is not None
 
 

@@ -10,10 +10,11 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** —
-- **Task attiva:** —
+- **Obiettivo attivo:** `O6` Aggiornamenti sicuri: deck update — 1 task: 0 completate, 1 in corso, 0 da fare, 0 bloccate
+- **Task attiva:** `O6.T1` Componente update: anteprima, applicazione e verifica degli aggiornamenti — in corso · rischio 50/100
 - **Ultima task gestita:** `O5.T2` — completata — deck logs: filtri per unità, periodo, gravità uguali a journalctl -o json, traccia agente esclusa, riga malevola solo nei dati, link da service; 11/11, 134 test
-- **Ultimo aggiornamento:** 2026-10-25 19:59
+- **Fase:** `in_progress`
+- **Ultimo aggiornamento:** 2026-10-25 20:06
 
 ## Richieste attive
 
@@ -51,8 +52,10 @@ _nessuna richiesta in attesa._
 
 **Gate obiettivo:** Un aggiornamento reale del sistema fatto da deck update: anteprima dei pacchetti, snapshot prima e dopo, verifica automatica dopo l'applicazione, rollback indicato se la verifica fallisce; la Deck resta raggiungibile, anche dopo il riavvio se l'aggiornamento lo richiede.
 
-- [ ] `O6.T1` Componente update: anteprima, applicazione e verifica degli aggiornamenti — *perimetro:* `deck/, componente update, pacchetti sulla Deck, install/install.sh`
+- [~] `O6.T1` Componente update: anteprima, applicazione e verifica degli aggiornamenti — *perimetro:* `deck/, componente update, pacchetti sulla Deck, install/install.sh`
   *gate previsto:* deck update elenca gli aggiornamenti disponibili con versione attuale e nuova e segnala kernel e GRUB (riavvio, coerenza di GRUB); l'applicazione con conferma crea gli snapshot, aggiorna, verifica servizi e accesso e indica il rollback se qualcosa non va; provato con un aggiornamento reale sulla Deck, riavvio compreso se richiesto.
+  *rischio:* 50/100 — Aggiorna pacchetti, kernel e GRUB della Deck: un aggiornamento difettoso può lasciarla non avviabile o irraggiungibile (INV-1). Mitigato da snapshot prima e dopo avviabili da GRUB, pacman in unità separata, verifica automatica, GRUB reinstallato coerente, rollback indicato; prova solo con un aggiornamento vero (scelta dell'utente).
+  *annotazioni:* `N16`, `N17`, `N18`
 
 ### `O7` Schermo leggibile e compatto, sistema pulito: deck screen — in corso
 
@@ -72,3 +75,6 @@ _Una riga per nota, sempre legata a una task. `wf.sh notes` per leggerle._
 - `N13` (`O4.T2`) Valutazione d'impatto O4.T2: INV-1 retto (profilo 2,4 GHz tenuto come riserva, ritorno automatico provato, riavvio Deck ok in 30 s, IP .49 invariato). Un rollback a uno snapshot precedente al 19:32 riporta la Deck sui 2,4 GHz, ancora raggiungibile. Una reinstallazione spegne LLMNR e preferisce i 5 GHz, ma il profilo 5 GHz va ricreato con prefer_5ghz. La password resta sulla Deck in file root 600, mai stampata (INV-6). Nessun effetto su snapshot, schermo, ssh. — 2026-10-25 19:35
 - `N14` (`O4.T2`) Per una roadmap futura, approvato dall'utente il 25/10: componente deck secrets per i segreti che vengono da fuori (prima la chiave API dell'agente interno). L'agente chiede il segreto con nome e scopo; l'umano lo consegna da un canale laterale, mai dalla chat: file in secrets/ inviato via pipe con ssh, pagina usa e getta sulla LAN aperta da un QR sullo schermo della Deck, più avanti un gestore di password con token revocabile. Conservato cifrato sulla Deck (systemd-creds, TPM se attivo); l'agente vede solo nomi e metadati, mai il valore; il valore va diretto a chi lo usa (LoadCredential), ogni uso registrato. — 2026-10-25 19:44
 - `N15` (`O5.T1`) Emerso in O5.T1 (25/10): gli snapshot creati da deck (prima di llmnr, prefer_5ghz, service enable/disable) sono single senza algoritmo di pulizia: snapper non li toglie mai e si accumulano (oggi 20-26). Serve una regola: cleanup number per quelli automatici, o una pulizia con anteprima in deck snapshot (vicino a O7.T2). — 2026-10-25 19:50
+- `N16` (`O6.T1`) Decisione dell'utente (25/10, 20:00): impostazione di deck update approvata; la prova del gate si fa solo con un aggiornamento vero di Arch (oggi la Deck è già aggiornata: core fermo al 24/10, nessun pacchetto installato con versione nuova). La task resta aperta finché non arriva il primo aggiornamento. — 2026-10-25 20:01
+- `N17` (`O6.T1`) Limite emerso in O6.T1 (25/10): /boot (moduli di GRUB) sta in @ e negli snapshot, l'EFI (/efi, grubx64.efi e BOOTX64.EFI) no. Dopo un aggiornamento di grub con grub-install, il rollback di deck allo snapshot di prima viene rifiutato (GRUB diverso, controllo di O3.T3): la rete di sicurezza per gli aggiornamenti di GRUB è solo lo snapshot dopo. Per il futuro: rollback che reinstalla nell'EFI il GRUB dello snapshot di destinazione. — 2026-10-25 20:02
+- `N18` (`O6.T1`) Avanzamento O6.T1 (25/10, 20:06): deck update implementato e installato sulla Deck (check, apply, verify, reboot), 149 test. Dal vivo: check reale in 1,4 s senza toccare il database di sistema, 0 aggiornamenti; apply non disponibile con il motivo; verify ok (5 servizi di accesso attivi, sshd -t ok, DNS ok, nessun .pacnew). Manca la prova del gate con il primo aggiornamento vero di Arch. — 2026-10-25 20:06

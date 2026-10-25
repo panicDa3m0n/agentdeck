@@ -26,6 +26,7 @@ Sulla Deck una chiamata dura circa 0,09 secondi (Python 3.14, misura del 25/10/2
 | `/network` | [../deck/agentdeck/components/network.py](../deck/agentdeck/components/network.py) | Rete: interfacce, Wi-Fi e reti visibili, risoluzione dei nomi, porte (vedi sotto) |
 | `/service` | [../deck/agentdeck/components/service.py](../deck/agentdeck/components/service.py) | Servizi di systemd: elenco, dettaglio, start, stop, restart, enable, disable (vedi sotto) |
 | `/logs` | [../deck/agentdeck/components/logs.py](../deck/agentdeck/components/logs.py) | Journal di systemd: righe per unità, periodo e gravità (vedi sotto) |
+| `/update` | [../deck/agentdeck/components/update.py](../deck/agentdeck/components/update.py) | Aggiornamenti del sistema: controllo, applicazione con snapshot e verifica, riavvio (vedi sotto) |
 
 ### `/network`: rete
 
@@ -186,6 +187,57 @@ una riga malevola con `logger` per verificare che resti nei dati:
 ssh agentdeck python /opt/agentdeck/tests/live_logs_check.py
 ```
 
+### `/update`: aggiornamenti del sistema
+
+| Azione | Effetto | Cosa fa |
+|---|---|---|
+| (schermata) | — | L'ultimo controllo salvato, con l'età (`data.checked`, `data.age_s`); stato del kernel; ultimo aggiornamento |
+| `check` | read | Gli aggiornamenti disponibili, come `checkupdates`: sincronizza una copia del database dei pacchetti in `/tmp/agentdeck-checkupdates`, quello del sistema non cambia. Circa 1,5 secondi |
+| `apply` | destructive | Anteprima con i pacchetti e cosa comportano, poi l'aggiornamento (sotto) |
+| `verify` | read | Servizi dell'accesso attivi, `sshd -t`, DNS, servizi falliti, file `.pacnew`, moduli del kernel in uso |
+| `reboot` | destructive | Riavvio dopo 10 secondi, disponibile quando un aggiornamento lo aspetta |
+
+`data.summary` dice cosa comporta un insieme di aggiornamenti
+([../deck/agentdeck/system.py](../deck/agentdeck/system.py), `classify_updates`):
+- **riavvio** per kernel (`linux`, `linux-lts`), firmware (`linux-firmware*`), `amd-ucode`, `systemd`, `glibc` e
+  `dbus-broker`;
+- **GRUB** quando si aggiorna `grub`;
+- **accesso** per `openssh`, `iwd`, `systemd`, `dbus-broker`, `openssl`, `pam` e `glibc`.
+
+**Applicazione.**
+1. Nuovo controllo: l'anteprima e l'applicazione partono dallo stato del mirror in quel momento.
+2. Snapshot prima (`agentdeck: prima di update`); se non si crea, non cambia niente.
+3. `pacman -Syu --noconfirm` nell'unità transitoria `agentdeck-update`, con l'output in
+   `/var/log/agentdeck/update.log`: se SSH cade l'aggiornamento continua, perché non scrive in una pipe legata
+   alla sessione. Gli snapshot pre e post di snap-pac si aggiungono come sempre.
+4. Se `grub` è stato aggiornato: `grub-install` nell'EFI (voce GRUB e percorso di riserva), poi
+   `grub-mkconfig`, con gli stessi comandi di [../install/install.sh](../install/install.sh). Binario e moduli
+   restano coerenti; un test controlla che i comandi coincidano con l'installatore.
+5. Snapshot dopo (`agentdeck: dopo update`).
+6. Verifica. Bloccano l'esito un servizio dell'accesso fermo, `sshd -t` che fallisce, il DNS che non risponde e
+   servizi falliti nuovi; sono solo segnalati il riavvio necessario e i file `.pacnew`.
+
+Se pacman, GRUB o la verifica falliscono, la risposta è `FAILED`, con il risultato, i problemi e le ultime 60
+righe di pacman nei dati. Indica il rollback allo snapshot di prima e dice di non riavviare.
+
+**Limite con GRUB.** `/boot`, con i moduli di GRUB, sta negli snapshot; l'EFI no. Dopo un aggiornamento di
+`grub`, `deck snapshot rollback` rifiuta gli snapshot di prima perché hanno un GRUB diverso: resta solo lo
+snapshot dopo. L'anteprima lo dice.
+
+Dopo un aggiornamento che chiede il riavvio compare l'avviso `REBOOT_REQUIRED`, che punta a `reboot`. L'avviso
+resta finché il kernel in uso non ha più i moduli installati o finché la Deck non si è riavviata dopo
+l'aggiornamento. Poi `deck update verify` conferma lo stato.
+
+| Avviso | Livello | Azione collegata |
+|---|---|---|
+| `UPDATES_UNCHECKED` | info | `check`, se l'ultimo controllo ha più di 24 ore |
+| `UPDATES_AVAILABLE` | info | `apply` |
+| `REBOOT_REQUIRED` | warning | `reboot` |
+
+Il controllo salvato e l'ultimo aggiornamento stanno in `~/.local/state/agentdeck/` (`updates.json`,
+`last-update.json`) dell'utente `agent`. Nomi, versioni e output di pacman sono testo esterno: stanno solo nei
+dati (INV-4).
+
 ### `/snapshot`: snapshot del sistema
 
 L'equivalente di Time Machine, sopra Snapper e grub-btrfs.
@@ -310,6 +362,7 @@ hanno ancora un'azione collegata.
 | [../deck/tests/live_service_check.py](../deck/tests/live_service_check.py) | Controllo dal vivo di `deck service` contro `systemctl`, con un servizio di prova |
 | [../deck/tests/test_logs.py](../deck/tests/test_logs.py) | Test di `/logs`: righe reali del journal, traccia dell'agente esclusa, filtri, righe malevole, collegamento da `/service` |
 | [../deck/tests/live_logs_check.py](../deck/tests/live_logs_check.py) | Controllo dal vivo di `deck logs` contro `journalctl -o json`, con una riga malevola |
+| [../deck/tests/test_update.py](../deck/tests/test_update.py) | Test di `/update`: `pacman -Qu`, riavvio e GRUB, anteprima, snapshot, verifica, rollback indicato, testo esterno |
 | [../deck/tests/live_status_check.py](../deck/tests/live_status_check.py) | Controllo dal vivo sulla Deck: ogni valore di `deck status` contro una lettura indipendente |
 | [../deck/install.sh](../deck/install.sh) | Installazione e aggiornamento sulla Deck, schermo compreso |
 | [../deck/screen/](../deck/screen/agentdeck_screen.py) | Schermo della Deck: registrazione dei comandi, visualizzatore, servizio ([schermo.md](schermo.md)) |
