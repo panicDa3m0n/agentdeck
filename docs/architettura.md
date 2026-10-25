@@ -36,7 +36,7 @@ Ogni proposta si misura con i due principi del progetto:
 2. [Init, servizi e interfacce del sistema](#2-init-servizi-e-interfacce-del-sistema) (O8.T2)
 3. [Identità, permessi, isolamento e segreti](#3-identità-permessi-isolamento-e-segreti) (O8.T3)
 4. [Stato del sistema, software e snapshot](#4-stato-del-sistema-software-e-snapshot) (O8.T4)
-5. Eventi, log e osservabilità (O8.T5)
+5. [Eventi, log e osservabilità](#5-eventi-log-e-osservabilità) (O8.T5)
 6. L'harness dell'agente (O8.T6)
 7. Sintesi: architettura proposta e decisioni (O8.T7)
 
@@ -339,3 +339,73 @@ Misure del 25/10/2026:
   bisogno, sapere e ripristinare lo stato del sistema. A4.3 resta dentro Arch com'è; A4.8 cambia la forma del
   sistema.
 - **A4.1** è indipendente e si può fare per primo.
+
+---
+
+## 5. Eventi, log e osservabilità
+
+### 5.1 Come funziona oggi
+
+Misure del 25/10/2026:
+
+| Fonte | Stato sulla Deck |
+|---|---|
+| **Journal** | Persistente, 32 MB. Circa **1.658 righe all'ora**, di cui 462 (28%) sono la traccia dei comandi dell'agente scritta dallo schermo. Solo il **42% delle righe ha un `MESSAGE_ID`** del catalogo di systemd, cioè un evento riconoscibile da una macchina (unità avviata, fermata, fallita); il resto è prosa. `journalctl -o json` e `-f` permettono lettura e flusso; l'interfaccia varlink `io.systemd.JournalAccess` è riservata a root |
+| **Segnali D-Bus** | systemd (`UnitNew`, `JobRemoved`, `PropertiesChanged`), networkd, logind, iwd. A riposo il sistema è silenzioso: **0 messaggi in 8 secondi** di osservazione |
+| **udev** | Eventi del kernel per dispositivi: alimentazione (`ACAD`, `BAT1`), USB, dischi. Nessun evento in 4 secondi a riposo |
+| **Timer** | Solo manutenzione: snapper (timeline, cleanup), `tmpfiles`, `man-db`, `shadow`, portachiavi di Arch. Nessuno per l'agente |
+| **Unità path** | Solo `systemd-ask-password-console.path` e `-wall.path`, che portano le richieste di password alla console e ai terminali |
+| **logind** | Tasto di accensione: `HandlePowerKey=poweroff`; pressione lunga e inattività: `ignore` |
+| **Pressione delle risorse** | PSI attivo (`/proc/pressure/{cpu,memory,io}`); `systemd-oomd` presente ma spento; `systemd-coredump` presente, nessun crash |
+| **Audit** | Spento (sezione 3) |
+| **Avvisi di `deck`** | Calcolati solo quando l'agente apre una schermata. Nessuna storia, nessun "nuovo dall'ultima volta", nessuna notifica |
+
+**Nessuno sveglia l'agente.** L'agente esiste solo mentre un umano apre una sessione dal Mac. Se di notte un
+servizio fallisce, il disco si riempie o un aggiornamento di sicurezza esce, lo si scopre alla sessione dopo,
+e solo se si apre la schermata giusta.
+
+### 5.2 Presupposti umani
+
+| # | Dove | Cosa presuppone | Effetto per un agente |
+|---|---|---|---|
+| H26 | Monitoraggio | Qualcuno che guarda uno stato o una dashboard quando vuole (pull) | L'agente non viene avvisato: ciò che succede fra una sessione e l'altra si perde, finché non va a cercarlo |
+| H27 | Log in prosa | Messaggi da leggere: il 58% senza un identificativo di evento | Riconoscere un evento vuol dire interpretare frasi, e il testo dei log è non fidato (INV-4) |
+| H28 | Tasto di accensione | Una persona che lo preme vuole spegnere | Un tocco per errore spegne il server senza che l'agente lo sappia o possa salvare lo stato |
+| H29 | Richieste di password | Console e terminali come canale per le domande del sistema (`ask-password`) | Domande che nessuno vedrà e che bloccano |
+| H30 | Notifiche | `wall` e messaggi alla console | Un canale che l'agente non riceve |
+
+### 5.3 Punti di intercettazione
+
+- **`OnFailure=` per tutte le unità**: un drop-in di primo livello (`/etc/systemd/system/service.d/`) fa partire
+  una nostra unità a ogni guasto di qualsiasi servizio, con il nome del servizio come parametro.
+- **Segnali D-Bus e varlink** con filtri: cambi di stato delle unità, della rete, delle sessioni, del Wi-Fi.
+- **Regole udev** che avviano unità (`SYSTEMD_WANTS`) all'arrivo di un dispositivo o a un cambio di
+  alimentazione.
+- **Unità path**: inotify su file e cartelle, ad esempio i `.pacnew`, `/etc` o la cartella dei segreti in
+  arrivo (N14).
+- **Timer** con `OnCalendar` e `OnBootSec` per i controlli periodici dell'agente.
+- **PSI**: soglie di pressione con notifica (poll su `/proc/pressure/*`), e `systemd-oomd` per i limiti di
+  memoria per gruppo di unità.
+- **journald**:
+  - campi strutturati propri (`AGENTDECK_*`) per gli eventi e le azioni dell'agente;
+  - namespace o file separati per tenere la traccia dell'agente fuori dal journal di sistema.
+- **logind**: `HandlePowerKey=ignore`, con il tasto trattato come evento.
+- **auditd** (sezione 3) con i suoi plugin per inoltrare gli eventi.
+
+### 5.4 Proposte
+
+| Id | Livello | Proposta | Perché, per l'agente |
+|---|---|---|---|
+| A5.1 | L1 | La **traccia dei comandi dell'agente fuori dal journal di sistema**, in un namespace di journald o in un registro suo | Il journal di sistema torna ai fatti del sistema (oggi il 28% è traccia); niente più filtri come quello di `deck logs` (P14) |
+| A5.2 | L1/L2 | **`OnFailure=` globale**: ogni servizio che fallisce produce un evento strutturato (unità, risultato, ultime righe del journal nei dati) | Nessun guasto passa inosservato |
+| A5.3 | L2 | **Raccoglitore di eventi di AgentDeck**, `agentdeck-events`. Ascolta segnali D-Bus, udev, PSI, journal (solo eventi con `MESSAGE_ID` o priorità alta), timer e le soglie degli avvisi di `deck`. Li trasforma in eventi uniformi: identificativo, ora, fonte, codice stabile, gravità, dati. Li tiene in una coda persistente con deduplica e stato (nuovo, visto, gestito) | Toglie H26 e H27: un solo flusso di eventi, già in forma di dato |
+| A5.4 | L2 | **Briefing di inizio sessione**, `deck inbox`: alla prima chiamata di una sessione l'agente riceve gli eventi nuovi dall'ultima volta, ordinati per gravità, con l'azione suggerita per ciascuno. Le istruzioni sono scritte dal sistema; il contenuto degli eventi sta nei dati | È l'autoprompting nel momento giusto: l'agente sa da dove cominciare. Chiude l'attrito 2 del punto della situazione |
+| A5.5 | L2 | **Risveglio dell'agente**: regole per evento decidono se basta accodarlo per la prossima sessione o se serve un agente subito. In quel caso parte una sessione senza interfaccia dell'harness (sezione 6), con l'evento come contesto iniziale. Limiti di frequenza e di costo delle API | Il passo che rende la Deck autonoma: è il trigger dell'agente interno |
+| A5.6 | L2 | **Registro delle azioni dell'agente**: ogni azione di `deck` e ogni comando della regia (A2.4) con sessione, intenzione, anteprima, esito e snapshot, in campi strutturati. Da qui escono i riepiloghi delle sessioni agentiche | Memoria di cosa si è fatto e perché; è la base per annullare e per riassumere |
+| A5.7 | L2 | **Avvisi con una storia**: ogni avviso di `deck` ha la prima comparsa, l'ultima, quando si è risolto, quante volte è tornato | Distingue un problema nuovo da uno noto; evita di riscoprire ogni volta le stesse cose |
+| A5.8 | L1 | `HandlePowerKey=ignore`, con il tasto di accensione trattato come evento: l'agente decide, ad esempio uno spegnimento ordinato con snapshot. Lo spegnimento forzato con la pressione lunga resta all'hardware | Toglie H28 |
+| A5.9 | L1 | `systemd-oomd` attivo con limiti per il gruppo dei lavori dell'agente, che proteggono i servizi dell'accesso | Un lavoro dell'agente che esaurisce la memoria non porta giù SSH |
+
+**Da decidere nella sintesi:**
+- quali eventi svegliano subito un agente e quali aspettano la prossima sessione;
+- il limite di spesa per le sessioni aperte da un evento (A5.5).

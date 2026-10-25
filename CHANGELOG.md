@@ -4,6 +4,18 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.3.5 — 2026-10-25
+
+Ciclo 03, task O8.T5: studio di eventi, log e osservabilità.
+
+- Sezione 5 di `docs/architettura.md`.
+- Il journal riceve circa 1.658 righe all'ora: il 28% è la traccia dei comandi dell'agente, e solo il 42% ha un
+  identificativo di evento riconoscibile da macchina.
+- A riposo il sistema è silenzioso (0 messaggi D-Bus in 8 secondi), e nessuno sveglia l'agente: tutto ciò che
+  succede fra una sessione e l'altra si scopre dopo. Il tasto di accensione spegne il server.
+- 5 presupposti umani e 9 proposte. Fra queste: `OnFailure=` globale, un raccoglitore di eventi con coda,
+  il briefing di inizio sessione `deck inbox`, il risveglio dell'agente per evento, il registro delle azioni.
+
 ## 0.3.4 — 2026-10-25
 
 Ciclo 03, task O8.T4: studio dello stato del sistema, del software e degli snapshot.

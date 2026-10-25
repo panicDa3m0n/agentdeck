@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-25 20:24",
-  "updated": "2026-10-25 23:17",
+  "updated": "2026-10-25 23:19",
   "objectives": [
     {
       "id": "O8",
@@ -61,10 +61,10 @@
           "title": "Eventi, log e osservabilità",
           "scope": "docs/architettura.md, letture sulla Deck",
           "gate_pre": "Sezione eventi: journal, udev, eventi di systemd e D-Bus, inotify, audit, timer; cosa può svegliare un agente e come diventa autoprompting (contesto e istruzioni al momento giusto); proposte per livello.",
-          "gate_post": "",
-          "state": "todo",
-          "risk": null,
-          "risk_why": "",
+          "gate_post": "Sezione 5 di architettura.md: journal (28% traccia agente, 42% eventi riconoscibili), sistema silenzioso, nessuno sveglia l'agente; 5 presupposti, 9 proposte",
+          "state": "done",
+          "risk": 5,
+          "risk_why": "Solo letture e osservazioni di pochi secondi sulla Deck (journal, D-Bus, udev, timer, logind) e scrittura di docs/architettura.md: nessuna modifica al sistema.",
           "docs": []
         },
         {
@@ -134,9 +134,9 @@
     "hold_plan": ""
   },
   "previous": {
-    "task": "O8.T4",
+    "task": "O8.T5",
     "state": "done",
-    "note": "Sezione 4 di architettura.md: 32 snapshot (19 senza pulizia), configurazione imperativa in 24 file, sysext e nspawn pronti; 5 presupposti umani, 8 proposte"
+    "note": "Sezione 5 di architettura.md: journal (28% traccia agente, 42% eventi riconoscibili), sistema silenzioso, nessuno sveglia l'agente; 5 presupposti, 9 proposte"
   },
   "cycle": {
     "n": 3,

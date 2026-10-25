@@ -715,3 +715,12 @@
 {"at": "2026-10-25 23:17", "testo": "TASK CHIUSA O8.T4 — completata: Sezione 4 di architettura.md: 32 snapshot (19 senza pulizia), configurazione imperativa in 24 file, sysext e nspawn pronti; 5 presupposti umani, 8 proposte"}
 {"at": "2026-10-25 23:17", "testo": "VERSIONE 0.3.4 (O8.T4)"}
 {"at": "2026-10-25 23:17", "testo": "VERSIONI scelte dall'utente: governance"}
+{"at": "2026-10-25 23:17", "testo": "[-] bash: ~/claude-rules/bin/wf.sh task-close --done \"Sezione 4 di architettura.md: 32 snapshot (19 senza pulizia), conf"}
+{"at": "2026-10-25 23:18", "testo": "TASK APERTA O8.T5 — Eventi, log e osservabilità | perimetro: docs/architettura.md, letture sulla Deck | gate: Sezione eventi: journal, udev, eventi di systemd e D-Bus, inotify, audit, timer; cosa può svegliare un agente e come diventa autoprompting (contesto e istruzioni al momento giusto); proposte per livello. | rischio: 5"}
+{"at": "2026-10-25 23:18", "testo": "[O8.T5] bash: ~/claude-rules/bin/wf.sh task-start --id O8.T5 --risk 5 --why \"Solo letture e osservazioni di pochi secondi su"}
+{"at": "2026-10-25 23:18", "testo": "[O8.T5] bash: ssh -o BatchMode=yes agentdeck 'varlinkctl info /run/systemd/io.systemd.JournalAccess 2>&1 | tail -4; varlinkc"}
+{"at": "2026-10-25 23:18", "testo": "[O8.T5] Edit  docs/architettura.md", "task": "O8.T5", "tipo": "file", "tool": "Edit", "file": "docs/architettura.md"}
+{"at": "2026-10-25 23:19", "testo": "[O8.T5] bash: cat >> docs/architettura.md <<'EOF'  ---  ## 5. Eventi, log e osservabilità  ### 5.1 Come funziona oggi  Misur"}
+{"at": "2026-10-25 23:19", "testo": "TASK CHIUSA O8.T5 — completata: Sezione 5 di architettura.md: journal (28% traccia agente, 42% eventi riconoscibili), sistema silenzioso, nessuno sveglia l'agente; 5 presupposti, 9 proposte"}
+{"at": "2026-10-25 23:19", "testo": "VERSIONE 0.3.5 (O8.T5)"}
+{"at": "2026-10-25 23:19", "testo": "VERSIONI scelte dall'utente: governance"}
