@@ -4,6 +4,17 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.1.11 — 2026-10-25
+
+Ciclo 01, task O3.T2: componente `deck snapshot`, elenco e creazione.
+
+- `deck snapshot` elenca gli snapshot come snapper e indica per ognuno se è avviabile dal menu di GRUB
+  (`in_grub`, `null` mentre grub-btrfsd riscrive il menu).
+- `deck snapshot create description="…"` crea uno snapshot singolo, marcato `source: deck`.
+- Il rollback compare tra le azioni come non ancora disponibile.
+- Verificato sulla Deck: elenco identico a snapper; lo snapshot creato da `deck` è comparso nel menu di
+  GRUB dopo 7 secondi. 56 test.
+
 ## 0.1.10 — 2026-10-25
 
 Ciclo 01, task O3.T5: sullo schermo della Deck anche la risposta di ogni comando (richiesta dell'utente).

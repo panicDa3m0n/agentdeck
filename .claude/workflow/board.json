@@ -127,8 +127,8 @@
           "title": "Componente snapshot: elenco e creazione",
           "scope": "deck/, componente snapshot, docs/deck.md, docs/accesso.md",
           "gate_pre": "deck snapshot elenca gli stessi snapshot di snapper; la creazione da deck produce uno snapshot visibile in snapper e nel menu snapshot di GRUB.",
-          "gate_post": "",
-          "state": "doing",
+          "gate_post": "deck snapshot: elenco identico a snapper (1-13), snapshot 14 creato da deck in snapper e nel menu GRUB dopo 7 s; in_grub; 56 test.",
+          "state": "done",
           "risk": 15,
           "risk_why": "Il componente legge gli snapshot e ne crea di nuovi con snapper: creare uno snapshot non cambia il sistema in uso e si annulla cancellandolo; il rollback resta fuori (O3.T3) e compare come azione non disponibile.",
           "docs": []
@@ -244,18 +244,18 @@
   ],
   "active": {
     "objective": "O3",
-    "task": "O3.T2",
-    "phase": "in_progress",
-    "risk": 15,
-    "risk_why": "Il componente legge gli snapshot e ne crea di nuovi con snapper: creare uno snapshot non cambia il sistema in uso e si annulla cancellandolo; il rollback resta fuori (O3.T3) e compare come azione non disponibile.",
+    "task": "",
+    "phase": "idle",
+    "risk": null,
+    "risk_why": "",
     "hold_invariants": "",
     "hold_plan": "",
     "gate_done": ""
   },
   "previous": {
-    "task": "O3.T5",
+    "task": "O3.T2",
     "state": "done",
-    "note": "Schermo: comando e risposta (errori in rosso, deck riassunto); I/O, uscite e binari invariati verificati; rete di sicurezza estesa; 48 test."
+    "note": "deck snapshot: elenco identico a snapper (1-13), snapshot 14 creato da deck in snapper e nel menu GRUB dopo 7 s; in_grub; 56 test."
   },
   "cycle": {
     "n": 1,

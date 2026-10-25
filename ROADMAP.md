@@ -10,10 +10,9 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O3` Primi componenti usati dall'agente: stato del sistema e snapshot — 5 task: 3 completate, 1 in corso, 1 da fare, 0 bloccate
-- **Task attiva:** `O3.T2` Componente snapshot: elenco e creazione — in corso · rischio 15/100
-- **Ultima task gestita:** `O3.T5` — completata — Schermo: comando e risposta (errori in rosso, deck riassunto); I/O, uscite e binari invariati verificati; rete di sicurezza estesa; 48 test.
-- **Fase:** `in_progress`
+- **Obiettivo attivo:** `O3` Primi componenti usati dall'agente: stato del sistema e snapshot — 5 task: 4 completate, 0 in corso, 1 da fare, 0 bloccate
+- **Task attiva:** —
+- **Ultima task gestita:** `O3.T2` — completata — deck snapshot: elenco identico a snapper (1-13), snapshot 14 creato da deck in snapper e nel menu GRUB dopo 7 s; in_grub; 56 test.
 - **Ultimo aggiornamento:** 2026-10-25 18:03
 
 ## Richieste attive
@@ -66,8 +65,8 @@ _nessuna richiesta in attesa._
   *gate previsto:* deck status riporta hardware, temperature, batteria, memoria, disco, rete, servizi falliti e snapshot; ogni valore coincide con quello letto dai comandi di sistema; le anomalie note (per esempio Wi-Fi a 2,4 GHz) compaiono come avvisi con azioni suggerite. · *gate confermato:* ✔ deck status sulla Deck: 23/23 valori coincidono con gli strumenti classici, avvisi WIFI_BAND_2G, LLMNR, ventola; 34 test verdi; 0,27 s.
   *rischio:* 15/100 — Componente in sola lettura: legge /proc, /sys e comandi di stato (alcuni con sudo); l'unica modifica di sistema prevista è installare il piccolo pacchetto ufficiale iw per leggere il Wi-Fi in modo affidabile, con gli snapshot di snap-pac.
   *annotazioni:* `N5`, `N8`
-- [~] `O3.T2` Componente snapshot: elenco e creazione — *perimetro:* `deck/, componente snapshot, docs/deck.md, docs/accesso.md`
-  *gate previsto:* deck snapshot elenca gli stessi snapshot di snapper; la creazione da deck produce uno snapshot visibile in snapper e nel menu snapshot di GRUB.
+- [x] `O3.T2` Componente snapshot: elenco e creazione — *perimetro:* `deck/, componente snapshot, docs/deck.md, docs/accesso.md`
+  *gate previsto:* deck snapshot elenca gli stessi snapshot di snapper; la creazione da deck produce uno snapshot visibile in snapper e nel menu snapshot di GRUB. · *gate confermato:* ✔ deck snapshot: elenco identico a snapper (1-13), snapshot 14 creato da deck in snapper e nel menu GRUB dopo 7 s; in_grub; 56 test.
   *rischio:* 15/100 — Il componente legge gli snapshot e ne crea di nuovi con snapper: creare uno snapshot non cambia il sistema in uso e si annulla cancellandolo; il rollback resta fuori (O3.T3) e compare come azione non disponibile.
 - [ ] `O3.T3` Rollback con anteprima e conferma — *perimetro:* `deck/, componente snapshot, subvolumi Btrfs sulla Deck`
   *gate previsto:* Prova reale: dopo snapshot e modifica di prova, il rollback mostra l'anteprima delle conseguenze, si conferma con il codice, la Deck riavvia nello stato salvato, la modifica di prova è sparita e ssh agentdeck funziona; lo stato precedente resta recuperabile come snapshot.

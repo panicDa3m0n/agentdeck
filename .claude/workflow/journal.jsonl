@@ -361,3 +361,7 @@
 {"at": "2026-10-25 18:03", "testo": "[O3.T2] Edit  docs/deck.md", "task": "O3.T2", "tipo": "file", "tool": "Edit", "file": "docs/deck.md"}
 {"at": "2026-10-25 18:03", "testo": "[O3.T2] Edit  docs/deck.md", "task": "O3.T2", "tipo": "file", "tool": "Edit", "file": "docs/deck.md"}
 {"at": "2026-10-25 18:03", "testo": "[O3.T2] Edit  docs/accesso.md", "task": "O3.T2", "tipo": "file", "tool": "Edit", "file": "docs/accesso.md"}
+{"at": "2026-10-25 18:03", "testo": "TASK CHIUSA O3.T2 — completata: deck snapshot: elenco identico a snapper (1-13), snapshot 14 creato da deck in snapper e nel menu GRUB dopo 7 s; in_grub; 56 test."}
+{"at": "2026-10-25 18:03", "testo": "VERSIONE 0.1.11 (O3.T2)"}
+{"at": "2026-10-25 18:03", "testo": "[-] bash: bash -c 'b=0; for f in README.md PRINCIPI.md CHANGELOG.md docs/*.md; do d=$(dirname \"$f\"); for l in $(grep -oE"}
+{"at": "2026-10-25 18:03", "testo": "[-] Edit  CHANGELOG.md", "task": "-", "tipo": "file", "tool": "Edit", "file": "CHANGELOG.md"}
