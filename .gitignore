@@ -1,0 +1,5 @@
+# Credenziali: mai nel repository
+secrets/
+# ISO e file scaricati
+cache/
+.DS_Store
