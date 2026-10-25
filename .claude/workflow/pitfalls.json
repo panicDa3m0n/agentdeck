@@ -20,6 +20,11 @@
       "id": "P4",
       "testo": "La governance annuncia una versione già pubblicata (es. 0.1.4 per O1.T5 dopo v0.1.4 di O1.T4) -> il contatore versionamento.attuale in project.json non avanza sempre alla chiusura -> prima di scrivere VERSION confrontare con l'ultimo tag su origin; se è indietro, riallineare con versione --scegli governance --da <versione giusta> --dove VERSION --pubblica e non riscrivere mai un tag pubblicato.",
       "creata": "2026-10-25 16:50"
+    },
+    {
+      "id": "P5",
+      "testo": "task-close rifiutato con riassuntivissimo troppo lungo -> il riepilogo di chiusura è una riga di roadmap, massimo 160 caratteri -> scriverlo sotto i 150 e mettere i dettagli in docs/ o in un'annotazione.",
+      "creata": "2026-10-25 17:20"
     }
   ]
 }

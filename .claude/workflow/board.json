@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-25 15:54",
-  "updated": "2026-10-25 16:54",
+  "updated": "2026-10-25 17:20",
   "objectives": [
     {
       "id": "O1",
@@ -83,10 +83,10 @@
           "title": "Specifica del protocollo di schermata e autoprompting",
           "scope": "docs/",
           "gate_pre": "docs/protocollo.md descrive la struttura della schermata (dati, azioni, navigazione, avvisi, errori, conferme con anteprima, istruzioni), le regole di autoprompting e di sicurezza del canale istruzioni, con esempi reali; linguaggio di implementazione deciso; approvato esplicitamente dall'utente.",
-          "gate_post": "",
-          "state": "todo",
-          "risk": null,
-          "risk_why": "",
+          "gate_post": "docs/protocollo.md approvato: schermate, azioni, conferme, errori, autoprompting, INV-4, 8 esempi reali; Python 3, testi in inglese.",
+          "state": "done",
+          "risk": 10,
+          "risk_why": "Produce solo un documento di specifica in docs/ da approvare con l'utente: nessun codice e nessuna modifica alla Deck; il rischio è progettuale (un protocollo sbagliato peserebbe su tutti i componenti), per questo il gate richiede l'approvazione esplicita.",
           "docs": []
         },
         {
@@ -181,10 +181,17 @@
       "text": "Dalla verifica INV-5 al gate di O1 (25/10): sulla Deck sono in ascolto 22 (SSH), 5355 (LLMNR di systemd-resolved, su tutta la LAN) e 53 solo su localhost. LLMNR non serve perché usiamo mDNS: deck status dovrebbe mostrare le porte in ascolto e segnalare LLMNR come superfluo, con l'azione suggerita LLMNR=no in resolved.conf.",
       "docs": [],
       "created": "2026-10-25 16:18"
+    },
+    {
+      "id": "N6",
+      "task": "O2.T2",
+      "text": "Dall'approvazione di O2.T1 (25/10): implementare deck seguendo docs/protocollo.md, approvato; Python 3 solo libreria standard; testi per l'agente in inglese. Da fare: installare il pacchetto python sulla Deck con snapshot (INV-3); ogni modulo rimanda a docs/protocollo.md (INV-9); test di conformità di ogni schermata e test di iniezione nel canale istruzioni (INV-4); aggiungere a PRINCIPI.md le righe di decisione: protocollo deck v1, Python 3, testi agente in inglese.",
+      "docs": [],
+      "created": "2026-10-25 17:20"
     }
   ],
   "active": {
-    "objective": "",
+    "objective": "O2",
     "task": "",
     "phase": "idle",
     "risk": null,
@@ -194,9 +201,9 @@
     "gate_done": ""
   },
   "previous": {
-    "task": "O1.T5",
+    "task": "O2.T1",
     "state": "done",
-    "note": "ssh agentdeck usa l'IP stabile .49 (HostKeyAlias), alias agentdeck-mdns sul nome; backup fatto; 10 collegamenti su 10 al primo colpo; accesso.md aggiornato."
+    "note": "docs/protocollo.md approvato: schermate, azioni, conferme, errori, autoprompting, INV-4, 8 esempi reali; Python 3, testi in inglese."
   },
   "cycle": {
     "n": 1,
@@ -207,6 +214,6 @@
     "objective": 3,
     "cycle": 1,
     "request": 0,
-    "note": 5
+    "note": 6
   }
 }

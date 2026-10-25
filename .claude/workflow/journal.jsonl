@@ -159,3 +159,26 @@
 {"at": "2026-10-25 16:51", "testo": "[-] bash: ~/claude-rules/bin/wf.sh obj-gate O1 2>&1 | grep -E \"^\\*Numeri|^\\*\\*Numeri|task,|Rischio più alto\" ; cd /Users"}
 {"at": "2026-10-25 16:51", "testo": "[-] Write  ../../../private/tmp/claude-502/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/scratchpad/bilancio-o1.html", "task": "-", "tipo": "file", "tool": "Write", "file": "../../../private/tmp/claude-502/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/scratchpad/bilancio-o1.html"}
 {"at": "2026-10-25 16:54", "testo": "OBIETTIVO CHIUSO O1 (completo) — approvato"}
+{"at": "2026-10-25 16:54", "testo": "[-] bash: git add ROADMAP.md PROGETTO.md .claude/workflow && git commit -q -F - <<'EOF' Obiettivo O1 chiuso: approvato  "}
+{"at": "2026-10-25 17:02", "testo": "TASK APERTA O2.T1 — Specifica del protocollo di schermata e autoprompting | perimetro: docs/ | gate: docs/protocollo.md descrive la struttura della schermata (dati, azioni, navigazione, avvisi, errori, conferme con anteprima, istruzioni), le regole di autoprompting e di sicurezza del canale istruzioni, con esempi reali; linguaggio di implementazione deciso; approvato esplicitamente dall'utente. | rischio: 10"}
+{"at": "2026-10-25 17:02", "testo": "[O2.T1] bash: ~/claude-rules/bin/wf.sh task-start --id O2.T1 --risk 10 --why \"Produce solo un documento di specifica in docs"}
+{"at": "2026-10-25 17:03", "testo": "[O2.T1] bash: ssh -o BatchMode=yes -o ConnectTimeout=8 agentdeck 'echo \"uptime: $(cut -d. -f1 /proc/uptime)s | kernel: $(una"}
+{"at": "2026-10-25 17:05", "testo": "[O2.T1] Write  docs/protocollo.md", "task": "O2.T1", "tipo": "file", "tool": "Write", "file": "docs/protocollo.md"}
+{"at": "2026-10-25 17:05", "testo": "[O2.T1] Edit  docs/README.md", "task": "O2.T1", "tipo": "file", "tool": "Edit", "file": "docs/README.md"}
+{"at": "2026-10-25 17:05", "testo": "[O2.T1] bash: awk '/^```json/{f=1; n++; next} /^```/{if(f){f=0}; next} f{print > (\"/private/tmp/claude-502/-Users-snj-linuxa"}
+{"at": "2026-10-25 17:05", "testo": "[O2.T1] Edit  docs/protocollo.md", "task": "O2.T1", "tipo": "file", "tool": "Edit", "file": "docs/protocollo.md"}
+{"at": "2026-10-25 17:06", "testo": "[O2.T1] Write  ../../../private/tmp/claude-502/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/scratchpad/protocollo-deck.html", "task": "O2.T1", "tipo": "file", "tool": "Write", "file": "../../../private/tmp/claude-502/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/scratchpad/protocollo-deck.html"}
+{"at": "2026-10-25 17:20", "testo": "[O2.T1] Edit  docs/protocollo.md", "task": "O2.T1", "tipo": "file", "tool": "Edit", "file": "docs/protocollo.md"}
+{"at": "2026-10-25 17:20", "testo": "[O2.T1] Edit  docs/protocollo.md", "task": "O2.T1", "tipo": "file", "tool": "Edit", "file": "docs/protocollo.md"}
+{"at": "2026-10-25 17:20", "testo": "[O2.T1] Edit  docs/protocollo.md", "task": "O2.T1", "tipo": "file", "tool": "Edit", "file": "docs/protocollo.md"}
+{"at": "2026-10-25 17:20", "testo": "ANNOTAZIONE N6 su O2.T2 — Dall'approvazione di O2.T1 (25/10): implementare deck seguendo docs/protocollo.md, approvato; Python 3 solo libreria standard; testi per l'agente in inglese. Da fare: installare il pacchetto python sulla Deck con snapshot (INV-3); ogni modulo rimanda a docs/protocollo.md (INV-9); test di conformità di ogni schermata e test di iniezione nel canale istruzioni (INV-4); aggiungere a PRINCIPI.md le righe di decisione: protocollo deck v1, Python 3, testi agente in inglese."}
+{"at": "2026-10-25 17:20", "testo": "[O2.T1] bash: ~/claude-rules/bin/wf.sh note-add --task O2.T2 --text \"Dall'approvazione di O2.T1 (25/10): implementare deck s"}
+{"at": "2026-10-25 17:20", "testo": "[O2.T1] FALLITO Bash: ~/claude-rules/bin/wf.sh task-close --done \"docs/protocollo.md: schermata, azioni, navigaz"}
+{"at": "2026-10-25 17:20", "testo": "FALLIMENTO [Bash] execution_error: riassuntivissimo troppo lungo (163 caratteri, max 160): è una riga di roadmap.\nSe serve più spazio il posto è una spec, "}
+{"at": "2026-10-25 17:20", "testo": "TRAPPOLA registrata: task-close rifiutato con riassuntivissimo troppo lungo -> il riepilogo di chiusura è una riga di roadmap, massimo 160 caratteri -> scriverlo sotto i 150 e mettere i dettagli in docs/ o in un'annotazione."}
+{"at": "2026-10-25 17:20", "testo": "TASK CHIUSA O2.T1 — completata: docs/protocollo.md approvato: schermate, azioni, conferme, errori, autoprompting, INV-4, 8 esempi reali; Python 3, testi in inglese."}
+{"at": "2026-10-25 17:20", "testo": "VERSIONE 0.1.6 (O2.T1)"}
+{"at": "2026-10-25 17:20", "testo": "ERRORE RISOLTO — execution_error: riassuntivissimo troppo lungo (163 caratteri, max 160): è una riga di roadmap. Se serve più spazio il posto è una spec, — Riepilogo oltre 160 caratteri accorciato; registrata la trappola P5.", "tipo": "errore-risolto"}
+{"at": "2026-10-25 17:20", "testo": "[-] bash: ~/claude-rules/bin/wf.sh pitfall \"task-close rifiutato con riassuntivissimo troppo lungo -> il riepilogo di ch"}
+{"at": "2026-10-25 17:20", "testo": "[-] bash: echo \"ultimo tag su origin: $(git ls-remote --tags origin | grep -v '\\^{}' | sed 's|.*refs/tags/||' | sort -V "}
+{"at": "2026-10-25 17:20", "testo": "[-] Edit  CHANGELOG.md", "task": "-", "tipo": "file", "tool": "Edit", "file": "CHANGELOG.md"}

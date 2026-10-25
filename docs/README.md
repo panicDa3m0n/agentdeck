@@ -23,6 +23,11 @@ documento (invariante INV-9). Quando si modifica il codice, si aggiorna il docum
 - [installazione.md](installazione.md): installazione di Arch a fasi e configurazione del sistema.
   Codice: [../install/install.sh](../install/install.sh), [../install/post-install.sh](../install/post-install.sh).
 
+## Interfaccia agentica
+
+- [protocollo.md](protocollo.md): protocollo di `deck` (schermate JSON, azioni, navigazione, errori,
+  conferme con anteprima, autoprompting, sicurezza del canale istruzioni).
+
 ## Uso quotidiano
 
 - [accesso.md](accesso.md): accesso SSH dell'agente, indirizzo della Deck, sicurezza, snapshot e recupero.

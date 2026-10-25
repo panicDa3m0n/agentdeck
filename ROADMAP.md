@@ -10,10 +10,10 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** —
+- **Obiettivo attivo:** `O2` Protocollo dell'interfaccia agentica: schermate interattive e autoprompting — 2 task: 1 completate, 0 in corso, 1 da fare, 0 bloccate
 - **Task attiva:** —
-- **Ultima task gestita:** `O1.T5` — completata — ssh agentdeck usa l'IP stabile .49 (HostKeyAlias), alias agentdeck-mdns sul nome; backup fatto; 10 collegamenti su 10 al primo colpo; accesso.md aggiornato.
-- **Ultimo aggiornamento:** 2026-10-25 16:54
+- **Ultima task gestita:** `O2.T1` — completata — docs/protocollo.md approvato: schermate, azioni, conferme, errori, autoprompting, INV-4, 8 esempi reali; Python 3, testi in inglese.
+- **Ultimo aggiornamento:** 2026-10-25 17:20
 
 ## Richieste attive
 
@@ -48,10 +48,12 @@ _nessuna richiesta in attesa._
 
 **Gate obiettivo:** Protocollo scritto e approvato dall'utente; il comando deck installato sulla Deck risponde con schermate JSON conformi al protocollo, con le istruzioni separate dai dati (INV-4).
 
-- [ ] `O2.T1` Specifica del protocollo di schermata e autoprompting — *perimetro:* `docs/`
-  *gate previsto:* docs/protocollo.md descrive la struttura della schermata (dati, azioni, navigazione, avvisi, errori, conferme con anteprima, istruzioni), le regole di autoprompting e di sicurezza del canale istruzioni, con esempi reali; linguaggio di implementazione deciso; approvato esplicitamente dall'utente.
+- [x] `O2.T1` Specifica del protocollo di schermata e autoprompting — *perimetro:* `docs/`
+  *gate previsto:* docs/protocollo.md descrive la struttura della schermata (dati, azioni, navigazione, avvisi, errori, conferme con anteprima, istruzioni), le regole di autoprompting e di sicurezza del canale istruzioni, con esempi reali; linguaggio di implementazione deciso; approvato esplicitamente dall'utente. · *gate confermato:* ✔ docs/protocollo.md approvato: schermate, azioni, conferme, errori, autoprompting, INV-4, 8 esempi reali; Python 3, testi in inglese.
+  *rischio:* 10/100 — Produce solo un documento di specifica in docs/ da approvare con l'utente: nessun codice e nessuna modifica alla Deck; il rischio è progettuale (un protocollo sbagliato peserebbe su tutti i componenti), per questo il gate richiede l'approvazione esplicita.
 - [ ] `O2.T2` Motore deck e installazione sulla Deck — *perimetro:* `deck/, script di installazione del comando`
   *gate previsto:* Sulla Deck: deck senza argomenti restituisce la schermata principale con l'elenco dei componenti; un indirizzo inesistente restituisce una schermata di errore strutturata con azioni per uscirne; ogni risposta è JSON valido conforme al protocollo; l'installazione è ripetibile da uno script nel repository.
+  *annotazioni:* `N6`
 
 ### `O3` Primi componenti usati dall'agente: stato del sistema e snapshot — in corso
 
@@ -74,3 +76,4 @@ _Una riga per nota, sempre legata a una task. `wf.sh notes` per leggerle._
 - `N3` (`O1.T4`) Documentare in docs/ il setup git e GitHub: identità personale impostata solo nel repository (Davide, davideditrani94@gmail.com), remote privato https://github.com/panicDa3m0n/agentdeck, credential helper locale che usa gh auth token --user panicDa3m0n (indipendente dall'account gh attivo), tag v<versione> a ogni versione chiusa (INV-8). — 2026-10-25 16:07
 - `N4` (`O1.T4`) Documentare nell'accesso alla Deck: IP stabile 192.168.1.49 grazie a SendRelease=no (O1.T2, testato con due riavvii); ssh agentdeck usa il nome agentdeck.local; se il nome non si risolve (trappola P2) usare ssh -o HostName=192.168.1.49 agentdeck. Una prenotazione DHCP sul router renderebbe l'IP fisso anche dopo spegnimenti lunghi: richiede l'accesso dell'utente al router. — 2026-10-25 16:12
 - `N5` (`O3.T1`) Dalla verifica INV-5 al gate di O1 (25/10): sulla Deck sono in ascolto 22 (SSH), 5355 (LLMNR di systemd-resolved, su tutta la LAN) e 53 solo su localhost. LLMNR non serve perché usiamo mDNS: deck status dovrebbe mostrare le porte in ascolto e segnalare LLMNR come superfluo, con l'azione suggerita LLMNR=no in resolved.conf. — 2026-10-25 16:18
+- `N6` (`O2.T2`) Dall'approvazione di O2.T1 (25/10): implementare deck seguendo docs/protocollo.md, approvato; Python 3 solo libreria standard; testi per l'agente in inglese. Da fare: installare il pacchetto python sulla Deck con snapshot (INV-3); ogni modulo rimanda a docs/protocollo.md (INV-9); test di conformità di ogni schermata e test di iniezione nel canale istruzioni (INV-4); aggiungere a PRINCIPI.md le righe di decisione: protocollo deck v1, Python 3, testi agente in inglese. — 2026-10-25 17:20

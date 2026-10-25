@@ -4,6 +4,15 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.1.6 — 2026-10-25
+
+Ciclo 01, task O2.T1: specifica del protocollo di schermata e autoprompting.
+
+- `docs/protocollo.md`, approvato: ogni risposta di `deck` è una schermata JSON con dati, azioni,
+  navigazione, avvisi, errori, conferme con anteprima e istruzioni per l'agente (autoprompting).
+- Regole di sicurezza del canale istruzioni (INV-4) e 8 esempi con dati reali della Deck.
+- Decisioni: Python 3 con la sola libreria standard; testi per l'agente in inglese.
+
 ## 0.1.5 — 2026-10-25
 
 Ciclo 01, task O1.T5: accesso SSH affidabile dal Mac.
