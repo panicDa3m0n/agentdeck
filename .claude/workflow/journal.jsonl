@@ -387,3 +387,10 @@
 {"at": "2026-10-25 18:10", "testo": "VERSIONE 0.1.12 (O3.T3)"}
 {"at": "2026-10-25 18:11", "testo": "[-] bash: bash -c 'b=0; for f in README.md PRINCIPI.md CHANGELOG.md docs/*.md; do d=$(dirname \"$f\"); for l in $(grep -oE"}
 {"at": "2026-10-25 18:11", "testo": "[-] Edit  CHANGELOG.md", "task": "-", "tipo": "file", "tool": "Edit", "file": "CHANGELOG.md"}
+{"at": "2026-10-25 18:11", "testo": "[-] bash: printf '0.1.12\\n' > VERSION && git add -A && git commit -q -F - <<'EOF' Versione 0.1.12: rollback con anteprim"}
+{"at": "2026-10-25 18:11", "testo": "GATE OBIETTIVO APERTO O3"}
+{"at": "2026-10-25 18:11", "testo": "[-] bash: ~/claude-rules/bin/wf.sh obj-gate O3 2>&1 | grep -E \"Numeri|Rischio più alto\"; cd /Users/snj/linuxai-steamdeck"}
+{"at": "2026-10-25 18:12", "testo": "[-] bash: ssh agentdeck 'echo uscita; echo errore >&2; exit 7' >\"$TMPDIR/o\" 2>\"$TMPDIR/e\"; code=$?; echo \"stdout=[$(cat "}
+{"at": "2026-10-25 18:12", "testo": "[-] bash: echo \"INV-6 file con credenziali (escluso il registro della governance): $(git grep -IlE 'PRIVATE KEY|ghp_[A-Z"}
+{"at": "2026-10-25 18:13", "testo": "[-] Write  ../../../private/tmp/claude-502/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/scratchpad/bilancio-o3.html", "task": "-", "tipo": "file", "tool": "Write", "file": "../../../private/tmp/claude-502/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/scratchpad/bilancio-o3.html"}
+{"at": "2026-10-25 18:56", "testo": "OBIETTIVO CHIUSO O3 (completo) — approvato"}

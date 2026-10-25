@@ -10,11 +10,10 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O3` Primi componenti usati dall'agente: stato del sistema e snapshot — 5 task: 5 completate, 0 in corso, 0 da fare, 0 bloccate
+- **Obiettivo attivo:** —
 - **Task attiva:** —
 - **Ultima task gestita:** `O3.T3` — completata — Rollback provato: snap 15, modifica di prova, anteprima, conferma, Deck tornata in 44 s senza la modifica; stato prima nello snap 18; 67 test.
-- **Fase:** `objective_gate_pending`
-- **Ultimo aggiornamento:** 2026-10-25 18:10
+- **Ultimo aggiornamento:** 2026-10-25 18:56
 
 ## Richieste attive
 
@@ -58,9 +57,10 @@ _nessuna richiesta in attesa._
   *rischio:* 20/100 — Installa il pacchetto python sulla Deck (snap-pac fa snapshot prima e dopo) e aggiunge codice nostro in /opt/agentdeck con il comando /usr/local/bin/deck: tutto reversibile, non tocca rete, SSH o avvio; il rischio è nella correttezza del motore, coperta da test di conformità e di iniezione.
   *annotazioni:* `N6`
 
-### `O3` Primi componenti usati dall'agente: stato del sistema e snapshot — in corso
+### `O3` Primi componenti usati dall'agente: stato del sistema e snapshot — chiuso
 
 **Gate obiettivo:** L'agente usa deck status e deck snapshot al posto dei comandi manuali; un rollback reale riporta il sistema allo stato salvato e ssh agentdeck funziona dopo il riavvio.
+**Chiuso:** 2026-10-25 18:56 — approvato
 
 - [x] `O3.T1` Componente status: monitor attività e informazioni di sistema — *perimetro:* `deck/, componente status, docs/deck.md, install/install.sh`
   *gate previsto:* deck status riporta hardware, temperature, batteria, memoria, disco, rete, servizi falliti e snapshot; ogni valore coincide con quello letto dai comandi di sistema; le anomalie note (per esempio Wi-Fi a 2,4 GHz) compaiono come avvisi con azioni suggerite. · *gate confermato:* ✔ deck status sulla Deck: 23/23 valori coincidono con gli strumenti classici, avvisi WIFI_BAND_2G, LLMNR, ventola; 34 test verdi; 0,27 s.
