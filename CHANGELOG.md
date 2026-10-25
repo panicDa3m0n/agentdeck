@@ -4,6 +4,16 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.1.5 — 2026-10-25
+
+Ciclo 01, task O1.T5: accesso SSH affidabile dal Mac.
+
+- `ssh agentdeck` punta all'IP stabile `192.168.1.49` invece che al nome `agentdeck.local`, che dal Mac a
+  volte non si risolve. Il nome resta disponibile come `ssh agentdeck-mdns`.
+- `HostKeyAlias agentdeck`: l'identità della Deck si controlla sotto un solo nome, qualunque indirizzo si usi.
+- Verificato con 10 collegamenti consecutivi riusciti al primo tentativo; `docs/accesso.md` aggiornato.
+- Contatore delle versioni della governance riallineato: era rimasto indietro di una versione.
+
 ## 0.1.4 — 2026-10-25
 
 Ciclo 01, task O1.T4: documentazione di base, indicizzata e collegata al codice.

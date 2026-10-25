@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-25 15:54",
-  "updated": "2026-10-25 16:16",
+  "updated": "2026-10-25 16:50",
   "objectives": [
     {
       "id": "O1",
@@ -54,6 +54,17 @@
           "state": "done",
           "risk": 5,
           "risk_why": "Solo documentazione e commenti di intestazione negli script: nessuna modifica al comportamento del codice né alla Deck.",
+          "docs": []
+        },
+        {
+          "id": "O1.T5",
+          "title": "Accesso SSH affidabile dal Mac",
+          "scope": "~/.ssh/config (voci agentdeck), docs/accesso.md",
+          "gate_pre": "La voce agentdeck in ~/.ssh/config punta all'IP stabile 192.168.1.49 e il nome .local resta come alias agentdeck-mdns; 10 tentativi consecutivi di ssh agentdeck riusciti al primo colpo; backup della configurazione precedente; docs/accesso.md aggiornato.",
+          "gate_post": "ssh agentdeck usa l'IP stabile .49 (HostKeyAlias), alias agentdeck-mdns sul nome; backup fatto; 10 collegamenti su 10 al primo colpo; accesso.md aggiornato.",
+          "state": "done",
+          "risk": 10,
+          "risk_why": "Modifica solo la voce agentdeck nella configurazione SSH del Mac, con backup prima: se qualcosa non va si ripristina il file; la Deck e il suo accesso non cambiano.",
           "docs": []
         }
       ]
@@ -161,6 +172,13 @@
       "text": "Documentare nell'accesso alla Deck: IP stabile 192.168.1.49 grazie a SendRelease=no (O1.T2, testato con due riavvii); ssh agentdeck usa il nome agentdeck.local; se il nome non si risolve (trappola P2) usare ssh -o HostName=192.168.1.49 agentdeck. Una prenotazione DHCP sul router renderebbe l'IP fisso anche dopo spegnimenti lunghi: richiede l'accesso dell'utente al router.",
       "docs": [],
       "created": "2026-10-25 16:12"
+    },
+    {
+      "id": "N5",
+      "task": "O3.T1",
+      "text": "Dalla verifica INV-5 al gate di O1 (25/10): sulla Deck sono in ascolto 22 (SSH), 5355 (LLMNR di systemd-resolved, su tutta la LAN) e 53 solo su localhost. LLMNR non serve perché usiamo mDNS: deck status dovrebbe mostrare le porte in ascolto e segnalare LLMNR come superfluo, con l'azione suggerita LLMNR=no in resolved.conf.",
+      "docs": [],
+      "created": "2026-10-25 16:18"
     }
   ],
   "active": {
@@ -170,12 +188,13 @@
     "risk": null,
     "risk_why": "",
     "hold_invariants": "",
-    "hold_plan": ""
+    "hold_plan": "",
+    "gate_done": "O1"
   },
   "previous": {
-    "task": "O1.T4",
+    "task": "O1.T5",
     "state": "done",
-    "note": "README, indice docs/ e 5 documenti; PRINCIPI con INV-10; 57 link verificati senza rotture; script e documenti collegati a vicenda; tutto su origin/main."
+    "note": "ssh agentdeck usa l'IP stabile .49 (HostKeyAlias), alias agentdeck-mdns sul nome; backup fatto; 10 collegamenti su 10 al primo colpo; accesso.md aggiornato."
   },
   "cycle": {
     "n": 1,
@@ -186,6 +205,6 @@
     "objective": 3,
     "cycle": 1,
     "request": 0,
-    "note": 4
+    "note": 5
   }
 }

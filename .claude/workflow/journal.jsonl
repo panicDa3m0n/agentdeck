@@ -120,3 +120,37 @@
 {"at": "2026-10-25 16:16", "testo": "VERSIONE 0.1.4 (O1.T4)"}
 {"at": "2026-10-25 16:16", "testo": "[-] bash: ~/claude-rules/bin/wf.sh task-close --done \"README, indice docs/ e 5 documenti; PRINCIPI con INV-10; 57 link v"}
 {"at": "2026-10-25 16:16", "testo": "[-] Edit  CHANGELOG.md", "task": "-", "tipo": "file", "tool": "Edit", "file": "CHANGELOG.md"}
+{"at": "2026-10-25 16:16", "testo": "[-] bash: printf '0.1.4\\n' > VERSION && git add -A && git commit -q -F - <<'EOF' Versione 0.1.4: documentazione di base "}
+{"at": "2026-10-25 16:16", "testo": "GATE OBIETTIVO APERTO O1"}
+{"at": "2026-10-25 16:17", "testo": "[-] bash: git fetch -q origin --tags && echo \"O1.T1 autori distinti su tutti i commit: $(git log --format='%an <%ae>' | "}
+{"at": "2026-10-25 16:17", "testo": "[-] bash: git grep -IhoE '.{0,40}(PRIVATE KEY|WIFI_PASS=[^$]|ghp_|github_pat_|sk-ant-).{0,40}' $(git rev-list --all) | s"}
+{"at": "2026-10-25 16:17", "testo": "[-] bash: git grep -IlE 'PRIVATE KEY|WIFI_PASS=[^$]|ghp_|github_pat_|sk-ant-' $(git rev-list --all) | sed 's/^[0-9a-f]*:"}
+{"at": "2026-10-25 16:17", "testo": "[-] bash: git grep -IhE 'PRIVATE KEY|WIFI_PASS=[^$]|ghp_|github_pat_|sk-ant-' $(git rev-list --all) | sort -u"}
+{"at": "2026-10-25 16:17", "testo": "[-] bash: ssh -o BatchMode=yes -o ConnectTimeout=8 agentdeck 'echo \"O1.T2/INV-1 ssh agentdeck al primo tentativo: ok | I"}
+{"at": "2026-10-25 16:17", "testo": "[-] bash: ssh -o BatchMode=yes -o ConnectTimeout=8 -o HostName=192.168.1.49 agentdeck 'echo \"IP: $(ip -4 -o addr show wl"}
+{"at": "2026-10-25 16:17", "testo": "[-] bash: ssh -o BatchMode=yes -o ConnectTimeout=8 -o HostName=192.168.1.49 agentdeck 'sudo sshd -T 2>&1 | grep -iE \"^(p"}
+{"at": "2026-10-25 16:17", "testo": "[-] bash: bash -c 'b=0; n=0; for f in README.md PRINCIPI.md CHANGELOG.md docs/*.md; do d=$(dirname \"$f\"); for l in $(gre"}
+{"at": "2026-10-25 16:18", "testo": "ANNOTAZIONE N5 su O3.T1 — Dalla verifica INV-5 al gate di O1 (25/10): sulla Deck sono in ascolto 22 (SSH), 5355 (LLMNR di systemd-resolved, su tutta la LAN) e 53 solo su localhost. LLMNR non serve perché usiamo mDNS: deck status dovrebbe mostrare le porte in ascolto e segnalare LLMNR come superfluo, con l'azione suggerita LLMNR=no in resolved.conf."}
+{"at": "2026-10-25 16:19", "testo": "[-] Write  ../../../private/tmp/claude-502/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/scratchpad/bilancio-o1.html", "task": "-", "tipo": "file", "tool": "Write", "file": "../../../private/tmp/claude-502/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/scratchpad/bilancio-o1.html"}
+{"at": "2026-10-25 16:49", "testo": "[-] bash: ~/claude-rules/bin/wf.sh project-set --detail ambiente=\"Steam Deck LCD a casa, sempre accesa e alimentata, in "}
+{"at": "2026-10-25 16:49", "testo": "TASK AGGIUNTA O1.T5 in O1 — Accesso SSH affidabile dal Mac"}
+{"at": "2026-10-25 16:49", "testo": "[-] bash: ~/claude-rules/bin/wf.sh task-add --obj O1 --title \"Accesso SSH affidabile dal Mac\" --gate \"La voce agentdeck "}
+{"at": "2026-10-25 16:49", "testo": "TASK APERTA O1.T5 — Accesso SSH affidabile dal Mac | perimetro: ~/.ssh/config (voci agentdeck), docs/accesso.md | gate: La voce agentdeck in ~/.ssh/config punta all'IP stabile 192.168.1.49 e il nome .local resta come alias agentdeck-mdns; 10 tentativi consecutivi di ssh agentdeck riusciti al primo colpo; backup della configurazione precedente; docs/accesso.md aggiornato. | rischio: 10"}
+{"at": "2026-10-25 16:49", "testo": "[O1.T5] bash: ~/claude-rules/bin/wf.sh task-start --id O1.T5 --risk 10 --why \"Modifica solo la voce agentdeck nella configur"}
+{"at": "2026-10-25 16:49", "testo": "[O1.T5] bash: cp ~/.ssh/config ~/.ssh/config.bak.$(date +%Y%m%d%H%M%S) && ls -1t ~/.ssh/config.bak.* | head -1"}
+{"at": "2026-10-25 16:49", "testo": "[O1.T5] Edit  ../.ssh/config", "task": "O1.T5", "tipo": "file", "tool": "Edit", "file": "../.ssh/config"}
+{"at": "2026-10-25 16:49", "testo": "[O1.T5] bash: ssh-keygen -F agentdeck -f ~/.ssh/known_hosts >/dev/null || ssh-keygen -F agentdeck.local -f ~/.ssh/known_host"}
+{"at": "2026-10-25 16:49", "testo": "[O1.T5] bash: ok=0; for i in $(seq 1 10); do if r=$(ssh -o BatchMode=yes -o ConnectTimeout=8 agentdeck 'echo \"$(hostname) $("}
+{"at": "2026-10-25 16:49", "testo": "[O1.T5] Edit  docs/accesso.md", "task": "O1.T5", "tipo": "file", "tool": "Edit", "file": "docs/accesso.md"}
+{"at": "2026-10-25 16:49", "testo": "[O1.T5] Edit  docs/accesso.md", "task": "O1.T5", "tipo": "file", "tool": "Edit", "file": "docs/accesso.md"}
+{"at": "2026-10-25 16:50", "testo": "[O1.T5] Edit  docs/accesso.md", "task": "O1.T5", "tipo": "file", "tool": "Edit", "file": "docs/accesso.md"}
+{"at": "2026-10-25 16:50", "testo": "[O1.T5] FALLITO Bash: ~/claude-rules/bin/wf.sh task-close --done \"ssh agentdeck punta all'IP stabile .49 con Hos"}
+{"at": "2026-10-25 16:50", "testo": "FALLIMENTO [Bash] execution_error: riassuntivissimo troppo lungo (162 caratteri, max 160): è una riga di roadmap.\nSe serve più spazio il posto è una spec, "}
+{"at": "2026-10-25 16:50", "testo": "TASK CHIUSA O1.T5 — completata: ssh agentdeck usa l'IP stabile .49 (HostKeyAlias), alias agentdeck-mdns sul nome; backup fatto; 10 collegamenti su 10 al primo colpo; accesso.md aggiornato."}
+{"at": "2026-10-25 16:50", "testo": "VERSIONE 0.1.4 (O1.T5)"}
+{"at": "2026-10-25 16:50", "testo": "ERRORE RISOLTO — execution_error: riassuntivissimo troppo lungo (162 caratteri, max 160): è una riga di roadmap. Se serve più spazio il posto è una spec, — Riepilogo di 162 caratteri accorciato sotto 160; task chiusa.", "tipo": "errore-risolto"}
+{"at": "2026-10-25 16:50", "testo": "[-] bash: ~/claude-rules/bin/wf.sh task-close --done \"ssh agentdeck usa l'IP stabile .49 (HostKeyAlias), alias agentdeck"}
+{"at": "2026-10-25 16:50", "testo": "VERSIONI scelte dall'utente: governance"}
+{"at": "2026-10-25 16:50", "testo": "TRAPPOLA registrata: La governance annuncia una versione già pubblicata (es. 0.1.4 per O1.T5 dopo v0.1.4 di O1.T4) -> il contatore versionamento.attuale in project.json non avanza sempre alla chiusura -> prima di scrivere VERSION confrontare con l'ultimo tag su origin; se è indietro, riallineare con versione --scegli governance --da <versione giusta> --dove VERSION --pubblica e non riscrivere mai un tag pubblicato."}
+{"at": "2026-10-25 16:50", "testo": "[-] bash: ~/claude-rules/bin/wf.sh pitfall \"La governance annuncia una versione già pubblicata (es. 0.1.4 per O1.T5 dopo"}
+{"at": "2026-10-25 16:50", "testo": "[-] Edit  CHANGELOG.md", "task": "-", "tipo": "file", "tool": "Edit", "file": "CHANGELOG.md"}

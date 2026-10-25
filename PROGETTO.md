@@ -9,13 +9,13 @@ AgentDeck: una Steam Deck LCD (APU AMD, 16 GB RAM, NVMe 2 TB) trasformata in ser
 
 **Come si verifica che funziona:** La Deck si riavvia da sola dal disco interno e torna raggiungibile con ssh agentdeck (utente agent, solo chiave); systemctl is-system-running risponde running senza unità fallite; è attivo il kernel principale; snapper elenca gli snapshot e GRUB li rende avviabili. Gli script hanno controlli in sola lettura: install.sh check e verify, prepare-stick.sh con DRY_RUN=1. Non esistono ancora test automatici: ogni componente nuovo si verifica usandolo davvero come agente sulla Deck e controllando che la risposta sia JSON valido e coerente con lo stato reale.
 
-**Versioni:** Il numero è MAJOR.MINOR.PATCH: il terzo sale a ogni task completata, qualunque sia il suo obiettivo; il secondo a ogni ciclo chiuso; il primo solo col sì dell'utente, su proposta dell'agente. Versione attuale: 0.1.3; il numero sta in VERSION. Ogni versione si pubblica appena chiusa.
+**Versioni:** Il numero è MAJOR.MINOR.PATCH: il terzo sale a ogni task completata, qualunque sia il suo obiettivo; il secondo a ogni ciclo chiuso; il primo solo col sì dell'utente, su proposta dell'agente. Versione attuale: 0.1.5; il numero sta in VERSION. Ogni versione si pubblica appena chiusa.
 
 ## Dettagli
 
 | Voce | Valore | Origine |
 |---|---|---|
-| ambiente | Steam Deck LCD a casa, sempre accesa e alimentata, in Wi-Fi sulla LAN domestica (192.168.1.0/24), raggiungibile come agentdeck.local; Arch Linux con kernel linux e linux-lts. Sviluppo dal MacBook Pro (repository in /Users/snj/linuxai-steamdeck), installazione e gestione via SSH. Nessun remote git per ora. | configurato |
+| ambiente | Steam Deck LCD a casa, sempre accesa e alimentata, in Wi-Fi sulla LAN domestica (192.168.1.0/24), raggiungibile come agentdeck.local con IP stabile 192.168.1.49; Arch Linux con kernel linux e linux-lts. Sviluppo dal MacBook Pro (repository in /Users/snj/linuxai-steamdeck), installazione e gestione via SSH. Repository privato su GitHub panicDa3m0n/agentdeck, ogni versione pubblicata con tag. | configurato |
 | branch | main | rilevato |
 | scopo_utente | Lo usano agenti AI (oggi Claude via SSH dal Mac, in futuro un agente interno su API cloud) per gestire servizi, ospitare applicazioni personali e domestiche, progetti di sviluppo e lavoro agentico; Davide è proprietario e spettatore, non operatore. | configurato |
 | vincoli | Arch Linux; principio agent-first (PRINCIPI.md) e sviluppo incrementale con ogni intervento discusso prima; priorità alla velocità; interfaccia grafica necessaria ma solo come canale verso l'umano; niente cifratura del disco; microSD da 1 TB per ora intoccata; agente interno solo su API cloud, niente modelli locali; progetto personale: per GitHub si usa l'account panicDa3m0n; nessuna scadenza. | configurato |
@@ -25,7 +25,7 @@ AgentDeck: una Steam Deck LCD (APU AMD, 16 GB RAM, NVMe 2 TB) trasformata in ser
 ### `01` Prima interfaccia agentica: protocollo, stato e snapshot — **in corso**
 
 - Roadmap: [ROADMAP.md](ROADMAP.md)
-- Aperto il 2026-10-25 15:54 · ultimo aggiornamento 2026-10-25 16:16
+- Aperto il 2026-10-25 15:54 · ultimo aggiornamento 2026-10-25 16:50
 
 ## Debito ereditato
 

@@ -10,11 +10,11 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O1` Base operativa affidabile per l'agente — 4 task: 4 completate, 0 in corso, 0 da fare, 0 bloccate
+- **Obiettivo attivo:** `O1` Base operativa affidabile per l'agente — 5 task: 5 completate, 0 in corso, 0 da fare, 0 bloccate
 - **Task attiva:** —
-- **Ultima task gestita:** `O1.T4` — completata — README, indice docs/ e 5 documenti; PRINCIPI con INV-10; 57 link verificati senza rotture; script e documenti collegati a vicenda; tutto su origin/main.
+- **Ultima task gestita:** `O1.T5` — completata — ssh agentdeck usa l'IP stabile .49 (HostKeyAlias), alias agentdeck-mdns sul nome; backup fatto; 10 collegamenti su 10 al primo colpo; accesso.md aggiornato.
 - **Fase:** `objective_gate_pending`
-- **Ultimo aggiornamento:** 2026-10-25 16:16
+- **Ultimo aggiornamento:** 2026-10-25 16:50
 
 ## Richieste attive
 
@@ -40,6 +40,9 @@ _nessuna richiesta in attesa._
   *gate previsto:* README.md con panoramica e link; docs/README.md come indice; documenti per principi, chiavetta live, installazione e accesso alla Deck; ogni script in live/ e install/ rimanda al suo documento e ogni documento rimanda agli script; tutto pubblicato sul remote. · *gate confermato:* ✔ README, indice docs/ e 5 documenti; PRINCIPI con INV-10; 57 link verificati senza rotture; script e documenti collegati a vicenda; tutto su origin/main.
   *rischio:* 5/100 — Solo documentazione e commenti di intestazione negli script: nessuna modifica al comportamento del codice né alla Deck.
   *annotazioni:* `N2`, `N3`, `N4`
+- [x] `O1.T5` Accesso SSH affidabile dal Mac — *perimetro:* `~/.ssh/config (voci agentdeck), docs/accesso.md`
+  *gate previsto:* La voce agentdeck in ~/.ssh/config punta all'IP stabile 192.168.1.49 e il nome .local resta come alias agentdeck-mdns; 10 tentativi consecutivi di ssh agentdeck riusciti al primo colpo; backup della configurazione precedente; docs/accesso.md aggiornato. · *gate confermato:* ✔ ssh agentdeck usa l'IP stabile .49 (HostKeyAlias), alias agentdeck-mdns sul nome; backup fatto; 10 collegamenti su 10 al primo colpo; accesso.md aggiornato.
+  *rischio:* 10/100 — Modifica solo la voce agentdeck nella configurazione SSH del Mac, con backup prima: se qualcosa non va si ripristina il file; la Deck e il suo accesso non cambiano.
 
 ### `O2` Protocollo dell'interfaccia agentica: schermate interattive e autoprompting — in corso
 
@@ -56,6 +59,7 @@ _nessuna richiesta in attesa._
 
 - [ ] `O3.T1` Componente status: monitor attività e informazioni di sistema — *perimetro:* `deck/, componente status`
   *gate previsto:* deck status riporta hardware, temperature, batteria, memoria, disco, rete, servizi falliti e snapshot; ogni valore coincide con quello letto dai comandi di sistema; le anomalie note (per esempio Wi-Fi a 2,4 GHz) compaiono come avvisi con azioni suggerite.
+  *annotazioni:* `N5`
 - [ ] `O3.T2` Componente snapshot: elenco e creazione — *perimetro:* `deck/, componente snapshot`
   *gate previsto:* deck snapshot elenca gli stessi snapshot di snapper; la creazione da deck produce uno snapshot visibile in snapper e nel menu snapshot di GRUB.
 - [ ] `O3.T3` Rollback con anteprima e conferma — *perimetro:* `deck/, componente snapshot, subvolumi Btrfs sulla Deck`
@@ -69,3 +73,4 @@ _Una riga per nota, sempre legata a una task. `wf.sh notes` per leggerle._
 - `N2` (`O1.T4`) Aggiungere a PRINCIPI.md (o al documento dei principi in docs/) il principio approvato dall'utente il 25/10, registrato come INV-10: si interviene al livello più alto che risolve il problema (configurazione, strato agentico, sostituzione di componenti); il codice di base si modifica solo per un bisogno reale e con decisione esplicita. Includere la tabella dei quattro livelli e il paragone con macOS e Android. — 2026-10-25 16:05
 - `N3` (`O1.T4`) Documentare in docs/ il setup git e GitHub: identità personale impostata solo nel repository (Davide, davideditrani94@gmail.com), remote privato https://github.com/panicDa3m0n/agentdeck, credential helper locale che usa gh auth token --user panicDa3m0n (indipendente dall'account gh attivo), tag v<versione> a ogni versione chiusa (INV-8). — 2026-10-25 16:07
 - `N4` (`O1.T4`) Documentare nell'accesso alla Deck: IP stabile 192.168.1.49 grazie a SendRelease=no (O1.T2, testato con due riavvii); ssh agentdeck usa il nome agentdeck.local; se il nome non si risolve (trappola P2) usare ssh -o HostName=192.168.1.49 agentdeck. Una prenotazione DHCP sul router renderebbe l'IP fisso anche dopo spegnimenti lunghi: richiede l'accesso dell'utente al router. — 2026-10-25 16:12
+- `N5` (`O3.T1`) Dalla verifica INV-5 al gate di O1 (25/10): sulla Deck sono in ascolto 22 (SSH), 5355 (LLMNR di systemd-resolved, su tutta la LAN) e 53 solo su localhost. LLMNR non serve perché usiamo mDNS: deck status dovrebbe mostrare le porte in ascolto e segnalare LLMNR come superfluo, con l'azione suggerita LLMNR=no in resolved.conf. — 2026-10-25 16:18

@@ -2,13 +2,13 @@
   "version": 1,
   "name": "linuxai-steamdeck",
   "created": "2026-10-25 15:45",
-  "updated": "2026-10-25 16:16",
+  "updated": "2026-10-25 16:50",
   "phase": "active",
   "description": "AgentDeck: una Steam Deck LCD (APU AMD, 16 GB RAM, NVMe 2 TB) trasformata in server domestico a basso consumo con Arch Linux, progettato agent-first: il sistema è gestito interamente da un agente AI (oggi Claude, via SSH dal Mac) e l’umano è al massimo spettatore. Serve a ospitare servizi, applicazioni personali e domestiche, progetti di sviluppo e uso agentico completo. Ogni componente del sistema, prendendo spunto dalle funzioni di macOS, viene riprogettato per l’uso agentico con due tecnologie: interattività (ogni risposta è una schermata in JSON strutturato con dati, azioni, navigazione, errori e conferme come anteprima delle conseguenze) e autoprompting (il sistema fornisce all’agente le istruzioni giuste per il contesto in cui si trova). L’agente che sviluppa è anche l’agente che usa il sistema, così i bisogni emergono dall’uso reale. Obiettivo finale: agente interno basato su API cloud, idealmente sessioni Claude Code integrate nativamente con il sistema. Progetto personale di Davide. Nel repository: principi (PRINCIPI.md), chiavetta live con Wi-Fi e SSH automatici (live/), installazione di Arch a fasi (install/).",
   "verification": "La Deck si riavvia da sola dal disco interno e torna raggiungibile con ssh agentdeck (utente agent, solo chiave); systemctl is-system-running risponde running senza unità fallite; è attivo il kernel principale; snapper elenca gli snapshot e GRUB li rende avviabili. Gli script hanno controlli in sola lettura: install.sh check e verify, prepare-stick.sh con DRY_RUN=1. Non esistono ancora test automatici: ogni componente nuovo si verifica usandolo davvero come agente sulla Deck e controllando che la risposta sia JSON valido e coerente con lo stato reale.",
   "details": {
     "scopo_utente": "Lo usano agenti AI (oggi Claude via SSH dal Mac, in futuro un agente interno su API cloud) per gestire servizi, ospitare applicazioni personali e domestiche, progetti di sviluppo e lavoro agentico; Davide è proprietario e spettatore, non operatore.",
-    "ambiente": "Steam Deck LCD a casa, sempre accesa e alimentata, in Wi-Fi sulla LAN domestica (192.168.1.0/24), raggiungibile come agentdeck.local; Arch Linux con kernel linux e linux-lts. Sviluppo dal MacBook Pro (repository in /Users/snj/linuxai-steamdeck), installazione e gestione via SSH. Nessun remote git per ora.",
+    "ambiente": "Steam Deck LCD a casa, sempre accesa e alimentata, in Wi-Fi sulla LAN domestica (192.168.1.0/24), raggiungibile come agentdeck.local con IP stabile 192.168.1.49; Arch Linux con kernel linux e linux-lts. Sviluppo dal MacBook Pro (repository in /Users/snj/linuxai-steamdeck), installazione e gestione via SSH. Repository privato su GitHub panicDa3m0n/agentdeck, ogni versione pubblicata con tag.",
     "vincoli": "Arch Linux; principio agent-first (PRINCIPI.md) e sviluppo incrementale con ogni intervento discusso prima; priorità alla velocità; interfaccia grafica necessaria ma solo come canale verso l'umano; niente cifratura del disco; microSD da 1 TB per ora intoccata; agente interno solo su API cloud, niente modelli locali; progetto personale: per GitHub si usa l'account panicDa3m0n; nessuna scadenza."
   },
   "detected": {
@@ -21,7 +21,7 @@
       "slug": "prima-interfaccia-agentica-protocollo-st",
       "state": "active",
       "opened": "2026-10-25 15:54",
-      "updated": "2026-10-25 16:16",
+      "updated": "2026-10-25 16:50",
       "file": ".claude/workflow/roadmaps/01-prima-interfaccia-agentica-protocollo-st.md"
     }
   ],
@@ -34,8 +34,8 @@
   },
   "versionamento": {
     "modalita": "governance",
-    "scelto": "2026-10-25 16:05",
-    "attuale": "0.1.3",
+    "scelto": "2026-10-25 16:50",
+    "attuale": "0.1.5",
     "dove": "VERSION",
     "pubblica": true
   }
