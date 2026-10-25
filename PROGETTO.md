@@ -46,7 +46,7 @@ AgentDeck: una Steam Deck LCD (APU AMD, 16 GB RAM, NVMe 2 TB) trasformata in ser
 ### `02` La Deck come server gestito dall'agente: rete, servizi, aggiornamenti, schermo — **in corso**
 
 - Roadmap: [ROADMAP.md](ROADMAP.md)
-- Aperto il 2026-10-25 19:02 · ultimo aggiornamento 2026-10-25 19:44
+- Aperto il 2026-10-25 19:02 · ultimo aggiornamento 2026-10-25 19:51
 
 ## Debito ereditato
 

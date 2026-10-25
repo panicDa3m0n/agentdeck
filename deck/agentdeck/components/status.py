@@ -26,8 +26,8 @@ def alerts_for(d: dict) -> list:
     services = d.get("services") or {}
     failed = services.get("failed") or []
     if failed:
-        out.append(alert("critical", "SERVICES_FAILED", message=sys_text(
-            "{n} system services have failed: see data.services.failed.", n=len(failed))))
+        out.append(alert("critical", "SERVICES_FAILED", path="/service", message=sys_text(
+            "{n} system services have failed: see data.services.failed and `deck service`.", n=len(failed))))
 
     apu = ((d.get("sensors") or {}).get("temps_c") or {}).get("apu")
     if apu is not None and apu >= TEMP_WARN_C:

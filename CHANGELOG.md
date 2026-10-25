@@ -4,6 +4,22 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.2.3 — 2026-10-25
+
+Ciclo 02, task O5.T1: componente `deck service`.
+
+- `deck service` elenca i servizi di systemd come `systemctl list-units --all`, con abilitazione, conteggi e
+  servizi falliti; `deck service show name=…` ne mostra il dettaglio.
+- Azioni `start`, `stop`, `restart`, `enable`, `disable`:
+  - `stop`, `restart` e `disable` con anteprima e conferma;
+  - snapshot prima di `enable` e `disable`;
+  - dopo ogni azione lo stato viene riletto e confrontato con quello atteso.
+- Protezione dell'accesso: `stop` e `disable` rifiutati per `sshd`, `systemd-networkd`, `iwd`,
+  `systemd-resolved` e `dbus-broker` (da cui dipende iwd) e per ciò che richiedono; `restart` di sshd solo
+  con la configurazione valida.
+- L'avviso `SERVICES_FAILED` di `deck status` ora rimanda a `/service`.
+- Controllo dal vivo 28 su 28, con un servizio di prova creato e tolto; 122 test.
+
 ## 0.2.2 — 2026-10-25
 
 Ciclo 02, task O4.T2: azioni di rete con anteprima e rete di sicurezza.

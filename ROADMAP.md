@@ -10,10 +10,10 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** —
+- **Obiettivo attivo:** `O5` Servizi e log gestiti dall'agente: deck service, deck logs — 2 task: 1 completate, 0 in corso, 1 da fare, 0 bloccate
 - **Task attiva:** —
-- **Ultima task gestita:** `O4.T2` — completata — deck network: llmnr_off/on e prefer_5ghz con ritorno automatico, provati dal vivo; Deck sui 5 GHz anche dopo riavvio, ssh ok, 11/11, 100 test
-- **Ultimo aggiornamento:** 2026-10-25 19:44
+- **Ultima task gestita:** `O5.T1` — completata — deck service: elenco come systemctl, azioni su servizio di prova con anteprima e snapshot, stop e disable dei 5 servizi di accesso rifiutati; 28/28, 122 test
+- **Ultimo aggiornamento:** 2026-10-25 19:51
 
 ## Richieste attive
 
@@ -38,8 +38,10 @@ _nessuna richiesta in attesa._
 
 **Gate obiettivo:** deck service mostra e governa i servizi di systemd con anteprima per le azioni che interrompono qualcosa e rifiuto per quelli da cui dipende l'accesso (INV-1); deck logs restituisce il journal strutturato con il testo dei log solo nei dati (INV-4).
 
-- [ ] `O5.T1` Componente service: elenco, stato e azioni sui servizi — *perimetro:* `deck/, componente service`
-  *gate previsto:* deck service elenca i servizi come systemctl, con stato, abilitazione e servizi falliti; start, stop, restart, enable e disable funzionano su un servizio di prova, quelli che interrompono qualcosa con anteprima; stop e disable di sshd, systemd-networkd, iwd e systemd-resolved rifiutati con il motivo (INV-1).
+- [x] `O5.T1` Componente service: elenco, stato e azioni sui servizi — *perimetro:* `deck/, componente service`
+  *gate previsto:* deck service elenca i servizi come systemctl, con stato, abilitazione e servizi falliti; start, stop, restart, enable e disable funzionano su un servizio di prova, quelli che interrompono qualcosa con anteprima; stop e disable di sshd, systemd-networkd, iwd e systemd-resolved rifiutati con il motivo (INV-1). · *gate confermato:* ✔ deck service: elenco come systemctl, azioni su servizio di prova con anteprima e snapshot, stop e disable dei 5 servizi di accesso rifiutati; 28/28, 122 test
+  *rischio:* 30/100 — Le azioni sui servizi possono togliere l'accesso all'agente se toccano sshd, networkd, iwd o resolved (INV-1): mitigato da rifiuto per quelli e per ciò da cui dipendono, prove su un servizio di prova, snapshot prima di enable e disable; l'elenco è sola lettura.
+  *annotazioni:* `N15`
 - [ ] `O5.T2` Componente logs: journal strutturato per servizio, periodo e gravità — *perimetro:* `deck/, componente logs, componente service`
   *gate previsto:* deck logs restituisce le righe del journal filtrate per servizio, periodo e gravità, uguali a journalctl -o json; il testo dei log sta solo nei dati e un test con una riga di log malevola verifica che non entri nel canale istruzioni (INV-4); da deck service si arriva ai log del servizio.
 
@@ -67,3 +69,4 @@ _Una riga per nota, sempre legata a una task. `wf.sh notes` per leggerle._
 - `N12` (`O4.T2`) Avanzamento O4.T2 (25/10, 19:31): llmnr_off provato dal vivo (snapshot 20 e 21, porta 5355 chiusa, DNS e mDNS ok, llmnr_on riapre la porta). prefer_5ghz: primo tentativo fallito subito, iwd non vedeva la rete (P12, corretto con scansione di iwd); secondo tentativo sui 5 GHz in 12 s, stesso IP .49, SSH ok, stessa password; senza conferma il ritorno è scattato a 180 s. Manca la prova con keep_5ghz. — 2026-10-25 19:31
 - `N13` (`O4.T2`) Valutazione d'impatto O4.T2: INV-1 retto (profilo 2,4 GHz tenuto come riserva, ritorno automatico provato, riavvio Deck ok in 30 s, IP .49 invariato). Un rollback a uno snapshot precedente al 19:32 riporta la Deck sui 2,4 GHz, ancora raggiungibile. Una reinstallazione spegne LLMNR e preferisce i 5 GHz, ma il profilo 5 GHz va ricreato con prefer_5ghz. La password resta sulla Deck in file root 600, mai stampata (INV-6). Nessun effetto su snapshot, schermo, ssh. — 2026-10-25 19:35
 - `N14` (`O4.T2`) Per una roadmap futura, approvato dall'utente il 25/10: componente deck secrets per i segreti che vengono da fuori (prima la chiave API dell'agente interno). L'agente chiede il segreto con nome e scopo; l'umano lo consegna da un canale laterale, mai dalla chat: file in secrets/ inviato via pipe con ssh, pagina usa e getta sulla LAN aperta da un QR sullo schermo della Deck, più avanti un gestore di password con token revocabile. Conservato cifrato sulla Deck (systemd-creds, TPM se attivo); l'agente vede solo nomi e metadati, mai il valore; il valore va diretto a chi lo usa (LoadCredential), ogni uso registrato. — 2026-10-25 19:44
+- `N15` (`O5.T1`) Emerso in O5.T1 (25/10): gli snapshot creati da deck (prima di llmnr, prefer_5ghz, service enable/disable) sono single senza algoritmo di pulizia: snapper non li toglie mai e si accumulano (oggi 20-26). Serve una regola: cleanup number per quelli automatici, o una pulizia con anteprima in deck snapshot (vicino a O7.T2). — 2026-10-25 19:50

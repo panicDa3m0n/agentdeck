@@ -24,6 +24,7 @@ Sulla Deck una chiamata dura circa 0,09 secondi (Python 3.14, misura del 25/10/2
 | `/status` | [../deck/agentdeck/components/status.py](../deck/agentdeck/components/status.py) | Stato della macchina (vedi sotto) |
 | `/snapshot` | [../deck/agentdeck/components/snapshot.py](../deck/agentdeck/components/snapshot.py) | Snapshot del sistema: elenco, creazione, rollback (vedi sotto) |
 | `/network` | [../deck/agentdeck/components/network.py](../deck/agentdeck/components/network.py) | Rete: interfacce, Wi-Fi e reti visibili, risoluzione dei nomi, porte (vedi sotto) |
+| `/service` | [../deck/agentdeck/components/service.py](../deck/agentdeck/components/service.py) | Servizi di systemd: elenco, dettaglio, start, stop, restart, enable, disable (vedi sotto) |
 
 ### `/network`: rete
 
@@ -99,6 +100,49 @@ Il controllo dal vivo confronta ogni valore con `ip`, `iw`, `resolvectl` e `ss`:
 
 ```bash
 ssh agentdeck python /opt/agentdeck/tests/live_network_check.py
+```
+
+### `/service`: servizi di systemd
+
+- `deck service` elenca tutti i servizi caricati, come `systemctl list-units --type=service --all`, con
+  `enabled` letto dal file dell'unità (`null` se systemd non lo riporta). In `data` ci sono anche i conteggi, i
+  servizi falliti e quelli protetti. Risponde in circa 0,5-0,8 secondi; la schermata pesa circa 23 KB.
+- `deck service show name=<unità>` (effetto `read`) mostra le proprietà di un servizio come `systemctl show`:
+  stato, abilitazione, PID, memoria, avvio, file dell'unità, dipendenze. Il suffisso `.service` si può omettere
+  e gli alias si risolvono (`dbus` diventa `dbus-broker.service`). Si gestiscono solo unità `.service`.
+
+| Azione | Effetto | Snapshot prima | Note |
+|---|---|---|---|
+| `start` | safe | no | Rifiutata se il servizio è mascherato |
+| `stop` | destructive | no | Torna da solo al riavvio se è abilitato |
+| `restart` | destructive | no | Per i servizi di rete l'anteprima avverte che SSH può cadere per qualche secondo |
+| `enable` | safe | sì | Solo all'avvio (niente `--now`); rifiutata per unità `static`, `indirect` e mascherate |
+| `disable` | destructive | sì | Il servizio resta attivo fino a uno `stop` |
+
+Dopo ogni azione `deck` rilegge il servizio, aspettando fino a 10 secondi che finisca di avviarsi o fermarsi,
+e risponde `FAILED` se non ha raggiunto lo stato atteso o se `systemctl` ha dato errore. Il messaggio di
+`systemctl` sta in `data.systemctl_error`.
+
+**Protezione dell'accesso (INV-1).** Sono protetti i servizi da cui dipende l'accesso dell'agente:
+`sshd`, `systemd-networkd`, `iwd`, `systemd-resolved` e `dbus-broker`, il bus di sistema senza cui iwd perde la
+rete (`system.ACCESS_SERVICES`). A questi si aggiungono le loro dipendenze dirette che sono servizi
+(`Requires`, `Requisite`, `BindsTo`), lette dal vivo; oggi non ce ne sono altre.
+- `stop` e `disable` di un servizio protetto, o di un servizio richiesto da uno protetto, sono rifiutati con
+  `NOT_AVAILABLE` e il motivo.
+- `restart` di `dbus-broker` è rifiutato; `restart` di `sshd` è ammesso solo se la configurazione passa
+  `sshd -t`.
+
+| Avviso | Livello | Azione collegata |
+|---|---|---|
+| `SERVICES_FAILED` | critical | `show` su `/service`; lo stesso codice in `deck status` rimanda a `/service` |
+
+Nomi, descrizioni e messaggi di `systemctl` sono testo esterno: stanno solo nei dati (INV-4).
+
+Il controllo dal vivo confronta l'elenco con `systemctl` e fa il giro completo delle azioni su un servizio di
+prova, `agentdeck-test`, che crea e poi toglie. Controlla anche i rifiuti sui servizi protetti:
+
+```bash
+ssh agentdeck python /opt/agentdeck/tests/live_service_check.py
 ```
 
 ### `/snapshot`: snapshot del sistema
@@ -221,6 +265,8 @@ hanno ancora un'azione collegata.
 | [../deck/tests/test_snapshot.py](../deck/tests/test_snapshot.py) | Test di `/snapshot`: elenco, creazione, rollback, rifiuti di sicurezza, guasti |
 | [../deck/tests/test_network.py](../deck/tests/test_network.py) | Test di `/network`: scansione, reti sorelle, avvisi, SSID malevoli, LLMNR, cambio Wi-Fi, profili iwd |
 | [../deck/tests/live_network_check.py](../deck/tests/live_network_check.py) | Controllo dal vivo di `deck network` contro `ip`, `iw`, `resolvectl`, `ss` |
+| [../deck/tests/test_service.py](../deck/tests/test_service.py) | Test di `/service`: parser di `systemctl`, protezione dell'accesso, anteprime, azioni, snapshot, testo esterno |
+| [../deck/tests/live_service_check.py](../deck/tests/live_service_check.py) | Controllo dal vivo di `deck service` contro `systemctl`, con un servizio di prova |
 | [../deck/tests/live_status_check.py](../deck/tests/live_status_check.py) | Controllo dal vivo sulla Deck: ogni valore di `deck status` contro una lettura indipendente |
 | [../deck/install.sh](../deck/install.sh) | Installazione e aggiornamento sulla Deck, schermo compreso |
 | [../deck/screen/](../deck/screen/agentdeck_screen.py) | Schermo della Deck: registrazione dei comandi, visualizzatore, servizio ([schermo.md](schermo.md)) |

@@ -392,6 +392,92 @@ def services() -> dict:
             "failed": [u.get("unit") for u in failed] if isinstance(failed, list) else None}
 
 
+# ---- Servizi di systemd (componente /service, task O5.T1)
+
+# Servizi da cui dipende l'accesso dell'agente (INV-1): SSH, rete, nomi e il bus di sistema su cui vive iwd.
+# Si aggiungono le loro dipendenze dirette (Requires, Requisite, BindsTo), lette dal vivo.
+ACCESS_SERVICES = ("sshd.service", "systemd-networkd.service", "iwd.service", "systemd-resolved.service",
+                   "dbus-broker.service")
+SERVICE_DETAIL_PROPS = ("Id", "Description", "LoadState", "ActiveState", "SubState", "UnitFileState",
+                        "UnitFilePreset", "Result", "MainPID", "ActiveEnterTimestamp", "MemoryCurrent",
+                        "NRestarts", "FragmentPath", "Requires", "Wants", "RequiredBy", "WantedBy", "BoundBy",
+                        "TriggeredBy")
+_UNIT_NAME = re.compile(r"[A-Za-z0-9:_.@\\-]{1,96}\.service")
+
+
+def parse_systemctl_show(text: str) -> list:
+    """I blocchi di `systemctl show -p ... <unità>...`: un dizionario per unità."""
+    blocks = []
+    for chunk in text.strip().split("\n\n"):
+        block = dict(line.split("=", 1) for line in chunk.splitlines() if "=" in line)
+        if block:
+            blocks.append(block)
+    return blocks
+
+
+def protected_services(dep_blocks: list) -> list:
+    """ACCESS_SERVICES più le loro dipendenze dirette che sono servizi."""
+    out = set(ACCESS_SERVICES)
+    for b in dep_blocks:
+        for key in ("Requires", "Requisite", "BindsTo"):
+            out |= {u for u in b.get(key, "").split() if u.endswith(".service")}
+    return sorted(out)
+
+
+def access_services() -> list:
+    text = run(["systemctl", "show", "-p", "Id,Requires,Requisite,BindsTo", *ACCESS_SERVICES])
+    return protected_services(parse_systemctl_show(text or ""))
+
+
+def unit_name(name: str) -> Optional[str]:
+    """Il nome di unità di un servizio: aggiunge .service se manca; None se il nome non è valido."""
+    name = name.strip()
+    if "." not in name:
+        name += ".service"
+    return name if _UNIT_NAME.fullmatch(name) else None
+
+
+def merge_services(units: list, shown: list, protected: list) -> list:
+    """Unisce `systemctl list-units --all --output=json` con l'abilitazione letta da `systemctl show`."""
+    enabled = {b.get("Id"): b.get("UnitFileState") or None for b in shown}
+    return [{"unit": u["unit"], "description": u.get("description"), "load": u.get("load"),
+             "active": u.get("active"), "sub": u.get("sub"), "enabled": enabled.get(u["unit"]),
+             "protected": u["unit"] in protected}
+            for u in units]
+
+
+def service_list() -> Optional[list]:
+    units = json.loads(run(["systemctl", "list-units", "--type=service", "--all", "--output=json",
+                            "--no-pager"]) or "null")
+    if not isinstance(units, list):
+        return None
+    names = [u["unit"] for u in units]
+    shown = parse_systemctl_show(run(["systemctl", "show", "-p", "Id,UnitFileState", *names]) or "") if names else []
+    return merge_services(units, shown, access_services())
+
+
+def service_show(unit: str) -> Optional[dict]:
+    """Le proprietà di un servizio; LoadState not-found se non esiste. Un alias restituisce il nome vero in Id."""
+    blocks = parse_systemctl_show(run(["systemctl", "show", "-p", ",".join(SERVICE_DETAIL_PROPS), unit]) or "")
+    if not blocks:
+        return None
+    b = blocks[0]
+    for key in ("Requires", "Wants", "RequiredBy", "WantedBy", "BoundBy", "TriggeredBy"):
+        b[key] = b.get(key, "").split()
+    for key in ("MainPID", "NRestarts", "MemoryCurrent"):
+        b[key] = int(b[key]) if b.get(key, "").isdigit() else None
+    return b
+
+
+def service_do(verb: str, unit: str) -> None:
+    """systemctl start|stop|restart|enable|disable sull'unità; un fallimento solleva RuntimeError."""
+    run_checked(["systemctl", verb, unit], timeout=90)
+
+
+def sshd_config_ok() -> bool:
+    return run(["sshd", "-t"], sudo=True) is not None
+
+
 def snapshots() -> Optional[dict]:
     text = run(["snapper", "--jsonout", "list"], sudo=True)
     return parse_snapper(text) if text else None

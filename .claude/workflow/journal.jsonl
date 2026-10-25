@@ -533,3 +533,29 @@
 {"at": "2026-10-25 19:44", "testo": "ANNOTAZIONE N14 su O4.T2 — Per una roadmap futura, approvato dall'utente il 25/10: componente deck secrets per i segreti che vengono da fuori (prima la chiave API dell'agente interno). L'agente chiede il segreto con nome e scopo; l'umano lo consegna da un canale laterale, mai dalla chat: file in secrets/ inviato via pipe con ssh, pagina usa e getta sulla LAN aperta da un QR sullo schermo della Deck, più avanti un gestore di password con token revocabile. Conservato cifrato sulla Deck (systemd-creds, TPM se attivo); l'agente vede solo nomi e metadati, mai il valore; il valore va diretto a chi lo usa (LoadCredential), ogni uso registrato."}
 {"at": "2026-10-25 19:44", "testo": "OBIETTIVO CHIUSO O4 (completo) — approvato"}
 {"at": "2026-10-25 19:44", "testo": "[-] bash: ~/claude-rules/bin/wf.sh note-add --task O4.T2 --text \"Per una roadmap futura, approvato dall'utente il 25/10:"}
+{"at": "2026-10-25 19:44", "testo": "[-] bash: git add ROADMAP.md PROGETTO.md .claude/workflow ':!.claude/workflow/.stop-guard' && git commit -q -F - <<'EOF'"}
+{"at": "2026-10-25 19:44", "testo": "[-] bash: ~/claude-rules/bin/wf.sh status --json 2>&1 | python3 -c \" import json,sys; d=json.load(sys.stdin) for o in d["}
+{"at": "2026-10-25 19:44", "testo": "TASK APERTA O5.T1 — Componente service: elenco, stato e azioni sui servizi | perimetro: deck/, componente service | gate: deck service elenca i servizi come systemctl, con stato, abilitazione e servizi falliti; start, stop, restart, enable e disable funzionano su un servizio di prova, quelli che interrompono qualcosa con anteprima; stop e disable di sshd, systemd-networkd, iwd e systemd-resolved rifiutati con il motivo (INV-1). | rischio: 30"}
+{"at": "2026-10-25 19:44", "testo": "[O5.T1] bash: ~/claude-rules/bin/wf.sh task-start --id O5.T1 --risk 30 --why \"Le azioni sui servizi possono togliere l'acces"}
+{"at": "2026-10-25 19:45", "testo": "[O5.T1] bash: ssh -o BatchMode=yes agentdeck 'systemctl --version | head -1; systemctl list-units --type=service --all --out"}
+{"at": "2026-10-25 19:45", "testo": "[O5.T1] bash: cd /Users/snj/linuxai-steamdeck/deck && sed -n 1,140p agentdeck/components/snapshot.py; cat agentdeck/componen"}
+{"at": "2026-10-25 19:45", "testo": "[O5.T1] bash: ssh -o BatchMode=yes agentdeck 'time (systemctl show -p Id,LoadState,ActiveState,SubState,UnitFileState,Descri"}
+{"at": "2026-10-25 19:46", "testo": "[O5.T1] bash: sed -n 36,62p agentdeck/protocol.py; grep -n \"SERVICE\\|failed\" agentdeck/components/status.py | head"}
+{"at": "2026-10-25 19:46", "testo": "[O5.T1] bash: python3 - <<'EOF' from pathlib import Path p = Path(\"agentdeck/system.py\") s = p.read_text() anchor = '''def s"}
+{"at": "2026-10-25 19:48", "testo": "[O5.T1] Write  deck/agentdeck/components/service.py", "task": "O5.T1", "tipo": "file", "tool": "Write", "file": "deck/agentdeck/components/service.py"}
+{"at": "2026-10-25 19:48", "testo": "[O5.T1] bash: python3 - <<'EOF' from pathlib import Path p = Path(\"agentdeck/components/service.py\") s = p.read_text() s = s"}
+{"at": "2026-10-25 19:48", "testo": "[O5.T1] bash: ssh -o BatchMode=yes agentdeck 'systemctl list-units --type=service --all --output=json --no-pager | python3 -"}
+{"at": "2026-10-25 19:49", "testo": "[O5.T1] Write  deck/tests/test_service.py", "task": "O5.T1", "tipo": "file", "tool": "Write", "file": "deck/tests/test_service.py"}
+{"at": "2026-10-25 19:49", "testo": "[O5.T1] bash: python3 - <<'EOF' from pathlib import Path p = Path(\"tests/test_service.py\") s = p.read_text() old = '''    de"}
+{"at": "2026-10-25 19:50", "testo": "[O5.T1] Write  deck/tests/live_service_check.py", "task": "O5.T1", "tipo": "file", "tool": "Write", "file": "deck/tests/live_service_check.py"}
+{"at": "2026-10-25 19:50", "testo": "[O5.T1] bash: python3 - <<'EOF' from pathlib import Path p = Path(\"tests/live_service_check.py\") s = p.read_text() old = '''"}
+{"at": "2026-10-25 19:50", "testo": "[O5.T1] bash: ssh -o BatchMode=yes agentdeck 'deck service | python3 -c \" import json,sys; s=json.load(sys.stdin); d=s[\\\"dat"}
+{"at": "2026-10-25 19:50", "testo": "[O5.T1] bash: ssh -o BatchMode=yes agentdeck 'python /opt/agentdeck/tests/live_service_check.py; echo \"uscita $?\"'; ssh -o B"}
+{"at": "2026-10-25 19:50", "testo": "ANNOTAZIONE N15 su O5.T1 — Emerso in O5.T1 (25/10): gli snapshot creati da deck (prima di llmnr, prefer_5ghz, service enable/disable) sono single senza algoritmo di pulizia: snapper non li toglie mai e si accumulano (oggi 20-26). Serve una regola: cleanup number per quelli automatici, o una pulizia con anteprima in deck snapshot (vicino a O7.T2)."}
+{"at": "2026-10-25 19:50", "testo": "[O5.T1] bash: cd /Users/snj/linuxai-steamdeck/deck && python3 - <<'EOF' from pathlib import Path p = Path(\"tests/live_servic"}
+{"at": "2026-10-25 19:50", "testo": "[O5.T1] bash: cd /Users/snj/linuxai-steamdeck && sed -n 18,27p docs/deck.md; grep -n \"^### \\`/snapshot\\`\\|test_network.py\\|l"}
+{"at": "2026-10-25 19:51", "testo": "[O5.T1] bash: python3 - <<'EOF' from pathlib import Path p = Path(\"docs/deck.md\") s = p.read_text() old = '''| `/network` | "}
+{"at": "2026-10-25 19:51", "testo": "[O5.T1] bash: ./deck/install.sh 2>&1 | grep -E \"^Ran |^OK|FAIL\" | head -2; ssh -o BatchMode=yes agentdeck 'python /opt/agent"}
+{"at": "2026-10-25 19:51", "testo": "TASK CHIUSA O5.T1 — completata: deck service: elenco come systemctl, azioni su servizio di prova con anteprima e snapshot, stop e disable dei 5 servizi di accesso rifiutati; 28/28, 122 test"}
+{"at": "2026-10-25 19:51", "testo": "VERSIONE 0.2.3 (O5.T1)"}
+{"at": "2026-10-25 19:51", "testo": "[-] bash: python3 - <<'EOF' from pathlib import Path c = Path(\"CHANGELOG.md\") s = c.read_text() entry = '''## 0.2.3 — 20"}
