@@ -735,3 +735,30 @@
 {"at": "2026-10-25 23:22", "testo": "VERSIONE 0.3.6 (O8.T6)"}
 {"at": "2026-10-25 23:22", "testo": "VERSIONI scelte dall'utente: governance"}
 {"at": "2026-10-25 23:22", "testo": "[-] bash: ~/claude-rules/bin/wf.sh note-add --task O8.T7 --text \"Da portare alla revisione (O8.T6, 25/10): la licenza di"}
+{"at": "2026-10-25 23:22", "testo": "[-] bash: python3 - <<'EOF' from pathlib import Path c = Path(\"CHANGELOG.md\"); s = c.read_text() entry = '''## 0.3.6 — 2"}
+{"at": "2026-10-25 23:22", "testo": "TASK APERTA O8.T7 — Sintesi: architettura proposta e decisioni | perimetro: docs/architettura.md, PRINCIPI.md | gate: Architettura complessiva in una pagina, con le interfacce per l'umano come canale futuro ed effimero; elenco delle decisioni approvate una per una dall'utente; roadmap degli sviluppi che ne deriva, pronta per il ciclo successivo. | rischio: 5"}
+{"at": "2026-10-25 23:22", "testo": "[O8.T7] bash: ~/claude-rules/bin/wf.sh task-start --id O8.T7 --risk 5 --why \"Sintesi scritta in docs/architettura.md e PRINC"}
+{"at": "2026-10-25 23:23", "testo": "[O8.T7] Edit  docs/architettura.md", "task": "O8.T7", "tipo": "file", "tool": "Edit", "file": "docs/architettura.md"}
+{"at": "2026-10-25 23:24", "testo": "[O8.T7] bash: for r in sst/opencode anomalyco/opencode Aider-AI/aider block/goose openai/codex cline/cline anthropics/claude"}
+{"at": "2026-10-25 23:24", "testo": "[O8.T7] bash: cat >> docs/architettura.md <<'EOF'  ---  ## 7. Sintesi: architettura proposta e decisioni  ### 7.1 Cosa ha tr"}
+{"at": "2026-10-25 23:24", "testo": "[O8.T7] bash: for r in anthropics/claude-agent-sdk-typescript anthropics/claude-agent-sdk-python charmbracelet/crush OpenHan"}
+{"at": "2026-10-25 23:24", "testo": "[O8.T7] bash: grep -n \"^#\\|^| 2026\\|^| Data\\|^|---\" PRINCIPI.md | head -30; tail -12 PRINCIPI.md"}
+{"at": "2026-10-25 23:25", "testo": "[O8.T7] bash: echo \"--- py README\"; gh api repos/anthropics/claude-agent-sdk-python/readme --jq '.content' | base64 -d | hea"}
+{"at": "2026-10-25 23:25", "testo": "[O8.T7] bash: python3 - <<'EOF' from pathlib import Path p = Path(\"PRINCIPI.md\"); s = p.read_text() old = \"| 2026-10-25 | In"}
+{"at": "2026-10-25 23:25", "testo": "[O8.T7] bash: gh api repos/anthropics/claude-agent-sdk-python/readme --jq '.content' | base64 -d | grep -n -iE \"hook|can_use"}
+{"at": "2026-10-25 23:25", "testo": "[O8.T7] bash: curl -s https://pypi.org/pypi/claude-agent-sdk/json | python3 -c \"import json,sys; d=json.load(sys.stdin)['inf"}
+{"at": "2026-10-25 23:25", "testo": "[O8.T7] bash: gh api repos/openai/codex/contents/docs/config.md --jq '.content' | base64 -d | head -60; echo ----; gh api re"}
+{"at": "2026-10-25 23:25", "testo": "[O8.T7] bash: gh search code \"enum WireApi\" --repo openai/codex --json path --jq '.[].path' 2>&1 | head;"}
+{"at": "2026-10-25 23:25", "testo": "[O8.T7] bash: gh api repos/openai/codex/contents/codex-rs/model-provider-info/src/lib.rs --jq '.content' | base64 -d | grep "}
+{"at": "2026-10-25 23:25", "testo": "ANNOTAZIONE N22 su O8.T7 — Decisione dell'utente (25/10, D1): niente API di Claude, l'harness è Claude Code. Sessioni interattive: Claude Code sulla Deck con il plugin di AgentDeck (hook, deck mcp, skill), seguite con Remote Control. Agente autonomo: Claude Code senza interfaccia (claude -p, --resume), non Agent SDK con chiave API; fork open source escluso. Da verificare: condizioni d'uso dell'abbonamento per sessioni automatiche; testo di INV-7 (modelli via API cloud) da allineare con il sì dell'utente."}
+{"at": "2026-10-25 23:25", "testo": "[O8.T7] bash: ~/claude-rules/bin/wf.sh note-add --task O8.T7 --text \"Decisione dell'utente (25/10, D1): niente API di Claude"}
+{"at": "2026-10-25 23:25", "testo": "[O8.T7] bash: for r in anomalyco/opencode Aider-AI/aider aaif-goose/goose cline/cline earendil-works/pi charmbracelet/crush "}
+{"at": "2026-10-25 23:26", "testo": "[O8.T7] bash: gh api repos/Aider-AI/aider/commits?per_page=1 --jq '.[0].commit.committer.date'; gh api repos/Aider-AI/aider/"}
+{"at": "2026-10-25 23:26", "testo": "[O8.T7] bash: gh api \"repos/Aider-AI/aider/commits?per_page=1\" --jq '.[0].commit.committer.date'; gh api \"repos/aaif-goose/g"}
+{"at": "2026-10-25 23:26", "testo": "[O8.T7] bash: python3 - <<'EOF' from pathlib import Path p = Path(\"docs/architettura.md\"); s = p.read_text() reps = [ (\"| A6"}
+{"at": "2026-10-25 23:26", "testo": "[O8.T7] Edit  ../.claude/projects/-Users-snj-linuxai-steamdeck/memory/project-steamdeck-agentic-server.md", "task": "O8.T7", "tipo": "file", "tool": "Edit", "file": "../.claude/projects/-Users-snj-linuxai-steamdeck/memory/project-steamdeck-agentic-server.md"}
+{"at": "2026-10-25 23:27", "testo": "[O8.T7] bash: python3 - <<'EOF' from pathlib import Path p = Path(\"docs/architettura.md\"); s = p.read_text() old = \"### 7.5 "}
+{"at": "2026-10-25 23:27", "testo": "[O8.T7] bash: python3 - <<'EOF' from pathlib import Path p = Path(\"docs/architettura.md\"); s = p.read_text() old_start = s.i"}
+{"at": "2026-10-25 23:27", "testo": "ANNOTAZIONE N23 su O8.T7 — Verifica dei termini (25/10, fonti primarie): Consumer Terms vietano reverse engineering e accesso automatizzato salvo chiave API o permesso esplicito; il login dell'abbonamento è per l'uso ordinario di Claude Code; il binario non va modificato. Sessioni interattive e Remote Control in regola; sessioni avviate da eventi con claude -p sull'abbonamento da chiarire prima di A5.5/A6.5 (decisione D7)."}
+{"at": "2026-10-25 23:27", "testo": "[O8.T7] bash: python3 - <<'EOF' from pathlib import Path p = Path(\"docs/architettura.md\"); s = p.read_text() old = \"   - le "}
+{"at": "2026-10-25 23:28", "testo": "[O8.T7] Write  ../../../private/tmp/claude-502/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/scratchpad/revisione-architettura.html", "task": "O8.T7", "tipo": "file", "tool": "Write", "file": "../../../private/tmp/claude-502/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/scratchpad/revisione-architettura.html"}

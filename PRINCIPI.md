@@ -66,7 +66,7 @@ Perché salire di livello solo quando serve:
 |---|---|---|
 | 2026-10-25 | Si cancella tutto: la Deck serve solo come hardware | Niente da conservare |
 | 2026-10-25 | Base: Arch Linux | Velocità, kernel recenti, ottimo supporto alla Deck |
-| 2026-10-25 | Interfaccia grafica presente, minimale e comandabile da script | L'agente mostra comandi, dashboard e riepiloghi all'umano |
+| 2026-10-25 | Interfaccia grafica presente, minimale e comandabile da script | L'agente mostra comandi, dashboard e riepiloghi all'umano. Superata la sera stessa: vedi "Sistema operativo solo per agenti" |
 | 2026-10-25 | Installazione: Arch live da chiavetta, poi installazione via SSH passo per passo | Semplice, ispezionabile, niente cancellazioni alla cieca |
 | 2026-10-25 | Filesystem Btrfs con snapshot automatici | Rete di sicurezza per le modifiche dell'agente |
 | 2026-10-25 | Utente `agent` con sudo senza password | Niente attriti; alcuni strumenti Arch rifiutano root |
@@ -82,9 +82,12 @@ Perché salire di livello solo quando serve:
 | 2026-10-25 | Protocollo di `deck` versione 1 ([docs/protocollo.md](docs/protocollo.md)) | Schermate JSON interattive e autoprompting per ogni componente |
 | 2026-10-25 | `deck` in Python 3, solo libreria standard | Un agente lo legge e lo corregge sulla Deck senza compilare |
 | 2026-10-25 | Testi rivolti all'agente in inglese; documentazione in italiano | Lingua in cui i modelli sono più affidabili e lingua del sistema |
+| 2026-10-25 | Sistema operativo solo per agenti; l'umano arriverà più avanti con interfacce effimere | Il sistema serve all'agente per una gestione totale secondo interattività e autoprompting; lo schermo della Deck perde priorità |
+| 2026-10-25 | Prima di sviluppare altro, studio dell'architettura del sistema strato per strato ([docs/architettura.md](docs/architettura.md)) | Capire dove il sistema si può intercettare e cambiare per l'uso agentico, invece di avvolgere uno strumento dopo l'altro |
+| 2026-10-25 | Harness degli agenti basato su Claude Code, con la forma da decidere (fork, plugin, Agent SDK, open source) | Sfruttare subito gli agenti Claude, anche da remoto, senza canali o app nostre; la licenza di Claude Code non permette un fork ([docs/architettura.md](docs/architettura.md), sezione 6) |
 
 ## Direzioni da confermare quando ci arriviamo
 
 - Compositor grafico: Sway (leggero, comandabile via IPC), con interfacce nostre dentro, per esempio
-  dashboard web a schermo intero.
+  dashboard web a schermo intero. Meno prioritario dal 25/10: l'umano avrà interfacce effimere.
 - Collegamento di rete via cavo USB-C con il Mac, mettendo la Deck in modalità periferica.

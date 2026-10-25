@@ -38,7 +38,7 @@ Ogni proposta si misura con i due principi del progetto:
 4. [Stato del sistema, software e snapshot](#4-stato-del-sistema-software-e-snapshot) (O8.T4)
 5. [Eventi, log e osservabilità](#5-eventi-log-e-osservabilità) (O8.T5)
 6. [L'harness dell'agente](#6-lharness-dellagente) (O8.T6)
-7. Sintesi: architettura proposta e decisioni (O8.T7)
+7. [Sintesi: architettura proposta e decisioni](#7-sintesi-architettura-proposta-e-decisioni) (O8.T7)
 
 ---
 
@@ -485,12 +485,12 @@ ma disponibile nei repository ufficiali (26.12); nessuna installazione di Claude
 
 | Id | Livello | Proposta | Perché |
 |---|---|---|---|
-| A6.1 | — | **Niente fork**: la licenza non lo permette. L'harness di AgentDeck è Claude Code non modificato più un **plugin di AgentDeck** (hook, MCP, skill, `CLAUDE.md`, impostazioni), che è la nostra "distribuzione" di Claude Code. Per gli agenti scritti da noi, come l'agente interno o i lavori avviati da un evento, si usa l'Agent SDK con lo stesso motore | Ottiene ciò che il fork avrebbe dato (Claude come agente nativo di AgentDeck) restando dentro i termini, e riceve gli aggiornamenti di Claude Code senza doverli fondere |
+| A6.1 | — | **Claude Code non modificato più un plugin di AgentDeck** (hook, MCP, skill, `CLAUDE.md`, impostazioni), che è la nostra "distribuzione" di Claude Code. **Decisione dell'utente (D1, 25/10): solo Claude Code, niente API di Claude**, quindi niente Agent SDK con chiave API e niente harness open source. Il fork di Claude Code non è permesso dalla licenza | Ottiene ciò che il fork avrebbe dato, cioè Claude come agente nativo di AgentDeck, restando dentro i termini, e riceve gli aggiornamenti di Claude Code senza doverli fondere |
 | A6.2 | L2 | **`deck mcp`**: server MCP che serve il protocollo di `deck`, con strumenti, anteprime, conferme e risorse. In locale sulla Deck, e dal Mac con `ssh agentdeck deck mcp` | Interattività nativa nell'harness. Si costruisce sullo stesso motore di A2.3 |
 | A6.3 | L2 | **Hook di AgentDeck** per Claude Code: briefing all'inizio, politica sui comandi grezzi, verifiche dopo le azioni, registro alla fine. Sono già sviluppati e provati nello schema della governance | Autoprompting nel punto in cui l'agente ragiona |
 | A6.4 | L2 | **Claude Code sulla Deck**: binario nativo, sessioni come unità di systemd per l'utente dell'agente, raggiungibili con **Remote Control** da claude.ai o dal telefono | L'agente vive nel sistema; l'umano lo segue da remoto senza app nostre, come chiesto |
-| A6.5 | L2 | **Sessioni avviate da un evento**: `claude -p` con uscita `stream-json`, ripresa delle sessioni, strumenti limitati e un tetto di spesa, lanciate dal raccoglitore di eventi (A5.5) come unità transitorie. Più avanti, l'agente interno sull'Agent SDK | La Deck risponde da sola agli eventi |
-| A6.6 | L1/L2 | **Credenziali dell'harness** con `deck secrets` (A3.6): chiave API o token OAuth di lunga durata, consegnati alle sessioni senza file in chiaro. Le condizioni d'uso di un abbonamento per agenti che lavorano da soli vanno verificate; la chiave API è la strada pulita per l'agente interno (INV-7) | Nessuna credenziale in chiaro; una revoca per agente |
+| A6.5 | L2 | **Sessioni avviate da un evento**, ed è anche l'agente interno: Claude Code senza interfaccia (`claude -p`, uscita `stream-json`, ripresa delle sessioni con `--resume`), con strumenti limitati e un tetto d'uso, lanciato dal raccoglitore di eventi (A5.5) come unità transitoria | La Deck risponde da sola agli eventi con lo stesso harness delle sessioni interattive |
+| A6.6 | L1/L2 | **Credenziali dell'harness** con `deck secrets` (A3.6): il token di lunga durata dell'abbonamento (`claude setup-token`, `CLAUDE_CODE_OAUTH_TOKEN`), consegnato alle sessioni senza file in chiaro. Vanno verificate le condizioni d'uso dell'abbonamento per sessioni che partono da sole e i loro limiti d'uso | Nessuna credenziale in chiaro; una revoca per agente |
 
 **Verifiche aperte:**
 - che il binario nativo di Claude Code funzioni su Arch, che non è fra le distribuzioni elencate;
@@ -502,3 +502,156 @@ ma disponibile nei repository ufficiali (26.12); nessuna installazione di Claude
 - **dove vive l'harness di gestione**: sulla Deck subito (A6.4), oppure dopo `deck mcp` e gli hook, provati
   prima dal Mac;
 - **l'autenticazione** delle sessioni sulla Deck.
+
+---
+
+## 7. Sintesi: architettura proposta e decisioni
+
+### 7.1 Cosa ha trovato lo studio
+
+In sei strati, **33 presupposti umani** (H1-H33) e **49 proposte** (A1.1-A6.6). I presupposti si raggruppano
+in cinque famiglie:
+
+| Famiglia | Esempi | Cosa serve all'agente |
+|---|---|---|
+| **Qualcuno alla console** | Shell d'emergenza con root bloccato (H1), panic (H2), menu di GRUB (H4), password chieste alla console (H29) | Ripartire da soli, oppure restare raggiungibili via SSH anche quando qualcosa va storto |
+| **Testo da leggere** | Output per terminale (H9), log in prosa (H27), errori in frasi (H12), notizie di Arch (H21) | Dati strutturati alla fonte: varlink, D-Bus, JSON, eventi con un codice |
+| **Domande e conferme a voce** | Prompt interattivi (H11), approvazioni una per una (H31), polkit come dialogo (H16) | Regole decise prima, anteprime con codice di conferma, transazioni con ritorno automatico |
+| **Un utente, una persona** | sudo per tutto (H15), un solo utente (H17), una chiave per sempre (H20) | Identità per agente e sessione; permessi per azione; traccia di chi ha fatto cosa |
+| **Qualcuno che guarda quando vuole** | Monitoraggio a richiesta (H26), avvio della sessione da parte di una persona (H32), nessuna storia degli avvisi | Eventi in coda, briefing all'ingresso, risveglio dell'agente |
+
+### 7.2 Gli schemi che tornano
+
+Cinque schemi emergono in più strati e diventano i mattoni dell'architettura:
+
+1. **Cambio con prova e ritorno automatico.** È già usato per il Wi-Fi (O4.T2) e per la rete di sicurezza SSH
+   (O3.T4). Proposto per gli avvii (A1.6) e implicito negli aggiornamenti (O6). Un cambio rischioso si applica
+   come prova; senza la conferma dell'agente entro un tempo dato, il sistema torna da solo allo stato di prima.
+2. **Azione come schermata.** Dati, azioni tipizzate, anteprima e conferma: il protocollo di `deck`, da
+   servire anche come varlink (A2.3) e MCP (A6.2).
+3. **Evento, coda, briefing, risveglio** (A5.2-A5.5). Ciò che succede diventa un dato in coda; l'agente lo
+   riceve all'ingresso, o viene svegliato.
+4. **Stato voluto e stato reale** (A4.3, o A4.8). Il sistema sa cosa dovrebbe essere, e mostra e ripara la
+   differenza.
+5. **Identità con un broker** (A3.2-A3.3). L'agente chiede, il sistema decide per azione e registra.
+
+E una regola che vale ovunque: **il testo esterno sta solo nei dati** (INV-4).
+
+### 7.3 L'architettura in una pagina
+
+```
+   umano (in futuro)  ── canale effimero: Remote Control, pagine generate, notifiche ──┐
+                                                                                     │
+ ┌─ AGENTI ──────────────────────────────────────────────────────────────────────────┴─┐
+ │  sessioni con identità (sviluppo, casa, interno), avviate da una persona o da un evento │
+ ├─ HARNESS ──────────────────────────────────────────────────────────────────────────────┤
+ │  Claude Code + plugin di AgentDeck (hook di autoprompting, deck mcp, skill, CLAUDE.md) │
+ │  interattivo con Remote Control, oppure senza interfaccia (claude -p) per gli eventi  │
+ ├─ INTERFACCE AGENTICHE ─────────────────────────────────────────────────────────────────┤
+ │  deck (CLI)  ·  io.agentdeck.* (varlink)  ·  deck mcp (MCP)  — un solo protocollo     │
+ ├─ SERVIZIO AGENTDECK (root) ────────────────────────────────────────────────────────────┤
+ │  broker dei privilegi · stato voluto · eventi e coda · registro delle azioni ·        │
+ │  transazioni con ritorno automatico · segreti (systemd-creds + TPM)                   │
+ ├─ API NATIVE DEL SISTEMA ───────────────────────────────────────────────────────────────┤
+ │  varlink e D-Bus di systemd, networkd, resolved, logind, iwd · JSON · /proc e /sys      │
+ ├─ SISTEMA ──────────────────────────────────────────────────────────────────────────────┤
+ │  Arch + systemd · Btrfs con snapshot e stati buoni · container nspawn per i carichi    │
+ ├─ AVVIO ────────────────────────────────────────────────────────────────────────────────┤
+ │  avvio di prova con conferma · watchdog · emergenza raggiungibile · (Secure Boot+TPM) │
+ └────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+L'umano non ha un'interfaccia permanente. Quando servirà, la avrà effimera: segue o guida una sessione con
+Remote Control, oppure l'agente genera una pagina quando c'è qualcosa da mostrare o da decidere. Lo schermo
+della Deck resta un dettaglio (N9, N10 rimandate).
+
+### 7.4 Le decisioni da prendere
+
+Le decisioni che cambiano la forma del sistema, con le strade e la mia raccomandazione:
+
+| Id | Decisione | Strade | Raccomandazione |
+|---|---|---|---|
+| D1 | **Harness** (A6.1, N21, N22) | **Deciso dall'utente il 25/10: Claude Code**, non modificato, con il plugin di AgentDeck; le sessioni autonome con `claude -p`. Niente API di Claude, niente Agent SDK con chiave API, niente harness open source. Il fork di Claude Code non è permesso dalla licenza (sezione 6) | — |
+| D2 | **Avvio** (sezione 1) | GRUB con avvii di prova fatti da noi (A1.5-A1.6), oppure systemd-boot con kernel unificati, boot counting nativo, Secure Boot e TPM (A1.10, A1.11, A3.7) | Prima GRUB con A1.6, perché è veloce e protegge subito; systemd-boot quando arrivano i segreti sigillati |
+| D3 | **Privilegi** (sezione 3) | L'agente resta root con le protezioni di `deck`, oppure lavora senza privilegi con il broker (A3.3) e polkit (A3.4) | Il broker, dopo il servizio di AgentDeck (A2.3), che ne è il presupposto |
+| D4 | **Stato del sistema** (sezione 4) | Stato voluto dichiarativo dentro Arch (A4.3), oppure sistema a immagini (A4.8) | A4.3: tiene Arch com'è (INV-7) e risolve la deriva; A4.8 da rivalutare più avanti |
+| D5 | **Interfaccia principale** (sezioni 2 e 6) | Comandi via SSH come oggi, oppure il servizio di AgentDeck (varlink) con MCP e la CLI come client | Il servizio con MCP: è ciò che rende AgentDeck nativo per gli agenti |
+| D6 | **Dove vive l'harness di gestione** (A6.4) | Sulla Deck subito, oppure prima dal Mac con `deck mcp` e gli hook, poi sulla Deck | Prima dal Mac, poi sulla Deck, quando MCP e hook sono provati |
+| D7 | **Risveglio** (A5.5, A6.5) | Con l'abbonamento, le sessioni che partono da sole sono una zona da chiarire nei termini (sezione 7.5). Strade: niente risveglio automatico, con gli eventi in coda letti all'ingresso; chiedere conferma ad Anthropic; chiave API solo per quelle sessioni | Per ora niente risveglio automatico: coda e briefing (A5.3-A5.4) danno già molto; chiedere conferma prima di costruire A5.5 |
+| D8 | **Identità** (A3.2) | Quanti agenti e con quali ruoli all'inizio | Due: sviluppo (dal Mac) e gestione (sulla Deck) |
+| D9 | **Regia dei comandi grezzi** (A2.4) | Sì o no; tocca la sessione SSH | Sì, con la rete di sicurezza SSH, dopo D5 |
+
+**Interventi senza decisioni di forma.** Sono configurazione a basso rischio, e si possono fare subito con la
+solita anteprima e le reti di sicurezza:
+- avvio: A1.1, panic che riavvia; A1.2, watchdog hardware; A1.3, `/efi` senza blocco; A1.4, emergenza
+  raggiungibile;
+- interfacce: A2.1, ambiente delle sessioni;
+- identità: A3.1, chiave limitata alla LAN e firewall; A3.8, audit;
+- stato: A4.1, politica degli snapshot;
+- eventi: A5.1, traccia separata; A5.2, `OnFailure=` globale; A5.8, tasto di accensione; A5.9, `systemd-oomd`.
+
+### 7.5 Harness: perché Claude Code senza modifiche
+
+- **Un fork non si può fare, nemmeno in privato.** La licenza di Claude Code non parla di vendita: dice
+  "All rights reserved", quindi modificarne il codice e farne girare una copia modificata non è concesso, che
+  il progetto sia commerciale o no. Una copia modificata userebbe comunque l'account dell'utente, con il rischio
+  di violare i termini.
+- **Non serve.** Ciò che un fork avrebbe dato si ottiene con le estensioni previste da Anthropic:
+  - il comportamento dell'agente: istruzioni, regole e contesto iniettati dagli hook a ogni turno, come fa già
+    la governance;
+  - gli strumenti: `deck mcp`;
+  - la conoscenza: `CLAUDE.md` e skill;
+  - i permessi: le impostazioni e gli hook che bloccano;
+  - il lavoro autonomo: `claude -p` e la ripresa delle sessioni;
+  - il controllo a distanza: Remote Control.
+
+  Resta fuori solo l'interfaccia del terminale, che per AgentDeck non conta.
+- **Si studia dall'esterno**: comportamento, impostazioni, formati di uscita e ciclo degli hook sono documentati,
+  e sono quanto basta per integrarlo a fondo.
+
+**I termini, verificati il 25/10/2026 su fonti primarie:**
+
+| Fonte | Cosa dice |
+|---|---|
+| `LICENSE.md` di Claude Code | "© Anthropic PBC. All rights reserved. Use is subject to Anthropic's Commercial Terms of Service." |
+| Consumer Terms (Free, Pro, Max), anthropic.com/legal/consumer-terms | Vietato "decompile, reverse engineer, disassemble, or otherwise reduce our Services to human-readable form", salvo dove la legge applicabile lo impedisce. Vietato l'accesso automatizzato "except when you are accessing our Services via an Anthropic API Key or where we otherwise explicitly permit it" |
+| Commercial Terms (API, Team, Enterprise), anthropic.com/legal/commercial-terms | Vietato "reverse engineer or duplicate the Services" |
+| Legale e conformità di Claude Code, code.claude.com/docs/en/legal-and-compliance | Il login OAuth dell'abbonamento è pensato "to support ordinary use of Claude Code and other native Anthropic applications"; per chi sviluppa con l'Agent SDK serve una chiave API; "The Claude Code binary must not be modified" |
+
+Ne seguono tre fatti:
+- **Modificare Claude Code è escluso**, anche in privato: non c'è un'eccezione per l'uso non commerciale.
+- **Le sessioni interattive con l'abbonamento**, comprese quelle seguite con Remote Control, sono l'uso
+  previsto.
+- **Le sessioni avviate da sole su un evento** (`claude -p`, A6.5) con l'abbonamento sono una **zona da
+  chiarire**: è una funzione di Claude Code stesso, ma i termini dell'abbonamento escludono l'accesso
+  automatizzato salvo permesso esplicito o chiave API.
+
+  Prima di costruire A5.5 e A6.5 serve una decisione. Le strade:
+  1. limitarsi a sessioni interattive e seguite da remoto, con la coda di eventi letta all'ingresso (A5.4);
+  2. chiedere conferma ad Anthropic;
+  3. accettare per le sole sessioni automatiche una chiave API, che però hai escluso.
+
+La verifica ha confrontato anche gli harness open source che si possono forkare (OpenCode MIT, Aider e Goose
+Apache-2.0, Cline Apache-2.0, OpenHands MIT). Funzionano con Claude solo con una chiave API, che hai escluso:
+restano fuori.
+
+### 7.6 Roadmap proposta
+
+Da decidere in revisione. È l'ordine che segue dalle raccomandazioni:
+
+1. **Ciclo 04, fondamenta autonome:**
+   - la Deck riparte da sola e resta raggiungibile: gli interventi di configurazione elencati sopra, gli avvii
+     di prova (A1.6) e `deck boot` (A1.7);
+   - la politica degli snapshot e gli stati buoni (A4.1, A4.2);
+   - gli eventi in coda e il briefing (A5.2-A5.4, A5.6).
+2. **Ciclo 05, AgentDeck nativo per gli agenti:**
+   - il servizio di AgentDeck con il protocollo su varlink (A2.3);
+   - le API native al posto del testo (A2.2, A2.7);
+   - `deck mcp` (A6.2) e il plugin con gli hook (A6.3), provati dal Mac;
+   - `deck secrets` (A3.6).
+3. **Ciclo 06, l'agente vive sulla Deck:**
+   - l'harness sulla Deck con Remote Control (A6.4);
+   - identità e broker dei privilegi (A3.2-A3.4);
+   - le sessioni avviate da un evento (A5.5, A6.5), solo se la decisione D7 e i termini lo permettono;
+   - lo stato voluto (A4.3).
+4. **In parallelo, quando arriva:** la prova di `deck update` con un aggiornamento vero (O9.T1).

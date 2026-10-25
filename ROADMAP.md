@@ -10,10 +10,11 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O8` Mappa del sistema e architettura agent-first — 7 task: 6 completate, 0 in corso, 1 da fare, 0 bloccate
-- **Task attiva:** —
+- **Obiettivo attivo:** `O8` Mappa del sistema e architettura agent-first — 7 task: 6 completate, 1 in corso, 0 da fare, 0 bloccate
+- **Task attiva:** `O8.T7` Sintesi: architettura proposta e decisioni — in corso · rischio 5/100
 - **Ultima task gestita:** `O8.T6` — completata — Sezione 6 di architettura.md: fork di Claude Code non permesso (licenza), Agent SDK, hook, MCP, Remote Control verificati; dove vivono le sessioni; 6 proposte
-- **Ultimo aggiornamento:** 2026-10-25 23:22
+- **Fase:** `in_progress`
+- **Ultimo aggiornamento:** 2026-10-25 23:27
 
 ## Richieste attive
 
@@ -45,9 +46,10 @@ _Mancanze di progetto che l'agente non può risolvere da solo. L'utente le confe
 - [x] `O8.T6` L'harness dell'agente: Claude Code e alternative — *perimetro:* `docs/architettura.md`
   *gate previsto:* Sezione harness: licenza di Claude Code e possibilità di fork verificate su fonti ufficiali; Claude Agent SDK; estensione senza fork (hook, MCP, plugin, skill, modalità senza interfaccia, Remote Control); dove vivono le sessioni e come il sistema alimenta comandi interattivi e autoprompting; proposta motivata. · *gate confermato:* ✔ Sezione 6 di architettura.md: fork di Claude Code non permesso (licenza), Agent SDK, hook, MCP, Remote Control verificati; dove vivono le sessioni; 6 proposte
   *rischio:* 5/100 — Ricerca su fonti ufficiali e letture sulla Deck; scrittura di docs/architettura.md: nessuna modifica al sistema.
-- [ ] `O8.T7` Sintesi: architettura proposta e decisioni — *perimetro:* `docs/architettura.md, PRINCIPI.md`
+- [~] `O8.T7` Sintesi: architettura proposta e decisioni — *perimetro:* `docs/architettura.md, PRINCIPI.md`
   *gate previsto:* Architettura complessiva in una pagina, con le interfacce per l'umano come canale futuro ed effimero; elenco delle decisioni approvate una per una dall'utente; roadmap degli sviluppi che ne deriva, pronta per il ciclo successivo.
-  *annotazioni:* `N21`
+  *rischio:* 5/100 — Sintesi scritta in docs/architettura.md e PRINCIPI.md, nessuna modifica alla Deck; le decisioni le prende l'utente in revisione.
+  *annotazioni:* `N21`, `N22`, `N23`
 
 ### `O9` Aggiornamento reale della Deck con deck update — in corso
 
@@ -61,3 +63,5 @@ _Mancanze di progetto che l'agente non può risolvere da solo. L'utente le confe
 _Una riga per nota, sempre legata a una task. `wf.sh notes` per leggerle._
 
 - `N21` (`O8.T7`) Da portare alla revisione (O8.T6, 25/10): la licenza di Claude Code (LICENSE.md: All rights reserved, termini commerciali di Anthropic) non permette un fork. Proposta A6.1: Claude Code non modificato più un plugin di AgentDeck (hook, MCP con deck mcp, skill, CLAUDE.md), Agent SDK per gli agenti nostri, Remote Control per seguire le sessioni dal telefono. Cambia l'idea iniziale dell'utente: va decisa esplicitamente. — 2026-10-25 23:22
+- `N22` (`O8.T7`) Decisione dell'utente (25/10, D1): niente API di Claude, l'harness è Claude Code. Sessioni interattive: Claude Code sulla Deck con il plugin di AgentDeck (hook, deck mcp, skill), seguite con Remote Control. Agente autonomo: Claude Code senza interfaccia (claude -p, --resume), non Agent SDK con chiave API; fork open source escluso. Da verificare: condizioni d'uso dell'abbonamento per sessioni automatiche; testo di INV-7 (modelli via API cloud) da allineare con il sì dell'utente. — 2026-10-25 23:25
+- `N23` (`O8.T7`) Verifica dei termini (25/10, fonti primarie): Consumer Terms vietano reverse engineering e accesso automatizzato salvo chiave API o permesso esplicito; il login dell'abbonamento è per l'uso ordinario di Claude Code; il binario non va modificato. Sessioni interattive e Remote Control in regola; sessioni avviate da eventi con claude -p sull'abbonamento da chiarire prima di A5.5/A6.5 (decisione D7). — 2026-10-25 23:27

@@ -60,7 +60,7 @@ AgentDeck: una Steam Deck LCD (APU AMD, 16 GB RAM, NVMe 2 TB) trasformata in ser
 ### `03` Studio dell'architettura agent-first: come funziona il sistema e dove intercettarlo — **in corso**
 
 - Roadmap: [ROADMAP.md](ROADMAP.md)
-- Aperto il 2026-10-25 20:24 · ultimo aggiornamento 2026-10-25 23:22
+- Aperto il 2026-10-25 20:24 · ultimo aggiornamento 2026-10-25 23:27
 
 ## Debito ereditato
 
