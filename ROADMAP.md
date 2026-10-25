@@ -10,10 +10,11 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O5` Servizi e log gestiti dall'agente: deck service, deck logs — 2 task: 1 completate, 0 in corso, 1 da fare, 0 bloccate
+- **Obiettivo attivo:** `O5` Servizi e log gestiti dall'agente: deck service, deck logs — 2 task: 2 completate, 0 in corso, 0 da fare, 0 bloccate
 - **Task attiva:** —
-- **Ultima task gestita:** `O5.T1` — completata — deck service: elenco come systemctl, azioni su servizio di prova con anteprima e snapshot, stop e disable dei 5 servizi di accesso rifiutati; 28/28, 122 test
-- **Ultimo aggiornamento:** 2026-10-25 19:51
+- **Ultima task gestita:** `O5.T2` — completata — deck logs: filtri per unità, periodo, gravità uguali a journalctl -o json, traccia agente esclusa, riga malevola solo nei dati, link da service; 11/11, 134 test
+- **Fase:** `objective_gate_pending`
+- **Ultimo aggiornamento:** 2026-10-25 19:57
 
 ## Richieste attive
 
@@ -42,8 +43,9 @@ _nessuna richiesta in attesa._
   *gate previsto:* deck service elenca i servizi come systemctl, con stato, abilitazione e servizi falliti; start, stop, restart, enable e disable funzionano su un servizio di prova, quelli che interrompono qualcosa con anteprima; stop e disable di sshd, systemd-networkd, iwd e systemd-resolved rifiutati con il motivo (INV-1). · *gate confermato:* ✔ deck service: elenco come systemctl, azioni su servizio di prova con anteprima e snapshot, stop e disable dei 5 servizi di accesso rifiutati; 28/28, 122 test
   *rischio:* 30/100 — Le azioni sui servizi possono togliere l'accesso all'agente se toccano sshd, networkd, iwd o resolved (INV-1): mitigato da rifiuto per quelli e per ciò da cui dipendono, prove su un servizio di prova, snapshot prima di enable e disable; l'elenco è sola lettura.
   *annotazioni:* `N15`
-- [ ] `O5.T2` Componente logs: journal strutturato per servizio, periodo e gravità — *perimetro:* `deck/, componente logs, componente service`
-  *gate previsto:* deck logs restituisce le righe del journal filtrate per servizio, periodo e gravità, uguali a journalctl -o json; il testo dei log sta solo nei dati e un test con una riga di log malevola verifica che non entri nel canale istruzioni (INV-4); da deck service si arriva ai log del servizio.
+- [x] `O5.T2` Componente logs: journal strutturato per servizio, periodo e gravità — *perimetro:* `deck/, componente logs, componente service`
+  *gate previsto:* deck logs restituisce le righe del journal filtrate per servizio, periodo e gravità, uguali a journalctl -o json; il testo dei log sta solo nei dati e un test con una riga di log malevola verifica che non entri nel canale istruzioni (INV-4); da deck service si arriva ai log del servizio. · *gate confermato:* ✔ deck logs: filtri per unità, periodo, gravità uguali a journalctl -o json, traccia agente esclusa, riga malevola solo nei dati, link da service; 11/11, 134 test
+  *rischio:* 10/100 — Solo lettura del journal, nessuna modifica alla Deck; il rischio è INV-4: il testo dei log è scritto da chiunque (anche con logger) e deve restare solo nei dati, verificato con una riga malevola.
 
 ### `O6` Aggiornamenti sicuri: deck update — in corso
 

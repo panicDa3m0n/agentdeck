@@ -478,6 +478,73 @@ def sshd_config_ok() -> bool:
     return run(["sshd", "-t"], sudo=True) is not None
 
 
+# ---- Journal (componente /logs, task O5.T2)
+
+JOURNAL_PRIORITIES = ("emerg", "alert", "crit", "err", "warning", "notice", "info", "debug")
+# Righe scritte dallo schermo della Deck con i comandi dell'agente e le loro risposte (deck/screen/ssh-log.sh):
+# senza escluderle, ogni risposta di deck logs tornerebbe nelle interrogazioni successive.
+AGENT_TRAIL_IDS = ("agentdeck-cmd", "agentdeck-out", "agentdeck-err")
+JOURNAL_FETCH_MAX = 20000
+
+
+def journal_args(lines: int, unit: Optional[str] = None, since: Optional[str] = None, until: Optional[str] = None,
+                 priority: Optional[str] = None, boot: bool = False) -> list:
+    """La riga di comando di journalctl per questi filtri, già validati. -T non serve: con -o json non filtra (P14)."""
+    args = ["journalctl", "-q", "--no-pager", "-o", "json", "-n", str(lines)]
+    if unit:
+        args += ["-u", unit]
+    if boot:
+        args.append("-b")
+    if since:
+        args.append(f"--since={since}")
+    if until:
+        args.append(f"--until={until}")
+    if priority:
+        args += ["-p", priority]
+    return args
+
+
+def journal_entry(raw: dict) -> dict:
+    """Una riga di `journalctl -o json` nei campi che servono all'agente."""
+    message = raw.get("MESSAGE")
+    if isinstance(message, list):  # campo binario o non UTF-8: journalctl lo dà come lista di byte
+        message = bytes(message).decode("utf-8", "replace")
+    stamp = raw.get("__REALTIME_TIMESTAMP", "")
+    prio = raw.get("PRIORITY", "")
+    pid = raw.get("_PID", "")
+    return {
+        "time": datetime.fromtimestamp(int(stamp) / 1e6).astimezone().isoformat(timespec="milliseconds")
+        if stamp.isdigit() else None,
+        "priority": int(prio) if prio.isdigit() else None,
+        "level": JOURNAL_PRIORITIES[int(prio)] if prio.isdigit() and int(prio) < 8 else None,
+        "unit": raw.get("_SYSTEMD_UNIT"), "subject_unit": raw.get("UNIT"),
+        "identifier": raw.get("SYSLOG_IDENTIFIER"), "pid": int(pid) if pid.isdigit() else None,
+        "message": message, "cursor": raw.get("__CURSOR"),
+    }
+
+
+def parse_journal(text: str) -> list:
+    return [journal_entry(json.loads(line)) for line in text.splitlines() if line.strip()]
+
+
+def journal(lines: int, include_agent: bool = False, reader=None, **filters) -> Optional[list]:
+    """Le ultime `lines` righe del journal con questi filtri, dalla più vecchia; None se journalctl fallisce.
+    Senza include_agent toglie la traccia dell'agente, chiedendo a journalctl più righe finché ne restano abbastanza."""
+    reader = reader or (lambda cmd: run(cmd, timeout=20))
+    fetch = lines if include_agent else lines * 2 + 50
+    while True:
+        text = reader(journal_args(fetch, **filters))
+        if text is None:
+            return None
+        entries = parse_journal(text)
+        fetched = len(entries)
+        if not include_agent:
+            entries = [e for e in entries if e["identifier"] not in AGENT_TRAIL_IDS]
+        if len(entries) >= lines or fetched < fetch or fetch >= JOURNAL_FETCH_MAX:
+            return entries[-lines:]
+        fetch = min(fetch * 4, JOURNAL_FETCH_MAX)
+
+
 def snapshots() -> Optional[dict]:
     text = run(["snapper", "--jsonout", "list"], sudo=True)
     return parse_snapper(text) if text else None

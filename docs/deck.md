@@ -25,6 +25,7 @@ Sulla Deck una chiamata dura circa 0,09 secondi (Python 3.14, misura del 25/10/2
 | `/snapshot` | [../deck/agentdeck/components/snapshot.py](../deck/agentdeck/components/snapshot.py) | Snapshot del sistema: elenco, creazione, rollback (vedi sotto) |
 | `/network` | [../deck/agentdeck/components/network.py](../deck/agentdeck/components/network.py) | Rete: interfacce, Wi-Fi e reti visibili, risoluzione dei nomi, porte (vedi sotto) |
 | `/service` | [../deck/agentdeck/components/service.py](../deck/agentdeck/components/service.py) | Servizi di systemd: elenco, dettaglio, start, stop, restart, enable, disable (vedi sotto) |
+| `/logs` | [../deck/agentdeck/components/logs.py](../deck/agentdeck/components/logs.py) | Journal di systemd: righe per unità, periodo e gravità (vedi sotto) |
 
 ### `/network`: rete
 
@@ -143,6 +144,46 @@ prova, `agentdeck-test`, che crea e poi toglie. Controlla anche i rifiuti sui se
 
 ```bash
 ssh agentdeck python /opt/agentdeck/tests/live_service_check.py
+```
+
+### `/logs`: il journal
+
+- `deck logs` mostra avvisi ed errori dell'avvio in corso: le ultime 50 righe con gravità `warning` o più grave.
+  Risponde in circa 20 ms.
+- `deck logs query` (effetto `read`) filtra con questi parametri, tutti facoltativi:
+
+| Parametro | Forme accettate | Opzione di journalctl |
+|---|---|---|
+| `unit` | `sshd`, `sshd.service`, `snapper-timeline.timer`, `session-5.scope`… (`.service` se manca il tipo) | `-u` |
+| `since` | `30m`, `2h`, `7d` (fa), `today`, `yesterday`, `boot` (avvio in corso), `YYYY-MM-DD[ HH:MM[:SS]]` | `--since`, oppure `-b` |
+| `until` | come `since`, tranne `boot` | `--until` |
+| `priority` | `emerg`, `alert`, `crit`, `err`, `warning`, `notice`, `info`, `debug`: quella e le più gravi | `-p` |
+| `lines` | da 1 a 1000, predefinito 100: le più recenti | `-n` |
+| `include_agent` | `true` per includere la traccia dei comandi dell'agente (predefinito `false`) | — |
+
+Ogni riga di `data.entries`, dalla più vecchia, ha:
+- `time` (ISO, millisecondi), `priority` (0-7) e `level`;
+- `unit` (l'unità del processo) e `subject_unit` (l'unità di cui parla un messaggio di systemd);
+- `identifier`, `pid`, `message`, `cursor`.
+
+`data.journalctl` riporta la riga di comando equivalente, mentre `data.truncated` dice se ci sono righe più
+vecchie oltre `lines`.
+
+**La traccia dell'agente.** Lo schermo della Deck scrive nel journal ogni comando dell'agente e la sua
+risposta, con gli identificatori `agentdeck-cmd`, `agentdeck-out` e `agentdeck-err` ([schermo.md](schermo.md)).
+Senza escluderli, ogni risposta di `deck logs` tornerebbe nelle interrogazioni successive.
+- `deck` toglie quelle righe da sé, perché in systemd 262 `journalctl -T` non filtra con `-o json` (trappola P14).
+  Chiede a journalctl più righe finché, dopo il filtro, ne restano `lines`, fino a un massimo di 20.000.
+- Con `include_agent=true` la traccia resta.
+
+Il testo dei log è scritto da programmi e utenti qualsiasi (basta `logger`): sta solo nei dati (INV-4).
+`deck service show` porta ai log del servizio con `data.logs` (`deck logs query unit=<unità>`).
+
+Il controllo dal vivo confronta cinque filtri con una lettura indipendente di `journalctl -o json` e scrive
+una riga malevola con `logger` per verificare che resti nei dati:
+
+```bash
+ssh agentdeck python /opt/agentdeck/tests/live_logs_check.py
 ```
 
 ### `/snapshot`: snapshot del sistema
@@ -267,6 +308,8 @@ hanno ancora un'azione collegata.
 | [../deck/tests/live_network_check.py](../deck/tests/live_network_check.py) | Controllo dal vivo di `deck network` contro `ip`, `iw`, `resolvectl`, `ss` |
 | [../deck/tests/test_service.py](../deck/tests/test_service.py) | Test di `/service`: parser di `systemctl`, protezione dell'accesso, anteprime, azioni, snapshot, testo esterno |
 | [../deck/tests/live_service_check.py](../deck/tests/live_service_check.py) | Controllo dal vivo di `deck service` contro `systemctl`, con un servizio di prova |
+| [../deck/tests/test_logs.py](../deck/tests/test_logs.py) | Test di `/logs`: righe reali del journal, traccia dell'agente esclusa, filtri, righe malevole, collegamento da `/service` |
+| [../deck/tests/live_logs_check.py](../deck/tests/live_logs_check.py) | Controllo dal vivo di `deck logs` contro `journalctl -o json`, con una riga malevola |
 | [../deck/tests/live_status_check.py](../deck/tests/live_status_check.py) | Controllo dal vivo sulla Deck: ogni valore di `deck status` contro una lettura indipendente |
 | [../deck/install.sh](../deck/install.sh) | Installazione e aggiornamento sulla Deck, schermo compreso |
 | [../deck/screen/](../deck/screen/agentdeck_screen.py) | Schermo della Deck: registrazione dei comandi, visualizzatore, servizio ([schermo.md](schermo.md)) |

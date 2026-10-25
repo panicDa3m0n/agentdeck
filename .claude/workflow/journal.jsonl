@@ -559,3 +559,31 @@
 {"at": "2026-10-25 19:51", "testo": "TASK CHIUSA O5.T1 — completata: deck service: elenco come systemctl, azioni su servizio di prova con anteprima e snapshot, stop e disable dei 5 servizi di accesso rifiutati; 28/28, 122 test"}
 {"at": "2026-10-25 19:51", "testo": "VERSIONE 0.2.3 (O5.T1)"}
 {"at": "2026-10-25 19:51", "testo": "[-] bash: python3 - <<'EOF' from pathlib import Path c = Path(\"CHANGELOG.md\") s = c.read_text() entry = '''## 0.2.3 — 20"}
+{"at": "2026-10-25 19:51", "testo": "[-] bash: printf '0.2.3\\n' > VERSION && git add -A -- . ':!.claude/workflow/.stop-guard' && git commit -q -F - <<'EOF' V"}
+{"at": "2026-10-25 19:52", "testo": "TASK APERTA O5.T2 — Componente logs: journal strutturato per servizio, periodo e gravità | perimetro: deck/, componente logs, componente service | gate: deck logs restituisce le righe del journal filtrate per servizio, periodo e gravità, uguali a journalctl -o json; il testo dei log sta solo nei dati e un test con una riga di log malevola verifica che non entri nel canale istruzioni (INV-4); da deck service si arriva ai log del servizio. | rischio: 10"}
+{"at": "2026-10-25 19:52", "testo": "[O5.T2] bash: ~/claude-rules/bin/wf.sh task-start --id O5.T2 --risk 10 --why \"Solo lettura del journal, nessuna modifica all"}
+{"at": "2026-10-25 19:53", "testo": "[O5.T2] bash: ssh -o BatchMode=yes agentdeck 'journalctl --help | grep -i -A1 \"exclude-identifier\"; echo \"con traccia: $(jou"}
+{"at": "2026-10-25 19:53", "testo": "[O5.T2] bash: ssh -o BatchMode=yes agentdeck 'journalctl -q --since=-10min -o json | python3 -c \" import json,sys,collection"}
+{"at": "2026-10-25 19:53", "testo": "[O5.T2] bash: ssh -o BatchMode=yes agentdeck 'a=$(journalctl -q --since=-10min | grep -c \"agentdeck-out\"); b=$(journalctl -q"}
+{"at": "2026-10-25 19:53", "testo": "TRAPPOLA registrata: journalctl -T / --exclude-identifier non esclude nulla con -o json (systemd 262: 174 righe agentdeck-out restano), funziona solo con l'output testuale -> l'esclusione viene applicata solo nella formattazione testuale -> con -o json filtrare SYSLOG_IDENTIFIER nel codice, chiedendo più righe con -n se ne servono N dopo il filtro."}
+{"at": "2026-10-25 19:53", "testo": "[O5.T2] bash: ~/claude-rules/bin/wf.sh pitfall \"journalctl -T / --exclude-identifier non esclude nulla con -o json (systemd "}
+{"at": "2026-10-25 19:54", "testo": "[O5.T2] bash: python3 - <<'EOF' from pathlib import Path p = Path(\"agentdeck/system.py\") s = p.read_text() anchor = '''def s"}
+{"at": "2026-10-25 19:54", "testo": "[O5.T2] Write  deck/agentdeck/components/logs.py", "task": "O5.T2", "tipo": "file", "tool": "Write", "file": "deck/agentdeck/components/logs.py"}
+{"at": "2026-10-25 19:54", "testo": "[O5.T2] bash: python3 - <<'EOF' from pathlib import Path i = Path(\"agentdeck/components/__init__.py\") s = i.read_text() s = "}
+{"at": "2026-10-25 19:54", "testo": "[O5.T2] bash: grep -n \"deck logs query\\|data.logs\" agentdeck/components/service.py; grep -n '^x$\\|\"x\"' agentdeck/components/"}
+{"at": "2026-10-25 19:55", "testo": "[O5.T2] Edit  deck/agentdeck/components/service.py", "task": "O5.T2", "tipo": "file", "tool": "Edit", "file": "deck/agentdeck/components/service.py"}
+{"at": "2026-10-25 19:55", "testo": "[O5.T2] Write  deck/tests/test_logs.py", "task": "O5.T2", "tipo": "file", "tool": "Write", "file": "deck/tests/test_logs.py"}
+{"at": "2026-10-25 19:55", "testo": "[O5.T2] bash: python3 -m unittest discover -s tests 2>&1 | tail -30"}
+{"at": "2026-10-25 19:55", "testo": "[O5.T2] Edit  deck/tests/test_logs.py", "task": "O5.T2", "tipo": "file", "tool": "Edit", "file": "deck/tests/test_logs.py"}
+{"at": "2026-10-25 19:55", "testo": "[O5.T2] bash: python3 -m unittest discover -s tests 2>&1 | tail -3"}
+{"at": "2026-10-25 19:56", "testo": "[O5.T2] Write  deck/tests/live_logs_check.py", "task": "O5.T2", "tipo": "file", "tool": "Write", "file": "deck/tests/live_logs_check.py"}
+{"at": "2026-10-25 19:56", "testo": "[O5.T2] bash: cd /Users/snj/linuxai-steamdeck && ./deck/install.sh 2>&1 | grep -E \"^Ran |^OK|FAIL\" | head -2; ssh -o BatchMo"}
+{"at": "2026-10-25 19:56", "testo": "[O5.T2] bash: ssh -o BatchMode=yes agentdeck 'link=$(deck service show name=systemd-timesyncd | python3 -c \"import json,sys;"}
+{"at": "2026-10-25 19:56", "testo": "[O5.T2] bash: grep -n \"agentdeck-out\\|agentdeck-cmd\\|journal\" docs/schermo.md | head -8; grep -n \"^### \\`/snapshot\\`\\|^| \\`/"}
+{"at": "2026-10-25 19:56", "testo": "[O5.T2] bash: sed -n 44,52p docs/schermo.md && python3 - <<'EOF' from pathlib import Path p = Path(\"docs/deck.md\") s = p.rea"}
+{"at": "2026-10-25 19:57", "testo": "[O5.T2] bash: python3 - <<'EOF' from pathlib import Path p = Path(\"docs/schermo.md\") s = p.read_text() old = '''   con il li"}
+{"at": "2026-10-25 19:57", "testo": "TASK CHIUSA O5.T2 — completata: deck logs: filtri per unità, periodo, gravità uguali a journalctl -o json, traccia agente esclusa, riga malevola solo nei dati, link da service; 11/11, 134 test"}
+{"at": "2026-10-25 19:57", "testo": "VERSIONE 0.2.3 (O5.T2)"}
+{"at": "2026-10-25 19:57", "testo": "[-] bash: python3 - <<'EOF' from pathlib import Path c = Path(\"CHANGELOG.md\") s = c.read_text() entry = '''## 0.2.4 — 20"}
+{"at": "2026-10-25 19:57", "testo": "[-] bash: git ls-remote --tags origin | grep -c \"v0.2.3$\"; git grep -n \"versione --scegli\" -- .claude/workflow/journal.j"}
+{"at": "2026-10-25 19:57", "testo": "VERSIONI scelte dall'utente: governance"}

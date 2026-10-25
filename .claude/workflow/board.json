@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-25 19:02",
-  "updated": "2026-10-25 19:51",
+  "updated": "2026-10-25 19:57",
   "objectives": [
     {
       "id": "O4",
@@ -61,10 +61,10 @@
           "title": "Componente logs: journal strutturato per servizio, periodo e gravità",
           "scope": "deck/, componente logs, componente service",
           "gate_pre": "deck logs restituisce le righe del journal filtrate per servizio, periodo e gravità, uguali a journalctl -o json; il testo dei log sta solo nei dati e un test con una riga di log malevola verifica che non entri nel canale istruzioni (INV-4); da deck service si arriva ai log del servizio.",
-          "gate_post": "",
-          "state": "todo",
-          "risk": null,
-          "risk_why": "",
+          "gate_post": "deck logs: filtri per unità, periodo, gravità uguali a journalctl -o json, traccia agente esclusa, riga malevola solo nei dati, link da service; 11/11, 134 test",
+          "state": "done",
+          "risk": 10,
+          "risk_why": "Solo lettura del journal, nessuna modifica alla Deck; il rischio è INV-4: il testo dei log è scritto da chiunque (anche con logger) e deve restare solo nei dati, verificato con una riga malevola.",
           "docs": []
         }
       ]
@@ -183,7 +183,7 @@
   "active": {
     "objective": "O5",
     "task": "",
-    "phase": "idle",
+    "phase": "objective_gate_pending",
     "risk": null,
     "risk_why": "",
     "hold_invariants": "",
@@ -191,9 +191,9 @@
     "gate_done": ""
   },
   "previous": {
-    "task": "O5.T1",
+    "task": "O5.T2",
     "state": "done",
-    "note": "deck service: elenco come systemctl, azioni su servizio di prova con anteprima e snapshot, stop e disable dei 5 servizi di accesso rifiutati; 28/28, 122 test"
+    "note": "deck logs: filtri per unità, periodo, gravità uguali a journalctl -o json, traccia agente esclusa, riga malevola solo nei dati, link da service; 11/11, 134 test"
   },
   "cycle": {
     "n": 2,

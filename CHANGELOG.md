@@ -4,6 +4,20 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.2.4 — 2026-10-25
+
+Ciclo 02, task O5.T2: componente `deck logs`.
+
+- `deck logs` mostra avvisi ed errori dall'avvio; `deck logs query` filtra per unità, periodo (`30m`, `2h`,
+  `today`, `boot`, data e ora), gravità e numero di righe. Risultati identici a `journalctl -o json` con gli
+  stessi filtri.
+- La traccia dei comandi dell'agente scritta dallo schermo resta fuori, salvo `include_agent=true`. `deck` la
+  filtra da sé perché `journalctl -T` non funziona con `-o json` (trappola P14).
+- Il testo dei log sta solo nei dati: verificato anche dal vivo con una riga malevola scritta con `logger`.
+- `deck service show` porta ai log del servizio (`data.logs`); i messaggi d'errore di `deck service` rimandano a
+  `deck logs`.
+- Controllo dal vivo 11 su 11; 134 test.
+
 ## 0.2.3 — 2026-10-25
 
 Ciclo 02, task O5.T1: componente `deck service`.
