@@ -111,3 +111,12 @@
 {"at": "2026-10-25 16:15", "testo": "PERIMETRO ESTESO su O1.T4 (+live/*.sh)"}
 {"at": "2026-10-25 16:15", "testo": "PERIMETRO ESTESO su O1.T4 (+install/*.sh)"}
 {"at": "2026-10-25 16:16", "testo": "[O1.T4] bash: bash -c ' broken=0; n=0 for f in README.md PRINCIPI.md CHANGELOG.md docs/*.md; do   d=$(dirname \"$f\")   for l "}
+{"at": "2026-10-25 16:16", "testo": "[O1.T4] bash: for s in live/*.sh install/*.sh; do bash -n \"$s\" || echo \"ERRORE sintassi $s\"; done && echo \"sintassi script O"}
+{"at": "2026-10-25 16:16", "testo": "[O1.T4] bash: git fetch -q origin && echo \"main locale = remoto: $([ \"$(git rev-parse HEAD)\" = \"$(git rev-parse origin/main)"}
+{"at": "2026-10-25 16:16", "testo": "TRAPPOLA registrata: gh api o gh repo view su panicDa3m0n/agentdeck danno 404 -> gh usa l'account attivo (SNJ) che non vede il repo privato personale -> verificare il remote con git fetch e git ls-tree origin/main, oppure con GH_TOKEN dato da gh auth token --user panicDa3m0n."}
+{"at": "2026-10-25 16:16", "testo": "ERRORE RISOLTO — execution_error: ssh: Could not resolve hostname agentdeck.local: nodename nor servname provided, or not known — 404 di gh api dovuto all'account gh attivo SNJ: push riuscito, contenuto del remote verificato con git fetch e ls-tree.", "tipo": "errore-risolto"}
+{"at": "2026-10-25 16:16", "testo": "[O1.T4] bash: ~/claude-rules/bin/wf.sh pitfall \"gh api o gh repo view su panicDa3m0n/agentdeck danno 404 -> gh usa l'account"}
+{"at": "2026-10-25 16:16", "testo": "TASK CHIUSA O1.T4 — completata: README, indice docs/ e 5 documenti; PRINCIPI con INV-10; 57 link verificati senza rotture; script e documenti collegati a vicenda; tutto su origin/main."}
+{"at": "2026-10-25 16:16", "testo": "VERSIONE 0.1.4 (O1.T4)"}
+{"at": "2026-10-25 16:16", "testo": "[-] bash: ~/claude-rules/bin/wf.sh task-close --done \"README, indice docs/ e 5 documenti; PRINCIPI con INV-10; 57 link v"}
+{"at": "2026-10-25 16:16", "testo": "[-] Edit  CHANGELOG.md", "task": "-", "tipo": "file", "tool": "Edit", "file": "CHANGELOG.md"}

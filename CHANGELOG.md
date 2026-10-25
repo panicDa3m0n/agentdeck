@@ -4,6 +4,16 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.1.4 — 2026-10-25
+
+Ciclo 01, task O1.T4: documentazione di base, indicizzata e collegata al codice.
+
+- `README.md` del progetto e indice `docs/README.md`.
+- Documenti per argomento: hardware, chiavetta live, installazione, accesso alla Deck, sviluppo
+  (repository, versioni, pubblicazione, governance).
+- `PRINCIPI.md`: principio del livello di intervento (INV-10) e decisioni del 25/10.
+- Ogni script in `live/` e `install/` rimanda al suo documento, e ogni documento agli script.
+
 ## 0.1.3 — 2026-10-25
 
 Ciclo 01, task O1.T3: comandi di base attesi dagli agenti.

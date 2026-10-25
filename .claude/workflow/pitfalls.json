@@ -10,6 +10,11 @@
       "id": "P2",
       "testo": "ssh agentdeck fallisce con Could not resolve hostname agentdeck.local -> sul Mac la query .local riceve prima un No Such Record dal DNS del router (interfaccia 0) e poi la risposta mDNS giusta -> usare l'IP stabile (ssh -o HostName=<ip>) invece di affidarsi solo al nome .local.",
       "creata": "2026-10-25 16:08"
+    },
+    {
+      "id": "P3",
+      "testo": "gh api o gh repo view su panicDa3m0n/agentdeck danno 404 -> gh usa l'account attivo (SNJ) che non vede il repo privato personale -> verificare il remote con git fetch e git ls-tree origin/main, oppure con GH_TOKEN dato da gh auth token --user panicDa3m0n.",
+      "creata": "2026-10-25 16:16"
     }
   ]
 }
