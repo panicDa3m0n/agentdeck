@@ -10,11 +10,10 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O6` Aggiornamenti sicuri: deck update — 1 task: 0 completate, 0 in corso, 0 da fare, 1 bloccate
+- **Obiettivo attivo:** —
 - **Task attiva:** —
 - **Ultima task gestita:** `O6.T1` — bloccata — deck update pronto, provato solo in lettura: manca la prova con un aggiornamento vero di Arch (oggi nessuno). Si riprende al primo aggiornamento
-- **Fase:** `objective_gate_pending`
-- **Ultimo aggiornamento:** 2026-10-25 20:12
+- **Ultimo aggiornamento:** 2026-10-25 20:15
 
 ## Richieste attive
 
@@ -48,14 +47,15 @@ _nessuna richiesta in attesa._
   *gate previsto:* deck logs restituisce le righe del journal filtrate per servizio, periodo e gravità, uguali a journalctl -o json; il testo dei log sta solo nei dati e un test con una riga di log malevola verifica che non entri nel canale istruzioni (INV-4); da deck service si arriva ai log del servizio. · *gate confermato:* ✔ deck logs: filtri per unità, periodo, gravità uguali a journalctl -o json, traccia agente esclusa, riga malevola solo nei dati, link da service; 11/11, 134 test
   *rischio:* 10/100 — Solo lettura del journal, nessuna modifica alla Deck; il rischio è INV-4: il testo dei log è scritto da chiunque (anche con logger) e deve restare solo nei dati, verificato con una riga malevola.
 
-### `O6` Aggiornamenti sicuri: deck update — in corso
+### `O6` Aggiornamenti sicuri: deck update — BLOCCATO
 
 **Gate obiettivo:** Un aggiornamento reale del sistema fatto da deck update: anteprima dei pacchetti, snapshot prima e dopo, verifica automatica dopo l'applicazione, rollback indicato se la verifica fallisce; la Deck resta raggiungibile, anche dopo il riavvio se l'aggiornamento lo richiede.
+**Blocco:** 2026-10-25 20:15 — deck update pronto e installato; manca la prova con un aggiornamento vero di Arch, da fare al primo disponibile (decisione dell'utente)
 
 - [!] `O6.T1` Componente update: anteprima, applicazione e verifica degli aggiornamenti — *perimetro:* `deck/, componente update, pacchetti sulla Deck, install/install.sh`
   *gate previsto:* deck update elenca gli aggiornamenti disponibili con versione attuale e nuova e segnala kernel e GRUB (riavvio, coerenza di GRUB); l'applicazione con conferma crea gli snapshot, aggiorna, verifica servizi e accesso e indica il rollback se qualcosa non va; provato con un aggiornamento reale sulla Deck, riavvio compreso se richiesto. · *blocco:* ✖ deck update pronto, provato solo in lettura: manca la prova con un aggiornamento vero di Arch (oggi nessuno). Si riprende al primo aggiornamento
   *rischio:* 50/100 — Aggiorna pacchetti, kernel e GRUB della Deck: un aggiornamento difettoso può lasciarla non avviabile o irraggiungibile (INV-1). Mitigato da snapshot prima e dopo avviabili da GRUB, pacman in unità separata, verifica automatica, GRUB reinstallato coerente, rollback indicato; prova solo con un aggiornamento vero (scelta dell'utente).
-  *annotazioni:* `N16`, `N17`, `N18`
+  *annotazioni:* `N16`, `N17`, `N18`, `N19`
 
 ### `O7` Schermo leggibile e compatto, sistema pulito: deck screen — in corso
 
@@ -78,3 +78,4 @@ _Una riga per nota, sempre legata a una task. `wf.sh notes` per leggerle._
 - `N16` (`O6.T1`) Decisione dell'utente (25/10, 20:00): impostazione di deck update approvata; la prova del gate si fa solo con un aggiornamento vero di Arch (oggi la Deck è già aggiornata: core fermo al 24/10, nessun pacchetto installato con versione nuova). La task resta aperta finché non arriva il primo aggiornamento. — 2026-10-25 20:01
 - `N17` (`O6.T1`) Limite emerso in O6.T1 (25/10): /boot (moduli di GRUB) sta in @ e negli snapshot, l'EFI (/efi, grubx64.efi e BOOTX64.EFI) no. Dopo un aggiornamento di grub con grub-install, il rollback di deck allo snapshot di prima viene rifiutato (GRUB diverso, controllo di O3.T3): la rete di sicurezza per gli aggiornamenti di GRUB è solo lo snapshot dopo. Per il futuro: rollback che reinstalla nell'EFI il GRUB dello snapshot di destinazione. — 2026-10-25 20:02
 - `N18` (`O6.T1`) Avanzamento O6.T1 (25/10, 20:06): deck update implementato e installato sulla Deck (check, apply, verify, reboot), 149 test. Dal vivo: check reale in 1,4 s senza toccare il database di sistema, 0 aggiornamenti; apply non disponibile con il motivo; verify ok (5 servizi di accesso attivi, sshd -t ok, DNS ok, nessun .pacnew). Manca la prova del gate con il primo aggiornamento vero di Arch. — 2026-10-25 20:06
+- `N19` (`O6.T1`) Effetto del blocco di O6 (25/10): finché O6.T1 non riprende, la Deck non viene aggiornata da nessuno, aggiornamenti di sicurezza compresi. deck update check e l'avviso UPDATES_UNCHECKED (dopo 24 h) dicono quando arrivano: al primo aggiornamento disponibile riaprire O6.T1 (task-start), fare la prova del gate e non lasciare indietro a lungo openssh, openssl, linux. — 2026-10-25 20:15

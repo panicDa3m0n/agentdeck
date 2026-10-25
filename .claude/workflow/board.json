@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-25 19:02",
-  "updated": "2026-10-25 20:12",
+  "updated": "2026-10-25 20:15",
   "objectives": [
     {
       "id": "O4",
@@ -75,7 +75,7 @@
       "id": "O6",
       "title": "Aggiornamenti sicuri: deck update",
       "gate": "Un aggiornamento reale del sistema fatto da deck update: anteprima dei pacchetti, snapshot prima e dopo, verifica automatica dopo l'applicazione, rollback indicato se la verifica fallisce; la Deck resta raggiungibile, anche dopo il riavvio se l'aggiornamento lo richiede.",
-      "state": "open",
+      "state": "blocked",
       "docs": [],
       "tasks": [
         {
@@ -89,7 +89,9 @@
           "risk_why": "Aggiorna pacchetti, kernel e GRUB della Deck: un aggiornamento difettoso può lasciarla non avviabile o irraggiungibile (INV-1). Mitigato da snapshot prima e dopo avviabili da GRUB, pacman in unità separata, verifica automatica, GRUB reinstallato coerente, rollback indicato; prova solo con un aggiornamento vero (scelta dell'utente).",
           "docs": []
         }
-      ]
+      ],
+      "closed_at": "2026-10-25 20:15",
+      "closed_note": "deck update pronto e installato; manca la prova con un aggiornamento vero di Arch, da fare al primo disponibile (decisione dell'utente)"
     },
     {
       "id": "O7",
@@ -201,17 +203,24 @@
       "text": "Avanzamento O6.T1 (25/10, 20:06): deck update implementato e installato sulla Deck (check, apply, verify, reboot), 149 test. Dal vivo: check reale in 1,4 s senza toccare il database di sistema, 0 aggiornamenti; apply non disponibile con il motivo; verify ok (5 servizi di accesso attivi, sshd -t ok, DNS ok, nessun .pacnew). Manca la prova del gate con il primo aggiornamento vero di Arch.",
       "docs": [],
       "created": "2026-10-25 20:06"
+    },
+    {
+      "id": "N19",
+      "task": "O6.T1",
+      "text": "Effetto del blocco di O6 (25/10): finché O6.T1 non riprende, la Deck non viene aggiornata da nessuno, aggiornamenti di sicurezza compresi. deck update check e l'avviso UPDATES_UNCHECKED (dopo 24 h) dicono quando arrivano: al primo aggiornamento disponibile riaprire O6.T1 (task-start), fare la prova del gate e non lasciare indietro a lungo openssh, openssl, linux.",
+      "docs": [],
+      "created": "2026-10-25 20:15"
     }
   ],
   "active": {
-    "objective": "O6",
+    "objective": "",
     "task": "",
-    "phase": "objective_gate_pending",
+    "phase": "idle",
     "risk": null,
     "risk_why": "",
     "hold_invariants": "",
     "hold_plan": "",
-    "gate_done": "O6"
+    "gate_done": ""
   },
   "previous": {
     "task": "O6.T1",
@@ -227,6 +236,6 @@
     "objective": 7,
     "cycle": 2,
     "request": 2,
-    "note": 18
+    "note": 19
   }
 }
