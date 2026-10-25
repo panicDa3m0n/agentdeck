@@ -394,3 +394,25 @@
 {"at": "2026-10-25 18:12", "testo": "[-] bash: echo \"INV-6 file con credenziali (escluso il registro della governance): $(git grep -IlE 'PRIVATE KEY|ghp_[A-Z"}
 {"at": "2026-10-25 18:13", "testo": "[-] Write  ../../../private/tmp/claude-502/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/scratchpad/bilancio-o3.html", "task": "-", "tipo": "file", "tool": "Write", "file": "../../../private/tmp/claude-502/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/scratchpad/bilancio-o3.html"}
 {"at": "2026-10-25 18:56", "testo": "OBIETTIVO CHIUSO O3 (completo) — approvato"}
+{"at": "2026-10-25 18:56", "testo": "[-] bash: ~/claude-rules/bin/wf.sh obj-close approvato 2>&1 | head -4 && git add ROADMAP.md PROGETTO.md .claude/workflow"}
+{"at": "2026-10-25 18:56", "testo": "[-] bash: ~/claude-rules/bin/wf.sh status --json | jq '{obiettivi: [.obiettivi[] | {id, titolo, stato, task: .conteggi}]"}
+{"at": "2026-10-25 18:57", "testo": "[-] Write  ../../../private/tmp/claude-502/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/scratchpad/bilancio-ciclo-01.html", "task": "-", "tipo": "file", "tool": "Write", "file": "../../../private/tmp/claude-502/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/scratchpad/bilancio-ciclo-01.html"}
+{"at": "2026-10-25 19:01", "testo": "VERSIONE 0.2.0 (ciclo 01 chiuso)"}
+{"at": "2026-10-25 19:02", "testo": "CICLO 02 APERTO — La Deck come server gestito dall'agente: rete, servizi, aggiornamenti, schermo"}
+{"at": "2026-10-25 19:02", "testo": "OBIETTIVO AGGIUNTO O4 — Rete gestita dall'agente: deck network"}
+{"at": "2026-10-25 19:02", "testo": "TASK AGGIUNTA O4.T1 in O4 — Componente network: interfacce, Wi-Fi, risoluzione dei nomi, porte"}
+{"at": "2026-10-25 19:02", "testo": "TASK AGGIUNTA O4.T2 in O4 — Azioni di rete con anteprima e rete di sicurezza: LLMNR e banda Wi-Fi"}
+{"at": "2026-10-25 19:02", "testo": "OBIETTIVO AGGIUNTO O5 — Servizi e log gestiti dall'agente: deck service, deck logs"}
+{"at": "2026-10-25 19:02", "testo": "TASK AGGIUNTA O5.T1 in O5 — Componente service: elenco, stato e azioni sui servizi"}
+{"at": "2026-10-25 19:02", "testo": "TASK AGGIUNTA O5.T2 in O5 — Componente logs: journal strutturato per servizio, periodo e gravità"}
+{"at": "2026-10-25 19:02", "testo": "OBIETTIVO AGGIUNTO O6 — Aggiornamenti sicuri: deck update"}
+{"at": "2026-10-25 19:02", "testo": "TASK AGGIUNTA O6.T1 in O6 — Componente update: anteprima, applicazione e verifica degli aggiornamenti"}
+{"at": "2026-10-25 19:02", "testo": "OBIETTIVO AGGIUNTO O7 — Schermo leggibile e compatto, sistema pulito: deck screen"}
+{"at": "2026-10-25 19:02", "testo": "TASK AGGIUNTA O7.T1 in O7 — Componente screen: lettura dello schermo e modalità compatta"}
+{"at": "2026-10-25 19:03", "testo": "TASK AGGIUNTA O7.T2 in O7 — Pulizia dei vecchi sistemi lasciati dai rollback"}
+{"at": "2026-10-25 19:05", "testo": "RICHIESTA R1 aperta (generale) — Sbloccare la conferma del ciclo 02: debt-resolve è richiesto da setup --confermato ma negato dal controllo dei comandi nel passo 6 del setup"}
+{"at": "2026-10-25 19:05", "testo": "TRAPPOLA registrata: All'apertura di un ciclo dopo il primo, setup --confermato rifiuta finché il debito ereditato non è risolto, ma nel passo 6 il controllo dei comandi nega debt-resolve -> difetto della governance (rilascio 2.6.15) -> far eseguire i debt-resolve all'utente dal suo terminale, oppure risolvere il debito prima di roadmap-new se possibile."}
+{"at": "2026-10-25 19:08", "testo": "TASK CORRETTA O4.T1 — title: «Componente network: interfacce, Wi-Fi, risoluzione dei nomi, porte» -> «Componente network: interfacce, Wi-Fi, risoluzione dei nomi, porte (N8)»"}
+{"at": "2026-10-25 19:08", "testo": "TASK CORRETTA O7.T1 — title: «Componente screen: lettura dello schermo e modalità compatta» -> «Componente screen: lettura dello schermo e modalità compatta (N9, N10)»"}
+{"at": "2026-10-25 19:08", "testo": "ROADMAP CONFERMATA — ciclo 02"}
+{"at": "2026-10-25 19:08", "testo": "[-] Edit  CHANGELOG.md", "task": "-", "tipo": "file", "tool": "Edit", "file": "CHANGELOG.md"}

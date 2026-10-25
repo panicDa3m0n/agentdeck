@@ -2,7 +2,7 @@
   "version": 1,
   "name": "linuxai-steamdeck",
   "created": "2026-10-25 15:45",
-  "updated": "2026-10-25 18:56",
+  "updated": "2026-10-25 19:08",
   "phase": "active",
   "description": "AgentDeck: una Steam Deck LCD (APU AMD, 16 GB RAM, NVMe 2 TB) trasformata in server domestico a basso consumo con Arch Linux, progettato agent-first: il sistema è gestito interamente da un agente AI (oggi Claude, via SSH dal Mac) e l’umano è al massimo spettatore. Serve a ospitare servizi, applicazioni personali e domestiche, progetti di sviluppo e uso agentico completo. Ogni componente del sistema, prendendo spunto dalle funzioni di macOS, viene riprogettato per l’uso agentico con due tecnologie: interattività (ogni risposta è una schermata in JSON strutturato con dati, azioni, navigazione, errori e conferme come anteprima delle conseguenze) e autoprompting (il sistema fornisce all’agente le istruzioni giuste per il contesto in cui si trova). L’agente che sviluppa è anche l’agente che usa il sistema, così i bisogni emergono dall’uso reale. Obiettivo finale: agente interno basato su API cloud, idealmente sessioni Claude Code integrate nativamente con il sistema. Progetto personale di Davide. Nel repository: principi (PRINCIPI.md), chiavetta live con Wi-Fi e SSH automatici (live/), installazione di Arch a fasi (install/).",
   "verification": "La Deck si riavvia da sola dal disco interno e torna raggiungibile con ssh agentdeck (utente agent, solo chiave); systemctl is-system-running risponde running senza unità fallite; è attivo il kernel principale; snapper elenca gli snapshot e GRUB li rende avviabili. Gli script hanno controlli in sola lettura: install.sh check e verify, prepare-stick.sh con DRY_RUN=1. Non esistono ancora test automatici: ogni componente nuovo si verifica usandolo davvero come agente sulla Deck e controllando che la risposta sia JSON valido e coerente con lo stato reale.",
@@ -19,23 +19,144 @@
       "n": 1,
       "title": "Prima interfaccia agentica: protocollo, stato e snapshot",
       "slug": "prima-interfaccia-agentica-protocollo-st",
-      "state": "active",
+      "state": "closed",
       "opened": "2026-10-25 15:54",
       "updated": "2026-10-25 18:56",
-      "file": ".claude/workflow/roadmaps/01-prima-interfaccia-agentica-protocollo-st.md"
+      "file": ".claude/workflow/roadmaps/01-prima-interfaccia-agentica-protocollo-st.md",
+      "closed": "2026-10-25 19:01",
+      "summary": {
+        "objectives": 3,
+        "done": 12,
+        "blocked": 0,
+        "objective_lines": [
+          "`O1` Base operativa affidabile per l'agente — approvato",
+          "    • O1.T1: Autore personale su tutti i commit; repo privato panicDa3m0n/agentdeck con main e tag v0.1.0, verificato via API; nessuna credenziale online.",
+          "    • O1.T2: SendRelease=no sulla Deck e in install.sh; snapshot 4 prima; dopo 2 riavvii consecutivi IP sempre .49; ssh agentdeck riuscito 5 volte su 5 al primo tentativo.",
+          "    • O1.T3: inetutils installato con pacman (snapshot pre 5 e post 6 da snap-pac); hostname restituisce agentdeck; pacchetto aggiunto a install/install.sh.",
+          "    • O1.T4: README, indice docs/ e 5 documenti; PRINCIPI con INV-10; 57 link verificati senza rotture; script e documenti collegati a vicenda; tutto su origin/main.",
+          "    • O1.T5: ssh agentdeck usa l'IP stabile .49 (HostKeyAlias), alias agentdeck-mdns sul nome; backup fatto; 10 collegamenti su 10 al primo colpo; accesso.md aggiornato.",
+          "`O2` Protocollo dell'interfaccia agentica: schermate interattive e autoprompting — approvato",
+          "    • O2.T1: docs/protocollo.md approvato: schermate, azioni, conferme, errori, autoprompting, INV-4, 8 esempi reali; Python 3, testi in inglese.",
+          "    • O2.T2: deck sulla Deck: home con componenti, errori strutturati, 8 chiamate reali conformi, 22 test verdi, ~0,09 s; install.sh ripetuto con successo.",
+          "`O3` Primi componenti usati dall'agente: stato del sistema e snapshot — approvato",
+          "    • O3.T1: deck status sulla Deck: 23/23 valori coincidono con gli strumenti classici, avvisi WIFI_BAND_2G, LLMNR, ventola; 34 test verdi; 0,27 s.",
+          "    • O3.T2: deck snapshot: elenco identico a snapper (1-13), snapshot 14 creato da deck in snapper e nel menu GRUB dopo 7 s; in_grub; 56 test.",
+          "    • O3.T3: Rollback provato: snap 15, modifica di prova, anteprima, conferma, Deck tornata in 44 s senza la modifica; stato prima nello snap 18; 67 test.",
+          "    • O3.T4: Schermo Deck: comandi agente ed esiti deck in tempo reale (verificato da /dev/vcsu1); snapshot 10; ssh, scp, rsync ok; docs/schermo.md.",
+          "    • O3.T5: Schermo: comando e risposta (errori in rosso, deck riassunto); I/O, uscite e binari invariati verificati; rete di sicurezza estesa; 48 test."
+        ],
+        "adr": []
+      }
+    },
+    {
+      "n": 2,
+      "title": "La Deck come server gestito dall'agente: rete, servizi, aggiornamenti, schermo",
+      "slug": "la-deck-come-server-gestito-dall-agente-",
+      "state": "active",
+      "opened": "2026-10-25 19:02",
+      "updated": "2026-10-25 19:08",
+      "file": ".claude/workflow/roadmaps/02-la-deck-come-server-gestito-dall-agente-.md"
     }
   ],
-  "debt": [],
+  "debt": [
+    {
+      "kind": "annotazione",
+      "ref": "N1",
+      "cycle": 1,
+      "state": "dropped",
+      "text": "[O1.T1] Richiesta dell'utente alla conferma della roadmap (25/10): appena chiuso il setup registrare due invarianti, non registrabili durante il passo 6. INV-8: ogni versione si pubblica sul remote privato appena chiusa (commit e tag su GitHub, account panicDa3m0n). INV-9: documentazione sempre completa, organizzata per argomento in più file in docs/ con indice e collegata dal codice stesso, e viceversa; una modifica non è conclusa finché la documentazione non la riflette. Rieseguire anche: versione --scegli governance --dove VERSION --pubblica.",
+      "why": "Già realizzata nel ciclo 01: INV-8 e INV-9 registrate, versioni pubblicate",
+      "resolved": "2026-10-25 19:07"
+    },
+    {
+      "kind": "annotazione",
+      "ref": "N2",
+      "cycle": 1,
+      "state": "dropped",
+      "text": "[O1.T4] Aggiungere a PRINCIPI.md (o al documento dei principi in docs/) il principio approvato dall'utente il 25/10, registrato come INV-10: si interviene al livello più alto che risolve il problema (configurazione, strato agentico, sostituzione di componenti); il codice di base si modifica solo per un bisogno reale e con decisione esplicita. Includere la tabella dei quattro livelli e il paragone con macOS e Android.",
+      "why": "Già realizzata in O1.T4: sezione 4 di PRINCIPI.md",
+      "resolved": "2026-10-25 19:07"
+    },
+    {
+      "kind": "annotazione",
+      "ref": "N3",
+      "cycle": 1,
+      "state": "dropped",
+      "text": "[O1.T4] Documentare in docs/ il setup git e GitHub: identità personale impostata solo nel repository (Davide, davideditrani94@gmail.com), remote privato https://github.com/panicDa3m0n/agentdeck, credential helper locale che usa gh auth token --user panicDa3m0n (indipendente dall'account gh attivo), tag v<versione> a ogni versione chiusa (INV-8).",
+      "why": "Già realizzata in O1.T4: docs/sviluppo.md",
+      "resolved": "2026-10-25 19:07"
+    },
+    {
+      "kind": "annotazione",
+      "ref": "N4",
+      "cycle": 1,
+      "state": "dropped",
+      "text": "[O1.T4] Documentare nell'accesso alla Deck: IP stabile 192.168.1.49 grazie a SendRelease=no (O1.T2, testato con due riavvii); ssh agentdeck usa il nome agentdeck.local; se il nome non si risolve (trappola P2) usare ssh -o HostName=192.168.1.49 agentdeck. Una prenotazione DHCP sul router renderebbe l'IP fisso anche dopo spegnimenti lunghi: richiede l'accesso dell'utente al router.",
+      "why": "Già realizzata in O1.T4 e O1.T5: docs/accesso.md",
+      "resolved": "2026-10-25 19:08"
+    },
+    {
+      "kind": "annotazione",
+      "ref": "N5",
+      "cycle": 1,
+      "state": "dropped",
+      "text": "[O3.T1] Dalla verifica INV-5 al gate di O1 (25/10): sulla Deck sono in ascolto 22 (SSH), 5355 (LLMNR di systemd-resolved, su tutta la LAN) e 53 solo su localhost. LLMNR non serve perché usiamo mDNS: deck status dovrebbe mostrare le porte in ascolto e segnalare LLMNR come superfluo, con l'azione suggerita LLMNR=no in resolved.conf.",
+      "why": "Già realizzata in O3.T1: avviso LLMNR_LISTENING; l'azione riparte con N8",
+      "resolved": "2026-10-25 19:08"
+    },
+    {
+      "kind": "annotazione",
+      "ref": "N6",
+      "cycle": 1,
+      "state": "dropped",
+      "text": "[O2.T2] Dall'approvazione di O2.T1 (25/10): implementare deck seguendo docs/protocollo.md, approvato; Python 3 solo libreria standard; testi per l'agente in inglese. Da fare: installare il pacchetto python sulla Deck con snapshot (INV-3); ogni modulo rimanda a docs/protocollo.md (INV-9); test di conformità di ogni schermata e test di iniezione nel canale istruzioni (INV-4); aggiungere a PRINCIPI.md le righe di decisione: protocollo deck v1, Python 3, testi agente in inglese.",
+      "why": "Già realizzata in O2.T2",
+      "resolved": "2026-10-25 19:08"
+    },
+    {
+      "kind": "annotazione",
+      "ref": "N7",
+      "cycle": 1,
+      "state": "dropped",
+      "text": "[O3.T4] Richiesta dell'utente del 25/10: sullo schermo della Deck vede solo agentdeck login; vuole vedere, come in un terminale, cosa sta facendo l'agente in base ai comandi. Da lavorare subito dopo O3.T1. Idea da discutere nel brief: wrapper dei comandi SSH dell'agente che registra ogni comando nel journal, servizio su tty1 al posto di getty che lo mostra; verifica leggendo /dev/vcs1. Attenzione: un comando con segreti sulla riga di comando comparirebbe a schermo e nel journal.",
+      "why": "Già realizzata in O3.T4 e O3.T5",
+      "resolved": "2026-10-25 19:08"
+    },
+    {
+      "kind": "annotazione",
+      "ref": "N8",
+      "cycle": 1,
+      "state": "taken",
+      "text": "[O3.T1] Bisogno emerso usando deck status (25/10): gli avvisi WIFI_BAND_2G e LLMNR_LISTENING hanno action null perché manca un componente di rete su cui agire. Candidato per il prossimo ciclo: componente /network (banda Wi-Fi preferita, LLMNR=no, porte in ascolto) collegato dagli avvisi di status.",
+      "resolved": "2026-10-25 19:08"
+    },
+    {
+      "kind": "annotazione",
+      "ref": "N9",
+      "cycle": 1,
+      "state": "taken",
+      "text": "[O3.T4] Idea emersa verificando lo schermo (25/10): poter leggere lo schermo è utile all'agente (INV-2: tutto osservabile). Candidato per un ciclo futuro: componente deck /screen che restituisce in data le righe visibili su tty1 (da /dev/vcsu1) e lo stato del servizio agentdeck-screen.",
+      "resolved": "2026-10-25 19:08"
+    },
+    {
+      "kind": "annotazione",
+      "ref": "N10",
+      "cycle": 1,
+      "state": "taken",
+      "text": "[O3.T5] Riscontro dell'utente (25/10): lo schermo con comandi e risposte è molto verboso, per ora va bene. Miglioramento futuro: modalità compatta (prime N righe di output per comando con il numero di righe nascoste, oppure solo comandi ed esiti) scelta da un'azione deck /screen.",
+      "resolved": "2026-10-25 19:08"
+    }
+  ],
   "counters": {
-    "objective": 0,
-    "cycle": 1,
+    "objective": 3,
+    "cycle": 2,
     "request": 0,
-    "note": 0
+    "note": 10
   },
   "versionamento": {
     "modalita": "governance",
     "scelto": "2026-10-25 17:50",
-    "attuale": "0.1.12",
+    "attuale": "0.2.0",
     "dove": "VERSION",
     "pubblica": true
   }

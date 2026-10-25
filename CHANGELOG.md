@@ -4,6 +4,19 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.2.0 — 2026-10-25
+
+Chiusura del ciclo 01, "Prima interfaccia agentica: protocollo, stato e snapshot": 3 obiettivi, 12 task,
+nessun blocco. Roadmap archiviata in `.claude/workflow/roadmaps/`. Aperto il ciclo 02, "La Deck come server
+gestito dall'agente: rete, servizi, aggiornamenti, schermo".
+
+- O1: base operativa affidabile.
+  - Repository privato con identità personale e una versione pubblicata per ogni task.
+  - IP stabile e accesso SSH al primo tentativo.
+  - Documentazione per argomento.
+- O2: protocollo dell'interfaccia agentica approvato (`docs/protocollo.md`) e motore `deck` sulla Deck.
+- O3: `deck status`, `deck snapshot` con rollback provato, schermo della Deck con comandi e risposte.
+
 ## 0.1.12 — 2026-10-25
 
 Ciclo 01, task O3.T3: rollback con anteprima e conferma.

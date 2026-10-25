@@ -45,6 +45,11 @@
       "id": "P9",
       "testo": "Dopo un rollback anche /opt/agentdeck torna alla versione dello snapshot -> deck sta nel subvolume @ come il resto del sistema -> rilanciare deck/install.sh se il codice di deck è cambiato dopo lo snapshot di destinazione.",
       "creata": "2026-10-25 18:10"
+    },
+    {
+      "id": "P10",
+      "testo": "All'apertura di un ciclo dopo il primo, setup --confermato rifiuta finché il debito ereditato non è risolto, ma nel passo 6 il controllo dei comandi nega debt-resolve -> difetto della governance (rilascio 2.6.15) -> far eseguire i debt-resolve all'utente dal suo terminale, oppure risolvere il debito prima di roadmap-new se possibile.",
+      "creata": "2026-10-25 19:05"
     }
   ]
 }
