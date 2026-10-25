@@ -10,10 +10,10 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O10` Claude Code sulla Deck, usato davvero — 4 task: 2 completate, 0 in corso, 2 da fare, 0 bloccate
+- **Obiettivo attivo:** `O10` Claude Code sulla Deck, usato davvero — 4 task: 3 completate, 0 in corso, 1 da fare, 0 bloccate
 - **Task attiva:** —
-- **Ultima task gestita:** `O10.T2` — completata — Login Max, token solo sulla Deck; claude -p ok; servizio con Remote Control in tmux, riconnesso dopo riavvio; sessione vista dall'utente
-- **Ultimo aggiornamento:** 2026-10-26 00:15
+- **Ultima task gestita:** `O10.T3` — completata — Prompt di sistema in quattro strati (stile, CLAUDE.md gestito, deny e guardia, hook con gli avvisi); provati con claude -p e da Remote Control dall'utente
+- **Ultimo aggiornamento:** 2026-10-26 00:33
 
 ## Richieste attive
 
@@ -32,8 +32,10 @@ _nessuna richiesta in attesa._
   *gate previsto:* Login con l'abbonamento fatto dall'utente, token solo sulla Deck (INV-6); prima richiesta di prova riuscita; sessione di Claude Code come servizio che sopravvive alla caduta di SSH; raggiungibile con Remote Control da claude.ai o dal telefono; termini dell'abbonamento per sessioni automatiche verificati e riportati; proposta di nuovo testo per INV-7. · *gate confermato:* ✔ Login Max, token solo sulla Deck; claude -p ok; servizio con Remote Control in tmux, riconnesso dopo riavvio; sessione vista dall'utente
   *rischio:* 30/100 — Ripresa per il login: avvio claude auth login in tmux sulla Deck, l'utente inserisce il codice con un comando suo; poi Remote Control e servizio come da piano.
   *annotazioni:* `N27`, `N28`, `N29`, `N30`
-- [ ] `O10.T3` Prima configurazione: AgentDeck spiegato a Claude Code — *perimetro:* `CLAUDE.md e impostazioni di Claude Code sulla Deck, deck/, docs/`
-  *gate previsto:* CLAUDE.md di AgentDeck ricavato da docs/ (fonte unica, INV-9) con principi, invarianti e uso di deck; permessi di Claude Code che proteggono l'accesso (niente stop o disable di sshd, rete, iwd, dbus); uso di deck dalla sessione verificato.
+- [x] `O10.T3` Prima configurazione: AgentDeck spiegato a Claude Code — *perimetro:* `CLAUDE.md e impostazioni di Claude Code sulla Deck, deck/, docs/`
+  *gate previsto:* CLAUDE.md di AgentDeck ricavato da docs/ (fonte unica, INV-9) con principi, invarianti e uso di deck; permessi di Claude Code che proteggono l'accesso (niente stop o disable di sshd, rete, iwd, dbus); uso di deck dalla sessione verificato. · *gate confermato:* ✔ Prompt di sistema in quattro strati (stile, CLAUDE.md gestito, deny e guardia, hook con gli avvisi); provati con claude -p e da Remote Control dall'utente
+  *rischio:* 20/100 — Cambia istruzioni e permessi dell'agente che vive sulla Deck: un errore lo renderebbe più libero, non meno; snapshot prima, verifica dei rifiuti sui servizi di accesso.
+  *annotazioni:* `N31`, `N32`, `N33`
 - [ ] `O10.T4` Uso reale dalla chat e bisogni emersi — *perimetro:* `sessioni di Claude Code sulla Deck, annotazioni della governance, docs/`
   *gate previsto:* Almeno una sessione di lavoro reale dalla chat di Claude Code sulla Deck, scelta con l'utente; ogni bisogno emerso registrato come annotazione; proposta di roadmap del ciclo successivo che nasce da quei bisogni.
 
@@ -52,3 +54,6 @@ _Una riga per nota, sempre legata a una task. `wf.sh notes` per leggerle._
 - `N28` (`O10.T2`) Effetto del rinvio del login (26/10, decisione dell'utente): senza login con l'abbonamento (R4) non si fanno richiesta di prova, Remote Control né il servizio persistente; restano pronti tmux 3.8 (snapshot 36-38) e la cartella di lavoro ~/agentdeck. O10.T3 si può preparare (CLAUDE.md, permessi) ma la verifica dalla sessione richiede il login; O10.T4 richiede il login. tmux va aggiunto all'elenco pacchetti di install/install.sh. Per il login usare una scheda del Terminale (P18). — 2026-10-26 00:03
 - `N29` (`O10.T2`) Login (26/10): claude auth login gira in tmux sulla Deck (sessione login) e il campo del codice riceve i tasti (prova con un codice falso: Invalid code). Il primo invio dell'utente con read e tmux send-keys ha consegnato una riga vuota, quindi nessun esito. Comando corretto che rifiuta la riga vuota e conta i caratteri; va lanciato dall'app Terminale del Mac, non dalla chat. Il codice non passa da righe di comando né registri. — 2026-10-26 00:09
 - `N30` (`O10.T2`) Proposta di nuovo testo per INV-7 (26/10), da decidere al gate di O10: Stack imposto: Arch Linux sulla Deck; gli agenti lavorano con Claude Code e l'abbonamento Claude dell'utente, cioè con modelli nel cloud di Anthropic: nessun modello eseguito in locale e nessuna chiave API. La governance non ha un comando per modificare un'invariante, solo invariant-add. — 2026-10-26 00:15
+- `N31` (`O10.T3`) Richiesta dell'utente (26/10): verificare come gestire il prompt di sistema di Claude Code per usarlo correttamente negli scopi di gestione dell'OS. Si studia dentro O10.T3: CLAUDE.md a più livelli, opzioni del prompt di sistema, stili di output, hook, agenti, e cosa vale per le sessioni di Remote Control. — 2026-10-26 00:16
+- `N32` (`O10.T3`) Fatto emerso (26/10, aiuto di Claude Code 2.1.310 sulla Deck): il comando principale accetta --system-prompt, --append-system-prompt (anche da file), --agent, --agents, --settings, --setting-sources; claude remote-control (server mode) fra questi accetta solo --permission-mode. Le sessioni aperte da Remote Control vanno configurate con ciò che si legge dalla cartella di lavoro e dalla macchina (CLAUDE.md, impostazioni, hook, agenti), da verificare sulla documentazione. — 2026-10-26 00:17
+- `N33` (`O10.T3`) Avanzamento O10.T3 (26/10): installati i quattro strati (stile AgentDeck, /etc/claude-code/CLAUDE.md generato con le 10 invarianti, managed-settings con deny e niente bypass, hook PreToolUse guardia e SessionStart con gli avvisi di deck). Verificati con claude -p in ~/agentdeck: identità e regole, avvisi di inizio sessione, deny e guardia con marcatori innocui anche con Bash permesso, uso di deck status. 158 test. Manca la conferma dell'utente da una sessione aperta con Remote Control. — 2026-10-26 00:24

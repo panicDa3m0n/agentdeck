@@ -363,6 +363,8 @@ hanno ancora un'azione collegata.
 | [../deck/tests/test_logs.py](../deck/tests/test_logs.py) | Test di `/logs`: righe reali del journal, traccia dell'agente esclusa, filtri, righe malevole, collegamento da `/service` |
 | [../deck/tests/live_logs_check.py](../deck/tests/live_logs_check.py) | Controllo dal vivo di `deck logs` contro `journalctl -o json`, con una riga malevola |
 | [../deck/tests/test_update.py](../deck/tests/test_update.py) | Test di `/update`: `pacman -Qu`, riavvio e GRUB, anteprima, snapshot, verifica, rollback indicato, testo esterno |
+| [../deck/claude/](../deck/claude/install.sh) | Configurazione di Claude Code per AgentDeck: stile, CLAUDE.md, impostazioni gestite, guardia, inizio sessione ([claude-code.md](claude-code.md)) |
+| [../deck/tests/test_claude_config.py](../deck/tests/test_claude_config.py) | Test della guardia, dell'hook di inizio sessione e del CLAUDE.md generato |
 | [../deck/tests/live_status_check.py](../deck/tests/live_status_check.py) | Controllo dal vivo sulla Deck: ogni valore di `deck status` contro una lettura indipendente |
 | [../deck/install.sh](../deck/install.sh) | Installazione e aggiornamento sulla Deck, schermo compreso |
 | [../deck/screen/](../deck/screen/agentdeck_screen.py) | Schermo della Deck: registrazione dei comandi, visualizzatore, servizio ([schermo.md](schermo.md)) |

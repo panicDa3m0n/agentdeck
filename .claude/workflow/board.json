@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-25 23:48",
-  "updated": "2026-10-26 00:15",
+  "updated": "2026-10-26 00:33",
   "objectives": [
     {
       "id": "O10",
@@ -39,10 +39,10 @@
           "title": "Prima configurazione: AgentDeck spiegato a Claude Code",
           "scope": "CLAUDE.md e impostazioni di Claude Code sulla Deck, deck/, docs/",
           "gate_pre": "CLAUDE.md di AgentDeck ricavato da docs/ (fonte unica, INV-9) con principi, invarianti e uso di deck; permessi di Claude Code che proteggono l'accesso (niente stop o disable di sshd, rete, iwd, dbus); uso di deck dalla sessione verificato.",
-          "gate_post": "",
-          "state": "todo",
-          "risk": null,
-          "risk_why": "",
+          "gate_post": "Prompt di sistema in quattro strati (stile, CLAUDE.md gestito, deny e guardia, hook con gli avvisi); provati con claude -p e da Remote Control dall'utente",
+          "state": "done",
+          "risk": 20,
+          "risk_why": "Cambia istruzioni e permessi dell'agente che vive sulla Deck: un errore lo renderebbe più libero, non meno; snapshot prima, verifica dei rifiuti sui servizi di accesso.",
           "docs": []
         },
         {
@@ -119,6 +119,27 @@
       "text": "Proposta di nuovo testo per INV-7 (26/10), da decidere al gate di O10: Stack imposto: Arch Linux sulla Deck; gli agenti lavorano con Claude Code e l'abbonamento Claude dell'utente, cioè con modelli nel cloud di Anthropic: nessun modello eseguito in locale e nessuna chiave API. La governance non ha un comando per modificare un'invariante, solo invariant-add.",
       "docs": [],
       "created": "2026-10-26 00:15"
+    },
+    {
+      "id": "N31",
+      "task": "O10.T3",
+      "text": "Richiesta dell'utente (26/10): verificare come gestire il prompt di sistema di Claude Code per usarlo correttamente negli scopi di gestione dell'OS. Si studia dentro O10.T3: CLAUDE.md a più livelli, opzioni del prompt di sistema, stili di output, hook, agenti, e cosa vale per le sessioni di Remote Control.",
+      "docs": [],
+      "created": "2026-10-26 00:16"
+    },
+    {
+      "id": "N32",
+      "task": "O10.T3",
+      "text": "Fatto emerso (26/10, aiuto di Claude Code 2.1.310 sulla Deck): il comando principale accetta --system-prompt, --append-system-prompt (anche da file), --agent, --agents, --settings, --setting-sources; claude remote-control (server mode) fra questi accetta solo --permission-mode. Le sessioni aperte da Remote Control vanno configurate con ciò che si legge dalla cartella di lavoro e dalla macchina (CLAUDE.md, impostazioni, hook, agenti), da verificare sulla documentazione.",
+      "docs": [],
+      "created": "2026-10-26 00:17"
+    },
+    {
+      "id": "N33",
+      "task": "O10.T3",
+      "text": "Avanzamento O10.T3 (26/10): installati i quattro strati (stile AgentDeck, /etc/claude-code/CLAUDE.md generato con le 10 invarianti, managed-settings con deny e niente bypass, hook PreToolUse guardia e SessionStart con gli avvisi di deck). Verificati con claude -p in ~/agentdeck: identità e regole, avvisi di inizio sessione, deny e guardia con marcatori innocui anche con Bash permesso, uso di deck status. 158 test. Manca la conferma dell'utente da una sessione aperta con Remote Control.",
+      "docs": [],
+      "created": "2026-10-26 00:24"
     }
   ],
   "active": {
@@ -131,9 +152,9 @@
     "hold_plan": ""
   },
   "previous": {
-    "task": "O10.T2",
+    "task": "O10.T3",
     "state": "done",
-    "note": "Login Max, token solo sulla Deck; claude -p ok; servizio con Remote Control in tmux, riconnesso dopo riavvio; sessione vista dall'utente"
+    "note": "Prompt di sistema in quattro strati (stile, CLAUDE.md gestito, deny e guardia, hook con gli avvisi); provati con claude -p e da Remote Control dall'utente"
   },
   "cycle": {
     "n": 4,
@@ -144,6 +165,6 @@
     "objective": 11,
     "cycle": 4,
     "request": 4,
-    "note": 30
+    "note": 33
   }
 }

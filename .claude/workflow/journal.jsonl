@@ -868,3 +868,35 @@
 {"at": "2026-10-26 00:15", "testo": "VERSIONE 0.4.2 (O10.T2)"}
 {"at": "2026-10-26 00:15", "testo": "[-] bash: ~/claude-rules/bin/wf.sh task-close --done \"Login Max, token solo sulla Deck; claude -p ok; servizio con Remot"}
 {"at": "2026-10-26 00:16", "testo": "VERSIONI scelte dall'utente: governance"}
+{"at": "2026-10-26 00:16", "testo": "[-] bash: ~/claude-rules/bin/wf.sh versione --scegli governance --da \"0.4.2\" --dove \"VERSION\" --pubblica 2>&1 | grep -o "}
+{"at": "2026-10-26 00:16", "testo": "TASK APERTA O10.T3 — Prima configurazione: AgentDeck spiegato a Claude Code | perimetro: CLAUDE.md e impostazioni di Claude Code sulla Deck, deck/, docs/ | gate: CLAUDE.md di AgentDeck ricavato da docs/ (fonte unica, INV-9) con principi, invarianti e uso di deck; permessi di Claude Code che proteggono l'accesso (niente stop o disable di sshd, rete, iwd, dbus); uso di deck dalla sessione verificato. | rischio: 20"}
+{"at": "2026-10-26 00:16", "testo": "ANNOTAZIONE N31 su O10.T3 — Richiesta dell'utente (26/10): verificare come gestire il prompt di sistema di Claude Code per usarlo correttamente negli scopi di gestione dell'OS. Si studia dentro O10.T3: CLAUDE.md a più livelli, opzioni del prompt di sistema, stili di output, hook, agenti, e cosa vale per le sessioni di Remote Control."}
+{"at": "2026-10-26 00:16", "testo": "[O10.T3] bash: ~/claude-rules/bin/wf.sh task-start --id O10.T3 --risk 20 --why \"Cambia istruzioni e permessi dell'agente che "}
+{"at": "2026-10-26 00:16", "testo": "[O10.T3] bash: ssh -o BatchMode=yes agentdeck '~/.local/bin/claude --help 2>&1 | grep -iE \"system-prompt|append|agent |--agen"}
+{"at": "2026-10-26 00:17", "testo": "[O10.T3] bash: ssh -o BatchMode=yes agentdeck 'echo \"ssh ok\"; ~/.local/bin/claude auth status 2>&1 | grep -E \"\\\"loggedIn\\\"\"; "}
+{"at": "2026-10-26 00:17", "testo": "ANNOTAZIONE N32 su O10.T3 — Fatto emerso (26/10, aiuto di Claude Code 2.1.310 sulla Deck): il comando principale accetta --system-prompt, --append-system-prompt (anche da file), --agent, --agents, --settings, --setting-sources; claude remote-control (server mode) fra questi accetta solo --permission-mode. Le sessioni aperte da Remote Control vanno configurate con ciò che si legge dalla cartella di lavoro e dalla macchina (CLAUDE.md, impostazioni, hook, agenti), da verificare sulla documentazione."}
+{"at": "2026-10-26 00:17", "testo": "[O10.T3] bash: ~/claude-rules/bin/wf.sh note-add --task O10.T3 --text \"Fatto emerso (26/10, aiuto di Claude Code 2.1.310 sull"}
+{"at": "2026-10-26 00:20", "testo": "[O10.T3] bash: ssh -o BatchMode=yes agentdeck 'ls -la ~/.claude/ /etc/claude-code 2>&1 | head -20; cat ~/.claude/settings.jso"}
+{"at": "2026-10-26 00:20", "testo": "[O10.T3] bash: grep -n \"INV-1\\b\\|INV-10\" PROGETTO.md | head -4; grep -n \"^## \" PROGETTO.md | head -12"}
+{"at": "2026-10-26 00:20", "testo": "[O10.T3] bash: grep -rn \"\\\"INV-1\\\"\\|INV-1\\`\\|id\\\": \\\"INV-1\" .claude/workflow/project.json | head -3; python3 -c \" import json"}
+{"at": "2026-10-26 00:20", "testo": "[O10.T3] bash: grep -rln \"L'accesso remoto dell'agente non si perde mai\" .claude/ PROGETTO.md PRINCIPI.md docs/ 2>/dev/null; "}
+{"at": "2026-10-26 00:20", "testo": "[O10.T3] bash: python3 -c \" import json; d=json.load(open('.claude/workflow/invariants.json')); print(type(d).__name__, (list"}
+{"at": "2026-10-26 00:21", "testo": "[O10.T3] Write  deck/claude/output-styles/agentdeck.md", "task": "O10.T3", "tipo": "file", "tool": "Write", "file": "deck/claude/output-styles/agentdeck.md"}
+{"at": "2026-10-26 00:21", "testo": "[O10.T3] Write  deck/claude/CLAUDE.template.md", "task": "O10.T3", "tipo": "file", "tool": "Write", "file": "deck/claude/CLAUDE.template.md"}
+{"at": "2026-10-26 00:21", "testo": "[O10.T3] Write  deck/claude/build_claude_md.py", "task": "O10.T3", "tipo": "file", "tool": "Write", "file": "deck/claude/build_claude_md.py"}
+{"at": "2026-10-26 00:21", "testo": "[O10.T3] Write  deck/claude/guard.py", "task": "O10.T3", "tipo": "file", "tool": "Write", "file": "deck/claude/guard.py"}
+{"at": "2026-10-26 00:21", "testo": "[O10.T3] Write  deck/claude/session_start.py", "task": "O10.T3", "tipo": "file", "tool": "Write", "file": "deck/claude/session_start.py"}
+{"at": "2026-10-26 00:21", "testo": "[O10.T3] Write  deck/claude/managed-settings.json", "task": "O10.T3", "tipo": "file", "tool": "Write", "file": "deck/claude/managed-settings.json"}
+{"at": "2026-10-26 00:22", "testo": "[O10.T3] Write  deck/claude/install.sh", "task": "O10.T3", "tipo": "file", "tool": "Write", "file": "deck/claude/install.sh"}
+{"at": "2026-10-26 00:22", "testo": "[O10.T3] Write  deck/tests/test_claude_config.py", "task": "O10.T3", "tipo": "file", "tool": "Write", "file": "deck/tests/test_claude_config.py"}
+{"at": "2026-10-26 00:22", "testo": "[O10.T3] bash: cd /Users/snj/linuxai-steamdeck/deck && python3 -m unittest tests.test_claude_config 2>&1 | tail -15"}
+{"at": "2026-10-26 00:22", "testo": "[O10.T3] bash: python3 - <<'EOF' from pathlib import Path p = Path(\"tests/test_claude_config.py\"); s = p.read_text() old = ''"}
+{"at": "2026-10-26 00:22", "testo": "[O10.T3] bash: cd /Users/snj/linuxai-steamdeck && ./deck/install.sh 2>&1 | grep -E \"^Ran |^OK|FAIL|skipped\" | head -3; bash d"}
+{"at": "2026-10-26 00:23", "testo": "[O10.T3] bash: ssh -o BatchMode=yes agentdeck 'cd ~/agentdeck && ~/.local/bin/claude -p \"Rispondi in tre righe numerate, senz"}
+{"at": "2026-10-26 00:23", "testo": "[O10.T3] bash: ssh -o BatchMode=yes agentdeck 'cd ~/agentdeck; for marker in agentdeck-deny-canary agentdeck-guard-canary; do"}
+{"at": "2026-10-26 00:24", "testo": "[O10.T3] bash: ssh -o BatchMode=yes agentdeck 'cd ~/agentdeck && ~/.local/bin/claude -p \"Usa deck per controllare lo stato de"}
+{"at": "2026-10-26 00:24", "testo": "[O10.T3] bash: python3 - <<'EOF' from pathlib import Path p = Path(\"docs/claude-code.md\"); s = p.read_text() anchor = \"## Agg"}
+{"at": "2026-10-26 00:24", "testo": "ANNOTAZIONE N33 su O10.T3 — Avanzamento O10.T3 (26/10): installati i quattro strati (stile AgentDeck, /etc/claude-code/CLAUDE.md generato con le 10 invarianti, managed-settings con deny e niente bypass, hook PreToolUse guardia e SessionStart con gli avvisi di deck). Verificati con claude -p in ~/agentdeck: identità e regole, avvisi di inizio sessione, deny e guardia con marcatori innocui anche con Bash permesso, uso di deck status. 158 test. Manca la conferma dell'utente da una sessione aperta con Remote Control."}
+{"at": "2026-10-26 00:33", "testo": "TASK CHIUSA O10.T3 — completata: Prompt di sistema in quattro strati (stile, CLAUDE.md gestito, deny e guardia, hook con gli avvisi); provati con claude -p e da Remote Control dall'utente"}
+{"at": "2026-10-26 00:33", "testo": "VERSIONE 0.4.3 (O10.T3)"}
+{"at": "2026-10-26 00:33", "testo": "VERSIONI scelte dall'utente: governance"}

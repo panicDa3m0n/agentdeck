@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "deny": [
+      "Bash(*systemctl stop sshd*)",
+      "Bash(*systemctl disable sshd*)",
+      "Bash(*systemctl mask sshd*)",
+      "Bash(*systemctl stop systemd-networkd*)",
+      "Bash(*systemctl disable systemd-networkd*)",
+      "Bash(*systemctl stop iwd*)",
+      "Bash(*systemctl disable iwd*)",
+      "Bash(*systemctl stop systemd-resolved*)",
+      "Bash(*systemctl stop dbus*)",
+      "Bash(*agentdeck-deny-canary*)"
+    ],
+    "disableBypassPermissionsMode": "disable"
+  },
+  "hooks": {
+    "SessionStart": [
+      {"hooks": [{"type": "command", "command": "/usr/bin/python3 /opt/agentdeck/claude/session_start.py"}]}
+    ],
+    "PreToolUse": [
+      {"matcher": "Bash", "hooks": [{"type": "command", "command": "/usr/bin/python3 /opt/agentdeck/claude/guard.py"}]}
+    ]
+  }
+}

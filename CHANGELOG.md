@@ -4,6 +4,24 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.4.3 — 2026-10-26
+
+Ciclo 04, task O10.T3: cosa sa Claude Code di AgentDeck. Il prompt di sistema per la gestione dell'OS è in
+quattro strati, perché le sessioni di Remote Control non accettano le opzioni del prompt di sistema.
+
+- **Identità:** stile di output "AgentDeck", dentro il prompt di sistema.
+- **Regole stabili:** `/etc/claude-code/CLAUDE.md`, generato da un modello e dalle 10 invarianti della
+  governance, che restano la fonte unica.
+- **Vincoli duri:** impostazioni gestite con regole `deny` sui servizi dell'accesso e la modalità senza permessi
+  disattivata, più una guardia `PreToolUse` che blocca i comandi che toglierebbero l'accesso.
+- **Il momento:** hook `SessionStart` che inietta lo stato della Deck e gli avvisi di `deck status`.
+- Sorgenti in `deck/claude/`, installatore `deck/claude/install.sh`.
+- Verificato dal vivo con `claude -p` e da una sessione di Remote Control aperta dall'utente:
+  - identità, regole e avvisi presenti;
+  - regola `deny` e guardia bloccano davvero, anche con Bash permesso;
+  - `deck` usato dalla sessione.
+- 158 test.
+
 ## 0.4.2 — 2026-10-26
 
 Ciclo 04, task O10.T2: Claude Code collegato all'abbonamento e sempre raggiungibile con Remote Control.

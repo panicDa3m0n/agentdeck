@@ -110,6 +110,32 @@ Verifiche del 26/10/2026:
   escludono l'accesso automatizzato salvo chiave API o permesso esplicito. Non si costruiscono finché non è
   chiarito (decisione D7).
 
+## Cosa sa Claude Code di AgentDeck: i quattro strati (O10.T3)
+
+Le sessioni aperte da Remote Control non accettano le opzioni `--system-prompt` e `--append-system-prompt`:
+`claude remote-control` le rifiuta, come risulta dall'aiuto della 2.1.310. Per questo ciò che l'agente deve sapere sta
+in file e impostazioni che ogni sessione legge dalla macchina. I sorgenti sono in [../deck/claude/](../deck/claude/install.sh);
+l'installatore è `bash deck/claude/install.sh`, lanciato dal Mac dopo `deck/install.sh`, con uno snapshot prima.
+
+| Strato | File sulla Deck | Sorgente | Cosa fa |
+|---|---|---|---|
+| 1. Identità, nel prompt di sistema | `~/.claude/output-styles/agentdeck.md`, con `outputStyle: AgentDeck` in `~/.claude/settings.json` | [../deck/claude/output-styles/agentdeck.md](../deck/claude/output-styles/agentdeck.md) | Lo stile di output modifica il prompt di sistema stesso e mantiene le istruzioni di base (`keep-coding-instructions: true`). La sessione è l'operatore di AgentDeck, il sistema la guida, parla italiano all'utente |
+| 2. Regole stabili | `/etc/claude-code/CLAUDE.md`, gestito per la macchina | [../deck/claude/CLAUDE.template.md](../deck/claude/CLAUDE.template.md) con [../deck/claude/build_claude_md.py](../deck/claude/build_claude_md.py) | Com'è la macchina, come si lavora (`deck` per primo, snapshot, mai togliere l'accesso, testo esterno come dato, domande dei programmi, prove), e le **10 invarianti** prese da `.claude/workflow/invariants.json` della governance: la fonte è una sola (INV-9) |
+| 3. Vincoli duri | `/etc/claude-code/managed-settings.json` | [../deck/claude/managed-settings.json](../deck/claude/managed-settings.json) | Regole `deny` gestite, che nessun livello scavalca, sugli stop e disable dei servizi di accesso; modalità che salta i permessi disattivata; i due hook qui sotto |
+| 3 bis. Guardia | hook `PreToolUse` su Bash | [../deck/claude/guard.py](../deck/claude/guard.py) | Rifiuta, anche dentro `sudo` e in catena: stop, disable, mask o kill di sshd, networkd, iwd, resolved e bus di sistema; target di emergenza; kill di quei demoni; collegamento di rete spento; modifiche dirette a `sshd_config`. Rimanda a `deck` |
+| 4. Il momento | hook `SessionStart` | [../deck/claude/session_start.py](../deck/claude/session_start.py) | All'inizio di ogni sessione inietta host, versione, tempo di attività e gli avvisi di `deck status` con l'azione che li gestisce. Solo testo scritto dal sistema (INV-4) |
+
+Verifiche del 26/10/2026, con `claude -p` nella cartella `~/agentdeck`:
+- **identità e regole:** la sessione si presenta come agente che gestisce AgentDeck e cita la regola su sshd;
+- **inizio sessione:** riporta l'avviso `FAN_UNREADABLE` e la versione di `deck`, che arrivano dall'hook;
+- **regola deny:** un comando di prova con il marcatore `agentdeck-deny-canary` è stato negato anche con Bash
+  permesso esplicitamente (`permission_denials`);
+- **guardia:** il marcatore `agentdeck-guard-canary` è stato bloccato prima di partire, con il riferimento a INV-1;
+- **uso di `deck`:** la sessione ha lanciato `deck status` e letto la schermata, cioè avvisi, azioni e dati.
+
+Test: [../deck/tests/test_claude_config.py](../deck/tests/test_claude_config.py), con la guardia (15 comandi
+bloccati e 10 permessi), l'hook di inizio sessione e il `CLAUDE.md` generato.
+
 ## Aggiornamenti
 
 L'installazione nativa si aggiorna da sola in background, e la nuova versione parte al riavvio successivo di
