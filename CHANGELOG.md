@@ -4,6 +4,19 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.3.0 — 2026-10-25
+
+Chiusura del ciclo 02, "La Deck come server gestito dall'agente: rete, servizi, aggiornamenti, schermo":
+4 obiettivi, 4 task completate, 3 bloccate. Roadmap archiviata in `.claude/workflow/roadmaps/`.
+
+- O4 (rete) e O5 (servizi e log) completi: versioni da 0.2.1 a 0.2.4.
+- O6 bloccato: `deck update` pronto e installato, manca la prova con un aggiornamento vero di Arch. Riprende
+  come O9.T1.
+- O7 rinviato dall'utente: lo schermo serve all'umano, la pulizia passa allo studio dello stato (O8.T4).
+- Aperto il ciclo 03, "Studio dell'architettura agent-first: come funziona il sistema e dove intercettarlo".
+  Prima di altro codice, il sistema si studia strato per strato in `docs/architettura.md`. L'harness degli
+  agenti partirà da Claude Code.
+
 ## 0.2.4 — 2026-10-25
 
 Ciclo 02, task O5.T2: componente `deck logs`.

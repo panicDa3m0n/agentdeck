@@ -1,0 +1,86 @@
+<!-- FILE GENERATO DALLA GOVERNANCE — non modificarlo a mano.
+     Ogni modifica manuale viene rilevata e scartata al comando successivo.
+     Si aggiorna SOLO con i comandi wf.sh (obj-add, task-add, task-start,
+     task-close, note-add, req-add, ...). -->
+
+
+# ROADMAP — linuxai-steamdeck  ·  ciclo 02: La Deck come server gestito dall'agente: rete, servizi, aggiornamenti, schermo
+
+_Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
+
+## Stato corrente
+
+- **Obiettivo attivo:** —
+- **Task attiva:** —
+- **Ultima task gestita:** `O7.T2` — bloccata — Rinviata dall'utente il 25/10: prima lo studio dell'architettura agent-first; da ridecidere dopo lo studio, nel ciclo 03
+- **Ultimo aggiornamento:** 2026-10-25 20:23
+
+## Richieste attive
+
+_nessuna richiesta in attesa._
+
+## Obiettivi
+
+### `O4` Rete gestita dall'agente: deck network — chiuso
+
+**Gate obiettivo:** deck network mostra lo stato reale di rete, Wi-Fi e porte; gli avvisi di rete di deck status puntano ad azioni di deck network; LLMNR spento e banda Wi-Fi migliore disponibile applicati con anteprima e rete di sicurezza; ssh agentdeck funziona dopo ogni modifica (INV-1).
+**Chiuso:** 2026-10-25 19:44 — approvato
+
+- [x] `O4.T1` Componente network: interfacce, Wi-Fi, risoluzione dei nomi, porte (N8) — *perimetro:* `deck/, componente network, componente status, docs/deck.md, docs/hardware.md`
+  *gate previsto:* deck network riporta interfacce, Wi-Fi collegato e reti visibili con le loro bande, stato di mDNS e LLMNR, porte in ascolto; ogni valore coincide con ip, iw, resolvectl e ss; gli avvisi WIFI_BAND_2G e LLMNR_LISTENING di deck status puntano alle azioni di deck network. · *gate confermato:* ✔ deck network: 11/11 valori uguali a ip, iw, resolvectl, ss; rete sorella a 5 GHz riconosciuta; avvisi di status puntano a /network; 80 test.
+  *rischio:* 10/100 — Componente in sola lettura: legge interfacce, Wi-Fi (con una scansione delle reti visibili), risoluzione dei nomi e porte; non cambia configurazione. Le azioni di rete compaiono come non disponibili fino a O4.T2.
+- [x] `O4.T2` Azioni di rete con anteprima e rete di sicurezza: LLMNR e banda Wi-Fi — *perimetro:* `deck/, configurazione di rete sulla Deck, install/install.sh`
+  *gate previsto:* Con anteprima e conferma: LLMNR spento (porta 5355 non più in ascolto) e Wi-Fi sulla banda a 5 GHz se la rete di casa la offre, altrimenti azione non disponibile con il motivo; snapshot prima; ripristino automatico se dopo la modifica la Deck non è raggiungibile, provato; ssh agentdeck funziona; correzioni riportate in install/install.sh. · *gate confermato:* ✔ deck network: llmnr_off/on e prefer_5ghz con ritorno automatico, provati dal vivo; Deck sui 5 GHz anche dopo riavvio, ssh ok, 11/11, 100 test
+  *rischio:* 45/100 — Cambia la rete della Deck, che è il canale dell'agente (INV-1): LLMNR è a basso rischio, il passaggio a un'altra rete Wi-Fi può far perdere il collegamento o cambiare IP. Mitigazioni: snapshot prima, verifica dopo ogni modifica, e per il Wi-Fi un ritorno automatico ai 2,4 GHz se entro pochi minuti l'agente non conferma di raggiungere la Deck.
+  *annotazioni:* `N11`, `N12`, `N13`, `N14`
+
+### `O5` Servizi e log gestiti dall'agente: deck service, deck logs — chiuso
+
+**Gate obiettivo:** deck service mostra e governa i servizi di systemd con anteprima per le azioni che interrompono qualcosa e rifiuto per quelli da cui dipende l'accesso (INV-1); deck logs restituisce il journal strutturato con il testo dei log solo nei dati (INV-4).
+**Chiuso:** 2026-10-25 19:59 — approvato
+
+- [x] `O5.T1` Componente service: elenco, stato e azioni sui servizi — *perimetro:* `deck/, componente service`
+  *gate previsto:* deck service elenca i servizi come systemctl, con stato, abilitazione e servizi falliti; start, stop, restart, enable e disable funzionano su un servizio di prova, quelli che interrompono qualcosa con anteprima; stop e disable di sshd, systemd-networkd, iwd e systemd-resolved rifiutati con il motivo (INV-1). · *gate confermato:* ✔ deck service: elenco come systemctl, azioni su servizio di prova con anteprima e snapshot, stop e disable dei 5 servizi di accesso rifiutati; 28/28, 122 test
+  *rischio:* 30/100 — Le azioni sui servizi possono togliere l'accesso all'agente se toccano sshd, networkd, iwd o resolved (INV-1): mitigato da rifiuto per quelli e per ciò da cui dipendono, prove su un servizio di prova, snapshot prima di enable e disable; l'elenco è sola lettura.
+  *annotazioni:* `N15`
+- [x] `O5.T2` Componente logs: journal strutturato per servizio, periodo e gravità — *perimetro:* `deck/, componente logs, componente service`
+  *gate previsto:* deck logs restituisce le righe del journal filtrate per servizio, periodo e gravità, uguali a journalctl -o json; il testo dei log sta solo nei dati e un test con una riga di log malevola verifica che non entri nel canale istruzioni (INV-4); da deck service si arriva ai log del servizio. · *gate confermato:* ✔ deck logs: filtri per unità, periodo, gravità uguali a journalctl -o json, traccia agente esclusa, riga malevola solo nei dati, link da service; 11/11, 134 test
+  *rischio:* 10/100 — Solo lettura del journal, nessuna modifica alla Deck; il rischio è INV-4: il testo dei log è scritto da chiunque (anche con logger) e deve restare solo nei dati, verificato con una riga malevola.
+
+### `O6` Aggiornamenti sicuri: deck update — BLOCCATO
+
+**Gate obiettivo:** Un aggiornamento reale del sistema fatto da deck update: anteprima dei pacchetti, snapshot prima e dopo, verifica automatica dopo l'applicazione, rollback indicato se la verifica fallisce; la Deck resta raggiungibile, anche dopo il riavvio se l'aggiornamento lo richiede.
+**Blocco:** 2026-10-25 20:15 — deck update pronto e installato; manca la prova con un aggiornamento vero di Arch, da fare al primo disponibile (decisione dell'utente)
+
+- [!] `O6.T1` Componente update: anteprima, applicazione e verifica degli aggiornamenti — *perimetro:* `deck/, componente update, pacchetti sulla Deck, install/install.sh`
+  *gate previsto:* deck update elenca gli aggiornamenti disponibili con versione attuale e nuova e segnala kernel e GRUB (riavvio, coerenza di GRUB); l'applicazione con conferma crea gli snapshot, aggiorna, verifica servizi e accesso e indica il rollback se qualcosa non va; provato con un aggiornamento reale sulla Deck, riavvio compreso se richiesto. · *blocco:* ✖ deck update pronto, provato solo in lettura: manca la prova con un aggiornamento vero di Arch (oggi nessuno). Si riprende al primo aggiornamento
+  *rischio:* 50/100 — Aggiorna pacchetti, kernel e GRUB della Deck: un aggiornamento difettoso può lasciarla non avviabile o irraggiungibile (INV-1). Mitigato da snapshot prima e dopo avviabili da GRUB, pacman in unità separata, verifica automatica, GRUB reinstallato coerente, rollback indicato; prova solo con un aggiornamento vero (scelta dell'utente).
+  *annotazioni:* `N16`, `N17`, `N18`, `N19`
+
+### `O7` Schermo leggibile e compatto, sistema pulito: deck screen — BLOCCATO
+
+**Gate obiettivo:** L'agente legge con deck screen cosa mostra lo schermo e ne sceglie la modalità; la modalità compatta riduce la verbosità; i vecchi sistemi lasciati dai rollback si eliminano con anteprima da deck snapshot.
+**Blocco:** 2026-10-25 20:23 — Rinviato dall'utente a dopo lo studio dell'architettura agent-first: schermo compatto e pulizia passano come debito al ciclo 03
+
+- [!] `O7.T1` Componente screen: lettura dello schermo e modalità compatta (N9, N10) — *perimetro:* `deck/, deck/screen/, docs/schermo.md`
+  *gate previsto:* deck screen restituisce nei dati le righe visibili sullo schermo, uguali a /dev/vcsu1, e lo stato del servizio; l'azione mode passa tra completa e compatta (per ogni comando poche righe di risposta e il numero di righe nascoste), verificato leggendo lo schermo; il testo dello schermo sta solo nei dati (INV-4). · *blocco:* ✖ Rinviata dall'utente il 25/10: prima lo studio dell'architettura agent-first; da ridecidere dopo lo studio, nel ciclo 03
+  *rischio:* 0/100 — Nessun lavoro: la task si chiude subito come rinviata per decisione dell'utente, senza toccare la Deck.
+- [!] `O7.T2` Pulizia dei vecchi sistemi lasciati dai rollback — *perimetro:* `deck/, componente snapshot, subvolumi Btrfs sulla Deck`
+  *gate previsto:* deck snapshot mostra i vecchi sistemi @old-* con lo spazio occupato e li elimina con anteprima e conferma, subvolumi annidati compresi; provato su @old-20261025-180914; il sistema in uso e gli snapshot restano intatti. · *blocco:* ✖ Rinviata dall'utente il 25/10: prima lo studio dell'architettura agent-first; da ridecidere dopo lo studio, nel ciclo 03
+  *rischio:* 0/100 — Nessun lavoro: la task si chiude subito come rinviata per decisione dell'utente, senza toccare la Deck.
+  *annotazioni:* `N20`
+
+## Annotazioni
+
+_Una riga per nota, sempre legata a una task. `wf.sh notes` per leggerle._
+
+- `N11` (`O4.T2`) Scoperto in O4.T1 (25/10): il router non trasmette la rete di casa su due bande con lo stesso nome; i 5 GHz sono una rete distinta, WINDTRE - 2065D6 - 5Ghz (BSSID 58:4b:bc:20:65:d7, segnale -20 dBm, canale 5500 MHz). prefer_5ghz quindi significa collegarsi a un'altra rete: serve la sua password (richiesta R2); tenere il profilo a 2,4 GHz come riserva e tornarci da soli se dopo il cambio la Deck non è raggiungibile. — 2026-10-25 19:15
+- `N12` (`O4.T2`) Avanzamento O4.T2 (25/10, 19:31): llmnr_off provato dal vivo (snapshot 20 e 21, porta 5355 chiusa, DNS e mDNS ok, llmnr_on riapre la porta). prefer_5ghz: primo tentativo fallito subito, iwd non vedeva la rete (P12, corretto con scansione di iwd); secondo tentativo sui 5 GHz in 12 s, stesso IP .49, SSH ok, stessa password; senza conferma il ritorno è scattato a 180 s. Manca la prova con keep_5ghz. — 2026-10-25 19:31
+- `N13` (`O4.T2`) Valutazione d'impatto O4.T2: INV-1 retto (profilo 2,4 GHz tenuto come riserva, ritorno automatico provato, riavvio Deck ok in 30 s, IP .49 invariato). Un rollback a uno snapshot precedente al 19:32 riporta la Deck sui 2,4 GHz, ancora raggiungibile. Una reinstallazione spegne LLMNR e preferisce i 5 GHz, ma il profilo 5 GHz va ricreato con prefer_5ghz. La password resta sulla Deck in file root 600, mai stampata (INV-6). Nessun effetto su snapshot, schermo, ssh. — 2026-10-25 19:35
+- `N14` (`O4.T2`) Per una roadmap futura, approvato dall'utente il 25/10: componente deck secrets per i segreti che vengono da fuori (prima la chiave API dell'agente interno). L'agente chiede il segreto con nome e scopo; l'umano lo consegna da un canale laterale, mai dalla chat: file in secrets/ inviato via pipe con ssh, pagina usa e getta sulla LAN aperta da un QR sullo schermo della Deck, più avanti un gestore di password con token revocabile. Conservato cifrato sulla Deck (systemd-creds, TPM se attivo); l'agente vede solo nomi e metadati, mai il valore; il valore va diretto a chi lo usa (LoadCredential), ogni uso registrato. — 2026-10-25 19:44
+- `N15` (`O5.T1`) Emerso in O5.T1 (25/10): gli snapshot creati da deck (prima di llmnr, prefer_5ghz, service enable/disable) sono single senza algoritmo di pulizia: snapper non li toglie mai e si accumulano (oggi 20-26). Serve una regola: cleanup number per quelli automatici, o una pulizia con anteprima in deck snapshot (vicino a O7.T2). — 2026-10-25 19:50
+- `N16` (`O6.T1`) Decisione dell'utente (25/10, 20:00): impostazione di deck update approvata; la prova del gate si fa solo con un aggiornamento vero di Arch (oggi la Deck è già aggiornata: core fermo al 24/10, nessun pacchetto installato con versione nuova). La task resta aperta finché non arriva il primo aggiornamento. — 2026-10-25 20:01
+- `N17` (`O6.T1`) Limite emerso in O6.T1 (25/10): /boot (moduli di GRUB) sta in @ e negli snapshot, l'EFI (/efi, grubx64.efi e BOOTX64.EFI) no. Dopo un aggiornamento di grub con grub-install, il rollback di deck allo snapshot di prima viene rifiutato (GRUB diverso, controllo di O3.T3): la rete di sicurezza per gli aggiornamenti di GRUB è solo lo snapshot dopo. Per il futuro: rollback che reinstalla nell'EFI il GRUB dello snapshot di destinazione. — 2026-10-25 20:02
+- `N18` (`O6.T1`) Avanzamento O6.T1 (25/10, 20:06): deck update implementato e installato sulla Deck (check, apply, verify, reboot), 149 test. Dal vivo: check reale in 1,4 s senza toccare il database di sistema, 0 aggiornamenti; apply non disponibile con il motivo; verify ok (5 servizi di accesso attivi, sshd -t ok, DNS ok, nessun .pacnew). Manca la prova del gate con il primo aggiornamento vero di Arch. — 2026-10-25 20:06
+- `N19` (`O6.T1`) Effetto del blocco di O6 (25/10): finché O6.T1 non riprende, la Deck non viene aggiornata da nessuno, aggiornamenti di sicurezza compresi. deck update check e l'avviso UPDATES_UNCHECKED (dopo 24 h) dicono quando arrivano: al primo aggiornamento disponibile riaprire O6.T1 (task-start), fare la prova del gate e non lasciare indietro a lungo openssh, openssl, linux. — 2026-10-25 20:15
+- `N20` (`O7.T2`) Effetto del rinvio di O7 (25/10): resta sul disco il vecchio sistema @old-20261025-180914 del rollback di prova e gli snapshot creati da deck continuano ad accumularsi senza pulizia (N15); il disco ha spazio in abbondanza (1% usato di 1,9 TB), quindi nessuna urgenza. Lo schermo della Deck resta verboso (N9, N10). Da ridecidere dopo lo studio dell'architettura. — 2026-10-25 20:23

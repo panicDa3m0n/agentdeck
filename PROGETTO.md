@@ -9,7 +9,7 @@ AgentDeck: una Steam Deck LCD (APU AMD, 16 GB RAM, NVMe 2 TB) trasformata in ser
 
 **Come si verifica che funziona:** La Deck si riavvia da sola dal disco interno e torna raggiungibile con ssh agentdeck (utente agent, solo chiave); systemctl is-system-running risponde running senza unità fallite; è attivo il kernel principale; snapper elenca gli snapshot e GRUB li rende avviabili. Gli script hanno controlli in sola lettura: install.sh check e verify, prepare-stick.sh con DRY_RUN=1. Non esistono ancora test automatici: ogni componente nuovo si verifica usandolo davvero come agente sulla Deck e controllando che la risposta sia JSON valido e coerente con lo stato reale.
 
-**Versioni:** Il numero è MAJOR.MINOR.PATCH: il terzo sale a ogni task completata, qualunque sia il suo obiettivo; il secondo a ogni ciclo chiuso; il primo solo col sì dell'utente, su proposta dell'agente. Versione attuale: 0.2.4; il numero sta in VERSION. Ogni versione si pubblica appena chiusa.
+**Versioni:** Il numero è MAJOR.MINOR.PATCH: il terzo sale a ogni task completata, qualunque sia il suo obiettivo; il secondo a ogni ciclo chiuso; il primo solo col sì dell'utente, su proposta dell'agente. Versione attuale: 0.3.0; il numero sta in VERSION. Ogni versione si pubblica appena chiusa.
 
 ## Dettagli
 
@@ -43,10 +43,24 @@ AgentDeck: una Steam Deck LCD (APU AMD, 16 GB RAM, NVMe 2 TB) trasformata in ser
     • O3.T4: Schermo Deck: comandi agente ed esiti deck in tempo reale (verificato da /dev/vcsu1); snapshot 10; ssh, scp, rsync ok; docs/schermo.md.
     • O3.T5: Schermo: comando e risposta (errori in rosso, deck riassunto); I/O, uscite e binari invariati verificati; rete di sicurezza estesa; 48 test.
 
-### `02` La Deck come server gestito dall'agente: rete, servizi, aggiornamenti, schermo — **in corso**
+### `02` La Deck come server gestito dall'agente: rete, servizi, aggiornamenti, schermo — concluso il 2026-10-25 20:23
+
+- Roadmap archiviata: [02-la-deck-come-server-gestito-dall-agente-.md](.claude/workflow/roadmaps/02-la-deck-come-server-gestito-dall-agente-.md)
+- Aperto il 2026-10-25 19:02 · concluso il 2026-10-25 20:23
+- **Risultato:** 4 obiettivi, 4 task completate, 3 rimaste bloccate
+  - `O4` Rete gestita dall'agente: deck network — approvato
+    • O4.T1: deck network: 11/11 valori uguali a ip, iw, resolvectl, ss; rete sorella a 5 GHz riconosciuta; avvisi di status puntano a /network; 80 test.
+    • O4.T2: deck network: llmnr_off/on e prefer_5ghz con ritorno automatico, provati dal vivo; Deck sui 5 GHz anche dopo riavvio, ssh ok, 11/11, 100 test
+  - `O5` Servizi e log gestiti dall'agente: deck service, deck logs — approvato
+    • O5.T1: deck service: elenco come systemctl, azioni su servizio di prova con anteprima e snapshot, stop e disable dei 5 servizi di accesso rifiutati; 28/28, 122 test
+    • O5.T2: deck logs: filtri per unità, periodo, gravità uguali a journalctl -o json, traccia agente esclusa, riga malevola solo nei dati, link da service; 11/11, 134 test
+  - `O6` Aggiornamenti sicuri: deck update — deck update pronto e installato; manca la prova con un aggiornamento vero di Arch, da fare al primo disponibile (decisione dell'utente)
+  - `O7` Schermo leggibile e compatto, sistema pulito: deck screen — Rinviato dall'utente a dopo lo studio dell'architettura agent-first: schermo compatto e pulizia passano come debito al ciclo 03
+
+### `03` Studio dell'architettura agent-first: come funziona il sistema e dove intercettarlo — **in corso**
 
 - Roadmap: [ROADMAP.md](ROADMAP.md)
-- Aperto il 2026-10-25 19:02 · ultimo aggiornamento 2026-10-25 20:15
+- Aperto il 2026-10-25 20:24 · ultimo aggiornamento 2026-10-25 20:44
 
 ## Debito ereditato
 
