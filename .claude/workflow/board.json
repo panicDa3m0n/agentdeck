@@ -3,13 +3,13 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-25 19:02",
-  "updated": "2026-10-25 19:35",
+  "updated": "2026-10-25 19:44",
   "objectives": [
     {
       "id": "O4",
       "title": "Rete gestita dall'agente: deck network",
       "gate": "deck network mostra lo stato reale di rete, Wi-Fi e porte; gli avvisi di rete di deck status puntano ad azioni di deck network; LLMNR spento e banda Wi-Fi migliore disponibile applicati con anteprima e rete di sicurezza; ssh agentdeck funziona dopo ogni modifica (INV-1).",
-      "state": "open",
+      "state": "closed",
       "docs": [],
       "tasks": [
         {
@@ -34,7 +34,9 @@
           "risk_why": "Cambia la rete della Deck, che è il canale dell'agente (INV-1): LLMNR è a basso rischio, il passaggio a un'altra rete Wi-Fi può far perdere il collegamento o cambiare IP. Mitigazioni: snapshot prima, verifica dopo ogni modifica, e per il Wi-Fi un ritorno automatico ai 2,4 GHz se entro pochi minuti l'agente non conferma di raggiungere la Deck.",
           "docs": []
         }
-      ]
+      ],
+      "closed_at": "2026-10-25 19:44",
+      "closed_note": "approvato"
     },
     {
       "id": "O5",
@@ -162,16 +164,24 @@
       "text": "Valutazione d'impatto O4.T2: INV-1 retto (profilo 2,4 GHz tenuto come riserva, ritorno automatico provato, riavvio Deck ok in 30 s, IP .49 invariato). Un rollback a uno snapshot precedente al 19:32 riporta la Deck sui 2,4 GHz, ancora raggiungibile. Una reinstallazione spegne LLMNR e preferisce i 5 GHz, ma il profilo 5 GHz va ricreato con prefer_5ghz. La password resta sulla Deck in file root 600, mai stampata (INV-6). Nessun effetto su snapshot, schermo, ssh.",
       "docs": [],
       "created": "2026-10-25 19:35"
+    },
+    {
+      "id": "N14",
+      "task": "O4.T2",
+      "text": "Per una roadmap futura, approvato dall'utente il 25/10: componente deck secrets per i segreti che vengono da fuori (prima la chiave API dell'agente interno). L'agente chiede il segreto con nome e scopo; l'umano lo consegna da un canale laterale, mai dalla chat: file in secrets/ inviato via pipe con ssh, pagina usa e getta sulla LAN aperta da un QR sullo schermo della Deck, più avanti un gestore di password con token revocabile. Conservato cifrato sulla Deck (systemd-creds, TPM se attivo); l'agente vede solo nomi e metadati, mai il valore; il valore va diretto a chi lo usa (LoadCredential), ogni uso registrato.",
+      "docs": [],
+      "created": "2026-10-25 19:44"
     }
   ],
   "active": {
-    "objective": "O4",
+    "objective": "",
     "task": "",
-    "phase": "objective_gate_pending",
+    "phase": "idle",
     "risk": null,
     "risk_why": "",
     "hold_invariants": "",
-    "hold_plan": ""
+    "hold_plan": "",
+    "gate_done": ""
   },
   "previous": {
     "task": "O4.T2",
@@ -187,6 +197,6 @@
     "objective": 7,
     "cycle": 2,
     "request": 2,
-    "note": 13
+    "note": 14
   }
 }

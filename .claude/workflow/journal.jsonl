@@ -516,3 +516,20 @@
 {"at": "2026-10-25 19:35", "testo": "TASK CHIUSA O4.T2 — completata: deck network: llmnr_off/on e prefer_5ghz con ritorno automatico, provati dal vivo; Deck sui 5 GHz anche dopo riavvio, ssh ok, 11/11, 100 test"}
 {"at": "2026-10-25 19:35", "testo": "VERSIONE 0.2.2 (O4.T2)"}
 {"at": "2026-10-25 19:35", "testo": "[-] bash: ~/claude-rules/bin/wf.sh note-add --text \"Valutazione d'impatto O4.T2: INV-1 retto (profilo 2,4 GHz tenuto com"}
+{"at": "2026-10-25 19:35", "testo": "[-] bash: printf '0.2.2\\n' > VERSION && git add -A -- . ':!.claude/workflow/.stop-guard' && git status --short | head -2"}
+{"at": "2026-10-25 19:35", "testo": "[-] bash: for t in $(git tag); do printf \"%s %s\\n\" \"$t\" \"$(git cat-file -t $t)\"; done | sort -V | tail -5; ./deck/instal"}
+{"at": "2026-10-25 19:35", "testo": "TRAPPOLA registrata: Il tag v0.2.2 è leggero mentre tutti gli altri tag di versione sono annotati -> creato con git tag vX senza -a -> creare i tag di versione con git tag -a vX -m \"Versione X\" e controllare con git cat-file -t vX (deve dire tag) prima del push."}
+{"at": "2026-10-25 19:35", "testo": "GATE OBIETTIVO APERTO O4"}
+{"at": "2026-10-25 19:35", "testo": "[-] bash: ~/claude-rules/bin/wf.sh pitfall \"Il tag v0.2.2 è leggero mentre tutti gli altri tag di versione sono annotati"}
+{"at": "2026-10-25 19:36", "testo": "[-] bash: ssh -o BatchMode=yes agentdeck 'echo \"== O4.T1\"; python /opt/agentdeck/tests/live_network_check.py 2>&1 | tail"}
+{"at": "2026-10-25 19:36", "testo": "[-] bash: ssh -o BatchMode=yes agentdeck 'sudo /usr/bin/sshd -T 2>&1 | grep -iE \"^(passwordauthentication|permitrootlogi"}
+{"at": "2026-10-25 19:36", "testo": "[-] bash: ~/claude-rules/bin/wf.sh status --json 2>&1 | python3 -c \" import json,sys; d=json.load(sys.stdin) print(list("}
+{"at": "2026-10-25 19:36", "testo": "[-] bash: ~/claude-rules/bin/wf.sh status --json 2>&1 | python3 -c \" import json,sys; d=json.load(sys.stdin) for o in d["}
+{"at": "2026-10-25 19:37", "testo": "[-] Write  ../../../private/tmp/claude-502/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/scratchpad/bilancio-o4.html", "task": "-", "tipo": "file", "tool": "Write", "file": "../../../private/tmp/claude-502/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/scratchpad/bilancio-o4.html"}
+{"at": "2026-10-25 19:43", "testo": "[-] FALLITO Bash: ~/claude-rules/bin/wf.sh note-add --help 2>&1 | head -8; echo ===; ~/claude-rules/bin/wf.s"}
+{"at": "2026-10-25 19:43", "testo": "FALLIMENTO [Bash] execution_error: manca --text\n\nFORMA CORRETTA:  ~/claude-rules/bin/wf.sh note-add --text '<annotazione>'\n\n── PROCEDURA GATE OBIETTIVO — P"}
+{"at": "2026-10-25 19:44", "testo": "ERRORE RISOLTO — execution_error: manca --text FORMA CORRETTA: ~/claude-rules/bin/wf.sh note-add --text '<annotazione>' ── PROCEDURA GATE OBIETTIVO — P — Era solo una prova dell'aiuto: note-add non ha --help e in zsh echo === non è valido; sintassi chiarita dal messaggio", "tipo": "errore-risolto"}
+{"at": "2026-10-25 19:44", "testo": "[-] bash: ~/claude-rules/bin/wf.sh errore --risolto \"Era solo una prova dell'aiuto: note-add non ha --help e in zsh echo"}
+{"at": "2026-10-25 19:44", "testo": "ANNOTAZIONE N14 su O4.T2 — Per una roadmap futura, approvato dall'utente il 25/10: componente deck secrets per i segreti che vengono da fuori (prima la chiave API dell'agente interno). L'agente chiede il segreto con nome e scopo; l'umano lo consegna da un canale laterale, mai dalla chat: file in secrets/ inviato via pipe con ssh, pagina usa e getta sulla LAN aperta da un QR sullo schermo della Deck, più avanti un gestore di password con token revocabile. Conservato cifrato sulla Deck (systemd-creds, TPM se attivo); l'agente vede solo nomi e metadati, mai il valore; il valore va diretto a chi lo usa (LoadCredential), ogni uso registrato."}
+{"at": "2026-10-25 19:44", "testo": "OBIETTIVO CHIUSO O4 (completo) — approvato"}
+{"at": "2026-10-25 19:44", "testo": "[-] bash: ~/claude-rules/bin/wf.sh note-add --task O4.T2 --text \"Per una roadmap futura, approvato dall'utente il 25/10:"}

@@ -60,6 +60,11 @@
       "id": "P12",
       "testo": "iwctl station wlan0 connect <rete> fallisce subito e iwd non registra tentativi -> iwctl si collega solo a reti viste da una scansione di iwd, non a quelle trovate da iw dev wlan0 scan (deck network scan) -> prima iwctl station wlan0 scan, poi aspettare che la rete compaia in get-networks (nome esatto) e solo allora connect.",
       "creata": "2026-10-25 19:27"
+    },
+    {
+      "id": "P13",
+      "testo": "Il tag v0.2.2 è leggero mentre tutti gli altri tag di versione sono annotati -> creato con git tag vX senza -a -> creare i tag di versione con git tag -a vX -m \"Versione X\" e controllare con git cat-file -t vX (deve dire tag) prima del push.",
+      "creata": "2026-10-25 19:35"
     }
   ]
 }
