@@ -10,10 +10,9 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O3` Primi componenti usati dall'agente: stato del sistema e snapshot — 4 task: 0 completate, 1 in corso, 3 da fare, 0 bloccate
-- **Task attiva:** `O3.T1` Componente status: monitor attività e informazioni di sistema — in corso · rischio 15/100
-- **Ultima task gestita:** `O2.T2` — completata — deck sulla Deck: home con componenti, errori strutturati, 8 chiamate reali conformi, 22 test verdi, ~0,09 s; install.sh ripetuto con successo.
-- **Fase:** `in_progress`
+- **Obiettivo attivo:** `O3` Primi componenti usati dall'agente: stato del sistema e snapshot — 4 task: 1 completate, 0 in corso, 3 da fare, 0 bloccate
+- **Task attiva:** —
+- **Ultima task gestita:** `O3.T1` — completata — deck status sulla Deck: 23/23 valori coincidono con gli strumenti classici, avvisi WIFI_BAND_2G, LLMNR, ventola; 34 test verdi; 0,27 s.
 - **Ultimo aggiornamento:** 2026-10-25 17:43
 
 ## Richieste attive
@@ -62,8 +61,8 @@ _nessuna richiesta in attesa._
 
 **Gate obiettivo:** L'agente usa deck status e deck snapshot al posto dei comandi manuali; un rollback reale riporta il sistema allo stato salvato e ssh agentdeck funziona dopo il riavvio.
 
-- [~] `O3.T1` Componente status: monitor attività e informazioni di sistema — *perimetro:* `deck/, componente status, docs/deck.md, install/install.sh`
-  *gate previsto:* deck status riporta hardware, temperature, batteria, memoria, disco, rete, servizi falliti e snapshot; ogni valore coincide con quello letto dai comandi di sistema; le anomalie note (per esempio Wi-Fi a 2,4 GHz) compaiono come avvisi con azioni suggerite.
+- [x] `O3.T1` Componente status: monitor attività e informazioni di sistema — *perimetro:* `deck/, componente status, docs/deck.md, install/install.sh`
+  *gate previsto:* deck status riporta hardware, temperature, batteria, memoria, disco, rete, servizi falliti e snapshot; ogni valore coincide con quello letto dai comandi di sistema; le anomalie note (per esempio Wi-Fi a 2,4 GHz) compaiono come avvisi con azioni suggerite. · *gate confermato:* ✔ deck status sulla Deck: 23/23 valori coincidono con gli strumenti classici, avvisi WIFI_BAND_2G, LLMNR, ventola; 34 test verdi; 0,27 s.
   *rischio:* 15/100 — Componente in sola lettura: legge /proc, /sys e comandi di stato (alcuni con sudo); l'unica modifica di sistema prevista è installare il piccolo pacchetto ufficiale iw per leggere il Wi-Fi in modo affidabile, con gli snapshot di snap-pac.
   *annotazioni:* `N5`, `N8`
 - [ ] `O3.T2` Componente snapshot: elenco e creazione — *perimetro:* `deck/, componente snapshot`

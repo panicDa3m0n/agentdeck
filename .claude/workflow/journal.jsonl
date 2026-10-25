@@ -258,3 +258,8 @@
 {"at": "2026-10-25 17:43", "testo": "[O3.T1] Edit  docs/deck.md", "task": "O3.T1", "tipo": "file", "tool": "Edit", "file": "docs/deck.md"}
 {"at": "2026-10-25 17:43", "testo": "[O3.T1] Edit  docs/deck.md", "task": "O3.T1", "tipo": "file", "tool": "Edit", "file": "docs/deck.md"}
 {"at": "2026-10-25 17:43", "testo": "[O3.T1] Edit  docs/deck.md", "task": "O3.T1", "tipo": "file", "tool": "Edit", "file": "docs/deck.md"}
+{"at": "2026-10-25 17:43", "testo": "[O3.T1] bash: bash -c 'b=0; for f in README.md PRINCIPI.md CHANGELOG.md docs/*.md; do d=$(dirname \"$f\"); for l in $(grep -oE"}
+{"at": "2026-10-25 17:43", "testo": "TASK CHIUSA O3.T1 — completata: deck status sulla Deck: 23/23 valori coincidono con gli strumenti classici, avvisi WIFI_BAND_2G, LLMNR, ventola; 34 test verdi; 0,27 s."}
+{"at": "2026-10-25 17:43", "testo": "VERSIONE 0.1.8 (O3.T1)"}
+{"at": "2026-10-25 17:43", "testo": "[-] bash: ~/claude-rules/bin/wf.sh task-close --done \"deck status sulla Deck: 23/23 valori coincidono con gli strumenti "}
+{"at": "2026-10-25 17:43", "testo": "[-] Edit  CHANGELOG.md", "task": "-", "tipo": "file", "tool": "Edit", "file": "CHANGELOG.md"}

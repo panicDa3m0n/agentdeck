@@ -116,8 +116,8 @@
           "title": "Componente status: monitor attività e informazioni di sistema",
           "scope": "deck/, componente status, docs/deck.md, install/install.sh",
           "gate_pre": "deck status riporta hardware, temperature, batteria, memoria, disco, rete, servizi falliti e snapshot; ogni valore coincide con quello letto dai comandi di sistema; le anomalie note (per esempio Wi-Fi a 2,4 GHz) compaiono come avvisi con azioni suggerite.",
-          "gate_post": "",
-          "state": "doing",
+          "gate_post": "deck status sulla Deck: 23/23 valori coincidono con gli strumenti classici, avvisi WIFI_BAND_2G, LLMNR, ventola; 34 test verdi; 0,27 s.",
+          "state": "done",
           "risk": 15,
           "risk_why": "Componente in sola lettura: legge /proc, /sys e comandi di stato (alcuni con sudo); l'unica modifica di sistema prevista è installare il piccolo pacchetto ufficiale iw per leggere il Wi-Fi in modo affidabile, con gli snapshot di snap-pac.",
           "docs": []
@@ -219,18 +219,18 @@
   ],
   "active": {
     "objective": "O3",
-    "task": "O3.T1",
-    "phase": "in_progress",
-    "risk": 15,
-    "risk_why": "Componente in sola lettura: legge /proc, /sys e comandi di stato (alcuni con sudo); l'unica modifica di sistema prevista è installare il piccolo pacchetto ufficiale iw per leggere il Wi-Fi in modo affidabile, con gli snapshot di snap-pac.",
+    "task": "",
+    "phase": "idle",
+    "risk": null,
+    "risk_why": "",
     "hold_invariants": "",
     "hold_plan": "",
     "gate_done": ""
   },
   "previous": {
-    "task": "O2.T2",
+    "task": "O3.T1",
     "state": "done",
-    "note": "deck sulla Deck: home con componenti, errori strutturati, 8 chiamate reali conformi, 22 test verdi, ~0,09 s; install.sh ripetuto con successo."
+    "note": "deck status sulla Deck: 23/23 valori coincidono con gli strumenti classici, avvisi WIFI_BAND_2G, LLMNR, ventola; 34 test verdi; 0,27 s."
   },
   "cycle": {
     "n": 1,

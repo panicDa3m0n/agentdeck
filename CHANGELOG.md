@@ -4,6 +4,17 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.1.8 — 2026-10-25
+
+Ciclo 01, task O3.T1: componente `deck status`.
+
+- Stato della macchina in una schermata: sistema, hardware, carico, batteria, temperature, memoria, disco,
+  rete e Wi-Fi, porte in ascolto, servizi, snapshot, sincronizzazione dell'ora.
+- Avvisi con codici stabili: oggi segnala Wi-Fi a 2,4 GHz, LLMNR superfluo sulla LAN e ventola non leggibile.
+- Letture robuste in `agentdeck/system.py`: una lettura che fallisce non rompe la schermata.
+- Controllo dal vivo: 23 valori su 23 coincidono con gli strumenti classici di Linux; 34 test verdi.
+- Installato `iw` sulla Deck (snapshot 8 e 9) e aggiunto all'elenco pacchetti di `install/install.sh`.
+
 ## 0.1.7 — 2026-10-25
 
 Ciclo 01, task O2.T2: motore `deck` e installazione sulla Deck.
