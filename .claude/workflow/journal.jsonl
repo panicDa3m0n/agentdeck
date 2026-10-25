@@ -154,3 +154,8 @@
 {"at": "2026-10-25 16:50", "testo": "TRAPPOLA registrata: La governance annuncia una versione già pubblicata (es. 0.1.4 per O1.T5 dopo v0.1.4 di O1.T4) -> il contatore versionamento.attuale in project.json non avanza sempre alla chiusura -> prima di scrivere VERSION confrontare con l'ultimo tag su origin; se è indietro, riallineare con versione --scegli governance --da <versione giusta> --dove VERSION --pubblica e non riscrivere mai un tag pubblicato."}
 {"at": "2026-10-25 16:50", "testo": "[-] bash: ~/claude-rules/bin/wf.sh pitfall \"La governance annuncia una versione già pubblicata (es. 0.1.4 per O1.T5 dopo"}
 {"at": "2026-10-25 16:50", "testo": "[-] Edit  CHANGELOG.md", "task": "-", "tipo": "file", "tool": "Edit", "file": "CHANGELOG.md"}
+{"at": "2026-10-25 16:50", "testo": "[-] bash: printf '0.1.5\\n' > VERSION && git add -A && git commit -q -F - <<'EOF' Versione 0.1.5: accesso SSH affidabile "}
+{"at": "2026-10-25 16:50", "testo": "GATE OBIETTIVO APERTO O1"}
+{"at": "2026-10-25 16:51", "testo": "[-] bash: ~/claude-rules/bin/wf.sh obj-gate O1 2>&1 | grep -E \"^\\*Numeri|^\\*\\*Numeri|task,|Rischio più alto\" ; cd /Users"}
+{"at": "2026-10-25 16:51", "testo": "[-] Write  ../../../private/tmp/claude-502/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/scratchpad/bilancio-o1.html", "task": "-", "tipo": "file", "tool": "Write", "file": "../../../private/tmp/claude-502/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/scratchpad/bilancio-o1.html"}
+{"at": "2026-10-25 16:54", "testo": "OBIETTIVO CHIUSO O1 (completo) — approvato"}

@@ -3,13 +3,13 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-25 15:54",
-  "updated": "2026-10-25 16:50",
+  "updated": "2026-10-25 16:54",
   "objectives": [
     {
       "id": "O1",
       "title": "Base operativa affidabile per l'agente",
       "gate": "Repository con identità git personale e remote privato su GitHub con le versioni pubblicate; documentazione di base indicizzata e collegata al codice; dopo due riavvii consecutivi la Deck mantiene lo stesso IP, risponde subito a ssh agentdeck e il comando hostname funziona.",
-      "state": "open",
+      "state": "closed",
       "docs": [],
       "tasks": [
         {
@@ -67,7 +67,9 @@
           "risk_why": "Modifica solo la voce agentdeck nella configurazione SSH del Mac, con backup prima: se qualcosa non va si ripristina il file; la Deck e il suo accesso non cambiano.",
           "docs": []
         }
-      ]
+      ],
+      "closed_at": "2026-10-25 16:54",
+      "closed_note": "approvato"
     },
     {
       "id": "O2",
@@ -182,14 +184,14 @@
     }
   ],
   "active": {
-    "objective": "O1",
+    "objective": "",
     "task": "",
-    "phase": "objective_gate_pending",
+    "phase": "idle",
     "risk": null,
     "risk_why": "",
     "hold_invariants": "",
     "hold_plan": "",
-    "gate_done": "O1"
+    "gate_done": ""
   },
   "previous": {
     "task": "O1.T5",

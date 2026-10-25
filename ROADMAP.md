@@ -10,11 +10,10 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O1` Base operativa affidabile per l'agente — 5 task: 5 completate, 0 in corso, 0 da fare, 0 bloccate
+- **Obiettivo attivo:** —
 - **Task attiva:** —
 - **Ultima task gestita:** `O1.T5` — completata — ssh agentdeck usa l'IP stabile .49 (HostKeyAlias), alias agentdeck-mdns sul nome; backup fatto; 10 collegamenti su 10 al primo colpo; accesso.md aggiornato.
-- **Fase:** `objective_gate_pending`
-- **Ultimo aggiornamento:** 2026-10-25 16:50
+- **Ultimo aggiornamento:** 2026-10-25 16:54
 
 ## Richieste attive
 
@@ -22,9 +21,10 @@ _nessuna richiesta in attesa._
 
 ## Obiettivi
 
-### `O1` Base operativa affidabile per l'agente — in corso
+### `O1` Base operativa affidabile per l'agente — chiuso
 
 **Gate obiettivo:** Repository con identità git personale e remote privato su GitHub con le versioni pubblicate; documentazione di base indicizzata e collegata al codice; dopo due riavvii consecutivi la Deck mantiene lo stesso IP, risponde subito a ssh agentdeck e il comando hostname funziona.
+**Chiuso:** 2026-10-25 16:54 — approvato
 
 - [x] `O1.T1` Identità git personale e remote privato su GitHub — *perimetro:* `repository git locale, remote GitHub`
   *gate previsto:* git log mostra come autore l'identità personale di Davide su tutti i commit, impostata solo per questo repository; esiste un repository GitHub privato sotto l'account personale panicDa3m0n con main pubblicato e il tag della versione corrente; nessuna credenziale sul remote (INV-6). · *gate confermato:* ✔ Autore personale su tutti i commit; repo privato panicDa3m0n/agentdeck con main e tag v0.1.0, verificato via API; nessuna credenziale online.
