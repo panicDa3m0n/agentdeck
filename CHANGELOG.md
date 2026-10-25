@@ -4,6 +4,21 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.1.7 — 2026-10-25
+
+Ciclo 01, task O2.T2: motore `deck` e installazione sulla Deck.
+
+- `deck` implementa il protocollo v1:
+  - schermate validate prima di ogni risposta;
+  - canale istruzioni protetto: solo testo `SysText` con valori validati;
+  - navigazione per indirizzi, parametri tipizzati;
+  - conferme con codice (5 minuti, una volta sola);
+  - errori strutturati con vie d'uscita.
+- Componenti: `/` (schermata principale) e `/protocol` (il protocollo descritto all'agente).
+- 22 test (conformità, iniezione nel canale istruzioni, parametri, conferme, guasti), verdi sul Mac e
+  sulla Deck; una chiamata dura circa 0,09 secondi sulla Deck.
+- Installazione ripetibile con `deck/install.sh` in `/opt/agentdeck`; documentazione in `docs/deck.md`.
+
 ## 0.1.6 — 2026-10-25
 
 Ciclo 01, task O2.T1: specifica del protocollo di schermata e autoprompting.

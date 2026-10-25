@@ -219,3 +219,10 @@
 {"at": "2026-10-25 17:26", "testo": "PERIMETRO ESTESO su O2.T2 (+docs/protocollo.md)"}
 {"at": "2026-10-25 17:27", "testo": "[O2.T2] Edit  docs/protocollo.md", "task": "O2.T2", "tipo": "file", "tool": "Edit", "file": "docs/protocollo.md"}
 {"at": "2026-10-25 17:27", "testo": "[O2.T2] bash: deck/install.sh > \"$TMPDIR/install2.log\" 2>&1; echo \"seconda installazione: uscita $?\"; grep -E \"^== |Ran |^OK"}
+{"at": "2026-10-25 17:27", "testo": "[O2.T2] bash: git add -A && git commit -q -F - <<'EOF' Motore deck e installazione sulla Deck (O2.T2)  deck implementa il pr"}
+{"at": "2026-10-25 17:27", "testo": "TASK CHIUSA O2.T2 — completata: deck sulla Deck: home con componenti, errori strutturati, 8 chiamate reali conformi, 22 test verdi, ~0,09 s; install.sh ripetuto con successo."}
+{"at": "2026-10-25 17:27", "testo": "VERSIONE 0.1.7 (O2.T2)"}
+{"at": "2026-10-25 17:27", "testo": "[-] bash: ~/claude-rules/bin/wf.sh task-close --done \"deck sulla Deck: home con componenti, errori strutturati, 8 chiama"}
+{"at": "2026-10-25 17:27", "testo": "[-] bash: echo \"ultimo tag: $(git ls-remote --tags origin | grep -v '\\^{}' | sed 's|.*refs/tags/||' | sort -V | tail -1)"}
+{"at": "2026-10-25 17:27", "testo": "[-] Edit  CHANGELOG.md", "task": "-", "tipo": "file", "tool": "Edit", "file": "CHANGELOG.md"}
+{"at": "2026-10-25 17:27", "testo": "VERSIONI scelte dall'utente: governance"}
