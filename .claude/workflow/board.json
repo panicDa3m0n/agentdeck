@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-25 15:54",
-  "updated": "2026-10-25 17:27",
+  "updated": "2026-10-25 17:37",
   "objectives": [
     {
       "id": "O1",
@@ -75,7 +75,7 @@
       "id": "O2",
       "title": "Protocollo dell'interfaccia agentica: schermate interattive e autoprompting",
       "gate": "Protocollo scritto e approvato dall'utente; il comando deck installato sulla Deck risponde con schermate JSON conformi al protocollo, con le istruzioni separate dai dati (INV-4).",
-      "state": "open",
+      "state": "closed",
       "docs": [],
       "tasks": [
         {
@@ -100,7 +100,9 @@
           "risk_why": "Installa il pacchetto python sulla Deck (snap-pac fa snapshot prima e dopo) e aggiunge codice nostro in /opt/agentdeck con il comando /usr/local/bin/deck: tutto reversibile, non tocca rete, SSH o avvio; il rischio è nella correttezza del motore, coperta da test di conformità e di iniezione.",
           "docs": []
         }
-      ]
+      ],
+      "closed_at": "2026-10-25 17:37",
+      "closed_note": "approvato"
     },
     {
       "id": "O3",
@@ -191,9 +193,9 @@
     }
   ],
   "active": {
-    "objective": "O2",
+    "objective": "",
     "task": "",
-    "phase": "objective_gate_pending",
+    "phase": "idle",
     "risk": null,
     "risk_why": "",
     "hold_invariants": "",

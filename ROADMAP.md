@@ -10,11 +10,10 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O2` Protocollo dell'interfaccia agentica: schermate interattive e autoprompting — 2 task: 2 completate, 0 in corso, 0 da fare, 0 bloccate
+- **Obiettivo attivo:** —
 - **Task attiva:** —
 - **Ultima task gestita:** `O2.T2` — completata — deck sulla Deck: home con componenti, errori strutturati, 8 chiamate reali conformi, 22 test verdi, ~0,09 s; install.sh ripetuto con successo.
-- **Fase:** `objective_gate_pending`
-- **Ultimo aggiornamento:** 2026-10-25 17:27
+- **Ultimo aggiornamento:** 2026-10-25 17:37
 
 ## Richieste attive
 
@@ -45,9 +44,10 @@ _nessuna richiesta in attesa._
   *gate previsto:* La voce agentdeck in ~/.ssh/config punta all'IP stabile 192.168.1.49 e il nome .local resta come alias agentdeck-mdns; 10 tentativi consecutivi di ssh agentdeck riusciti al primo colpo; backup della configurazione precedente; docs/accesso.md aggiornato. · *gate confermato:* ✔ ssh agentdeck usa l'IP stabile .49 (HostKeyAlias), alias agentdeck-mdns sul nome; backup fatto; 10 collegamenti su 10 al primo colpo; accesso.md aggiornato.
   *rischio:* 10/100 — Modifica solo la voce agentdeck nella configurazione SSH del Mac, con backup prima: se qualcosa non va si ripristina il file; la Deck e il suo accesso non cambiano.
 
-### `O2` Protocollo dell'interfaccia agentica: schermate interattive e autoprompting — in corso
+### `O2` Protocollo dell'interfaccia agentica: schermate interattive e autoprompting — chiuso
 
 **Gate obiettivo:** Protocollo scritto e approvato dall'utente; il comando deck installato sulla Deck risponde con schermate JSON conformi al protocollo, con le istruzioni separate dai dati (INV-4).
+**Chiuso:** 2026-10-25 17:37 — approvato
 
 - [x] `O2.T1` Specifica del protocollo di schermata e autoprompting — *perimetro:* `docs/`
   *gate previsto:* docs/protocollo.md descrive la struttura della schermata (dati, azioni, navigazione, avvisi, errori, conferme con anteprima, istruzioni), le regole di autoprompting e di sicurezza del canale istruzioni, con esempi reali; linguaggio di implementazione deciso; approvato esplicitamente dall'utente. · *gate confermato:* ✔ docs/protocollo.md approvato: schermate, azioni, conferme, errori, autoprompting, INV-4, 8 esempi reali; Python 3, testi in inglese.
