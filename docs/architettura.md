@@ -34,7 +34,7 @@ Ogni proposta si misura con i due principi del progetto:
 
 1. [Avvio, kernel e ripristino](#1-avvio-kernel-e-ripristino) (O8.T1)
 2. [Init, servizi e interfacce del sistema](#2-init-servizi-e-interfacce-del-sistema) (O8.T2)
-3. Identità, permessi, isolamento e segreti (O8.T3)
+3. [Identità, permessi, isolamento e segreti](#3-identità-permessi-isolamento-e-segreti) (O8.T3)
 4. Stato del sistema, software e snapshot (O8.T4)
 5. Eventi, log e osservabilità (O8.T5)
 6. L'harness dell'agente (O8.T6)
@@ -196,3 +196,80 @@ testo.
 - quanto del vecchio "comando via SSH" resta come interfaccia primaria, rispetto al servizio varlink e MCP
   (A2.3);
 - se la regia dei comandi grezzi (A2.4) va fatta, perché tocca la sessione SSH (INV-1).
+
+---
+
+## 3. Identità, permessi, isolamento e segreti
+
+### 3.1 Come funziona oggi
+
+Misure del 25/10/2026:
+
+| Aspetto | Stato sulla Deck |
+|---|---|
+| **Identità** | Un solo utente con shell di login: `agent` (uid 1000, gruppo `wheel`, password bloccata). `root` ha la password bloccata. Il sistema non distingue l'agente da un umano, né un agente da un altro o una sessione dall'altra |
+| **Accesso** | SSH con una sola chiave ed25519 in `authorized_keys`, senza restrizioni (nessun `from=`, nessuna scadenza). PAM: `system-remote-login`, `system-login`. Ogni sessione è un `session-N.scope` di logind (`Remote=yes`) |
+| **Privilegi** | `/etc/sudoers.d/10-agent`: `agent ALL=(ALL:ALL) NOPASSWD: ALL`. Ogni azione privilegiata avviene come root, tutta uguale. sudo (1.9.17) registra nel journal solo testo libero |
+| **Autorizzazione fine** | **polkit non è installato.** Le chiamate privilegiate a D-Bus e varlink sono permesse solo a root: una richiesta dell'agente a systemd di riavviare un servizio risponde "Access denied". Oggi l'unica strada è `sudo` |
+| **Isolamento** | Il kernel ha i moduli di sicurezza `capability, landlock, lockdown, yama, bpf`: Landlock e BPF LSM ci sono, SELinux e AppArmor no. Namespace utente attivi (59.054), seccomp disponibile, `systemd-nspawn` e `machinectl` inclusi in systemd. Quasi tutti i servizi girano senza sandbox: `systemd-analyze security` dà esposizione 9,4-9,6 ("UNSAFE"), iwd 6,0 |
+| **Traccia** | `audit` 4.2.1 installato ma `auditd` spento. Nessuna registrazione strutturata di chi ha fatto cosa |
+| **Difese di rete** | nftables e iptables installati, **nessuna regola**. In ascolto solo SSH (22) e il resolver locale (53 su loopback) |
+| **Segreti** | Passphrase Wi-Fi in `/var/lib/iwd/*.psk` (root, 600); chiavi host di SSH, compresa la nuova ibrida ML-DSA di OpenSSH 10; la chiave dell'agente sta sul Mac; `secrets/wifi.env` sul Mac, fuori da git. La chiavetta live contiene la password del Wi-Fi in chiaro. Nessun archivio di segreti |
+| **TPM e credenziali** | TPM 2.0 attivo (`systemd-analyze has-tpm2`: sì). I PCR da 0 a 9 sono misurati anche con GRUB. `systemd-creds` è disponibile, ma non è mai stato usato (nessun `credential.secret`). Secure Boot in setup mode (sezione 1) |
+
+### 3.2 Presupposti umani
+
+| # | Dove | Cosa presuppone | Effetto per un agente |
+|---|---|---|---|
+| H15 | sudo | Una persona fidata che ogni tanto alza i privilegi, digitando la password; un registro da leggere a occhio | Tolta la password, resta il tutto o niente: ogni errore dell'agente, o di chi ne prende la chiave, è un errore di root |
+| H16 | polkit (assente) | Il modello è un dialogo che chiede la password per ogni azione amministrativa | Senza polkit non esiste una delega per azione: le API del sistema sono solo per root |
+| H17 | Modello di utenti | Un utente è una persona con una shell. Nessuna nozione di più agenti, di ruoli, di sessioni dell'agente, del proprietario umano diverso dall'operatore | Impossibile dare permessi diversi a un agente di sviluppo e a un agente di casa, o revocare una sola sessione |
+| H18 | Segreti | Password digitate nei prompt (`iwctl`, `sudo`, `passwd`) e file leggibili da root | Niente consegna sicura senza chat (N14); i segreti non sono legati allo stato del sistema |
+| H19 | Audit | Strumento forense, acceso e letto da un amministratore | Nessuna traccia continua e strutturata delle azioni dell'agente |
+| H20 | Chiave SSH | Una chiave per una persona, per sempre | Una chiave rubata vale root a vita, da qualsiasi rete |
+
+### 3.3 Punti di intercettazione
+
+- **SSH**:
+  - opzioni in `authorized_keys` (`from=`, `restrict`, comandi forzati);
+  - certificati SSH con scadenza, firmati da una nostra autorità;
+  - una chiave per ogni agente o sessione.
+- **sudo**:
+  - regole per comando invece di `ALL`;
+  - registrazione strutturata degli eventi e dell'input e output (sudo 1.9);
+  - un uso di sudo come accesso di emergenza, non come strada normale.
+- **polkit**: regole in JavaScript per azione D-Bus. Ad esempio: "il gruppo degli agenti può riavviare questi
+  servizi senza password". Si abbina alle API native della sezione 2.
+- **Sandbox di systemd** per i servizi e per i lavori transitori: `ProtectSystem`, `PrivateTmp`,
+  `NoNewPrivileges`, `CapabilityBoundingSet`, `RestrictAddressFamilies`, `SystemCallFilter`, `IPAddressDeny`.
+- **Landlock e BPF LSM**:
+  - con Landlock un processo limita da sé file e rete, senza permessi di root; è adatto ai programmi che
+    l'agente lancia su dati non fidati;
+  - con BPF LSM si possono scrivere politiche di sistema.
+- **Container**: `systemd-nspawn`, già presente, per isolare carichi di lavoro e ambienti degli agenti.
+- **Segreti**:
+  - `systemd-creds` cifra con il TPM e con una chiave della macchina;
+  - le unità li ricevono con `LoadCredentialEncrypted`, senza che passino da file in chiaro;
+  - il TPM sigilla i segreti ai PCR: diventano inutilizzabili se la catena di avvio cambia.
+- **Audit**: regole su `execve` con `auid=1000`, cioè l'utente con cui si è entrati, e sulle scritture in
+  `/etc`. Ne viene una traccia completa anche per i comandi che non passano da `deck`.
+- **Firewall**: nftables con ingresso chiuso salvo SSH dalla rete di casa e mDNS.
+
+### 3.4 Proposte
+
+| Id | Livello | Proposta | Perché, per l'agente |
+|---|---|---|---|
+| A3.1 | L1 | Chiave dell'agente limitata alla rete di casa (`from="192.168.1.0/24"`) e firewall nftables con ingresso chiuso salvo SSH dalla LAN e mDNS | Rafforza INV-5 e riduce H20 senza cambiare nulla per l'agente. Da fare con la rete di sicurezza SSH |
+| A3.2 | L2 | **Identità degli agenti**: proprietario umano, agenti con nome (ad esempio sviluppo, casa, interno) e sessioni. Ogni agente ha la sua chiave o un certificato SSH a scadenza; ogni sessione ha un identificativo che segue le sue azioni | Toglie H17 e H20: permessi e revoca per agente, e traccia per sessione |
+| A3.3 | L2 | **Broker dei privilegi** al posto di `sudo ALL`. L'agente lavora senza privilegi; le operazioni privilegiate passano dal servizio di AgentDeck (A2.3), che gira come root e per ogni azione applica la politica: permessa, da confermare con anteprima, rifiutata (le protezioni di INV-1 che `deck` ha già). Registra intenzione ed esito. `sudo` resta come accesso di emergenza, registrato per intero | È l'equivalente agentico di polkit e dei servizi di autorizzazione di macOS: i permessi si danno per azione e non per programma. Toglie H15 |
+| A3.4 | L1/L3 | polkit con regole per il gruppo degli agenti, così le API D-Bus e varlink del sistema si usano senza sudo, azione per azione | È lo strato di sistema su cui poggia A3.3, e rende possibile A2.2 senza root |
+| A3.5 | L2 | **Isolamento per default**: i lavori dell'agente (A2.5) girano in unità transitorie con sandbox; i programmi lanciati su dati non fidati, come contenuti scaricati o repository di terzi, con Landlock; i carichi di lavoro e gli ambienti degli agenti in container `systemd-nspawn` (sezione 4) | Un errore o un'iniezione resta confinato. Abbassa l'esposizione oggi a 9,6 |
+| A3.6 | L2 | **`deck secrets`** (N14) su `systemd-creds`: cifratura con TPM e chiave della macchina, consegna alle unità con `LoadCredentialEncrypted`. L'agente vede solo nomi e metadati; i canali di consegna da parte dell'umano sono quelli di N14 | Toglie H18: segreti mai in chat e mai in chiaro su disco |
+| A3.7 | L3 | Secure Boot con chiavi nostre (`sbctl`, dai repository ufficiali) e segreti sigillati al PCR 7. Va insieme ad A1.10 | Un segreto si apre solo se la Deck parte dal sistema che conosciamo |
+| A3.8 | L1 | `auditd` attivo, con regole su `execve` dell'agente e sulle scritture in `/etc` e in `/var/lib/iwd`; sudo con registrazione strutturata | Toglie H19: la traccia completa è un dato, che `deck` legge (sezione 5) |
+
+**Da decidere nella sintesi:**
+- **A3.3**, la decisione più grossa di questa sezione: l'agente è root con protezioni, come oggi, oppure lavora
+  senza privilegi e passa da un broker. La seconda strada è più sicura e più agentica, ma richiede prima il
+  servizio di A2.3.
+- **A3.2:** quanti agenti diversi prevediamo all'inizio.

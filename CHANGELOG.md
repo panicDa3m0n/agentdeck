@@ -4,6 +4,19 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.3.3 — 2026-10-25
+
+Ciclo 03, task O8.T3: studio di identità, permessi, isolamento e segreti dell'agente.
+
+- Sezione 3 di `docs/architettura.md`.
+- Oggi:
+  - l'agente ha `sudo ALL` senza password e polkit non c'è, quindi ogni API privilegiata è solo per root;
+  - i servizi girano senza sandbox (esposizione 9,4-9,6);
+  - audit spento, firewall senza regole, nessun archivio di segreti.
+- Già pronti: TPM 2.0 con PCR misurati, `systemd-creds`, Landlock e BPF LSM, `systemd-nspawn`.
+- 6 presupposti umani e 8 proposte. Fra queste: identità per agente e sessione, un broker dei privilegi al posto
+  di `sudo ALL`, `deck secrets` su systemd-creds con il TPM, audit e firewall.
+
 ## 0.3.2 — 2026-10-25
 
 Ciclo 03, task O8.T2: studio di init, servizi e interfacce del sistema.

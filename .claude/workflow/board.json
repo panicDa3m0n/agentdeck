@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-25 20:24",
-  "updated": "2026-10-25 23:13",
+  "updated": "2026-10-25 23:15",
   "objectives": [
     {
       "id": "O8",
@@ -39,10 +39,10 @@
           "title": "Identità, permessi, isolamento e segreti dell'agente",
           "scope": "docs/architettura.md, letture sulla Deck",
           "gate_pre": "Sezione identità: utenti, PAM, sudo, polkit, capabilities, sandbox di systemd, Landlock; segreti con systemd-creds e TPM della Deck (N14); dall'agente con sudo totale a permessi mirati e tracciati; proposte per livello.",
-          "gate_post": "",
-          "state": "todo",
-          "risk": null,
-          "risk_why": "",
+          "gate_post": "Sezione 3 di architettura.md: sudo ALL senza polkit, nessuna sandbox né audit né firewall, TPM e Landlock pronti; 6 presupposti umani, 8 proposte",
+          "state": "done",
+          "risk": 5,
+          "risk_why": "Solo letture sulla Deck (utenti, PAM, sudo, polkit, sandbox, TPM, credenziali) e scrittura di docs/architettura.md: nessuna modifica al sistema.",
           "docs": []
         },
         {
@@ -134,9 +134,9 @@
     "hold_plan": ""
   },
   "previous": {
-    "task": "O8.T2",
+    "task": "O8.T3",
     "state": "done",
-    "note": "Sezione 2 di architettura.md: 18 socket varlink e D-Bus misurati (8 ms), deck usa 12 parser di testo; 6 presupposti umani, 7 proposte"
+    "note": "Sezione 3 di architettura.md: sudo ALL senza polkit, nessuna sandbox né audit né firewall, TPM e Landlock pronti; 6 presupposti umani, 8 proposte"
   },
   "cycle": {
     "n": 3,
