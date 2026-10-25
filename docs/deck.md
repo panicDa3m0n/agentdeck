@@ -36,7 +36,7 @@ L'equivalente di Time Machine, sopra Snapper e grub-btrfs.
     leggibile.
 - `deck snapshot create description="…"` crea uno snapshot singolo (descrizione obbligatoria, massimo 100
   caratteri) e restituisce `done` con il suo `id`. grub-btrfsd lo aggiunge al menu di GRUB in pochi secondi.
-- `rollback` compare già tra le azioni ma non è ancora disponibile (task O3.T3).
+- `deck snapshot rollback id=N` riporta il sistema allo snapshot `N`, in due chiamate (protocollo, sezione 7).
 
 | Avviso | Livello | Quando |
 |---|---|---|
@@ -44,6 +44,50 @@ L'equivalente di Time Machine, sopra Snapper e grub-btrfs.
 | `GRUB_MENU_UNREADABLE` | info | Il menu non è leggibile: grub-btrfsd lo sta riscrivendo, riprovare tra pochi secondi |
 
 Le descrizioni sono testo esterno: stanno solo nei dati (INV-4).
+
+### Rollback
+
+1. **Anteprima** (`deck snapshot rollback id=N`): `status: confirm` con codice valido 5 minuti. Contiene:
+   - lo snapshot di destinazione;
+   - i pacchetti che verrebbero rimossi, che tornerebbero e che cambierebbero versione (`data.packages`);
+   - il controllo dell'accesso (`data.access_check`).
+
+   Niente viene ancora modificato.
+2. **Rifiuti di sicurezza** (`NOT_AVAILABLE`), controllati sia nell'anteprima sia all'esecuzione:
+   - se nello snapshot mancano sshd o networkd o iwd abilitati, il profilo Wi-Fi, l'utente `agent`, il
+     suo sudo, o se `AllowUsers` esclude `agent`: tornarci lascerebbe la Deck senza accesso (INV-1);
+   - se lo snapshot ha una versione di GRUB diversa da quella installata: i moduli in `/boot/grub`
+     potrebbero non combaciare con GRUB nella partizione EFI e la Deck non si avvierebbe.
+3. **Esecuzione** (`… confirm=<codice>`):
+   1. salva lo stato attuale come nuovo snapshot (lo `undo_snapshot_id` della risposta);
+   2. monta il livello superiore di Btrfs in `/run/agentdeck/btrfs-top`;
+   3. crea una copia scrivibile dello snapshot;
+   4. rinomina `@` in `@old-<data>` e la copia in `@`. Se il secondo passo fallisce, rimette subito `@` al
+      suo posto: il sistema resta com'era e la risposta è `FAILED`;
+   5. programma il riavvio dopo 10 secondi.
+
+   GRUB e `fstab` trovano il sistema per nome (`subvol=@`), quindi al riavvio parte lo snapshot.
+4. **Dopo il riavvio:** la Deck torna in circa un minuto. `deck status` conferma lo stato.
+   - **Annullare** il rollback: `deck snapshot rollback id=<undo_snapshot_id>`.
+   - **Cosa non cambia:** `/home`, `/var/log`, la cache dei pacchetti, gli snapshot e la partizione EFI.
+   - **Se `deck` è cambiato** dopo lo snapshot di destinazione: `deck` torna alla sua versione di allora,
+     quindi va reinstallato con `deck/install.sh`.
+
+Prova reale del 25/10/2026:
+- prima è stato creato lo snapshot 15, poi un file segnaposto e il pacchetto `tree`;
+- l'anteprima annunciava la rimozione di `tree`;
+- dopo la conferma lo stato è stato salvato come snapshot 18 e la Deck è tornata in 44 secondi;
+- segnaposto e `tree` erano spariti, e lo snapshot 18 conteneva ancora il segnaposto.
+
+**Pulizia del vecchio sistema:** `@old-<data>` resta sul disco. Occupa solo i blocchi diversi dallo
+snapshot, perché Btrfs li condivide. Contiene i subvolumi annidati di systemd (`var/lib/portables`,
+`var/lib/machines`), che vanno cancellati prima di lui:
+
+```bash
+sudo mount -o subvolid=5 /dev/nvme0n1p2 /mnt
+sudo btrfs subvolume delete /mnt/@old-<data>/var/lib/portables /mnt/@old-<data>/var/lib/machines /mnt/@old-<data>
+sudo umount /mnt
+```
 
 ### `/status`: stato della macchina
 

@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-25 15:54",
-  "updated": "2026-10-25 18:03",
+  "updated": "2026-10-25 18:10",
   "objectives": [
     {
       "id": "O1",
@@ -136,12 +136,12 @@
         {
           "id": "O3.T3",
           "title": "Rollback con anteprima e conferma",
-          "scope": "deck/, componente snapshot, subvolumi Btrfs sulla Deck",
+          "scope": "deck/, componente snapshot, subvolumi Btrfs sulla Deck, docs/deck.md, docs/accesso.md",
           "gate_pre": "Prova reale: dopo snapshot e modifica di prova, il rollback mostra l'anteprima delle conseguenze, si conferma con il codice, la Deck riavvia nello stato salvato, la modifica di prova è sparita e ssh agentdeck funziona; lo stato precedente resta recuperabile come snapshot.",
           "gate_post": "",
-          "state": "todo",
-          "risk": null,
-          "risk_why": "",
+          "state": "doing",
+          "risk": 60,
+          "risk_why": "Sostituisce il subvolume del sistema in uso con uno snapshot e riavvia: un errore può lasciare la Deck non avviabile o senza accesso SSH (INV-1). Mitigazioni: snapshot dello stato attuale prima, scambio con ripristino immediato se un passo fallisce, verifica dell'accesso e di GRUB nello snapshot di destinazione, prova reale su uno snapshot appena creato; chiavetta di recupero pronta.",
           "docs": []
         },
         {
@@ -244,10 +244,10 @@
   ],
   "active": {
     "objective": "O3",
-    "task": "",
-    "phase": "idle",
-    "risk": null,
-    "risk_why": "",
+    "task": "O3.T3",
+    "phase": "in_progress",
+    "risk": 60,
+    "risk_why": "Sostituisce il subvolume del sistema in uso con uno snapshot e riavvia: un errore può lasciare la Deck non avviabile o senza accesso SSH (INV-1). Mitigazioni: snapshot dello stato attuale prima, scambio con ripristino immediato se un passo fallisce, verifica dell'accesso e di GRUB nello snapshot di destinazione, prova reale su uno snapshot appena creato; chiavetta di recupero pronta.",
     "hold_invariants": "",
     "hold_plan": "",
     "gate_done": ""

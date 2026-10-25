@@ -10,10 +10,11 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O3` Primi componenti usati dall'agente: stato del sistema e snapshot — 5 task: 4 completate, 0 in corso, 1 da fare, 0 bloccate
-- **Task attiva:** —
+- **Obiettivo attivo:** `O3` Primi componenti usati dall'agente: stato del sistema e snapshot — 5 task: 4 completate, 1 in corso, 0 da fare, 0 bloccate
+- **Task attiva:** `O3.T3` Rollback con anteprima e conferma — in corso · rischio 60/100
 - **Ultima task gestita:** `O3.T2` — completata — deck snapshot: elenco identico a snapper (1-13), snapshot 14 creato da deck in snapper e nel menu GRUB dopo 7 s; in_grub; 56 test.
-- **Ultimo aggiornamento:** 2026-10-25 18:03
+- **Fase:** `in_progress`
+- **Ultimo aggiornamento:** 2026-10-25 18:10
 
 ## Richieste attive
 
@@ -68,8 +69,9 @@ _nessuna richiesta in attesa._
 - [x] `O3.T2` Componente snapshot: elenco e creazione — *perimetro:* `deck/, componente snapshot, docs/deck.md, docs/accesso.md`
   *gate previsto:* deck snapshot elenca gli stessi snapshot di snapper; la creazione da deck produce uno snapshot visibile in snapper e nel menu snapshot di GRUB. · *gate confermato:* ✔ deck snapshot: elenco identico a snapper (1-13), snapshot 14 creato da deck in snapper e nel menu GRUB dopo 7 s; in_grub; 56 test.
   *rischio:* 15/100 — Il componente legge gli snapshot e ne crea di nuovi con snapper: creare uno snapshot non cambia il sistema in uso e si annulla cancellandolo; il rollback resta fuori (O3.T3) e compare come azione non disponibile.
-- [ ] `O3.T3` Rollback con anteprima e conferma — *perimetro:* `deck/, componente snapshot, subvolumi Btrfs sulla Deck`
+- [~] `O3.T3` Rollback con anteprima e conferma — *perimetro:* `deck/, componente snapshot, subvolumi Btrfs sulla Deck, docs/deck.md, docs/accesso.md`
   *gate previsto:* Prova reale: dopo snapshot e modifica di prova, il rollback mostra l'anteprima delle conseguenze, si conferma con il codice, la Deck riavvia nello stato salvato, la modifica di prova è sparita e ssh agentdeck funziona; lo stato precedente resta recuperabile come snapshot.
+  *rischio:* 60/100 — Sostituisce il subvolume del sistema in uso con uno snapshot e riavvia: un errore può lasciare la Deck non avviabile o senza accesso SSH (INV-1). Mitigazioni: snapshot dello stato attuale prima, scambio con ripristino immediato se un passo fallisce, verifica dell'accesso e di GRUB nello snapshot di destinazione, prova reale su uno snapshot appena creato; chiavetta di recupero pronta.
 - [x] `O3.T4` Schermo della Deck: attività dell'agente visibile come un terminale — *perimetro:* `configurazione SSH e servizi sulla Deck, deck/, docs/, README.md`
   *gate previsto:* Al posto del login, sullo schermo della Deck un terminale mostra in tempo reale ogni comando eseguito dall'agente via SSH e l'esito delle chiamate a deck; verificato leggendo il contenuto della console; snapshot prima; ssh agentdeck, scp e rsync funzionano ancora (INV-1); documentato. · *gate confermato:* ✔ Schermo Deck: comandi agente ed esiti deck in tempo reale (verificato da /dev/vcsu1); snapshot 10; ssh, scp, rsync ok; docs/schermo.md.
   *rischio:* 35/100 — Tocca la configurazione SSH (solo SetEnv per l'utente agent, nessun cambio di autenticazione) e sostituisce il login su tty1 con un servizio: l'accesso SSH è l'unico canale (INV-1), quindi snapshot prima, sshd -t, e una rete di sicurezza che annulla da sola la modifica SSH dopo 3 minuti se non confermata dopo i test di ssh, scp e rsync.

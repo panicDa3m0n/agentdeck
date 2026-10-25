@@ -73,14 +73,24 @@ ssh agentdeck 'deck snapshot create description="prima di X"'  # nuovo snapshot
 ```
 
 Gli snapshot compaiono anche nel sottomenu "Arch Linux snapshots" di GRUB e si possono avviare in sola
-lettura. Il rollback con anteprima e conferma arriva con la task O3.T3 (vedi [deck.md](deck.md)).
+lettura. Per tornare davvero a uno snapshot, da remoto e senza nessuno davanti alla Deck:
+
+```bash
+ssh agentdeck 'deck snapshot rollback id=N'                 # anteprima e codice di conferma
+ssh agentdeck 'deck snapshot rollback id=N confirm=<codice>'  # esegue e riavvia
+```
+
+`deck` rifiuta gli snapshot da cui la Deck ripartirebbe senza accesso SSH o con un GRUB diverso. Dettagli
+in [deck.md](deck.md).
 
 ## Se la Deck non risponde
 
 1. **Verificare se è accesa e in rete:** `ping 192.168.1.49`; se non risponde, cercarla per nome con
    `dns-sd -G v4 agentdeck.local` (l'IP potrebbe essere cambiato).
-2. **Se un aggiornamento ha rotto l'avvio:** dal menu di GRUB si sceglie uno snapshot precedente oppure il
+2. **Se una modifica ha rotto qualcosa ma la Deck risponde:** `deck snapshot rollback` verso lo snapshot
+   precedente alla modifica.
+3. **Se un aggiornamento ha rotto l'avvio:** dal menu di GRUB si sceglie uno snapshot precedente oppure il
    kernel `linux-lts` in "Advanced options". Serve una persona davanti alla Deck.
-3. **Se il sistema è irraggiungibile:** avviare la chiavetta di recupero (Volume giù + Accensione) e
+4. **Se il sistema è irraggiungibile:** avviare la chiavetta di recupero (Volume giù + Accensione) e
    collegarsi con `ssh -i ~/.ssh/id_ed25519_steamdeck root@agentdeck-live.local`. Da lì si montano i
    subvolumi e si ripara. Vedi [chiavetta-live.md](chiavetta-live.md).

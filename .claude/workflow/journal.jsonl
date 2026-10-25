@@ -365,3 +365,21 @@
 {"at": "2026-10-25 18:03", "testo": "VERSIONE 0.1.11 (O3.T2)"}
 {"at": "2026-10-25 18:03", "testo": "[-] bash: bash -c 'b=0; for f in README.md PRINCIPI.md CHANGELOG.md docs/*.md; do d=$(dirname \"$f\"); for l in $(grep -oE"}
 {"at": "2026-10-25 18:03", "testo": "[-] Edit  CHANGELOG.md", "task": "-", "tipo": "file", "tool": "Edit", "file": "CHANGELOG.md"}
+{"at": "2026-10-25 18:04", "testo": "[-] bash: printf '0.1.11\\n' > VERSION && git add -A && git commit -q -F - <<'EOF' Versione 0.1.11: componente deck snaps"}
+{"at": "2026-10-25 18:05", "testo": "TASK APERTA O3.T3 — Rollback con anteprima e conferma | perimetro: deck/, componente snapshot, subvolumi Btrfs sulla Deck | gate: Prova reale: dopo snapshot e modifica di prova, il rollback mostra l'anteprima delle conseguenze, si conferma con il codice, la Deck riavvia nello stato salvato, la modifica di prova è sparita e ssh agentdeck funziona; lo stato precedente resta recuperabile come snapshot. | rischio: 60"}
+{"at": "2026-10-25 18:05", "testo": "[O3.T3] bash: ~/claude-rules/bin/wf.sh task-start --id O3.T3 --risk 60 --why \"Sostituisce il subvolume del sistema in uso co"}
+{"at": "2026-10-25 18:06", "testo": "[O3.T3] Edit  deck/agentdeck/system.py", "task": "O3.T3", "tipo": "file", "tool": "Edit", "file": "deck/agentdeck/system.py"}
+{"at": "2026-10-25 18:07", "testo": "[O3.T3] Write  deck/agentdeck/components/snapshot.py", "task": "O3.T3", "tipo": "file", "tool": "Write", "file": "deck/agentdeck/components/snapshot.py"}
+{"at": "2026-10-25 18:08", "testo": "[O3.T3] Write  deck/tests/test_snapshot.py", "task": "O3.T3", "tipo": "file", "tool": "Write", "file": "deck/tests/test_snapshot.py"}
+{"at": "2026-10-25 18:08", "testo": "[O3.T3] bash: cd /Users/snj/linuxai-steamdeck/deck && python3 -m unittest discover -s tests 2>&1 | tail -15"}
+{"at": "2026-10-25 18:08", "testo": "[O3.T3] bash: cd /Users/snj/linuxai-steamdeck && deck/install.sh > \"$TMPDIR/install12.log\" 2>&1; echo \"installazione: uscita"}
+{"at": "2026-10-25 18:09", "testo": "[O3.T3] Write  ../../../private/tmp/claude-502/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/scratchpad/rollback-test.sh", "task": "O3.T3", "tipo": "file", "tool": "Write", "file": "../../../private/tmp/claude-502/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/scratchpad/rollback-test.sh"}
+{"at": "2026-10-25 18:10", "testo": "[O3.T3] bash: bash /private/tmp/claude-502/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/scratchpad/roll"}
+{"at": "2026-10-25 18:10", "testo": "PERIMETRO ESTESO su O3.T3 (+docs/deck.md)"}
+{"at": "2026-10-25 18:10", "testo": "PERIMETRO ESTESO su O3.T3 (+docs/accesso.md)"}
+{"at": "2026-10-25 18:10", "testo": "TRAPPOLA registrata: Dopo un rollback anche /opt/agentdeck torna alla versione dello snapshot -> deck sta nel subvolume @ come il resto del sistema -> rilanciare deck/install.sh se il codice di deck è cambiato dopo lo snapshot di destinazione."}
+{"at": "2026-10-25 18:10", "testo": "[O3.T3] bash: ~/claude-rules/bin/wf.sh scope-add \"docs/deck.md\" >/dev/null && ~/claude-rules/bin/wf.sh scope-add \"docs/acces"}
+{"at": "2026-10-25 18:10", "testo": "[O3.T3] Edit  docs/deck.md", "task": "O3.T3", "tipo": "file", "tool": "Edit", "file": "docs/deck.md"}
+{"at": "2026-10-25 18:10", "testo": "[O3.T3] Edit  docs/accesso.md", "task": "O3.T3", "tipo": "file", "tool": "Edit", "file": "docs/accesso.md"}
+{"at": "2026-10-25 18:10", "testo": "[O3.T3] Edit  docs/accesso.md", "task": "O3.T3", "tipo": "file", "tool": "Edit", "file": "docs/accesso.md"}
+{"at": "2026-10-25 18:10", "testo": "[O3.T3] Edit  docs/accesso.md", "task": "O3.T3", "tipo": "file", "tool": "Edit", "file": "docs/accesso.md"}

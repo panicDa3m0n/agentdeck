@@ -262,6 +262,122 @@ def snapshot_list() -> Optional[list]:
     return [dict(s, in_grub=None if in_grub is None else s["id"] in in_grub) for s in parse_snapper_list(text)]
 
 
+SNAPSHOTS_DIR = "/.snapshots"
+TOP_MOUNT = "/run/agentdeck/btrfs-top"
+UNTOUCHED_BY_ROLLBACK = ["/home", "/var/log", "/var/cache/pacman/pkg", "/.snapshots", "/efi"]
+
+# File dello snapshot di destinazione da cui dipende l'accesso dell'agente (INV-1)
+ACCESS_FILES = {
+    "sshd_enabled": "etc/systemd/system/multi-user.target.wants/sshd.service",
+    "networkd_enabled": "etc/systemd/system/multi-user.target.wants/systemd-networkd.service",
+    "iwd_enabled": "etc/systemd/system/multi-user.target.wants/iwd.service",
+    "wifi_network_file": "etc/systemd/network/25-wireless.network",
+    "agent_sudoers": "etc/sudoers.d/10-agent",
+}
+
+
+def run_checked(cmd: list, sudo: bool = True, timeout: float = 120) -> str:
+    """Come run(), ma un fallimento solleva RuntimeError con lo stderr del comando."""
+    full = ["sudo", "-n"] + cmd if sudo else cmd
+    result = subprocess.run(full, capture_output=True, text=True, timeout=timeout)
+    if result.returncode != 0:
+        raise RuntimeError(f"{' '.join(cmd[:3])}: {result.stderr.strip() or 'exit ' + str(result.returncode)}")
+    return result.stdout
+
+
+def parse_pacman_q(text: str) -> dict:
+    """Pacchetti installati da `pacman -Q`: nome -> versione."""
+    return dict(line.split(" ", 1) for line in text.splitlines() if " " in line)
+
+
+def parse_pacman_local(names: list) -> dict:
+    """Pacchetti di uno snapshot dai nomi delle cartelle di var/lib/pacman/local (nome-versione-rilascio)."""
+    packages = {}
+    for entry in names:
+        parts = entry.strip().rsplit("-", 2)
+        if len(parts) == 3:
+            packages[parts[0]] = parts[1] + "-" + parts[2]
+    return packages
+
+
+def package_diff(current: dict, target: dict) -> dict:
+    """Cosa cambia nei pacchetti tornando allo snapshot."""
+    return {"removed": sorted(n for n in current if n not in target),
+            "restored": sorted(n for n in target if n not in current),
+            "changed": [{"name": n, "from": current[n], "to": target[n]}
+                        for n in sorted(current) if n in target and current[n] != target[n]]}
+
+
+def snapshot_packages(snapshot_id: int) -> tuple:
+    """(pacchetti attuali, pacchetti dello snapshot)."""
+    current = parse_pacman_q(run_checked(["pacman", "-Q"], sudo=False))
+    listing = run_checked(["ls", f"{SNAPSHOTS_DIR}/{int(snapshot_id)}/snapshot/var/lib/pacman/local"])
+    return current, parse_pacman_local([n for n in listing.split() if n != "ALPM_DB_VERSION"])
+
+
+def snapshot_access_check(snapshot_id: int) -> dict:
+    """Controlla nello snapshot che dopo il rollback la Deck resti raggiungibile come agent (INV-1)."""
+    base = f"{SNAPSHOTS_DIR}/{int(snapshot_id)}/snapshot"
+    script = "; ".join(
+        [f'[ -e "{base}/{rel}" ] && echo {key}=1 || echo {key}=0' for key, rel in ACCESS_FILES.items()]
+        + [f'grep -q "^agent:" "{base}/etc/passwd" && echo agent_user=1 || echo agent_user=0',
+           f'ls "{base}"/var/lib/iwd/*.psk >/dev/null 2>&1 && echo wifi_profile=1 || echo wifi_profile=0',
+           f'grep -h "^AllowUsers" "{base}"/etc/ssh/sshd_config "{base}"/etc/ssh/sshd_config.d/*.conf 2>/dev/null '
+           f'| sed "s/^/allow=/" || true'])
+    out = run_checked(["sh", "-c", script])
+    checks: dict = {}
+    allow_lines = []
+    for line in out.splitlines():
+        key, _, value = line.partition("=")
+        if key == "allow":
+            allow_lines.append(value)
+        elif key:
+            checks[key] = value == "1"
+    checks["ssh_allows_agent"] = all("agent" in line.split()[1:] for line in allow_lines)
+    checks["ok"] = all(checks.values())
+    return checks
+
+
+def root_device() -> str:
+    """Il dispositivo Btrfs della radice, per esempio /dev/nvme0n1p2."""
+    return run_checked(["findmnt", "-no", "SOURCE", "/"], sudo=False).strip().split("[")[0]
+
+
+def rollback_root(snapshot_id: int, stamp: str) -> str:
+    """Rimpiazza il subvolume @ con una copia scrivibile dello snapshot. Restituisce il nome del vecchio @.
+
+    Lavora sul livello superiore del filesystem (subvolid=5) montato in TOP_MOUNT. Se lo scambio fallisce
+    a metà, rimette subito il vecchio @ al suo posto: in ogni caso, all'uscita, @ esiste.
+    """
+    top = TOP_MOUNT
+    source = f"{top}/@snapshots/{int(snapshot_id)}/snapshot"
+    new, old = f"{top}/@new-{stamp}", f"{top}/@old-{stamp}"
+    run_checked(["mkdir", "-p", top])
+    run_checked(["mount", "-o", "subvolid=5", root_device(), top])
+    try:
+        run_checked(["test", "-d", source])
+        run_checked(["btrfs", "subvolume", "snapshot", source, new])
+        try:
+            run_checked(["mv", f"{top}/@", old])
+        except Exception:
+            run_checked(["btrfs", "subvolume", "delete", new])
+            raise
+        try:
+            run_checked(["mv", new, f"{top}/@"])
+        except Exception:
+            run_checked(["mv", old, f"{top}/@"])  # il sistema torna com'era
+            raise
+    finally:
+        run(["umount", top], sudo=True)
+    return f"@old-{stamp}"
+
+
+def schedule_reboot(seconds: int) -> bool:
+    """Riavvia la Deck fra qualche secondo, così la risposta di deck arriva prima."""
+    return run(["systemd-run", "--quiet", f"--on-active={int(seconds)}", "--unit=agentdeck-rollback-reboot",
+                "systemctl", "reboot"], sudo=True) is not None
+
+
 def snapshot_create(description: str) -> Optional[int]:
     """Crea uno snapshot singolo con questa descrizione; restituisce il numero, o None se fallisce."""
     out = run(["snapper", "-c", "root", "create", "--print-number", "--userdata", "source=deck",

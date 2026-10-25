@@ -40,6 +40,11 @@
       "id": "P8",
       "testo": "deck snapshot dice per un attimo che nessuno snapshot è nel menu di GRUB -> grub-btrfsd cancella e riscrive /boot/grub/grub-btrfs.cfg a ogni modifica -> un menu non leggibile vale in_grub null (sconosciuto) con l'avviso GRUB_MENU_UNREADABLE, non false.",
       "creata": "2026-10-25 18:03"
+    },
+    {
+      "id": "P9",
+      "testo": "Dopo un rollback anche /opt/agentdeck torna alla versione dello snapshot -> deck sta nel subvolume @ come il resto del sistema -> rilanciare deck/install.sh se il codice di deck è cambiato dopo lo snapshot di destinazione.",
+      "creata": "2026-10-25 18:10"
     }
   ]
 }
