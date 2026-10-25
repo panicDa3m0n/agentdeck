@@ -10,10 +10,10 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** —
+- **Obiettivo attivo:** `O10` Claude Code sulla Deck, usato davvero — 4 task: 1 completate, 0 in corso, 3 da fare, 0 bloccate
 - **Task attiva:** —
-- **Ultima task gestita:** —
-- **Ultimo aggiornamento:** 2026-10-25 23:50
+- **Ultima task gestita:** `O10.T1` — completata — Claude Code 2.1.310 sulla Deck per agent: firma GPG del manifest e checksum verificate, --version e doctor ok, nessuna porta nuova; install/claude-code.sh
+- **Ultimo aggiornamento:** 2026-10-25 23:56
 
 ## Richieste attive
 
@@ -25,10 +25,12 @@ _nessuna richiesta in attesa._
 
 **Gate obiettivo:** Claude Code gira sulla Deck per l'utente agent, autenticato con l'abbonamento e seguibile con Remote Control; conosce AgentDeck da un CLAUDE.md ricavato da docs/ e usa deck; una sessione di lavoro reale dalla chat produce i bisogni per il ciclo successivo; snapshot prima di ogni modifica e ssh agentdeck sempre funzionante (INV-1).
 
-- [ ] `O10.T1` Installazione di Claude Code sulla Deck — *perimetro:* `pacchetti e file dell'utente agent sulla Deck, install/, deck/, docs/`
-  *gate previsto:* Snapshot prima; binario nativo di Claude Code installato per l'utente agent; claude --version e una richiesta di prova funzionano su Arch; nessun servizio esposto in rete; installazione ripetibile da script del repository; documentazione aggiornata.
+- [x] `O10.T1` Installazione di Claude Code sulla Deck — *perimetro:* `pacchetti e file dell'utente agent sulla Deck, install/, deck/, docs/`
+  *gate previsto:* Snapshot prima; binario nativo di Claude Code installato per l'utente agent con firma GPG del manifest e checksum verificate; claude --version e claude doctor funzionano su Arch (la prima richiesta vera passa a O10.T2, dopo il login: decisione dell'utente); nessun servizio esposto in rete; installazione ripetibile da script del repository; documentazione aggiornata. · *gate confermato:* ✔ Claude Code 2.1.310 sulla Deck per agent: firma GPG del manifest e checksum verificate, --version e doctor ok, nessuna porta nuova; install/claude-code.sh
+  *rischio:* 25/100 — Installa sulla Deck un programma che esegue comandi; qui non viene ancora usato come agente, non tocca rete né servizi, snapshot prima, nessun servizio esposto.
 - [ ] `O10.T2` Accesso: abbonamento, sessione persistente e Remote Control (N22, N23) — *perimetro:* `configurazione di Claude Code e unità systemd sulla Deck, docs/`
-  *gate previsto:* Login con l'abbonamento fatto dall'utente, token solo sulla Deck (INV-6); sessione di Claude Code come servizio che sopravvive alla caduta di SSH; raggiungibile con Remote Control da claude.ai o dal telefono; termini dell'abbonamento per sessioni automatiche verificati e riportati; proposta di nuovo testo per INV-7.
+  *gate previsto:* Login con l'abbonamento fatto dall'utente, token solo sulla Deck (INV-6); prima richiesta di prova riuscita; sessione di Claude Code come servizio che sopravvive alla caduta di SSH; raggiungibile con Remote Control da claude.ai o dal telefono; termini dell'abbonamento per sessioni automatiche verificati e riportati; proposta di nuovo testo per INV-7.
+  *annotazioni:* `N27`
 - [ ] `O10.T3` Prima configurazione: AgentDeck spiegato a Claude Code — *perimetro:* `CLAUDE.md e impostazioni di Claude Code sulla Deck, deck/, docs/`
   *gate previsto:* CLAUDE.md di AgentDeck ricavato da docs/ (fonte unica, INV-9) con principi, invarianti e uso di deck; permessi di Claude Code che proteggono l'accesso (niente stop o disable di sshd, rete, iwd, dbus); uso di deck dalla sessione verificato.
 - [ ] `O10.T4` Uso reale dalla chat e bisogni emersi — *perimetro:* `sessioni di Claude Code sulla Deck, annotazioni della governance, docs/`
@@ -43,4 +45,6 @@ _nessuna richiesta in attesa._
 
 ## Annotazioni
 
-_nessuna annotazione._
+_Una riga per nota, sempre legata a una task. `wf.sh notes` per leggerle._
+
+- `N27` (`O10.T2`) Da O10.T1 (25/10): le sessioni SSH non interattive di agent non leggono ~/.bashrc, quindi claude non è nel PATH dei comandi lanciati via ssh (PATH di sshd: /usr/local/sbin:/usr/local/bin:/usr/bin). Per il servizio di Claude Code impostare PATH nell'unità systemd; per i comandi via ssh usare ~/.local/bin/claude o decidere un collegamento di sistema (fuori dal perimetro di O10.T1). — 2026-10-25 23:55

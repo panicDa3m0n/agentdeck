@@ -7,6 +7,7 @@ risultato prima di passare alla successiva. L'unica fase distruttiva chiede una 
 Codice:
 - [../install/install.sh](../install/install.sh): le fasi di installazione, da root sul sistema live.
 - [../install/post-install.sh](../install/post-install.sh): rifinitura dopo il primo avvio, come `agent`.
+- [../install/claude-code.sh](../install/claude-code.sh): Claude Code per l'utente `agent`, con verifica della firma ([claude-code.md](claude-code.md)).
 
 Indice: [README.md](README.md).
 
@@ -30,6 +31,12 @@ Dopo il primo avvio, verificato che `ssh agentdeck` funziona:
 
 ```bash
 ssh agentdeck 'bash -s' < install/post-install.sh
+```
+
+Poi `deck` ([deck.md](deck.md), `deck/install.sh`) e Claude Code:
+
+```bash
+scp install/claude-code.sh agentdeck:/tmp/ && ssh agentdeck 'bash /tmp/claude-code.sh latest'
 ```
 
 ## Le fasi

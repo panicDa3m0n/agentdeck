@@ -38,6 +38,7 @@ L'indice completo è in [docs/README.md](docs/README.md).
 | [docs/accesso.md](docs/accesso.md) | Come l'agente raggiunge la Deck, sicurezza e recupero |
 | [docs/protocollo.md](docs/protocollo.md) | Protocollo dell'interfaccia agentica: schermate, azioni, conferme, autoprompting |
 | [docs/deck.md](docs/deck.md) | Il motore `deck`: uso, codice, installazione, nuovi componenti |
+| [docs/claude-code.md](docs/claude-code.md) | Claude Code sulla Deck: installazione verificata, percorsi, aggiornamenti |
 | [docs/sviluppo.md](docs/sviluppo.md) | Repository, versioni, pubblicazione su GitHub, governance |
 
 ## Struttura del repository

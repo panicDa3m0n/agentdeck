@@ -4,6 +4,21 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.4.1 — 2026-10-25
+
+Ciclo 04, task O10.T1: Claude Code installato sulla Deck.
+
+- Nuovo `install/claude-code.sh`, da lanciare come `agent`, mai come root:
+  - usa l'installatore ufficiale di Anthropic;
+  - verifica la firma GPG del manifest con l'impronta ufficiale della chiave di rilascio, che l'installatore
+    non controlla;
+  - confronta la checksum del binario installato con il manifest firmato;
+  - aggiunge `~/.local/bin` al PATH una volta sola.
+- Installata la versione 2.1.310 in 17 secondi, con snapshot 35 prima. `claude doctor` è in ordine, nessuna
+  porta nuova in ascolto.
+- La prima richiesta vera passa a O10.T2, dopo il login con l'abbonamento (decisione dell'utente).
+- Nuovo `docs/claude-code.md`; la procedura di installazione comprende Claude Code.
+
 ## 0.4.0 — 2026-10-25
 
 Chiusura del ciclo 03, "Studio dell'architettura agent-first: come funziona il sistema e dove intercettarlo":

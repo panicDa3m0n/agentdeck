@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-25 23:48",
-  "updated": "2026-10-25 23:50",
+  "updated": "2026-10-25 23:56",
   "objectives": [
     {
       "id": "O10",
@@ -16,18 +16,18 @@
           "id": "O10.T1",
           "title": "Installazione di Claude Code sulla Deck",
           "scope": "pacchetti e file dell'utente agent sulla Deck, install/, deck/, docs/",
-          "gate_pre": "Snapshot prima; binario nativo di Claude Code installato per l'utente agent; claude --version e una richiesta di prova funzionano su Arch; nessun servizio esposto in rete; installazione ripetibile da script del repository; documentazione aggiornata.",
-          "gate_post": "",
-          "state": "todo",
-          "risk": null,
-          "risk_why": "",
+          "gate_pre": "Snapshot prima; binario nativo di Claude Code installato per l'utente agent con firma GPG del manifest e checksum verificate; claude --version e claude doctor funzionano su Arch (la prima richiesta vera passa a O10.T2, dopo il login: decisione dell'utente); nessun servizio esposto in rete; installazione ripetibile da script del repository; documentazione aggiornata.",
+          "gate_post": "Claude Code 2.1.310 sulla Deck per agent: firma GPG del manifest e checksum verificate, --version e doctor ok, nessuna porta nuova; install/claude-code.sh",
+          "state": "done",
+          "risk": 25,
+          "risk_why": "Installa sulla Deck un programma che esegue comandi; qui non viene ancora usato come agente, non tocca rete né servizi, snapshot prima, nessun servizio esposto.",
           "docs": []
         },
         {
           "id": "O10.T2",
           "title": "Accesso: abbonamento, sessione persistente e Remote Control (N22, N23)",
           "scope": "configurazione di Claude Code e unità systemd sulla Deck, docs/",
-          "gate_pre": "Login con l'abbonamento fatto dall'utente, token solo sulla Deck (INV-6); sessione di Claude Code come servizio che sopravvive alla caduta di SSH; raggiungibile con Remote Control da claude.ai o dal telefono; termini dell'abbonamento per sessioni automatiche verificati e riportati; proposta di nuovo testo per INV-7.",
+          "gate_pre": "Login con l'abbonamento fatto dall'utente, token solo sulla Deck (INV-6); prima richiesta di prova riuscita; sessione di Claude Code come servizio che sopravvive alla caduta di SSH; raggiungibile con Remote Control da claude.ai o dal telefono; termini dell'abbonamento per sessioni automatiche verificati e riportati; proposta di nuovo testo per INV-7.",
           "gate_post": "",
           "state": "todo",
           "risk": null,
@@ -80,9 +80,17 @@
     }
   ],
   "requests": [],
-  "notes": [],
+  "notes": [
+    {
+      "id": "N27",
+      "task": "O10.T2",
+      "text": "Da O10.T1 (25/10): le sessioni SSH non interattive di agent non leggono ~/.bashrc, quindi claude non è nel PATH dei comandi lanciati via ssh (PATH di sshd: /usr/local/sbin:/usr/local/bin:/usr/bin). Per il servizio di Claude Code impostare PATH nell'unità systemd; per i comandi via ssh usare ~/.local/bin/claude o decidere un collegamento di sistema (fuori dal perimetro di O10.T1).",
+      "docs": [],
+      "created": "2026-10-25 23:55"
+    }
+  ],
   "active": {
-    "objective": "",
+    "objective": "O10",
     "task": "",
     "phase": "idle",
     "risk": null,
@@ -91,9 +99,9 @@
     "hold_plan": ""
   },
   "previous": {
-    "task": "",
-    "state": "",
-    "note": ""
+    "task": "O10.T1",
+    "state": "done",
+    "note": "Claude Code 2.1.310 sulla Deck per agent: firma GPG del manifest e checksum verificate, --version e doctor ok, nessuna porta nuova; install/claude-code.sh"
   },
   "cycle": {
     "n": 4,
@@ -104,6 +112,6 @@
     "objective": 11,
     "cycle": 4,
     "request": 3,
-    "note": 26
+    "note": 27
   }
 }
