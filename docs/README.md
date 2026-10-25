@@ -27,6 +27,8 @@ documento (invariante INV-9). Quando si modifica il codice, si aggiorna il docum
 
 - [protocollo.md](protocollo.md): protocollo di `deck` (schermate JSON, azioni, navigazione, errori,
   conferme con anteprima, autoprompting, sicurezza del canale istruzioni).
+- [deck.md](deck.md): il motore di `deck`: uso, codice, installazione, come aggiungere un componente.
+  Codice: [../deck/](../deck/deck).
 
 ## Uso quotidiano
 

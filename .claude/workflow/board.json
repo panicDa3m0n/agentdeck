@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-25 15:54",
-  "updated": "2026-10-25 17:20",
+  "updated": "2026-10-25 17:26",
   "objectives": [
     {
       "id": "O1",
@@ -92,12 +92,12 @@
         {
           "id": "O2.T2",
           "title": "Motore deck e installazione sulla Deck",
-          "scope": "deck/, script di installazione del comando",
+          "scope": "deck/, script di installazione del comando, docs/deck.md, docs/README.md, PRINCIPI.md, README.md, docs/protocollo.md",
           "gate_pre": "Sulla Deck: deck senza argomenti restituisce la schermata principale con l'elenco dei componenti; un indirizzo inesistente restituisce una schermata di errore strutturata con azioni per uscirne; ogni risposta è JSON valido conforme al protocollo; l'installazione è ripetibile da uno script nel repository.",
           "gate_post": "",
-          "state": "todo",
-          "risk": null,
-          "risk_why": "",
+          "state": "doing",
+          "risk": 20,
+          "risk_why": "Installa il pacchetto python sulla Deck (snap-pac fa snapshot prima e dopo) e aggiunge codice nostro in /opt/agentdeck con il comando /usr/local/bin/deck: tutto reversibile, non tocca rete, SSH o avvio; il rischio è nella correttezza del motore, coperta da test di conformità e di iniezione.",
           "docs": []
         }
       ]
@@ -192,10 +192,10 @@
   ],
   "active": {
     "objective": "O2",
-    "task": "",
-    "phase": "idle",
-    "risk": null,
-    "risk_why": "",
+    "task": "O2.T2",
+    "phase": "in_progress",
+    "risk": 20,
+    "risk_why": "Installa il pacchetto python sulla Deck (snap-pac fa snapshot prima e dopo) e aggiunge codice nostro in /opt/agentdeck con il comando /usr/local/bin/deck: tutto reversibile, non tocca rete, SSH o avvio; il rischio è nella correttezza del motore, coperta da test di conformità e di iniezione.",
     "hold_invariants": "",
     "hold_plan": "",
     "gate_done": ""

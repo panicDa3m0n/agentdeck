@@ -182,3 +182,40 @@
 {"at": "2026-10-25 17:20", "testo": "[-] bash: ~/claude-rules/bin/wf.sh pitfall \"task-close rifiutato con riassuntivissimo troppo lungo -> il riepilogo di ch"}
 {"at": "2026-10-25 17:20", "testo": "[-] bash: echo \"ultimo tag su origin: $(git ls-remote --tags origin | grep -v '\\^{}' | sed 's|.*refs/tags/||' | sort -V "}
 {"at": "2026-10-25 17:20", "testo": "[-] Edit  CHANGELOG.md", "task": "-", "tipo": "file", "tool": "Edit", "file": "CHANGELOG.md"}
+{"at": "2026-10-25 17:20", "testo": "[-] bash: printf '0.1.6\\n' > VERSION && git add -A && git commit -q -F - <<'EOF' Versione 0.1.6: protocollo di deck appr"}
+{"at": "2026-10-25 17:21", "testo": "TASK APERTA O2.T2 — Motore deck e installazione sulla Deck | perimetro: deck/, script di installazione del comando | gate: Sulla Deck: deck senza argomenti restituisce la schermata principale con l'elenco dei componenti; un indirizzo inesistente restituisce una schermata di errore strutturata con azioni per uscirne; ogni risposta è JSON valido conforme al protocollo; l'installazione è ripetibile da uno script nel repository. | rischio: 20"}
+{"at": "2026-10-25 17:21", "testo": "[O2.T2] bash: ~/claude-rules/bin/wf.sh task-start --id O2.T2 --risk 20 --why \"Installa il pacchetto python sulla Deck (snap-"}
+{"at": "2026-10-25 17:22", "testo": "PERIMETRO ESTESO su O2.T2 (+docs/deck.md)"}
+{"at": "2026-10-25 17:22", "testo": "PERIMETRO ESTESO su O2.T2 (+docs/README.md)"}
+{"at": "2026-10-25 17:22", "testo": "PERIMETRO ESTESO su O2.T2 (+PRINCIPI.md)"}
+{"at": "2026-10-25 17:22", "testo": "[O2.T2] bash: ~/claude-rules/bin/wf.sh scope-add \"docs/deck.md\" && ~/claude-rules/bin/wf.sh scope-add \"docs/README.md\" && ~/"}
+{"at": "2026-10-25 17:23", "testo": "PERIMETRO ESTESO su O2.T2 (+README.md)"}
+{"at": "2026-10-25 17:23", "testo": "[O2.T2] Write  deck/agentdeck/__init__.py", "task": "O2.T2", "tipo": "file", "tool": "Write", "file": "deck/agentdeck/__init__.py"}
+{"at": "2026-10-25 17:23", "testo": "[O2.T2] Write  deck/agentdeck/protocol.py", "task": "O2.T2", "tipo": "file", "tool": "Write", "file": "deck/agentdeck/protocol.py"}
+{"at": "2026-10-25 17:24", "testo": "[O2.T2] Write  deck/agentdeck/confirm.py", "task": "O2.T2", "tipo": "file", "tool": "Write", "file": "deck/agentdeck/confirm.py"}
+{"at": "2026-10-25 17:24", "testo": "[O2.T2] Write  deck/agentdeck/engine.py", "task": "O2.T2", "tipo": "file", "tool": "Write", "file": "deck/agentdeck/engine.py"}
+{"at": "2026-10-25 17:24", "testo": "[O2.T2] Edit  deck/agentdeck/engine.py", "task": "O2.T2", "tipo": "file", "tool": "Edit", "file": "deck/agentdeck/engine.py"}
+{"at": "2026-10-25 17:24", "testo": "[O2.T2] Edit  deck/agentdeck/engine.py", "task": "O2.T2", "tipo": "file", "tool": "Edit", "file": "deck/agentdeck/engine.py"}
+{"at": "2026-10-25 17:24", "testo": "[O2.T2] Write  deck/agentdeck/cli.py", "task": "O2.T2", "tipo": "file", "tool": "Write", "file": "deck/agentdeck/cli.py"}
+{"at": "2026-10-25 17:24", "testo": "[O2.T2] Write  deck/agentdeck/components/__init__.py", "task": "O2.T2", "tipo": "file", "tool": "Write", "file": "deck/agentdeck/components/__init__.py"}
+{"at": "2026-10-25 17:24", "testo": "[O2.T2] Write  deck/agentdeck/components/home.py", "task": "O2.T2", "tipo": "file", "tool": "Write", "file": "deck/agentdeck/components/home.py"}
+{"at": "2026-10-25 17:24", "testo": "[O2.T2] Write  deck/agentdeck/components/protocol_info.py", "task": "O2.T2", "tipo": "file", "tool": "Write", "file": "deck/agentdeck/components/protocol_info.py"}
+{"at": "2026-10-25 17:24", "testo": "[O2.T2] Write  deck/deck", "task": "O2.T2", "tipo": "file", "tool": "Write", "file": "deck/deck"}
+{"at": "2026-10-25 17:25", "testo": "[O2.T2] Write  deck/tests/test_deck.py", "task": "O2.T2", "tipo": "file", "tool": "Write", "file": "deck/tests/test_deck.py"}
+{"at": "2026-10-25 17:25", "testo": "[O2.T2] bash: cd /Users/snj/linuxai-steamdeck/deck && chmod +x deck && python3 -m unittest discover -s tests -v 2>&1 | tail "}
+{"at": "2026-10-25 17:25", "testo": "[O2.T2] bash: ./deck --pretty | head -30; echo \"---\"; ./deck /wifi; echo \" (exit $?)\""}
+{"at": "2026-10-25 17:25", "testo": "[O2.T2] Write  deck/install.sh", "task": "O2.T2", "tipo": "file", "tool": "Write", "file": "deck/install.sh"}
+{"at": "2026-10-25 17:25", "testo": "[O2.T2] bash: cd /Users/snj/linuxai-steamdeck && chmod +x deck/install.sh && bash -n deck/install.sh && deck/install.sh 2>&1"}
+{"at": "2026-10-25 17:26", "testo": "[O2.T2] FALLITO Bash: ssh -o BatchMode=yes agentdeck 'cd /opt/agentdeck && for call in \"\" \"protocol\" \"--help\" \"/"}
+{"at": "2026-10-25 17:26", "testo": "FALLIMENTO [Bash] execution_error: deck                     exit=0  conforme | ok \ndeck protocol            exit=0  conforme | ok \ndeck --help             "}
+{"at": "2026-10-25 17:26", "testo": "ERRORE RISOLTO — execution_error: deck exit=0 conforme | ok deck protocol exit=0 conforme | ok deck --help — Exit 127 da /usr/bin/time assente sulla Deck: misura rifatta con il time di bash; le 8 chiamate erano tutte conformi.", "tipo": "errore-risolto"}
+{"at": "2026-10-25 17:26", "testo": "[O2.T2] bash: ssh -o BatchMode=yes agentdeck 'TIMEFORMAT=\"%R s\"; for i in 1 2 3 4 5; do { time deck >/dev/null; } 2>&1; done"}
+{"at": "2026-10-25 17:26", "testo": "[O2.T2] Write  docs/deck.md", "task": "O2.T2", "tipo": "file", "tool": "Write", "file": "docs/deck.md"}
+{"at": "2026-10-25 17:26", "testo": "[O2.T2] Edit  docs/README.md", "task": "O2.T2", "tipo": "file", "tool": "Edit", "file": "docs/README.md"}
+{"at": "2026-10-25 17:26", "testo": "[O2.T2] Edit  README.md", "task": "O2.T2", "tipo": "file", "tool": "Edit", "file": "README.md"}
+{"at": "2026-10-25 17:26", "testo": "[O2.T2] Edit  README.md", "task": "O2.T2", "tipo": "file", "tool": "Edit", "file": "README.md"}
+{"at": "2026-10-25 17:26", "testo": "[O2.T2] Edit  README.md", "task": "O2.T2", "tipo": "file", "tool": "Edit", "file": "README.md"}
+{"at": "2026-10-25 17:26", "testo": "[O2.T2] Edit  PRINCIPI.md", "task": "O2.T2", "tipo": "file", "tool": "Edit", "file": "PRINCIPI.md"}
+{"at": "2026-10-25 17:26", "testo": "PERIMETRO ESTESO su O2.T2 (+docs/protocollo.md)"}
+{"at": "2026-10-25 17:27", "testo": "[O2.T2] Edit  docs/protocollo.md", "task": "O2.T2", "tipo": "file", "tool": "Edit", "file": "docs/protocollo.md"}
+{"at": "2026-10-25 17:27", "testo": "[O2.T2] bash: deck/install.sh > \"$TMPDIR/install2.log\" 2>&1; echo \"seconda installazione: uscita $?\"; grep -E \"^== |Ran |^OK"}

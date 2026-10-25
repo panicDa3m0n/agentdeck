@@ -4,7 +4,9 @@ Come `deck`, l'interfaccia di sistema di AgentDeck, parla con un agente. Ogni co
 (stato, snapshot, rete, servizi, …) segue questo protocollo: un agente che lo conosce, o che legge una sola
 schermata, sa usare tutti i componenti.
 
-Stato del documento: **approvato dall'utente il 25/10/2026** (task O2.T1). Codice: arriva con O2.T2 in `deck/`.
+Stato del documento: **approvato dall'utente il 25/10/2026** (task O2.T1). Implementazione: il motore
+`deck` ([deck.md](deck.md), codice in [../deck/](../deck/deck)), in particolare
+[../deck/agentdeck/protocol.py](../deck/agentdeck/protocol.py).
 Indice: [README.md](README.md). Principi da cui nasce: [../PRINCIPI.md](../PRINCIPI.md).
 
 ## 1. Idee di fondo

@@ -79,6 +79,9 @@ Perché salire di livello solo quando serve:
 | 2026-10-25 | Documentazione per argomento in `docs/`, indicizzata e collegata al codice | Il sistema resta comprensibile a ogni agente che ci lavora |
 | 2026-10-25 | Si interviene al livello più alto che risolve il problema | Aggiornamenti di Arch preservati, modifiche reversibili |
 | 2026-10-25 | IP stabile con `SendRelease=no` | Il router riassegna sempre lo stesso indirizzo (`192.168.1.49`) |
+| 2026-10-25 | Protocollo di `deck` versione 1 ([docs/protocollo.md](docs/protocollo.md)) | Schermate JSON interattive e autoprompting per ogni componente |
+| 2026-10-25 | `deck` in Python 3, solo libreria standard | Un agente lo legge e lo corregge sulla Deck senza compilare |
+| 2026-10-25 | Testi rivolti all'agente in inglese; documentazione in italiano | Lingua in cui i modelli sono più affidabili e lingua del sistema |
 
 ## Direzioni da confermare quando ci arriviamo
 

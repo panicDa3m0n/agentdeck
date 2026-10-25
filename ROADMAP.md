@@ -10,10 +10,11 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O2` Protocollo dell'interfaccia agentica: schermate interattive e autoprompting — 2 task: 1 completate, 0 in corso, 1 da fare, 0 bloccate
-- **Task attiva:** —
+- **Obiettivo attivo:** `O2` Protocollo dell'interfaccia agentica: schermate interattive e autoprompting — 2 task: 1 completate, 1 in corso, 0 da fare, 0 bloccate
+- **Task attiva:** `O2.T2` Motore deck e installazione sulla Deck — in corso · rischio 20/100
 - **Ultima task gestita:** `O2.T1` — completata — docs/protocollo.md approvato: schermate, azioni, conferme, errori, autoprompting, INV-4, 8 esempi reali; Python 3, testi in inglese.
-- **Ultimo aggiornamento:** 2026-10-25 17:20
+- **Fase:** `in_progress`
+- **Ultimo aggiornamento:** 2026-10-25 17:26
 
 ## Richieste attive
 
@@ -51,8 +52,9 @@ _nessuna richiesta in attesa._
 - [x] `O2.T1` Specifica del protocollo di schermata e autoprompting — *perimetro:* `docs/`
   *gate previsto:* docs/protocollo.md descrive la struttura della schermata (dati, azioni, navigazione, avvisi, errori, conferme con anteprima, istruzioni), le regole di autoprompting e di sicurezza del canale istruzioni, con esempi reali; linguaggio di implementazione deciso; approvato esplicitamente dall'utente. · *gate confermato:* ✔ docs/protocollo.md approvato: schermate, azioni, conferme, errori, autoprompting, INV-4, 8 esempi reali; Python 3, testi in inglese.
   *rischio:* 10/100 — Produce solo un documento di specifica in docs/ da approvare con l'utente: nessun codice e nessuna modifica alla Deck; il rischio è progettuale (un protocollo sbagliato peserebbe su tutti i componenti), per questo il gate richiede l'approvazione esplicita.
-- [ ] `O2.T2` Motore deck e installazione sulla Deck — *perimetro:* `deck/, script di installazione del comando`
+- [~] `O2.T2` Motore deck e installazione sulla Deck — *perimetro:* `deck/, script di installazione del comando, docs/deck.md, docs/README.md, PRINCIPI.md, README.md, docs/protocollo.md`
   *gate previsto:* Sulla Deck: deck senza argomenti restituisce la schermata principale con l'elenco dei componenti; un indirizzo inesistente restituisce una schermata di errore strutturata con azioni per uscirne; ogni risposta è JSON valido conforme al protocollo; l'installazione è ripetibile da uno script nel repository.
+  *rischio:* 20/100 — Installa il pacchetto python sulla Deck (snap-pac fa snapshot prima e dopo) e aggiunge codice nostro in /opt/agentdeck con il comando /usr/local/bin/deck: tutto reversibile, non tocca rete, SSH o avvio; il rischio è nella correttezza del motore, coperta da test di conformità e di iniezione.
   *annotazioni:* `N6`
 
 ### `O3` Primi componenti usati dall'agente: stato del sistema e snapshot — in corso
