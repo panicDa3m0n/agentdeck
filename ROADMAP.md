@@ -10,30 +10,29 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O4` Rete gestita dall'agente: deck network — 2 task: 1 completate, 0 in corso, 1 da fare, 0 bloccate
+- **Obiettivo attivo:** `O4` Rete gestita dall'agente: deck network — 2 task: 2 completate, 0 in corso, 0 da fare, 0 bloccate
 - **Task attiva:** —
-- **Ultima task gestita:** `O4.T1` — completata — deck network: 11/11 valori uguali a ip, iw, resolvectl, ss; rete sorella a 5 GHz riconosciuta; avvisi di status puntano a /network; 80 test.
-- **Ultimo aggiornamento:** 2026-10-25 19:15
+- **Ultima task gestita:** `O4.T2` — completata — deck network: llmnr_off/on e prefer_5ghz con ritorno automatico, provati dal vivo; Deck sui 5 GHz anche dopo riavvio, ssh ok, 11/11, 100 test
+- **Fase:** `objective_gate_pending`
+- **Ultimo aggiornamento:** 2026-10-25 19:35
 
 ## Richieste attive
 
-_Mancanze di progetto che l'agente non può risolvere da solo. L'utente le conferma in chat, poi vengono chiuse con `req-resolve`._
-
-- `R2` (`O4`) Password della rete Wi-Fi a 5 GHz WINDTRE - 2065D6 - 5Ghz, da scrivere in secrets/wifi.env (WIFI_5G_PASS) o confermare che è uguale a quella a 2,4 GHz
+_nessuna richiesta in attesa._
 
 ## Obiettivi
 
 ### `O4` Rete gestita dall'agente: deck network — in corso
 
 **Gate obiettivo:** deck network mostra lo stato reale di rete, Wi-Fi e porte; gli avvisi di rete di deck status puntano ad azioni di deck network; LLMNR spento e banda Wi-Fi migliore disponibile applicati con anteprima e rete di sicurezza; ssh agentdeck funziona dopo ogni modifica (INV-1).
-**Richieste vincolanti:** `R2` Password della rete Wi-Fi a 5 GHz WINDTRE - 2065D6 - 5Ghz, da scrivere in secrets/wifi.env (WIFI_5G_PASS) o confermare che è uguale a quella a 2,4 GHz
 
 - [x] `O4.T1` Componente network: interfacce, Wi-Fi, risoluzione dei nomi, porte (N8) — *perimetro:* `deck/, componente network, componente status, docs/deck.md, docs/hardware.md`
   *gate previsto:* deck network riporta interfacce, Wi-Fi collegato e reti visibili con le loro bande, stato di mDNS e LLMNR, porte in ascolto; ogni valore coincide con ip, iw, resolvectl e ss; gli avvisi WIFI_BAND_2G e LLMNR_LISTENING di deck status puntano alle azioni di deck network. · *gate confermato:* ✔ deck network: 11/11 valori uguali a ip, iw, resolvectl, ss; rete sorella a 5 GHz riconosciuta; avvisi di status puntano a /network; 80 test.
   *rischio:* 10/100 — Componente in sola lettura: legge interfacce, Wi-Fi (con una scansione delle reti visibili), risoluzione dei nomi e porte; non cambia configurazione. Le azioni di rete compaiono come non disponibili fino a O4.T2.
-- [ ] `O4.T2` Azioni di rete con anteprima e rete di sicurezza: LLMNR e banda Wi-Fi — *perimetro:* `deck/, configurazione di rete sulla Deck, install/install.sh`
-  *gate previsto:* Con anteprima e conferma: LLMNR spento (porta 5355 non più in ascolto) e Wi-Fi sulla banda a 5 GHz se la rete di casa la offre, altrimenti azione non disponibile con il motivo; snapshot prima; ripristino automatico se dopo la modifica la Deck non è raggiungibile, provato; ssh agentdeck funziona; correzioni riportate in install/install.sh.
-  *annotazioni:* `N11`
+- [x] `O4.T2` Azioni di rete con anteprima e rete di sicurezza: LLMNR e banda Wi-Fi — *perimetro:* `deck/, configurazione di rete sulla Deck, install/install.sh`
+  *gate previsto:* Con anteprima e conferma: LLMNR spento (porta 5355 non più in ascolto) e Wi-Fi sulla banda a 5 GHz se la rete di casa la offre, altrimenti azione non disponibile con il motivo; snapshot prima; ripristino automatico se dopo la modifica la Deck non è raggiungibile, provato; ssh agentdeck funziona; correzioni riportate in install/install.sh. · *gate confermato:* ✔ deck network: llmnr_off/on e prefer_5ghz con ritorno automatico, provati dal vivo; Deck sui 5 GHz anche dopo riavvio, ssh ok, 11/11, 100 test
+  *rischio:* 45/100 — Cambia la rete della Deck, che è il canale dell'agente (INV-1): LLMNR è a basso rischio, il passaggio a un'altra rete Wi-Fi può far perdere il collegamento o cambiare IP. Mitigazioni: snapshot prima, verifica dopo ogni modifica, e per il Wi-Fi un ritorno automatico ai 2,4 GHz se entro pochi minuti l'agente non conferma di raggiungere la Deck.
+  *annotazioni:* `N11`, `N12`, `N13`
 
 ### `O5` Servizi e log gestiti dall'agente: deck service, deck logs — in corso
 
@@ -65,3 +64,5 @@ _Mancanze di progetto che l'agente non può risolvere da solo. L'utente le confe
 _Una riga per nota, sempre legata a una task. `wf.sh notes` per leggerle._
 
 - `N11` (`O4.T2`) Scoperto in O4.T1 (25/10): il router non trasmette la rete di casa su due bande con lo stesso nome; i 5 GHz sono una rete distinta, WINDTRE - 2065D6 - 5Ghz (BSSID 58:4b:bc:20:65:d7, segnale -20 dBm, canale 5500 MHz). prefer_5ghz quindi significa collegarsi a un'altra rete: serve la sua password (richiesta R2); tenere il profilo a 2,4 GHz come riserva e tornarci da soli se dopo il cambio la Deck non è raggiungibile. — 2026-10-25 19:15
+- `N12` (`O4.T2`) Avanzamento O4.T2 (25/10, 19:31): llmnr_off provato dal vivo (snapshot 20 e 21, porta 5355 chiusa, DNS e mDNS ok, llmnr_on riapre la porta). prefer_5ghz: primo tentativo fallito subito, iwd non vedeva la rete (P12, corretto con scansione di iwd); secondo tentativo sui 5 GHz in 12 s, stesso IP .49, SSH ok, stessa password; senza conferma il ritorno è scattato a 180 s. Manca la prova con keep_5ghz. — 2026-10-25 19:31
+- `N13` (`O4.T2`) Valutazione d'impatto O4.T2: INV-1 retto (profilo 2,4 GHz tenuto come riserva, ritorno automatico provato, riavvio Deck ok in 30 s, IP .49 invariato). Un rollback a uno snapshot precedente al 19:32 riporta la Deck sui 2,4 GHz, ancora raggiungibile. Una reinstallazione spegne LLMNR e preferisce i 5 GHz, ma il profilo 5 GHz va ricreato con prefer_5ghz. La password resta sulla Deck in file root 600, mai stampata (INV-6). Nessun effetto su snapshot, schermo, ssh. — 2026-10-25 19:35

@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-25 19:02",
-  "updated": "2026-10-25 19:15",
+  "updated": "2026-10-25 19:35",
   "objectives": [
     {
       "id": "O4",
@@ -28,10 +28,10 @@
           "title": "Azioni di rete con anteprima e rete di sicurezza: LLMNR e banda Wi-Fi",
           "scope": "deck/, configurazione di rete sulla Deck, install/install.sh",
           "gate_pre": "Con anteprima e conferma: LLMNR spento (porta 5355 non più in ascolto) e Wi-Fi sulla banda a 5 GHz se la rete di casa la offre, altrimenti azione non disponibile con il motivo; snapshot prima; ripristino automatico se dopo la modifica la Deck non è raggiungibile, provato; ssh agentdeck funziona; correzioni riportate in install/install.sh.",
-          "gate_post": "",
-          "state": "todo",
-          "risk": null,
-          "risk_why": "",
+          "gate_post": "deck network: llmnr_off/on e prefer_5ghz con ritorno automatico, provati dal vivo; Deck sui 5 GHz anche dopo riavvio, ssh ok, 11/11, 100 test",
+          "state": "done",
+          "risk": 45,
+          "risk_why": "Cambia la rete della Deck, che è il canale dell'agente (INV-1): LLMNR è a basso rischio, il passaggio a un'altra rete Wi-Fi può far perdere il collegamento o cambiare IP. Mitigazioni: snapshot prima, verifica dopo ogni modifica, e per il Wi-Fi un ritorno automatico ai 2,4 GHz se entro pochi minuti l'agente non conferma di raggiungere la Deck.",
           "docs": []
         }
       ]
@@ -134,10 +134,11 @@
       "id": "R2",
       "objective": "O4",
       "title": "Password della rete Wi-Fi a 5 GHz WINDTRE - 2065D6 - 5Ghz, da scrivere in secrets/wifi.env (WIFI_5G_PASS) o confermare che è uguale a quella a 2,4 GHz",
-      "state": "open",
+      "state": "resolved",
       "doc": "",
       "dettaglio": "",
-      "created": "2026-10-25 19:15"
+      "created": "2026-10-25 19:15",
+      "resolved": "2026-10-25 19:17"
     }
   ],
   "notes": [
@@ -147,21 +148,35 @@
       "text": "Scoperto in O4.T1 (25/10): il router non trasmette la rete di casa su due bande con lo stesso nome; i 5 GHz sono una rete distinta, WINDTRE - 2065D6 - 5Ghz (BSSID 58:4b:bc:20:65:d7, segnale -20 dBm, canale 5500 MHz). prefer_5ghz quindi significa collegarsi a un'altra rete: serve la sua password (richiesta R2); tenere il profilo a 2,4 GHz come riserva e tornarci da soli se dopo il cambio la Deck non è raggiungibile.",
       "docs": [],
       "created": "2026-10-25 19:15"
+    },
+    {
+      "id": "N12",
+      "task": "O4.T2",
+      "text": "Avanzamento O4.T2 (25/10, 19:31): llmnr_off provato dal vivo (snapshot 20 e 21, porta 5355 chiusa, DNS e mDNS ok, llmnr_on riapre la porta). prefer_5ghz: primo tentativo fallito subito, iwd non vedeva la rete (P12, corretto con scansione di iwd); secondo tentativo sui 5 GHz in 12 s, stesso IP .49, SSH ok, stessa password; senza conferma il ritorno è scattato a 180 s. Manca la prova con keep_5ghz.",
+      "docs": [],
+      "created": "2026-10-25 19:31"
+    },
+    {
+      "id": "N13",
+      "task": "O4.T2",
+      "text": "Valutazione d'impatto O4.T2: INV-1 retto (profilo 2,4 GHz tenuto come riserva, ritorno automatico provato, riavvio Deck ok in 30 s, IP .49 invariato). Un rollback a uno snapshot precedente al 19:32 riporta la Deck sui 2,4 GHz, ancora raggiungibile. Una reinstallazione spegne LLMNR e preferisce i 5 GHz, ma il profilo 5 GHz va ricreato con prefer_5ghz. La password resta sulla Deck in file root 600, mai stampata (INV-6). Nessun effetto su snapshot, schermo, ssh.",
+      "docs": [],
+      "created": "2026-10-25 19:35"
     }
   ],
   "active": {
     "objective": "O4",
     "task": "",
-    "phase": "idle",
+    "phase": "objective_gate_pending",
     "risk": null,
     "risk_why": "",
     "hold_invariants": "",
     "hold_plan": ""
   },
   "previous": {
-    "task": "O4.T1",
+    "task": "O4.T2",
     "state": "done",
-    "note": "deck network: 11/11 valori uguali a ip, iw, resolvectl, ss; rete sorella a 5 GHz riconosciuta; avvisi di status puntano a /network; 80 test."
+    "note": "deck network: llmnr_off/on e prefer_5ghz con ritorno automatico, provati dal vivo; Deck sui 5 GHz anche dopo riavvio, ssh ok, 11/11, 100 test"
   },
   "cycle": {
     "n": 2,
@@ -172,6 +187,6 @@
     "objective": 7,
     "cycle": 2,
     "request": 2,
-    "note": 11
+    "note": 13
   }
 }

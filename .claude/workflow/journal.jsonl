@@ -458,3 +458,61 @@
 {"at": "2026-10-25 19:15", "testo": "VERSIONE 0.2.1 (O4.T1)"}
 {"at": "2026-10-25 19:15", "testo": "[-] bash: bash -c 'b=0; for f in README.md PRINCIPI.md CHANGELOG.md docs/*.md; do d=$(dirname \"$f\"); for l in $(grep -oE"}
 {"at": "2026-10-25 19:15", "testo": "[-] Edit  CHANGELOG.md", "task": "-", "tipo": "file", "tool": "Edit", "file": "CHANGELOG.md"}
+{"at": "2026-10-25 19:15", "testo": "[-] bash: printf '0.2.1\\n' > VERSION && git add -A && git commit -q -F - <<'EOF' Versione 0.2.1: componente deck network"}
+{"at": "2026-10-25 19:17", "testo": "RICHIESTA R2 risolta"}
+{"at": "2026-10-25 19:17", "testo": "TASK APERTA O4.T2 — Azioni di rete con anteprima e rete di sicurezza: LLMNR e banda Wi-Fi | perimetro: deck/, configurazione di rete sulla Deck, install/install.sh | gate: Con anteprima e conferma: LLMNR spento (porta 5355 non più in ascolto) e Wi-Fi sulla banda a 5 GHz se la rete di casa la offre, altrimenti azione non disponibile con il motivo; snapshot prima; ripristino automatico se dopo la modifica la Deck non è raggiungibile, provato; ssh agentdeck funziona; correzioni riportate in install/install.sh. | rischio: 45"}
+{"at": "2026-10-25 19:17", "testo": "[O4.T2] bash: ~/claude-rules/bin/wf.sh req-resolve R2 2>&1 | head -1; ~/claude-rules/bin/wf.sh task-start --id O4.T2 --risk "}
+{"at": "2026-10-25 19:18", "testo": "[O4.T2] bash: ssh -o BatchMode=yes agentdeck 'echo \"iwd: $(pacman -Q iwd)\"; man -P cat iwd.config 2>/dev/null | grep -iE -A3"}
+{"at": "2026-10-25 19:18", "testo": "[O4.T2] Write  deck/agentdeck/wifi_switch.py", "task": "O4.T2", "tipo": "file", "tool": "Write", "file": "deck/agentdeck/wifi_switch.py"}
+{"at": "2026-10-25 19:19", "testo": "[O4.T2] Edit  deck/agentdeck/system.py", "task": "O4.T2", "tipo": "file", "tool": "Edit", "file": "deck/agentdeck/system.py"}
+{"at": "2026-10-25 19:19", "testo": "[O4.T2] Write  deck/agentdeck/components/network.py", "task": "O4.T2", "tipo": "file", "tool": "Write", "file": "deck/agentdeck/components/network.py"}
+{"at": "2026-10-25 19:21", "testo": "[O4.T2] bash: cd /Users/snj/linuxai-steamdeck/deck && grep -n \"^def \\|^class \\|^    def \" agentdeck/protocol.py agentdeck/en"}
+{"at": "2026-10-25 19:22", "testo": "[O4.T2] bash: sed -n 130,200p agentdeck/protocol.py; grep -n \"Preview(\" -A 12 agentdeck/components/snapshot.py | head -40; g"}
+{"at": "2026-10-25 19:22", "testo": "[O4.T2] bash: grep -rn \"snapshot_create(\\|description=\" agentdeck/ | grep -v \"def \\|param(\" | head; grep -n \"def llmnr_set\\|"}
+{"at": "2026-10-25 19:22", "testo": "[O4.T2] bash: grep -n \"LLMNR\\|5355\\|WIFI_BAND\\|network_alerts\\|from .network\" -B2 -A6 agentdeck/components/status.py | head "}
+{"at": "2026-10-25 19:23", "testo": "[O4.T2] bash: python3 - <<'EOF' from pathlib import Path p = Path(\"agentdeck/system.py\") s = p.read_text() old = '''def wifi"}
+{"at": "2026-10-25 19:23", "testo": "[O4.T2] bash: python3 - <<'EOF' from pathlib import Path p = Path(\"agentdeck/components/network.py\") s = p.read_text() reps "}
+{"at": "2026-10-25 19:23", "testo": "[O4.T2] bash: python3 - <<'EOF' from pathlib import Path p = Path(\"agentdeck/wifi_switch.py\") s = p.read_text() old = '''   "}
+{"at": "2026-10-25 19:23", "testo": "[O4.T2] bash: grep -n \"confirm=\\|token\" tests/test_snapshot.py | head -10"}
+{"at": "2026-10-25 19:24", "testo": "[O4.T2] bash: python3 - <<'EOF' from pathlib import Path p = Path(\"tests/test_network.py\") s = p.read_text() reps = [ ('''\"\""}
+{"at": "2026-10-25 19:24", "testo": "[O4.T2] bash: cd /Users/snj/linuxai-steamdeck && grep -n \"resolved\\|mdns\\|MulticastDNS\\|iwd\\|SendRelease\" install/install.sh"}
+{"at": "2026-10-25 19:24", "testo": "[O4.T2] Edit  install/install.sh", "task": "O4.T2", "tipo": "file", "tool": "Edit", "file": "install/install.sh"}
+{"at": "2026-10-25 19:24", "testo": "[O4.T2] bash: ./deck/install.sh 2>&1 | tail -15"}
+{"at": "2026-10-25 19:24", "testo": "[O4.T2] bash: ssh -o BatchMode=yes agentdeck 'deck network | python3 -c \" import json,sys; s=json.load(sys.stdin) print(\\\"ac"}
+{"at": "2026-10-25 19:25", "testo": "[O4.T2] bash: ssh -o BatchMode=yes agentdeck 't=$(deck network llmnr_off | python3 -c \"import json,sys; print(json.load(sys."}
+{"at": "2026-10-25 19:25", "testo": "[O4.T2] bash: ssh -o BatchMode=yes agentdeck 'deck network llmnr_on | python3 -c \"import json,sys; s=json.load(sys.stdin); p"}
+{"at": "2026-10-25 19:25", "testo": "[O4.T2] bash: ssh -o BatchMode=yes agentdeck 'deck network scan | python3 -c \" import json,sys; s=json.load(sys.stdin); c=s["}
+{"at": "2026-10-25 19:26", "testo": "[O4.T2] bash: cat > /private/tmp/claude-502/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/scratchpad/wat"}
+{"at": "2026-10-25 19:26", "testo": "[O4.T2] bash: /private/tmp/claude-502/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/scratchpad/watch-swi"}
+{"at": "2026-10-25 19:26", "testo": "[O4.T2] bash: grep -n \"^#\\|network\\|LLMNR\\|O4.T2\" docs/deck.md | head -60"}
+{"at": "2026-10-25 19:26", "testo": "[O4.T2] bash: python3 - <<'EOF' from pathlib import Path p = Path(\"docs/deck.md\") s = p.read_text() old = '''`deck status` u"}
+{"at": "2026-10-25 19:26", "testo": "[O4.T2] bash: ssh -o BatchMode=yes -o ConnectTimeout=5 agentdeck 'sudo journalctl -u agentdeck-wifi-switch --since \"19:25\" -"}
+{"at": "2026-10-25 19:26", "testo": "[O4.T2] bash: ssh -o BatchMode=yes -o ConnectTimeout=5 agentdeck 'sudo iwctl station wlan0 get-networks 2>&1 | sed \"s/\\x1b\\["}
+{"at": "2026-10-25 19:27", "testo": "[O4.T2] bash: cd /Users/snj/linuxai-steamdeck/deck && python3 - <<'EOF' from pathlib import Path p = Path(\"agentdeck/wifi_sw"}
+{"at": "2026-10-25 19:27", "testo": "TRAPPOLA registrata: iwctl station wlan0 connect <rete> fallisce subito e iwd non registra tentativi -> iwctl si collega solo a reti viste da una scansione di iwd, non a quelle trovate da iw dev wlan0 scan (deck network scan) -> prima iwctl station wlan0 scan, poi aspettare che la rete compaia in get-networks (nome esatto) e solo allora connect."}
+{"at": "2026-10-25 19:27", "testo": "[O4.T2] bash: ~/claude-rules/bin/wf.sh pitfall \"iwctl station wlan0 connect <rete> fallisce subito e iwd non registra tentat"}
+{"at": "2026-10-25 19:27", "testo": "[O4.T2] bash: cd /Users/snj/linuxai-steamdeck && ./deck/install.sh 2>&1 | grep -E \"Ran |OK|FAIL|Error\" | head -5; ssh -o Bat"}
+{"at": "2026-10-25 19:28", "testo": "[O4.T2] bash: ssh -o BatchMode=yes agentdeck 'deck network scan >/dev/null; t=$(deck network prefer_5ghz | python3 -c \"impor"}
+{"at": "2026-10-25 19:28", "testo": "[O4.T2] bash: /private/tmp/claude-502/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/scratchpad/watch-swi"}
+{"at": "2026-10-25 19:28", "testo": "[O4.T2] bash: grep -n \"LLMNR\\|5 GHz\\|5Ghz\\|2,4 GHz\\|mdns.conf\\|resolved.conf.d\\|iwd\" docs/installazione.md docs/hardware.md "}
+{"at": "2026-10-25 19:28", "testo": "[O4.T2] bash: python3 - <<'EOF' from pathlib import Path p = Path(\"docs/installazione.md\") s = p.read_text() old = '''  - `i"}
+{"at": "2026-10-25 19:28", "testo": "[O4.T2] bash: grep -n \"Wi-Fi\\|wifi\" docs/accesso.md | head -10"}
+{"at": "2026-10-25 19:28", "testo": "[O4.T2] bash: date +%T; ssh -o BatchMode=yes -o ConnectTimeout=5 -o ServerAliveInterval=3 -o ServerAliveCountMax=2 agentdeck"}
+{"at": "2026-10-25 19:28", "testo": "[O4.T2] bash: git tag --sort=-v:refname | head -2; git ls-remote --tags origin 2>/dev/null | tail -2; ~/claude-rules/bin/wf."}
+{"at": "2026-10-25 19:31", "testo": "[O4.T2] bash: cat /private/tmp/claude-502/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/tasks/bx09bkk9g."}
+{"at": "2026-10-25 19:31", "testo": "ANNOTAZIONE N12 su O4.T2 — Avanzamento O4.T2 (25/10, 19:31): llmnr_off provato dal vivo (snapshot 20 e 21, porta 5355 chiusa, DNS e mDNS ok, llmnr_on riapre la porta). prefer_5ghz: primo tentativo fallito subito, iwd non vedeva la rete (P12, corretto con scansione di iwd); secondo tentativo sui 5 GHz in 12 s, stesso IP .49, SSH ok, stessa password; senza conferma il ritorno è scattato a 180 s. Manca la prova con keep_5ghz."}
+{"at": "2026-10-25 19:31", "testo": "[O4.T2] bash: ~/claude-rules/bin/wf.sh note-add --text \"Avanzamento O4.T2 (25/10, 19:31): llmnr_off provato dal vivo (snapsh"}
+{"at": "2026-10-25 19:32", "testo": "[O4.T2] bash: ssh -o BatchMode=yes agentdeck 'sudo ls /var/lib/iwd/; sudo journalctl -u agentdeck-wifi-switch --since \"19:27"}
+{"at": "2026-10-25 19:32", "testo": "[O4.T2] bash: for i in $(seq 1 12); do s=$(ssh -o BatchMode=yes -o ConnectTimeout=4 -o ServerAliveInterval=3 -o ServerAliveC"}
+{"at": "2026-10-25 19:32", "testo": "[O4.T2] bash: ssh -o BatchMode=yes agentdeck 'sudo systemd-run --quiet --collect --unit=agentdeck-iwd-guard --on-active=120 "}
+{"at": "2026-10-25 19:33", "testo": "[O4.T2] bash: ssh -o BatchMode=yes agentdeck 'sudo systemctl stop agentdeck-iwd-guard.timer; systemctl list-timers agentdeck"}
+{"at": "2026-10-25 19:33", "testo": "[O4.T2] bash: ssh -o BatchMode=yes agentdeck 'deck status | python3 -c \"import json,sys; s=json.load(sys.stdin); print(\\\"sta"}
+{"at": "2026-10-25 19:34", "testo": "[O4.T2] bash: cd /Users/snj/linuxai-steamdeck/deck && sed -n 25,60p tests/live_network_check.py; ssh -o BatchMode=yes agentd"}
+{"at": "2026-10-25 19:34", "testo": "[O4.T2] bash: python3 - <<'EOF' from pathlib import Path p = Path(\"agentdeck/components/network.py\") s = p.read_text() old ="}
+{"at": "2026-10-25 19:34", "testo": "[O4.T2] bash: cd /Users/snj/linuxai-steamdeck && ./deck/install.sh 2>&1 | grep -E \"^Ran |^OK|FAIL\" | head -4; ssh -o BatchMo"}
+{"at": "2026-10-25 19:34", "testo": "[O4.T2] bash: python3 - <<'EOF' from pathlib import Path p = Path(\"docs/hardware.md\") s = p.read_text() old = '''| Wi-Fi | R"}
+{"at": "2026-10-25 19:35", "testo": "[O4.T2] bash: cat .claude/workflow/.stop-guard | head -5; echo; grep -n \"stop-guard\" .gitignore .claude/workflow/.gitignore "}
+{"at": "2026-10-25 19:35", "testo": "ANNOTAZIONE N13 su O4.T2 — Valutazione d'impatto O4.T2: INV-1 retto (profilo 2,4 GHz tenuto come riserva, ritorno automatico provato, riavvio Deck ok in 30 s, IP .49 invariato). Un rollback a uno snapshot precedente al 19:32 riporta la Deck sui 2,4 GHz, ancora raggiungibile. Una reinstallazione spegne LLMNR e preferisce i 5 GHz, ma il profilo 5 GHz va ricreato con prefer_5ghz. La password resta sulla Deck in file root 600, mai stampata (INV-6). Nessun effetto su snapshot, schermo, ssh."}
+{"at": "2026-10-25 19:35", "testo": "TASK CHIUSA O4.T2 — completata: deck network: llmnr_off/on e prefer_5ghz con ritorno automatico, provati dal vivo; Deck sui 5 GHz anche dopo riavvio, ssh ok, 11/11, 100 test"}
+{"at": "2026-10-25 19:35", "testo": "VERSIONE 0.2.2 (O4.T2)"}
+{"at": "2026-10-25 19:35", "testo": "[-] bash: ~/claude-rules/bin/wf.sh note-add --text \"Valutazione d'impatto O4.T2: INV-1 retto (profilo 2,4 GHz tenuto com"}

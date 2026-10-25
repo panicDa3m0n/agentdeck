@@ -77,8 +77,13 @@ perché dopo un rollback l'id cambia.
 - **Utente `agent`:** gruppo `wheel`, sudo senza password (`/etc/sudoers.d/10-agent`), accesso solo con chiave. Root bloccato.
 - **SSH** (`/etc/ssh/sshd_config.d/10-agentdeck.conf`): niente password. All'installazione root è ammesso con chiave come riserva per il primo avvio; `post-install.sh` lo disattiva.
 - **Rete:**
-  - `iwd` per il Wi-Fi, con il profilo copiato dal sistema live;
+  - `iwd` per il Wi-Fi, con il profilo copiato dal sistema live e la preferenza per i 5 GHz
+    (`/etc/iwd/main.conf`, `[Rank] BandModifier5GHz=1.5`);
   - `systemd-networkd` per il DHCP, `systemd-resolved` per il DNS e mDNS (`agentdeck.local`);
+  - LLMNR spento (`/etc/systemd/resolved.conf.d/20-agentdeck-llmnr.conf`): non serve e ascolterebbe sulla
+    porta 5355 di tutta la LAN. Sono le stesse impostazioni di `deck network llmnr_off` e `prefer_5ghz`
+    ([deck.md](deck.md)). Il profilo della rete a 5 GHz di casa invece non viene copiato: dopo una
+    reinstallazione lo crea `deck network prefer_5ghz`;
   - `SendRelease=no` nei file `.network`, così il router riassegna sempre lo stesso IP;
   - un file per il cavo (metrica 100) e uno per il Wi-Fi (metrica 600).
 - **Memoria e alimentazione:** zram pari a metà della RAM con zstd; sospensione e ibernazione disattivate (`systemctl mask`).

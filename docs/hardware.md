@@ -12,7 +12,7 @@ Indice: [README.md](README.md).
 | RAM | 16 GB (circa 14 GiB visibili al sistema) | Una parte è riservata alla GPU |
 | Disco di sistema | NVMe **WD PC SN740 SDDPTQE-2T00, 2 TB** | Sostituito rispetto all'originale; SMART OK, praticamente nuovo |
 | microSD | 1 TB (928 GB utili) | **Non toccata** (decisione del 25/10): contiene ancora un layout da Windows (EFI, MSR, NTFS) |
-| Wi-Fi | Realtek RTL8822CE (802.11ac) | Oggi collegata a 2,4 GHz (2437 MHz), segnale circa -30 dBm. Il router di casa trasmette i 5 GHz come **rete distinta**, "… - 5Ghz" (5500 MHz, circa -20 dBm), non con lo stesso nome |
+| Wi-Fi | Realtek RTL8822CE (802.11ac) | Collegata ai 5 GHz (5500 MHz, segnale circa -26 dBm, 585 Mbit/s in trasmissione contro i 144 dei 2,4 GHz) dal 25/10 con `deck network prefer_5ghz`. Il router di casa trasmette i 5 GHz come **rete distinta**, "… - 5Ghz", con la stessa password; la rete a 2,4 GHz resta come riserva. IP invariato |
 | Schermo | eDP 800×1280, montato in verticale | La console Linux appare già in orizzontale |
 | Ventola | Gestita dal firmware della Deck | Linux non ne legge i giri: nessun sensore `fan` in hwmon |
 | Batteria | `BAT1`, alimentatore `ACAD` | La Deck resta sempre collegata alla corrente |
@@ -39,6 +39,5 @@ Temperatura a riposo: circa 43-44 °C (APU e NVMe).
 
 ## Da sistemare più avanti
 
-- Wi-Fi a 5 GHz invece di 2,4 GHz.
 - Controllo della ventola e lettura dei giri.
 - Limite di carica della batteria, visto che la Deck resta sempre in carica.

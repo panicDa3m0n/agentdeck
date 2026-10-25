@@ -55,6 +55,11 @@
       "id": "P11",
       "testo": "Cercare la rete di casa per nome con grep o awk trova anche WINDTRE - 2065D6 - 5Ghz -> il router usa un nome distinto per i 5 GHz che inizia come quello a 2,4 GHz -> confrontare il nome esatto (riga SSID del blocco BSS), mai il prefisso.",
       "creata": "2026-10-25 19:15"
+    },
+    {
+      "id": "P12",
+      "testo": "iwctl station wlan0 connect <rete> fallisce subito e iwd non registra tentativi -> iwctl si collega solo a reti viste da una scansione di iwd, non a quelle trovate da iw dev wlan0 scan (deck network scan) -> prima iwctl station wlan0 scan, poi aspettare che la rete compaia in get-networks (nome esatto) e solo allora connect.",
+      "creata": "2026-10-25 19:27"
     }
   ]
 }

@@ -4,6 +4,24 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.2.2 — 2026-10-25
+
+Ciclo 02, task O4.T2: azioni di rete con anteprima e rete di sicurezza.
+
+- `deck network llmnr_off` (con anteprima, snapshot e verifica di DNS e mDNS) e `llmnr_on` per tornare
+  indietro. LLMNR è spento sulla Deck: la porta 5355 non è più in ascolto sulla LAN.
+- `deck network prefer_5ghz` passa alla rete a 5 GHz dello stesso router, copiando sulla Deck la password
+  della rete attuale senza mostrarla. Il cambio gira in un'unità a parte e torna da solo alla rete di prima
+  senza un indirizzo entro 1 minuto o senza `deck network keep_5ghz` entro 3 minuti.
+- Provato sulla Deck:
+  - ritorno automatico senza conferma, 5 secondi dopo la scadenza;
+  - cambio confermato, con riavvio di iwd e riavvio della Deck: resta sui 5 GHz, IP .49, `ssh agentdeck` ok;
+  - 585 Mbit/s in trasmissione contro 144.
+- Trovato e corretto: iwd si collega solo a reti viste da una sua scansione (P12). Le reti nascoste del
+  router non contano più come reti sorelle.
+- `install/install.sh` spegne LLMNR e dà a iwd la preferenza per i 5 GHz. Controllo dal vivo 11 su 11;
+  100 test.
+
 ## 0.2.1 — 2026-10-25
 
 Ciclo 02, task O4.T1: componente `deck network` (riprende N8).

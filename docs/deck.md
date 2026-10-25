@@ -50,9 +50,50 @@ primo o nell'ultimo byte (`same_router_bssid`), oppure da un nome che inizia com
 | `WIFI_BAND_2G` | warning | `prefer_5ghz` se si vedono i 5 GHz della stessa rete o di una rete sorella, altrimenti `scan` |
 | `LLMNR_LISTENING` | info | `llmnr_off` |
 
-`deck status` usa gli stessi codici e rimanda a `/network`. Le azioni `llmnr_off` e `prefer_5ghz` compaiono
-come non disponibili finché non arrivano anteprima e rete di sicurezza (task O4.T2). SSID e nomi di rete
-sono testo esterno: stanno solo nei dati (INV-4).
+`deck status` usa gli stessi codici e rimanda a `/network`. SSID e nomi di rete sono testo esterno: stanno
+solo nei dati (INV-4), anche nelle anteprime (`data.target`, `data.fallback`).
+
+#### Azioni che cambiano la rete
+
+| Azione | Effetto | Disponibile quando | Cosa fa |
+|---|---|---|---|
+| `llmnr_off` | destructive | LLMNR è acceso | Snapshot, drop-in `/etc/systemd/resolved.conf.d/20-agentdeck-llmnr.conf` con `LLMNR=no`, riavvio di resolved |
+| `llmnr_on` | safe | LLMNR è spento | Toglie il drop-in e riavvia resolved: è l'annullamento di `llmnr_off` |
+| `prefer_5ghz` | destructive | Wi-Fi a 2,4 GHz, una rete a 5 GHz dello stesso router nella scansione, nessun cambio in corso | Snapshot, poi il cambio di rete con ritorno automatico (sotto) |
+| `keep_5ghz` | safe | Un cambio aspetta la conferma | Conferma che la Deck è raggiungibile sulla nuova rete |
+
+Dopo `llmnr_off` e `llmnr_on` `deck` verifica subito, per al massimo 5 secondi: stato di LLMNR (porta 5355
+e impostazione globale), mDNS sull'interfaccia di default, una query DNS. Se la verifica non passa rimette
+l'impostazione precedente e risponde `FAILED`.
+
+Il **cambio Wi-Fi** gira come root nell'unità transitoria `agentdeck-wifi-switch`
+([../deck/agentdeck/wifi_switch.py](../deck/agentdeck/wifi_switch.py)), staccata dalla sessione SSH che il
+cambio interrompe:
+
+1. se la rete di destinazione non ha un profilo iwd, lo crea copiando solo la `Passphrase` dal profilo della
+   rete attuale. Le chiavi SAE-PT dipendono dal nome della rete e non si copiano; la password non viene mai
+   stampata. Se il profilo attuale non ha una password, l'anteprima risponde `NOT_AVAILABLE`;
+2. si collega alla destinazione e aspetta fino a 60 secondi l'SSID giusto, un IPv4 e il gateway che risponde
+   al ping;
+3. scrive lo stato `awaiting_confirmation` e aspetta fino a 3 minuti `deck network keep_5ghz`, che crea
+   `/run/agentdeck/wifi-keep`;
+4. con la conferma scrive `/etc/iwd/main.conf` con `[Rank] BandModifier5GHz=1.5` (iwd preferisce i 5 GHz);
+   senza conferma, senza indirizzo o per qualunque errore torna alla rete di prima e toglie il profilo
+   creato. Se il ritorno non dà un indirizzo riavvia iwd, che si ricollega da solo a una rete nota.
+
+Lo stato di ogni passo sta in `/var/lib/agentdeck/wifi-switch.json` e compare in `data.wifi_switch`:
+`switching`, `awaiting_confirmation`, `kept`, `reverted` (con `reason`), `failed`. Un cambio "in corso" la
+cui unità non è più attiva (riavvio, errore) vale `interrupted`.
+
+| Avviso | Livello | Quando |
+|---|---|---|
+| `WIFI_SWITCH_PENDING` | critical | Un cambio aspetta `keep_5ghz`: senza conferma la Deck torna indietro |
+| `WIFI_SWITCH_REVERTED` | warning | L'ultimo cambio non si è concluso (`reverted`, `failed`, `interrupted`) |
+
+Sequenza per l'agente: `deck network scan`, poi `deck network prefer_5ghz` per l'anteprima, poi la conferma.
+Dopo circa 20 secondi ci si ricollega con `ssh agentdeck` (se l'IP è cambiato:
+`dns-sd -G v4 agentdeck.local` dal Mac), si controlla `deck network` e si conferma con
+`deck network keep_5ghz`.
 
 Il controllo dal vivo confronta ogni valore con `ip`, `iw`, `resolvectl` e `ss`:
 
@@ -174,10 +215,11 @@ hanno ancora un'azione collegata.
 | [../deck/agentdeck/confirm.py](../deck/agentdeck/confirm.py) | Codici di conferma: una azione, quei parametri, 5 minuti, una volta sola |
 | [../deck/agentdeck/components/](../deck/agentdeck/components/__init__.py) | Un modulo per componente; l'elenco dei componenti attivi è in `__init__.py` |
 | [../deck/agentdeck/system.py](../deck/agentdeck/system.py) | Letture dello stato della Deck da `/proc`, `/sys` e comandi; parser puri |
+| [../deck/agentdeck/wifi_switch.py](../deck/agentdeck/wifi_switch.py) | Cambio Wi-Fi con ritorno automatico, eseguito come root in un'unità transitoria |
 | [../deck/tests/test_deck.py](../deck/tests/test_deck.py) | Test di conformità, iniezione, parametri, conferme, guasti |
 | [../deck/tests/test_status.py](../deck/tests/test_status.py) | Test di `/status`: parser su output reali, avvisi, nomi esterni nei soli dati |
 | [../deck/tests/test_snapshot.py](../deck/tests/test_snapshot.py) | Test di `/snapshot`: elenco, creazione, rollback, rifiuti di sicurezza, guasti |
-| [../deck/tests/test_network.py](../deck/tests/test_network.py) | Test di `/network`: scansione, reti sorelle, risoluzione dei nomi, avvisi, SSID malevoli |
+| [../deck/tests/test_network.py](../deck/tests/test_network.py) | Test di `/network`: scansione, reti sorelle, avvisi, SSID malevoli, LLMNR, cambio Wi-Fi, profili iwd |
 | [../deck/tests/live_network_check.py](../deck/tests/live_network_check.py) | Controllo dal vivo di `deck network` contro `ip`, `iw`, `resolvectl`, `ss` |
 | [../deck/tests/live_status_check.py](../deck/tests/live_status_check.py) | Controllo dal vivo sulla Deck: ogni valore di `deck status` contro una lettura indipendente |
 | [../deck/install.sh](../deck/install.sh) | Installazione e aggiornamento sulla Deck, schermo compreso |

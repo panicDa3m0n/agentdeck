@@ -311,6 +311,59 @@ def name_resolution() -> Optional[dict]:
     return parse_resolvectl(text) if text else None
 
 
+LLMNR_DROPIN = "/etc/systemd/resolved.conf.d/20-agentdeck-llmnr.conf"
+WIFI_SWITCH_STATE = Path("/var/lib/agentdeck/wifi-switch.json")
+WIFI_KEEP_FLAG = "/run/agentdeck/wifi-keep"
+WIFI_SWITCH_SCRIPT = Path(__file__).resolve().parent / "wifi_switch.py"
+WIFI_SWITCH_UNIT = "agentdeck-wifi-switch"
+
+
+def llmnr_set(enabled: bool) -> None:
+    """Accende o spegne LLMNR con un drop-in di systemd-resolved, poi lo riavvia. mDNS non cambia."""
+    if enabled:
+        run_checked(["rm", "-f", LLMNR_DROPIN])
+    else:
+        run_checked(["install", "-d", "/etc/systemd/resolved.conf.d"])
+        run_checked(["sh", "-c", f"printf '[Resolve]\\nLLMNR=no\\n' > {LLMNR_DROPIN}"])
+    run_checked(["systemctl", "restart", "systemd-resolved"])
+
+
+def dns_works(name: str = "archlinux.org") -> bool:
+    return run(["resolvectl", "query", "--legend=no", name], timeout=10) is not None
+
+
+def iwd_profile_has_passphrase(ssid: str) -> bool:
+    """Vero se il profilo iwd della rete contiene una Passphrase; la password non viene letta qui."""
+    from .wifi_switch import profile_name
+    out = run(["grep", "-c", "^Passphrase=", f"/var/lib/iwd/{profile_name(ssid)}"], sudo=True)
+    return bool(out) and out.strip() != "0"
+
+
+def wifi_switch_state() -> Optional[dict]:
+    """Lo stato dell'ultimo cambio Wi-Fi. Un cambio "in corso" la cui unità non è più attiva (riavvio, errore)
+    vale "interrupted"."""
+    try:
+        state = json.loads(WIFI_SWITCH_STATE.read_text())
+    except (OSError, ValueError):
+        return None
+    if state.get("state") in ("switching", "awaiting_confirmation") and \
+            run(["systemctl", "is-active", "--quiet", WIFI_SWITCH_UNIT]) is None:
+        state = dict(state, state="interrupted")
+    return state
+
+
+def wifi_switch_start(target: str, fallback: str) -> bool:
+    """Lancia il cambio Wi-Fi in un'unità transitoria, staccata dalla sessione SSH (vedi wifi_switch.py)."""
+    run(["systemctl", "reset-failed", WIFI_SWITCH_UNIT], sudo=True)
+    return run(["systemd-run", "--quiet", "--collect", f"--unit={WIFI_SWITCH_UNIT}", "/usr/bin/python3",
+                str(WIFI_SWITCH_SCRIPT), target, fallback], sudo=True) is not None
+
+
+def wifi_switch_keep() -> None:
+    run_checked(["install", "-d", "/run/agentdeck"])
+    run_checked(["touch", WIFI_KEEP_FLAG])
+
+
 def network() -> dict:
     addrs = json.loads(run(["ip", "-j", "-4", "addr"]) or "[]")
     interfaces = [{"name": a.get("ifname"), "state": (a.get("operstate") or "").lower() or None,

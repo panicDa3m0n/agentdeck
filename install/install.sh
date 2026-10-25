@@ -156,6 +156,11 @@ SendRelease=no
 EOF
   install -d "$MNT/etc/systemd/resolved.conf.d"
   printf '[Resolve]\nMulticastDNS=yes\n' > "$MNT/etc/systemd/resolved.conf.d/mdns.conf"
+  # LLMNR non serve (i nomi passano da mDNS) e ascolterebbe sulla porta 5355 di tutta la LAN: come deck network llmnr_off
+  printf '[Resolve]\nLLMNR=no\n' > "$MNT/etc/systemd/resolved.conf.d/20-agentdeck-llmnr.conf"
+  # iwd preferisce i 5 GHz quando una rete nota li offre: come deck network prefer_5ghz confermato
+  install -d "$MNT/etc/iwd"
+  printf '[Rank]\nBandModifier5GHz=1.5\n' > "$MNT/etc/iwd/main.conf"
   install -d -m 700 "$MNT/var/lib/iwd"
   cp -a /var/lib/iwd/*.psk "$MNT/var/lib/iwd/"
 
