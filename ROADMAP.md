@@ -10,10 +10,9 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O4` Rete gestita dall'agente: deck network — 2 task: 0 completate, 1 in corso, 1 da fare, 0 bloccate
-- **Task attiva:** `O4.T1` Componente network: interfacce, Wi-Fi, risoluzione dei nomi, porte (N8) — in corso · rischio 10/100
-- **Ultima task gestita:** —
-- **Fase:** `in_progress`
+- **Obiettivo attivo:** `O4` Rete gestita dall'agente: deck network — 2 task: 1 completate, 0 in corso, 1 da fare, 0 bloccate
+- **Task attiva:** —
+- **Ultima task gestita:** `O4.T1` — completata — deck network: 11/11 valori uguali a ip, iw, resolvectl, ss; rete sorella a 5 GHz riconosciuta; avvisi di status puntano a /network; 80 test.
 - **Ultimo aggiornamento:** 2026-10-25 19:15
 
 ## Richieste attive
@@ -29,8 +28,8 @@ _Mancanze di progetto che l'agente non può risolvere da solo. L'utente le confe
 **Gate obiettivo:** deck network mostra lo stato reale di rete, Wi-Fi e porte; gli avvisi di rete di deck status puntano ad azioni di deck network; LLMNR spento e banda Wi-Fi migliore disponibile applicati con anteprima e rete di sicurezza; ssh agentdeck funziona dopo ogni modifica (INV-1).
 **Richieste vincolanti:** `R2` Password della rete Wi-Fi a 5 GHz WINDTRE - 2065D6 - 5Ghz, da scrivere in secrets/wifi.env (WIFI_5G_PASS) o confermare che è uguale a quella a 2,4 GHz
 
-- [~] `O4.T1` Componente network: interfacce, Wi-Fi, risoluzione dei nomi, porte (N8) — *perimetro:* `deck/, componente network, componente status, docs/deck.md, docs/hardware.md`
-  *gate previsto:* deck network riporta interfacce, Wi-Fi collegato e reti visibili con le loro bande, stato di mDNS e LLMNR, porte in ascolto; ogni valore coincide con ip, iw, resolvectl e ss; gli avvisi WIFI_BAND_2G e LLMNR_LISTENING di deck status puntano alle azioni di deck network.
+- [x] `O4.T1` Componente network: interfacce, Wi-Fi, risoluzione dei nomi, porte (N8) — *perimetro:* `deck/, componente network, componente status, docs/deck.md, docs/hardware.md`
+  *gate previsto:* deck network riporta interfacce, Wi-Fi collegato e reti visibili con le loro bande, stato di mDNS e LLMNR, porte in ascolto; ogni valore coincide con ip, iw, resolvectl e ss; gli avvisi WIFI_BAND_2G e LLMNR_LISTENING di deck status puntano alle azioni di deck network. · *gate confermato:* ✔ deck network: 11/11 valori uguali a ip, iw, resolvectl, ss; rete sorella a 5 GHz riconosciuta; avvisi di status puntano a /network; 80 test.
   *rischio:* 10/100 — Componente in sola lettura: legge interfacce, Wi-Fi (con una scansione delle reti visibili), risoluzione dei nomi e porte; non cambia configurazione. Le azioni di rete compaiono come non disponibili fino a O4.T2.
 - [ ] `O4.T2` Azioni di rete con anteprima e rete di sicurezza: LLMNR e banda Wi-Fi — *perimetro:* `deck/, configurazione di rete sulla Deck, install/install.sh`
   *gate previsto:* Con anteprima e conferma: LLMNR spento (porta 5355 non più in ascolto) e Wi-Fi sulla banda a 5 GHz se la rete di casa la offre, altrimenti azione non disponibile con il motivo; snapshot prima; ripristino automatico se dopo la modifica la Deck non è raggiungibile, provato; ssh agentdeck funziona; correzioni riportate in install/install.sh.

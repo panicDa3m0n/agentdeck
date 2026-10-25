@@ -4,6 +4,17 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.2.1 — 2026-10-25
+
+Ciclo 02, task O4.T1: componente `deck network` (riprende N8).
+
+- Interfacce, Wi-Fi collegato e reti visibili per banda: cache del kernel nella schermata, scansione fresca
+  con `deck network scan` (circa 5 secondi).
+- Reti sorelle dello stesso router; DNS, mDNS e LLMNR da `resolvectl`; porte in ascolto.
+- Gli avvisi `WIFI_BAND_2G` e `LLMNR_LISTENING`, in `deck status` e `deck network`, puntano alle azioni di
+  `/network`, che restano non disponibili fino a O4.T2.
+- Scoperto: i 5 GHz di casa sono una rete distinta, "… - 5Ghz". Controllo dal vivo: 11 valori su 11; 80 test.
+
 ## 0.2.0 — 2026-10-25
 
 Chiusura del ciclo 01, "Prima interfaccia agentica: protocollo, stato e snapshot": 3 obiettivi, 12 task,

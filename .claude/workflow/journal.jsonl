@@ -454,3 +454,7 @@
 {"at": "2026-10-25 19:15", "testo": "[O4.T1] Edit  docs/deck.md", "task": "O4.T1", "tipo": "file", "tool": "Edit", "file": "docs/deck.md"}
 {"at": "2026-10-25 19:15", "testo": "[O4.T1] Edit  docs/hardware.md", "task": "O4.T1", "tipo": "file", "tool": "Edit", "file": "docs/hardware.md"}
 {"at": "2026-10-25 19:15", "testo": "[O4.T1] Edit  docs/deck.md", "task": "O4.T1", "tipo": "file", "tool": "Edit", "file": "docs/deck.md"}
+{"at": "2026-10-25 19:15", "testo": "TASK CHIUSA O4.T1 — completata: deck network: 11/11 valori uguali a ip, iw, resolvectl, ss; rete sorella a 5 GHz riconosciuta; avvisi di status puntano a /network; 80 test."}
+{"at": "2026-10-25 19:15", "testo": "VERSIONE 0.2.1 (O4.T1)"}
+{"at": "2026-10-25 19:15", "testo": "[-] bash: bash -c 'b=0; for f in README.md PRINCIPI.md CHANGELOG.md docs/*.md; do d=$(dirname \"$f\"); for l in $(grep -oE"}
+{"at": "2026-10-25 19:15", "testo": "[-] Edit  CHANGELOG.md", "task": "-", "tipo": "file", "tool": "Edit", "file": "CHANGELOG.md"}

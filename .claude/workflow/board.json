@@ -17,8 +17,8 @@
           "title": "Componente network: interfacce, Wi-Fi, risoluzione dei nomi, porte (N8)",
           "scope": "deck/, componente network, componente status, docs/deck.md, docs/hardware.md",
           "gate_pre": "deck network riporta interfacce, Wi-Fi collegato e reti visibili con le loro bande, stato di mDNS e LLMNR, porte in ascolto; ogni valore coincide con ip, iw, resolvectl e ss; gli avvisi WIFI_BAND_2G e LLMNR_LISTENING di deck status puntano alle azioni di deck network.",
-          "gate_post": "",
-          "state": "doing",
+          "gate_post": "deck network: 11/11 valori uguali a ip, iw, resolvectl, ss; rete sorella a 5 GHz riconosciuta; avvisi di status puntano a /network; 80 test.",
+          "state": "done",
           "risk": 10,
           "risk_why": "Componente in sola lettura: legge interfacce, Wi-Fi (con una scansione delle reti visibili), risoluzione dei nomi e porte; non cambia configurazione. Le azioni di rete compaiono come non disponibili fino a O4.T2.",
           "docs": []
@@ -151,17 +151,17 @@
   ],
   "active": {
     "objective": "O4",
-    "task": "O4.T1",
-    "phase": "in_progress",
-    "risk": 10,
-    "risk_why": "Componente in sola lettura: legge interfacce, Wi-Fi (con una scansione delle reti visibili), risoluzione dei nomi e porte; non cambia configurazione. Le azioni di rete compaiono come non disponibili fino a O4.T2.",
+    "task": "",
+    "phase": "idle",
+    "risk": null,
+    "risk_why": "",
     "hold_invariants": "",
     "hold_plan": ""
   },
   "previous": {
-    "task": "",
-    "state": "",
-    "note": ""
+    "task": "O4.T1",
+    "state": "done",
+    "note": "deck network: 11/11 valori uguali a ip, iw, resolvectl, ss; rete sorella a 5 GHz riconosciuta; avvisi di status puntano a /network; 80 test."
   },
   "cycle": {
     "n": 2,
