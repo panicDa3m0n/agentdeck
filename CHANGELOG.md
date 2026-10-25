@@ -4,6 +4,18 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.1.10 — 2026-10-25
+
+Ciclo 01, task O3.T5: sullo schermo della Deck anche la risposta di ogni comando (richiesta dell'utente).
+
+- Sotto ogni comando compare il suo output, con gli errori in rosso; le righe lunghe vanno a capo su al
+  massimo 3 righe; la risposta JSON di `deck` è sostituita dalla riga di esito.
+- Lo script di registrazione fa passare stdout e stderr da `tee`: chi lancia il comando riceve esattamente
+  gli stessi dati, codice di uscita compreso (verificato con dati binari a ogni installazione). Esclusi i
+  trasferimenti di file e le sessioni con terminale.
+- Rete di sicurezza estesa: le versioni precedenti dello script e della configurazione SSH tornano da sole
+  dopo 3 minuti se le prove falliscono.
+
 ## 0.1.9 — 2026-10-25
 
 Ciclo 01, task O3.T4: schermo della Deck come terminale dell'agente (richiesta dell'utente).

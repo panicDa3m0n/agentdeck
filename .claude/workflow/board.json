@@ -160,8 +160,8 @@
           "title": "Schermo della Deck: anche la risposta di ogni comando",
           "scope": "deck/screen/, deck/install.sh, deck/tests/, docs/schermo.md, README.md, docs/README.md",
           "gate_pre": "Sotto ogni comando lo schermo mostra il suo output (normale e, in rosso, gli errori), le risposte di deck riassunte, i trasferimenti di file esclusi; per chi esegue il comando stdout, stderr, codice di uscita e dati binari restano identici (verificato); ssh, scp e rsync funzionano; rete di sicurezza anche per lo script di registrazione; documentato.",
-          "gate_post": "",
-          "state": "doing",
+          "gate_post": "Schermo: comando e risposta (errori in rosso, deck riassunto); I/O, uscite e binari invariati verificati; rete di sicurezza estesa; 48 test.",
+          "state": "done",
           "risk": 35,
           "risk_why": "Lo script di registrazione passerà da tee l'output di ogni comando SSH dell'agente: tocca il percorso di input/output di tutti i comandi, quindi INV-1. Mitigazioni: trasferimenti e terminali interattivi esclusi, errori dello script non bloccanti, snapshot e ripristino automatico in 3 minuti se le prove falliscono.",
           "docs": []
@@ -237,18 +237,18 @@
   ],
   "active": {
     "objective": "O3",
-    "task": "O3.T5",
-    "phase": "in_progress",
-    "risk": 35,
-    "risk_why": "Lo script di registrazione passerà da tee l'output di ogni comando SSH dell'agente: tocca il percorso di input/output di tutti i comandi, quindi INV-1. Mitigazioni: trasferimenti e terminali interattivi esclusi, errori dello script non bloccanti, snapshot e ripristino automatico in 3 minuti se le prove falliscono.",
+    "task": "",
+    "phase": "idle",
+    "risk": null,
+    "risk_why": "",
     "hold_invariants": "",
     "hold_plan": "",
     "gate_done": ""
   },
   "previous": {
-    "task": "O3.T4",
+    "task": "O3.T5",
     "state": "done",
-    "note": "Schermo Deck: comandi agente ed esiti deck in tempo reale (verificato da /dev/vcsu1); snapshot 10; ssh, scp, rsync ok; docs/schermo.md."
+    "note": "Schermo: comando e risposta (errori in rosso, deck riassunto); I/O, uscite e binari invariati verificati; rete di sicurezza estesa; 48 test."
   },
   "cycle": {
     "n": 1,

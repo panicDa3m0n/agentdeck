@@ -10,10 +10,9 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O3` Primi componenti usati dall'agente: stato del sistema e snapshot — 5 task: 2 completate, 1 in corso, 2 da fare, 0 bloccate
-- **Task attiva:** `O3.T5` Schermo della Deck: anche la risposta di ogni comando — in corso · rischio 35/100
-- **Ultima task gestita:** `O3.T4` — completata — Schermo Deck: comandi agente ed esiti deck in tempo reale (verificato da /dev/vcsu1); snapshot 10; ssh, scp, rsync ok; docs/schermo.md.
-- **Fase:** `in_progress`
+- **Obiettivo attivo:** `O3` Primi componenti usati dall'agente: stato del sistema e snapshot — 5 task: 3 completate, 0 in corso, 2 da fare, 0 bloccate
+- **Task attiva:** —
+- **Ultima task gestita:** `O3.T5` — completata — Schermo: comando e risposta (errori in rosso, deck riassunto); I/O, uscite e binari invariati verificati; rete di sicurezza estesa; 48 test.
 - **Ultimo aggiornamento:** 2026-10-25 17:57
 
 ## Richieste attive
@@ -74,8 +73,8 @@ _nessuna richiesta in attesa._
   *gate previsto:* Al posto del login, sullo schermo della Deck un terminale mostra in tempo reale ogni comando eseguito dall'agente via SSH e l'esito delle chiamate a deck; verificato leggendo il contenuto della console; snapshot prima; ssh agentdeck, scp e rsync funzionano ancora (INV-1); documentato. · *gate confermato:* ✔ Schermo Deck: comandi agente ed esiti deck in tempo reale (verificato da /dev/vcsu1); snapshot 10; ssh, scp, rsync ok; docs/schermo.md.
   *rischio:* 35/100 — Tocca la configurazione SSH (solo SetEnv per l'utente agent, nessun cambio di autenticazione) e sostituisce il login su tty1 con un servizio: l'accesso SSH è l'unico canale (INV-1), quindi snapshot prima, sshd -t, e una rete di sicurezza che annulla da sola la modifica SSH dopo 3 minuti se non confermata dopo i test di ssh, scp e rsync.
   *annotazioni:* `N7`, `N9`
-- [~] `O3.T5` Schermo della Deck: anche la risposta di ogni comando — *perimetro:* `deck/screen/, deck/install.sh, deck/tests/, docs/schermo.md, README.md, docs/README.md`
-  *gate previsto:* Sotto ogni comando lo schermo mostra il suo output (normale e, in rosso, gli errori), le risposte di deck riassunte, i trasferimenti di file esclusi; per chi esegue il comando stdout, stderr, codice di uscita e dati binari restano identici (verificato); ssh, scp e rsync funzionano; rete di sicurezza anche per lo script di registrazione; documentato.
+- [x] `O3.T5` Schermo della Deck: anche la risposta di ogni comando — *perimetro:* `deck/screen/, deck/install.sh, deck/tests/, docs/schermo.md, README.md, docs/README.md`
+  *gate previsto:* Sotto ogni comando lo schermo mostra il suo output (normale e, in rosso, gli errori), le risposte di deck riassunte, i trasferimenti di file esclusi; per chi esegue il comando stdout, stderr, codice di uscita e dati binari restano identici (verificato); ssh, scp e rsync funzionano; rete di sicurezza anche per lo script di registrazione; documentato. · *gate confermato:* ✔ Schermo: comando e risposta (errori in rosso, deck riassunto); I/O, uscite e binari invariati verificati; rete di sicurezza estesa; 48 test.
   *rischio:* 35/100 — Lo script di registrazione passerà da tee l'output di ogni comando SSH dell'agente: tocca il percorso di input/output di tutti i comandi, quindi INV-1. Mitigazioni: trasferimenti e terminali interattivi esclusi, errori dello script non bloccanti, snapshot e ripristino automatico in 3 minuti se le prove falliscono.
 
 ## Annotazioni

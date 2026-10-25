@@ -335,3 +335,7 @@
 {"at": "2026-10-25 17:57", "testo": "PERIMETRO ESTESO su O3.T5 (+README.md)"}
 {"at": "2026-10-25 17:57", "testo": "PERIMETRO ESTESO su O3.T5 (+docs/README.md)"}
 {"at": "2026-10-25 17:57", "testo": "[O3.T5] bash: ~/claude-rules/bin/wf.sh scope-add \"README.md\" >/dev/null && ~/claude-rules/bin/wf.sh scope-add \"docs/README.m"}
+{"at": "2026-10-25 17:57", "testo": "TASK CHIUSA O3.T5 — completata: Schermo: comando e risposta (errori in rosso, deck riassunto); I/O, uscite e binari invariati verificati; rete di sicurezza estesa; 48 test."}
+{"at": "2026-10-25 17:57", "testo": "VERSIONE 0.1.10 (O3.T5)"}
+{"at": "2026-10-25 17:57", "testo": "[-] bash: git add -A && git commit -q -F - <<'EOF' Schermo della Deck: anche la risposta di ogni comando (O3.T5)  ssh-lo"}
+{"at": "2026-10-25 17:57", "testo": "[-] Edit  CHANGELOG.md", "task": "-", "tipo": "file", "tool": "Edit", "file": "CHANGELOG.md"}
