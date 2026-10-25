@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-25 23:48",
-  "updated": "2026-10-26 00:03",
+  "updated": "2026-10-26 00:15",
   "objectives": [
     {
       "id": "O10",
@@ -26,12 +26,12 @@
         {
           "id": "O10.T2",
           "title": "Accesso: abbonamento, sessione persistente e Remote Control (N22, N23)",
-          "scope": "configurazione di Claude Code e unità systemd sulla Deck, docs/, pacchetto tmux sulla Deck",
+          "scope": "configurazione di Claude Code e unità systemd sulla Deck, docs/, pacchetto tmux sulla Deck, install/agentdeck-claude.service, install/claude-service.sh",
           "gate_pre": "Login con l'abbonamento fatto dall'utente, token solo sulla Deck (INV-6); prima richiesta di prova riuscita; sessione di Claude Code come servizio che sopravvive alla caduta di SSH; raggiungibile con Remote Control da claude.ai o dal telefono; termini dell'abbonamento per sessioni automatiche verificati e riportati; proposta di nuovo testo per INV-7.",
-          "gate_post": "Rinviata dall'utente: manca il login di Claude Code con l'abbonamento (R4). Pronti tmux e ~/agentdeck; si riprende dal login nel Terminale",
-          "state": "blocked",
+          "gate_post": "Login Max, token solo sulla Deck; claude -p ok; servizio con Remote Control in tmux, riconnesso dopo riavvio; sessione vista dall'utente",
+          "state": "done",
           "risk": 30,
-          "risk_why": "Collega l'account dell'utente e lascia un agente in esecuzione sulla Deck: snapshot prima, nessuna porta in ascolto (Remote Control lavora in uscita), token solo sulla Deck e login fatto dall'utente.",
+          "risk_why": "Ripresa per il login: avvio claude auth login in tmux sulla Deck, l'utente inserisce il codice con un comando suo; poi Remote Control e servizio come da piano.",
           "docs": []
         },
         {
@@ -84,10 +84,11 @@
       "id": "R4",
       "objective": "O10",
       "title": "Login di Claude Code sulla Deck con l'abbonamento: l'utente autorizza dal browser e incolla il codice nella scheda del terminale aperta per il login",
-      "state": "open",
+      "state": "resolved",
       "doc": "",
       "dettaglio": "",
-      "created": "2026-10-26 00:02"
+      "created": "2026-10-26 00:02",
+      "resolved": "2026-10-26 00:11"
     }
   ],
   "notes": [
@@ -104,6 +105,20 @@
       "text": "Effetto del rinvio del login (26/10, decisione dell'utente): senza login con l'abbonamento (R4) non si fanno richiesta di prova, Remote Control né il servizio persistente; restano pronti tmux 3.8 (snapshot 36-38) e la cartella di lavoro ~/agentdeck. O10.T3 si può preparare (CLAUDE.md, permessi) ma la verifica dalla sessione richiede il login; O10.T4 richiede il login. tmux va aggiunto all'elenco pacchetti di install/install.sh. Per il login usare una scheda del Terminale (P18).",
       "docs": [],
       "created": "2026-10-26 00:03"
+    },
+    {
+      "id": "N29",
+      "task": "O10.T2",
+      "text": "Login (26/10): claude auth login gira in tmux sulla Deck (sessione login) e il campo del codice riceve i tasti (prova con un codice falso: Invalid code). Il primo invio dell'utente con read e tmux send-keys ha consegnato una riga vuota, quindi nessun esito. Comando corretto che rifiuta la riga vuota e conta i caratteri; va lanciato dall'app Terminale del Mac, non dalla chat. Il codice non passa da righe di comando né registri.",
+      "docs": [],
+      "created": "2026-10-26 00:09"
+    },
+    {
+      "id": "N30",
+      "task": "O10.T2",
+      "text": "Proposta di nuovo testo per INV-7 (26/10), da decidere al gate di O10: Stack imposto: Arch Linux sulla Deck; gli agenti lavorano con Claude Code e l'abbonamento Claude dell'utente, cioè con modelli nel cloud di Anthropic: nessun modello eseguito in locale e nessuna chiave API. La governance non ha un comando per modificare un'invariante, solo invariant-add.",
+      "docs": [],
+      "created": "2026-10-26 00:15"
     }
   ],
   "active": {
@@ -117,8 +132,8 @@
   },
   "previous": {
     "task": "O10.T2",
-    "state": "blocked",
-    "note": "Rinviata dall'utente: manca il login di Claude Code con l'abbonamento (R4). Pronti tmux e ~/agentdeck; si riprende dal login nel Terminale"
+    "state": "done",
+    "note": "Login Max, token solo sulla Deck; claude -p ok; servizio con Remote Control in tmux, riconnesso dopo riavvio; sessione vista dall'utente"
   },
   "cycle": {
     "n": 4,
@@ -129,6 +144,6 @@
     "objective": 11,
     "cycle": 4,
     "request": 4,
-    "note": 28
+    "note": 30
   }
 }

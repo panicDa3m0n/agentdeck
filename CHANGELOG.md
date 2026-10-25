@@ -4,6 +4,26 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.4.2 — 2026-10-26
+
+Ciclo 04, task O10.T2: Claude Code collegato all'abbonamento e sempre raggiungibile con Remote Control.
+
+- Login fatto dall'utente con l'abbonamento claude.ai (Max). Le credenziali stanno solo sulla Deck, con permessi
+  600.
+- Prima richiesta senza interfaccia: `claude -p` risponde in 2,3 secondi.
+- Nuovo servizio `agentdeck-claude`:
+  - `install/agentdeck-claude.service`, installato da `install/claude-service.sh`;
+  - avvia `claude remote-control` in una sessione tmux nella cartella di lavoro `~/agentdeck`;
+  - è abilitato all'accensione e si riavvia se si ferma.
+- Verificato:
+  - dopo un riavvio del servizio e dopo un riavvio della Deck si riconnette da solo;
+  - nessuna porta nuova in ascolto;
+  - l'utente vede la sessione su claude.ai o nell'app.
+- Installato `tmux` (snapshot 36-38, servizio con snapshot 40). Proposto il nuovo testo di INV-7, da decidere al
+  gate di O10.
+- Trappole registrate: P17 (`pkill -f` chiude la propria sessione) e P18 (il codice di login dalla chat non
+  arriva).
+
 ## 0.4.1 — 2026-10-25
 
 Ciclo 04, task O10.T1: Claude Code installato sulla Deck.

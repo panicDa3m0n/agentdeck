@@ -1,0 +1,27 @@
+# Claude Code sulla Deck con Remote Control, sempre acceso (task O10.T2).
+#
+# Avvia `claude remote-control` (server mode) in una sessione tmux "claude" dell'utente agent, nella cartella di
+# lavoro ~/agentdeck. Le sessioni si seguono e si guidano da claude.ai/code o dall'app Claude; il processo lavora
+# solo in uscita (HTTPS verso Anthropic) e non apre porte. Se si ferma, ad esempio dopo un'interruzione di rete
+# lunga, systemd lo riavvia. Per guardare cosa fa: tmux attach -t claude (uscire con Ctrl+B poi D).
+#
+# Installato da install/claude-service.sh. Documentazione: docs/claude-code.md
+[Unit]
+Description=AgentDeck: Claude Code con Remote Control (tmux, utente agent)
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=forking
+User=agent
+Group=agent
+WorkingDirectory=/home/agent/agentdeck
+Environment=HOME=/home/agent
+Environment=PATH=/home/agent/.local/bin:/usr/local/bin:/usr/bin
+ExecStart=/usr/bin/tmux new-session -d -s claude -x 200 -y 50 "/home/agent/.local/bin/claude remote-control --name agentdeck"
+ExecStop=/usr/bin/tmux kill-session -t claude
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target

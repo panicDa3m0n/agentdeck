@@ -57,30 +57,58 @@ nell'unità di systemd (O10.T2).
 - Nessuna porta nuova in ascolto: Claude Code non espone servizi (INV-5).
 - Snapshot del sistema prima dell'installazione: numero 35.
 
-## Accesso e sessione persistente (O10.T2, in sospeso)
+## Accesso e sessione sempre accesa (O10.T2)
 
-Preparato il 26/10/2026:
-- `tmux` 3.8 installato, con snapshot 36 di `deck` e 37-38 di snap-pac, per tenere viva la sessione di
-  Remote Control;
-- la cartella di lavoro `~/agentdeck`. Remote Control non salva la fiducia nella home, quindi serve una cartella
-  dedicata.
+**Login** con l'abbonamento claude.ai dell'utente (piano Max), fatto il 26/10/2026:
+- `claude auth status` dà `loggedIn: true` e `authMethod: claude.ai`;
+- le credenziali stanno solo sulla Deck, in `~/.claude/.credentials.json`, con permessi 600 per l'utente `agent`
+  (INV-6).
 
-Manca il **login con l'abbonamento**, rinviato dall'utente (richiesta R4).
+Come si rifà il login:
+1. `claude auth login` mostra un link da aprire nel browser, poi aspetta il codice di autorizzazione.
+2. Dalla chat il codice incollato non arriva (P18), e in alcuni terminali il campo non accetta l'incolla. Il
+   metodo che ha funzionato:
+   - l'agente avvia il login in una sessione tmux sulla Deck, `tmux new-session -d -s login
+     "~/.local/bin/claude auth login"`, e passa il link all'utente;
+   - l'utente autorizza, poi consegna il codice dall'app Terminale del Mac con
+     `ssh agentdeck 'read -r c && [ -n "$c" ] && tmux send-keys -t login "$c" Enter'`.
 
-**Come si fa il login:**
-- `claude auth login` mostra un link da aprire nel browser, poi aspetta il codice di autorizzazione.
-- Va lanciato da una **scheda del pannello Terminale** o da un terminale vero, non dalla chat: lì il codice non
-  arriva e il processo resta appeso sulla Deck (P18). I login appesi si chiudono con `pgrep` e `kill`, non con
-  `pkill -f` (P17).
-- Il codice lo incolla l'utente.
-- Il token di `claude setup-token` non basta per Remote Control, che vuole il login completo.
+   Il codice non passa da righe di comando né da registri.
+3. I login rimasti appesi si chiudono con `pgrep` e `kill`, non con `pkill -f` (P17).
 
-**Remote Control:**
-- lavora solo in uscita, in HTTPS verso Anthropic, senza porte aperte;
+Il token di `claude setup-token` non basta per Remote Control, che vuole il login completo.
+
+**Prima richiesta** senza interfaccia: `claude -p` ha risposto in 2,3 secondi con il modello `claude-opus-5-5`.
+
+**Servizio `agentdeck-claude`** ([../install/agentdeck-claude.service](../install/agentdeck-claude.service),
+installato da [../install/claude-service.sh](../install/claude-service.sh)):
+- avvia `claude remote-control --name agentdeck`, cioè Remote Control in server mode, in una sessione tmux
+  `claude` dell'utente `agent`, nella cartella di lavoro `~/agentdeck`;
+- è abilitato all'accensione e si riavvia da solo dopo 30 secondi se si ferma. Ad esempio, dopo circa
+  10 minuti senza rete, il server mode di Remote Control esce;
+- per guardarlo: `tmux attach -t claude`, e si esce con Ctrl+B poi D;
+- le prime due conferme, fiducia nella cartella e abilitazione di Remote Control, le ha date l'agente con il sì
+  esplicito dell'utente; restano salvate.
+
+Verifiche del 26/10/2026:
+- dopo un riavvio del servizio si riconnette senza domande;
+- dopo un riavvio della Deck torna "Connected" da solo, e `ssh agentdeck` funziona dopo 32 secondi;
+- nessuna porta nuova in ascolto.
+
+**Remote Control**:
+- lavora solo in uscita, in HTTPS verso Anthropic;
+- le sessioni si aprono dall'app Claude, nella scheda Code, o da claude.ai/code. Possono girare fino a 32
+  sessioni nella cartella `~/agentdeck`;
 - con Remote Control attivo la trascrizione delle sessioni è conservata sui server di Anthropic, mentre
   l'esecuzione resta sulla Deck;
-- al primo avvio, `claude remote-control` chiede di abilitarlo e di fidarsi della cartella, e lo chiede solo in un
-  terminale interattivo.
+- le richieste di permesso di Claude Code arrivano sul dispositivo collegato e restano aperte finché non si
+  risponde. Le regole dei permessi si configurano in O10.T3.
+
+**Termini dell'abbonamento** (verificati in O8.T6, [architettura.md](architettura.md) 7.5):
+- sessioni interattive e seguite con Remote Control: uso previsto dell'abbonamento;
+- sessioni che partono da sole su un evento (`claude -p` lanciato dal sistema): i termini per Pro e Max
+  escludono l'accesso automatizzato salvo chiave API o permesso esplicito. Non si costruiscono finché non è
+  chiarito (decisione D7).
 
 ## Aggiornamenti
 
