@@ -677,3 +677,20 @@
 {"at": "2026-10-25 23:10", "testo": "[-] bash: ~/claude-rules/bin/wf.sh task-close --done \"Sezione 1 di architettura.md: avvio misurato (20 s), 8 presupposti"}
 {"at": "2026-10-25 23:10", "testo": "VERSIONI scelte dall'utente: governance"}
 {"at": "2026-10-25 23:10", "testo": "[-] Edit  CHANGELOG.md", "task": "-", "tipo": "file", "tool": "Edit", "file": "CHANGELOG.md"}
+{"at": "2026-10-25 23:10", "testo": "[-] bash: cat VERSION && git add -A -- . ':!.claude/workflow/.stop-guard' && git commit -q -F - <<'EOF' Versione 0.3.1: "}
+{"at": "2026-10-25 23:10", "testo": "TRAPPOLA registrata: Il commit di una versione esce con il numero vecchio in VERSION (successo con v0.3.1) -> versione --scegli ... --dove VERSION riallinea il contatore della governance ma non scrive il file -> scrivere VERSION con printf nello stesso comando del commit e controllare con cat VERSION prima di creare il tag."}
+{"at": "2026-10-25 23:10", "testo": "[-] bash: printf '0.3.1\\n' > VERSION && git add VERSION && git commit -q -F - <<'EOF' VERSION 0.3.1: il commit della ver"}
+{"at": "2026-10-25 23:11", "testo": "TASK APERTA O8.T2 — Init, servizi e interfacce del sistema | perimetro: docs/architettura.md, letture sulla Deck | gate: Sezione interfacce: systemd, D-Bus, varlink, socket, /proc e /sys contro i comandi testuali per umani; quali parti offrono già API strutturate e quali no; come deck può parlare al sistema senza passare dal testo; proposte per livello. | rischio: 5"}
+{"at": "2026-10-25 23:11", "testo": "[O8.T2] bash: ~/claude-rules/bin/wf.sh task-start --id O8.T2 --risk 5 --why \"Solo letture sulla Deck (bus di sistema, socket"}
+{"at": "2026-10-25 23:11", "testo": "[O8.T2] bash: ssh -o BatchMode=yes agentdeck 'echo \"== Manager\"; varlinkctl introspect /run/systemd/io.systemd.Manager io.sy"}
+{"at": "2026-10-25 23:11", "testo": "[O8.T2] bash: ssh -o BatchMode=yes agentdeck 'for c in \"ip -j addr\" \"ss --json -lt\" \"iw dev wlan0 link\" \"lsblk -J\" \"findmnt "}
+{"at": "2026-10-25 23:12", "testo": "[O8.T2] FALLITO Bash: ssh -o BatchMode=yes agentdeck 'busctl --json=short call net.connman.iwd / org.freedesktop"}
+{"at": "2026-10-25 23:12", "testo": "FALLIMENTO [Bash] execution_error: Station /net/connman/iwd/0/3 {'ConnectedNetwork': '/net/connman/iwd/0/3/57494e44545245202d20323036354436202d203547687a_p"}
+{"at": "2026-10-25 23:12", "testo": "ERRORE RISOLTO — execution_error: Station /net/connman/iwd/0/3 {'ConnectedNetwork': '/net/connman/iwd/0/3/57494e44545245202d20323036354436202d203547687a_p — Uscita 1 dal grep finale: le righe SetEnv di sshd sono rientrate in un blocco Match, il pattern cercava a inizio riga; dati raccolti", "tipo": "errore-risolto"}
+{"at": "2026-10-25 23:12", "testo": "[O8.T2] bash: ~/claude-rules/bin/wf.sh errore --risolto \"Uscita 1 dal grep finale: le righe SetEnv di sshd sono rientrate in"}
+{"at": "2026-10-25 23:12", "testo": "[O8.T2] Edit  docs/architettura.md", "task": "O8.T2", "tipo": "file", "tool": "Edit", "file": "docs/architettura.md"}
+{"at": "2026-10-25 23:12", "testo": "[O8.T2] bash: cd /Users/snj/linuxai-steamdeck && cat >> docs/architettura.md <<'EOF'  ---  ## 2. Init, servizi e interfacce "}
+{"at": "2026-10-25 23:13", "testo": "TASK CHIUSA O8.T2 — completata: Sezione 2 di architettura.md: 18 socket varlink e D-Bus misurati (8 ms), deck usa 12 parser di testo; 6 presupposti umani, 7 proposte"}
+{"at": "2026-10-25 23:13", "testo": "VERSIONE 0.3.2 (O8.T2)"}
+{"at": "2026-10-25 23:13", "testo": "[-] bash: ~/claude-rules/bin/wf.sh task-close --done \"Sezione 2 di architettura.md: 18 socket varlink e D-Bus misurati ("}
+{"at": "2026-10-25 23:13", "testo": "VERSIONI scelte dall'utente: governance"}

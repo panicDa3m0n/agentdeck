@@ -4,6 +4,18 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.3.2 — 2026-10-25
+
+Ciclo 03, task O8.T2: studio di init, servizi e interfacce del sistema.
+
+- Sezione 2 di `docs/architettura.md`.
+- Sulla Deck ci sono 18 socket varlink di systemd 262, con 27 interfacce: servizi, rete, nomi, journal,
+  avvio, credenziali, aggiornamenti. Rispondono in JSON tipizzato in pochi millisecondi. Ci sono anche il D-Bus
+  di iwd e molti comandi con uscita JSON.
+- `deck` oggi legge testo con 12 parser anche dove esiste un'API, ad esempio per snapper, i servizi e il Wi-Fi.
+- 6 presupposti umani (pager, domande interattive, errori in prosa, scoperta da `man`, nessuna traccia
+  d'intenzione) e 7 proposte. Fra queste, `deck` sulle API native e AgentDeck esposto come servizio varlink.
+
 ## 0.3.1 — 2026-10-25
 
 Ciclo 03, task O8.T1: studio dello strato di avvio, kernel e ripristino.

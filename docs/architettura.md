@@ -33,7 +33,7 @@ Ogni proposta si misura con i due principi del progetto:
 ## Indice
 
 1. [Avvio, kernel e ripristino](#1-avvio-kernel-e-ripristino) (O8.T1)
-2. Init, servizi e interfacce del sistema (O8.T2)
+2. [Init, servizi e interfacce del sistema](#2-init-servizi-e-interfacce-del-sistema) (O8.T2)
 3. Identità, permessi, isolamento e segreti (O8.T3)
 4. Stato del sistema, software e snapshot (O8.T4)
 5. Eventi, log e osservabilità (O8.T5)
@@ -122,3 +122,77 @@ Misure del 25/10/2026 sulla Deck (`systemd-analyze`, `bootctl status`, `efibootm
 **Verifiche aperte** per lo sviluppo:
 - che `sp5100_tco` regga davvero un riavvio forzato;
 - che la Deck si riaccenda da sola al ritorno della corrente. Su questo hardware non è ancora misurato.
+
+---
+
+## 2. Init, servizi e interfacce del sistema
+
+### 2.1 Come funziona oggi
+
+L'agente parla con la Deck in un solo modo: **SSH, poi bash, poi un comando**. `deck` aggiunge un livello
+strutturato, ma dietro lancia 35 comandi e legge il loro output con 12 parser di testo
+([../deck/agentdeck/system.py](../deck/agentdeck/system.py)). Il sistema però offre molto di più, misurato il
+25/10/2026:
+
+| Interfaccia | Cosa c'è sulla Deck | Forma |
+|---|---|---|
+| **varlink** di systemd 262 | 18 socket in `/run/systemd/io.systemd.*`, con 27 interfacce nel registro `/run/varlink/registry`: `Manager` (riavvio, soft-reboot, kexec), `Unit` (`List`, `SetProperties`, `StartTransient`), `Network`, `Resolve` e `Resolve.Monitor`, `Journal`/`JournalAccess`, `Login`, `Hostname`, `BootControl`, `Credentials`, `SysUpdate`, `sysext`, `Repart`, `UserDatabase` | JSON tipizzato, con l'interfaccia descritta in un IDL leggibile da macchina (`varlinkctl introspect`). `io.systemd.Unit.List` su `sshd.service` risponde con configurazione e stato completi in **8 ms** |
+| **D-Bus** di sistema | `org.freedesktop.systemd1`, `network1`, `resolve1`, `login1`, `timesync1`, `net.connman.iwd` | Tipizzato; `busctl --json=short`. iwd dà lo stato della stazione e le reti note con il **nome esatto**, senza testo da interpretare |
+| **Comandi con JSON** | `systemctl --output=json`, `networkctl`, `resolvectl`, `loginctl`, `hostnamectl`, `userdbctl`, `bootctl` (`--json`), `ip -j`, `lsblk -J`, `findmnt -J`, `snapper --jsonout`, `btrfs --format json`, `smartctl -j`, `journalctl -o json` | JSON |
+| **Comandi solo testo** | `ss`, `iw`, `pacman`, `free`, `df`, `iwctl` (anche con codici colore), `timedatectl` (coppie chiave=valore) | Testo per terminale |
+| **File del kernel** | `/proc` (memoria, processi, rete), `/sys` (batteria, sensori, rete, schermo, watchdog) | Un valore per file, o righe semi-strutturate |
+| **Unità e drop-in** | Configurazione dichiarativa di servizi, timer, socket, mount | File INI; li legge e li scrive anche un agente |
+
+`deck` usa testo anche dove esiste di meglio:
+- gli **snapshot** sono letti dalla tabella di `snapper list`, mentre `snapper --jsonout` c'è;
+- lo **stato dei servizi** passa da `systemctl show`, circa 220 ms per 111 unità, mentre varlink risponde in
+  millisecondi;
+- il **Wi-Fi** passa da `iw` e `iwctl`, mentre iwd ha un'API D-Bus completa.
+
+Le trappole P11 (nome di rete trovato per prefisso) e P12 (`iwctl` che non vede la rete) sono nate proprio dal
+testo.
+
+### 2.2 Presupposti umani
+
+| # | Dove | Cosa succede | Effetto per un agente |
+|---|---|---|---|
+| H9 | Output dei comandi | Tabelle allineate alla larghezza del terminale, colori, intestazioni, unità di misura arrotondate (`df -h`), messaggi tradotti secondo `LANG` | Parser fragili che si rompono a ogni cambio di versione o di lingua |
+| H10 | Pager | `systemctl`, `journalctl` e simili aprono `less` quando c'è un terminale | Con un terminale l'agente resta bloccato; senza, oggi va bene per caso: nessuna variabile `PAGER` o `SYSTEMD_PAGER` è impostata |
+| H11 | Domande interattive | `pacman` senza `--noconfirm`, `iwctl` che chiede la passphrase, `systemctl edit` che apre un editor, `ssh` con una chiave host nuova, gli agenti di autenticazione di polkit | Comandi che aspettano una risposta: violano INV-2 |
+| H12 | Errori | Messaggi in testo libero su stderr; i codici di uscita cambiano significato da un programma all'altro (`systemctl is-system-running` esce con 1 quando lo stato è "degraded") | L'agente deve interpretare frasi |
+| H13 | Scoperta | Le capacità si imparano da `--help` e dalle pagine `man`, scritte per persone | L'agente scopre leggendo prosa, invece di un elenco di azioni con i loro parametri |
+| H14 | Nessuna traccia d'intenzione | Il sistema registra cosa è successo (journal), non chi l'ha chiesto e perché | Nessun legame fra la richiesta dell'agente e i suoi effetti |
+
+### 2.3 Punti di intercettazione
+
+- **Dal lato dell'output:**
+  - le API native, cioè varlink, D-Bus e i flag JSON, al posto del testo;
+  - `/proc` e `/sys` letti direttamente;
+  - le variabili d'ambiente delle sessioni dell'agente (`SYSTEMD_PAGER`, `SYSTEMD_COLORS`, `NO_COLOR`, `LANG`),
+    impostabili per l'utente `agent` con `SetEnv` di sshd o con `environment.d`.
+- **Dal lato dei comandi:**
+  - la sessione SSH: `ForceCommand` e la riga `BASH_ENV` che usiamo già per lo schermo;
+  - il comando `deck`;
+  - un servizio varlink o D-Bus nostro, che il sistema pubblica e rende scopribile;
+  - un server MCP, per gli harness degli agenti (sezione 6).
+- **Lavoro dell'agente come unità transitorie:** `StartTransient` di varlink o `systemd-run`, che già usiamo per
+  il cambio Wi-Fi e per gli aggiornamenti. Ogni lavoro lungo diventa un'unità con un nome, i suoi log, limiti di
+  risorse, uno stato interrogabile e la possibilità di fermarlo.
+- **Autorizzazione:** polkit per le chiamate D-Bus e i permessi dei socket varlink. Ne parla la sezione 3.
+
+### 2.4 Proposte
+
+| Id | Livello | Proposta | Perché, per l'agente |
+|---|---|---|---|
+| A2.1 | L1 | Ambiente delle sessioni dell'agente pensato per macchine: `SYSTEMD_PAGER=cat`, `PAGER=cat`, `SYSTEMD_COLORS=0`, `NO_COLOR=1`, lingua fissa `C.UTF-8` | Toglie H9 (in parte) e H10 senza toccare i programmi |
+| A2.2 | L2 | **`deck` passa alle API native:** varlink per servizi, rete, nomi e journal; D-Bus di iwd per il Wi-Fi; JSON per snapshot (`snapper --jsonout`), Btrfs, dischi e mount; `/proc` e `/sys` letti direttamente. Il testo resta solo dove non esiste altro (`ss`, `iw scan`, `pacman`), ognuno con un piano per toglierlo | Più veloce (ms invece di centinaia di ms), indipendente da versione e lingua, senza le trappole del testo (P11, P12) |
+| A2.3 | L2 | **AgentDeck come servizio di sistema**: le schermate di `deck` esposte anche come interfaccia varlink `io.agentdeck.*`, su un socket in `/run/agentdeck/`. L'IDL descrive azioni e parametri tipizzati; `deck` diventa uno dei client, e lo stesso protocollo si serve a MCP (sezione 6) | Interattività nativa: le azioni si scoprono e si chiamano come API del sistema, non come comandi da leggere |
+| A2.4 | L2 | **Sessione dell'agente con una regia:** la riga che oggi registra i comandi per lo schermo diventa il punto in cui ogni comando grezzo viene registrato in modo strutturato (comando, intenzione dichiarata, durata, codice di uscita, effetti), con l'ambiente di A2.1. Se il comando ha un equivalente in `deck`, compare un suggerimento (autoprompting); i programmi interattivi che bloccherebbero vanno avvolti | Toglie H11, H12 e H14 anche per i comandi che non passano da `deck`. Va fatto con la rete di sicurezza SSH, come la registrazione dello schermo |
+| A2.5 | L2 | **Lavori dell'agente come unità transitorie**, con un componente `deck jobs`: elenco, stato, log, annullamento | Il lavoro dell'agente diventa osservabile e gestibile come quello di un servizio, e sopravvive alla caduta di SSH |
+| A2.6 | L2 | Errori strutturati per tutte le azioni: codice stabile, campo, causa e uscita suggerita, come già fa il protocollo di `deck`, estesi ai comandi della regia (A2.4) | Toglie H12 |
+| A2.7 | L3 | Sostituire gli strumenti solo testo dove l'API esiste: `iwctl` e `iw link` con il D-Bus di iwd; `pacman -Q` con la lettura diretta del database locale (`/var/lib/pacman/local/*/desc`, formato stabile) o con `pyalpm` dei repository ufficiali; `ss` con `/proc/net/*` | Toglie il testo da tutto lo strato di `deck` |
+
+**Da decidere nella sintesi:**
+- quanto del vecchio "comando via SSH" resta come interfaccia primaria, rispetto al servizio varlink e MCP
+  (A2.3);
+- se la regia dei comandi grezzi (A2.4) va fatta, perché tocca la sessione SSH (INV-1).

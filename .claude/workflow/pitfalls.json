@@ -70,6 +70,11 @@
       "id": "P14",
       "testo": "journalctl -T / --exclude-identifier non esclude nulla con -o json (systemd 262: 174 righe agentdeck-out restano), funziona solo con l'output testuale -> l'esclusione viene applicata solo nella formattazione testuale -> con -o json filtrare SYSLOG_IDENTIFIER nel codice, chiedendo più righe con -n se ne servono N dopo il filtro.",
       "creata": "2026-10-25 19:53"
+    },
+    {
+      "id": "P15",
+      "testo": "Il commit di una versione esce con il numero vecchio in VERSION (successo con v0.3.1) -> versione --scegli ... --dove VERSION riallinea il contatore della governance ma non scrive il file -> scrivere VERSION con printf nello stesso comando del commit e controllare con cat VERSION prima di creare il tag.",
+      "creata": "2026-10-25 23:10"
     }
   ]
 }

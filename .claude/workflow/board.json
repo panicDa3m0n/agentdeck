@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-25 20:24",
-  "updated": "2026-10-25 23:10",
+  "updated": "2026-10-25 23:13",
   "objectives": [
     {
       "id": "O8",
@@ -28,10 +28,10 @@
           "title": "Init, servizi e interfacce del sistema",
           "scope": "docs/architettura.md, letture sulla Deck",
           "gate_pre": "Sezione interfacce: systemd, D-Bus, varlink, socket, /proc e /sys contro i comandi testuali per umani; quali parti offrono già API strutturate e quali no; come deck può parlare al sistema senza passare dal testo; proposte per livello.",
-          "gate_post": "",
-          "state": "todo",
-          "risk": null,
-          "risk_why": "",
+          "gate_post": "Sezione 2 di architettura.md: 18 socket varlink e D-Bus misurati (8 ms), deck usa 12 parser di testo; 6 presupposti umani, 7 proposte",
+          "state": "done",
+          "risk": 5,
+          "risk_why": "Solo letture sulla Deck (bus di sistema, socket varlink, uscite dei comandi) e scrittura di docs/architettura.md: nessuna modifica al sistema.",
           "docs": []
         },
         {
@@ -134,9 +134,9 @@
     "hold_plan": ""
   },
   "previous": {
-    "task": "O8.T1",
+    "task": "O8.T2",
     "state": "done",
-    "note": "Sezione 1 di architettura.md: avvio misurato (20 s), 8 presupposti umani (root bloccato in emergenza, panic, watchdog spento), 11 proposte"
+    "note": "Sezione 2 di architettura.md: 18 socket varlink e D-Bus misurati (8 ms), deck usa 12 parser di testo; 6 presupposti umani, 7 proposte"
   },
   "cycle": {
     "n": 3,
