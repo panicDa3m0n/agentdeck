@@ -80,7 +80,8 @@ def parse_iw_link(text: str) -> dict:
     rx = find(r"^\s*rx bitrate:\s*([0-9.]+)")
     tx = find(r"^\s*tx bitrate:\s*([0-9.]+)")
     frequency = int(float(freq)) if freq else None
-    return {"connected": True, "ssid": find(r"^\s*SSID:\s*(.*)$"), "frequency_mhz": frequency,
+    return {"connected": True, "bssid": find(r"^Connected to ([0-9a-f:]{17})"), "ssid": find(r"^\s*SSID:\s*(.*)$"),
+            "frequency_mhz": frequency,
             "band_ghz": band_ghz(frequency), "signal_dbm": int(signal) if signal else None,
             "rx_bitrate_mbps": float(rx) if rx else None, "tx_bitrate_mbps": float(tx) if tx else None}
 
@@ -212,13 +213,111 @@ def disk(path: str = "/") -> dict:
     return {"total": total, "used": total - free, "available": available}
 
 
+def parse_iw_scan(text: str) -> list:
+    """Access point da `iw dev <if> scan [dump]`: BSSID, frequenza, banda, segnale, SSID, ultima volta visto."""
+    points, current = [], None
+    for line in text.splitlines():
+        head = re.match(r"^BSS ([0-9a-f:]{17})", line)
+        if head:
+            current = {"bssid": head.group(1), "ssid": None, "frequency_mhz": None, "band_ghz": None,
+                       "signal_dbm": None, "last_seen_ms": None, "associated": "-- associated" in line}
+            points.append(current)
+            continue
+        if current is None:
+            continue
+        value = line.strip()
+        if value.startswith("freq:"):
+            current["frequency_mhz"] = int(float(value.split()[1]))
+            current["band_ghz"] = band_ghz(current["frequency_mhz"])
+        elif value.startswith("signal:"):
+            current["signal_dbm"] = round(float(value.split()[1]))
+        elif value.startswith("last seen:"):
+            current["last_seen_ms"] = int(value.split()[2])
+        elif line.startswith("\tSSID:"):
+            current["ssid"] = line.split("SSID:", 1)[1].strip() or None
+    return points
+
+
+def group_networks(points: list) -> list:
+    """Le reti visibili per nome, con le bande su cui trasmettono e il segnale migliore per banda."""
+    networks: dict = {}
+    for p in points:
+        n = networks.setdefault(p["ssid"], {"ssid": p["ssid"], "bands_ghz": [], "best_signal_dbm": {},
+                                            "access_points": []})
+        n["access_points"].append(p)
+        band = p["band_ghz"]
+        if band is not None:
+            if band not in n["bands_ghz"]:
+                n["bands_ghz"].append(band)
+            key = str(band)
+            if p["signal_dbm"] is not None and (key not in n["best_signal_dbm"] or p["signal_dbm"] > n["best_signal_dbm"][key]):
+                n["best_signal_dbm"][key] = p["signal_dbm"]
+    for n in networks.values():
+        n["bands_ghz"].sort()
+    return sorted(networks.values(), key=lambda n: -max(n["best_signal_dbm"].values(), default=-999))
+
+
+def same_router(a: Optional[str], b: Optional[str]) -> bool:
+    """Due BSSID dello stesso apparecchio: i router danno a ogni rete un indirizzo che differisce solo nel
+    primo o nell'ultimo byte (per esempio 58:4b:bc:20:65:d6 e 58:4b:bc:20:65:d7)."""
+    if not a or not b or a == b:
+        return False
+    x, y = a.lower().split(":"), b.lower().split(":")
+    return len(x) == len(y) == 6 and (x[:5] == y[:5] or x[1:] == y[1:])
+
+
+def wifi_interface() -> Optional[str]:
+    for d in sorted((SYS / "class" / "net").glob("*")):
+        if (d / "wireless").exists():
+            return d.name
+    return None
+
+
+def wifi_scan(fresh: bool = False) -> Optional[list]:
+    """Access point visibili. Senza fresh legge la cache del kernel (immediata, ma tiene solo quelli visti di
+    recente); con fresh fa una scansione attiva, che dura circa 5 secondi."""
+    iface = wifi_interface()
+    if iface is None:
+        return None
+    if fresh:
+        run(["iw", "dev", iface, "scan"], sudo=True, timeout=20)
+    text = run(["iw", "dev", iface, "scan", "dump"], sudo=True)
+    return parse_iw_scan(text) if text is not None else None
+
+
+def parse_resolvectl(text: str) -> dict:
+    """Risoluzione dei nomi da `resolvectl status --json=short`: impostazioni globali e per interfaccia."""
+    scopes = json.loads(text)
+
+    def flag(value) -> Optional[bool]:
+        return None if value is None else value != "no"
+
+    def server(s) -> Optional[str]:
+        return (s or {}).get("addressString")
+
+    glob = next((s for s in scopes if "ifname" not in s), {})
+    links = [{"interface": s["ifname"], "llmnr": flag(s.get("llmnr")), "mdns": flag(s.get("mDNS")),
+              "dns_servers": [server(x) for x in s.get("servers", [])], "current_server": server(s.get("currentServer")),
+              "default_route": s.get("defaultRoute")}
+             for s in scopes if "ifname" in s]
+    return {"global": {"llmnr": flag(glob.get("llmnr")), "mdns": flag(glob.get("mDNS")),
+                       "current_server": server(glob.get("currentServer")),
+                       "fallback_servers": [server(x) for x in glob.get("fallbackServers", [])]},
+            "links": links}
+
+
+def name_resolution() -> Optional[dict]:
+    text = run(["resolvectl", "status", "--json=short"])
+    return parse_resolvectl(text) if text else None
+
+
 def network() -> dict:
     addrs = json.loads(run(["ip", "-j", "-4", "addr"]) or "[]")
     interfaces = [{"name": a.get("ifname"), "state": (a.get("operstate") or "").lower() or None,
                    "ipv4": next((i.get("local") for i in a.get("addr_info", []) if i.get("family") == "inet"), None)}
                   for a in addrs if a.get("ifname") != "lo"]
     route = json.loads(run(["ip", "-j", "route", "show", "default"]) or "[]")
-    wifi_if = next((i["name"] for i in interfaces if i["name"] and (SYS / "class" / "net" / i["name"] / "wireless").exists()), None)
+    wifi_if = wifi_interface()
     wifi = parse_iw_link(run(["iw", "dev", wifi_if, "link"]) or "") if wifi_if else None
     if wifi is not None:
         wifi["interface"] = wifi_if

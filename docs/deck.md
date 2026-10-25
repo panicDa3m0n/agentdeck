@@ -22,7 +22,43 @@ Sulla Deck una chiamata dura circa 0,09 secondi (Python 3.14, misura del 25/10/2
 | `/` | [../deck/agentdeck/components/home.py](../deck/agentdeck/components/home.py) | Schermata principale: host, versione, tempo di attività, componenti |
 | `/protocol` | [../deck/agentdeck/components/protocol_info.py](../deck/agentdeck/components/protocol_info.py) | Il protocollo descritto all'agente: campi, stati, effetti, codici d'errore, canale istruzioni |
 | `/status` | [../deck/agentdeck/components/status.py](../deck/agentdeck/components/status.py) | Stato della macchina (vedi sotto) |
-| `/snapshot` | [../deck/agentdeck/components/snapshot.py](../deck/agentdeck/components/snapshot.py) | Snapshot del sistema: elenco e creazione (vedi sotto) |
+| `/snapshot` | [../deck/agentdeck/components/snapshot.py](../deck/agentdeck/components/snapshot.py) | Snapshot del sistema: elenco, creazione, rollback (vedi sotto) |
+| `/network` | [../deck/agentdeck/components/network.py](../deck/agentdeck/components/network.py) | Rete: interfacce, Wi-Fi e reti visibili, risoluzione dei nomi, porte (vedi sotto) |
+
+### `/network`: rete
+
+- `deck network` risponde in circa 0,08 secondi. Le reti visibili vengono dalla **cache di scansione del
+  kernel**, che tiene solo gli access point visti di recente.
+- `deck network scan` (effetto `read`) fa una **scansione fresca**: dura circa 5 secondi.
+
+| Sezione di `data` | Contenuto | Fonte |
+|---|---|---|
+| `interfaces`, `default_gateway` | Interfacce con stato e IPv4, gateway | `ip -j` |
+| `wifi` | Collegamento: BSSID, SSID, frequenza, banda, segnale, velocità | `iw dev wlan0 link` |
+| `networks` | Reti visibili per nome, con bande, segnale migliore per banda e access point | `iw dev wlan0 scan [dump]` |
+| `connected_network` | La rete collegata, le bande su cui la si vede, le **reti sorelle** | calcolato |
+| `name_resolution` | Server DNS, mDNS e LLMNR, globali e per interfaccia | `resolvectl status --json=short` |
+| `listening` | Porte in ascolto | `sudo ss -Hltunp` |
+
+Le **reti sorelle** sono altre reti dello stesso router. Le si riconosce da un BSSID che differisce solo nel
+primo o nell'ultimo byte (`same_router_bssid`), oppure da un nome che inizia come quello della rete collegata
+(`ssid_prefix`). Sulla rete di casa i 5 GHz sono una rete distinta, "… - 5Ghz": vedi
+[hardware.md](hardware.md).
+
+| Avviso | Livello | Azione collegata |
+|---|---|---|
+| `WIFI_BAND_2G` | warning | `prefer_5ghz` se si vedono i 5 GHz della stessa rete o di una rete sorella, altrimenti `scan` |
+| `LLMNR_LISTENING` | info | `llmnr_off` |
+
+`deck status` usa gli stessi codici e rimanda a `/network`. Le azioni `llmnr_off` e `prefer_5ghz` compaiono
+come non disponibili finché non arrivano anteprima e rete di sicurezza (task O4.T2). SSID e nomi di rete
+sono testo esterno: stanno solo nei dati (INV-4).
+
+Il controllo dal vivo confronta ogni valore con `ip`, `iw`, `resolvectl` e `ss`:
+
+```bash
+ssh agentdeck python /opt/agentdeck/tests/live_network_check.py
+```
 
 ### `/snapshot`: snapshot del sistema
 
@@ -124,7 +160,8 @@ L'equivalente di Monitor Attività e Informazioni di sistema. Le letture stanno 
 | `READ_FAILED` | warning | Una sezione non è stata letta |
 
 SSID, nomi dei servizi e descrizioni degli snapshot sono testo esterno: stanno solo nei dati (INV-4).
-Gli avvisi oggi non hanno un'azione collegata: servirà un componente di rete.
+Gli avvisi di rete (`WIFI_BAND_2G`, `LLMNR_LISTENING`) rimandano alle azioni di `/network`; gli altri non
+hanno ancora un'azione collegata.
 
 ## Codice
 
@@ -139,7 +176,9 @@ Gli avvisi oggi non hanno un'azione collegata: servirà un componente di rete.
 | [../deck/agentdeck/system.py](../deck/agentdeck/system.py) | Letture dello stato della Deck da `/proc`, `/sys` e comandi; parser puri |
 | [../deck/tests/test_deck.py](../deck/tests/test_deck.py) | Test di conformità, iniezione, parametri, conferme, guasti |
 | [../deck/tests/test_status.py](../deck/tests/test_status.py) | Test di `/status`: parser su output reali, avvisi, nomi esterni nei soli dati |
-| [../deck/tests/test_snapshot.py](../deck/tests/test_snapshot.py) | Test di `/snapshot`: elenco, creazione, descrizioni malevole, menu GRUB, guasti |
+| [../deck/tests/test_snapshot.py](../deck/tests/test_snapshot.py) | Test di `/snapshot`: elenco, creazione, rollback, rifiuti di sicurezza, guasti |
+| [../deck/tests/test_network.py](../deck/tests/test_network.py) | Test di `/network`: scansione, reti sorelle, risoluzione dei nomi, avvisi, SSID malevoli |
+| [../deck/tests/live_network_check.py](../deck/tests/live_network_check.py) | Controllo dal vivo di `deck network` contro `ip`, `iw`, `resolvectl`, `ss` |
 | [../deck/tests/live_status_check.py](../deck/tests/live_status_check.py) | Controllo dal vivo sulla Deck: ogni valore di `deck status` contro una lettura indipendente |
 | [../deck/install.sh](../deck/install.sh) | Installazione e aggiornamento sulla Deck, schermo compreso |
 | [../deck/screen/](../deck/screen/agentdeck_screen.py) | Schermo della Deck: registrazione dei comandi, visualizzatore, servizio ([schermo.md](schermo.md)) |

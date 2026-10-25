@@ -48,8 +48,9 @@ def alerts_for(d: dict) -> list:
 
     wifi = (d.get("network") or {}).get("wifi") or {}
     if wifi.get("band_ghz") == 2.4:
-        out.append(alert("warning", "WIFI_BAND_2G", message=sys_text(
-            "Wi-Fi is on the 2.4 GHz band, slower than 5 GHz.")))
+        out.append(alert("warning", "WIFI_BAND_2G", path="/network", action_id="scan", message=sys_text(
+            "Wi-Fi is on the 2.4 GHz band, slower than 5 GHz: `deck network` shows whether the same network is "
+            "available on 5 GHz.")))
     if wifi.get("signal_dbm") is not None and wifi["signal_dbm"] < WIFI_SIGNAL_WEAK_DBM:
         out.append(alert("warning", "WIFI_SIGNAL_WEAK", message=sys_text(
             "Wi-Fi signal is weak ({s} dBm).", s=wifi["signal_dbm"])))
@@ -58,9 +59,9 @@ def alerts_for(d: dict) -> list:
         out.append(alert("warning", "TIME_NOT_SYNCED", message=sys_text("The clock is not synchronized with NTP.")))
 
     if any(s["port"] == LLMNR_PORT for s in d.get("listening") or []):
-        out.append(alert("info", "LLMNR_LISTENING", message=sys_text(
+        out.append(alert("info", "LLMNR_LISTENING", path="/network", action_id="llmnr_off", message=sys_text(
             "LLMNR is listening on port 5355 across the LAN but is not needed, because names are resolved "
-            "with mDNS. Suggested fix: set LLMNR=no in systemd-resolved.")))
+            "with mDNS.")))
 
     if (d.get("sensors") or {}).get("fan_rpm") is None:
         out.append(alert("info", "FAN_UNREADABLE", message=sys_text(

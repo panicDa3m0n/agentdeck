@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-25 19:02",
-  "updated": "2026-10-25 19:08",
+  "updated": "2026-10-25 19:15",
   "objectives": [
     {
       "id": "O4",
@@ -15,12 +15,12 @@
         {
           "id": "O4.T1",
           "title": "Componente network: interfacce, Wi-Fi, risoluzione dei nomi, porte (N8)",
-          "scope": "deck/, componente network, componente status",
+          "scope": "deck/, componente network, componente status, docs/deck.md, docs/hardware.md",
           "gate_pre": "deck network riporta interfacce, Wi-Fi collegato e reti visibili con le loro bande, stato di mDNS e LLMNR, porte in ascolto; ogni valore coincide con ip, iw, resolvectl e ss; gli avvisi WIFI_BAND_2G e LLMNR_LISTENING di deck status puntano alle azioni di deck network.",
           "gate_post": "",
-          "state": "todo",
-          "risk": null,
-          "risk_why": "",
+          "state": "doing",
+          "risk": 10,
+          "risk_why": "Componente in sola lettura: legge interfacce, Wi-Fi (con una scansione delle reti visibili), risoluzione dei nomi e porte; non cambia configurazione. Le azioni di rete compaiono come non disponibili fino a O4.T2.",
           "docs": []
         },
         {
@@ -124,19 +124,37 @@
       "id": "R1",
       "objective": "",
       "title": "Sbloccare la conferma del ciclo 02: debt-resolve è richiesto da setup --confermato ma negato dal controllo dei comandi nel passo 6 del setup",
+      "state": "resolved",
+      "doc": "",
+      "dettaglio": "",
+      "created": "2026-10-25 19:05",
+      "resolved": "2026-10-25 19:08"
+    },
+    {
+      "id": "R2",
+      "objective": "O4",
+      "title": "Password della rete Wi-Fi a 5 GHz WINDTRE - 2065D6 - 5Ghz, da scrivere in secrets/wifi.env (WIFI_5G_PASS) o confermare che è uguale a quella a 2,4 GHz",
       "state": "open",
       "doc": "",
       "dettaglio": "",
-      "created": "2026-10-25 19:05"
+      "created": "2026-10-25 19:15"
     }
   ],
-  "notes": [],
+  "notes": [
+    {
+      "id": "N11",
+      "task": "O4.T2",
+      "text": "Scoperto in O4.T1 (25/10): il router non trasmette la rete di casa su due bande con lo stesso nome; i 5 GHz sono una rete distinta, WINDTRE - 2065D6 - 5Ghz (BSSID 58:4b:bc:20:65:d7, segnale -20 dBm, canale 5500 MHz). prefer_5ghz quindi significa collegarsi a un'altra rete: serve la sua password (richiesta R2); tenere il profilo a 2,4 GHz come riserva e tornarci da soli se dopo il cambio la Deck non è raggiungibile.",
+      "docs": [],
+      "created": "2026-10-25 19:15"
+    }
+  ],
   "active": {
-    "objective": "",
-    "task": "",
-    "phase": "idle",
-    "risk": null,
-    "risk_why": "",
+    "objective": "O4",
+    "task": "O4.T1",
+    "phase": "in_progress",
+    "risk": 10,
+    "risk_why": "Componente in sola lettura: legge interfacce, Wi-Fi (con una scansione delle reti visibili), risoluzione dei nomi e porte; non cambia configurazione. Le azioni di rete compaiono come non disponibili fino a O4.T2.",
     "hold_invariants": "",
     "hold_plan": ""
   },
@@ -153,7 +171,7 @@
   "counters": {
     "objective": 7,
     "cycle": 2,
-    "request": 1,
-    "note": 10
+    "request": 2,
+    "note": 11
   }
 }

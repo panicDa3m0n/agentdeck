@@ -416,3 +416,41 @@
 {"at": "2026-10-25 19:08", "testo": "TASK CORRETTA O7.T1 — title: «Componente screen: lettura dello schermo e modalità compatta» -> «Componente screen: lettura dello schermo e modalità compatta (N9, N10)»"}
 {"at": "2026-10-25 19:08", "testo": "ROADMAP CONFERMATA — ciclo 02"}
 {"at": "2026-10-25 19:08", "testo": "[-] Edit  CHANGELOG.md", "task": "-", "tipo": "file", "tool": "Edit", "file": "CHANGELOG.md"}
+{"at": "2026-10-25 19:08", "testo": "[-] bash: printf '0.2.0\\n' > VERSION && git add -A && git commit -q -F - <<'EOF' Versione 0.2.0: chiusura del ciclo 01, "}
+{"at": "2026-10-25 19:08", "testo": "RICHIESTA R1 risolta"}
+{"at": "2026-10-25 19:09", "testo": "LSP: da non valutato a skipped — L'utente preferisce continuare con la ricerca testuale (25/10)."}
+{"at": "2026-10-25 19:09", "testo": "TASK APERTA O4.T1 — Componente network: interfacce, Wi-Fi, risoluzione dei nomi, porte (N8) | perimetro: deck/, componente network, componente status | gate: deck network riporta interfacce, Wi-Fi collegato e reti visibili con le loro bande, stato di mDNS e LLMNR, porte in ascolto; ogni valore coincide con ip, iw, resolvectl e ss; gli avvisi WIFI_BAND_2G e LLMNR_LISTENING di deck status puntano alle azioni di deck network. | rischio: 10"}
+{"at": "2026-10-25 19:09", "testo": "[O4.T1] bash: ~/claude-rules/bin/wf.sh task-start --id O4.T1 --risk 10 --why \"Componente in sola lettura: legge interfacce, "}
+{"at": "2026-10-25 19:09", "testo": "[O4.T1] bash: ssh -o BatchMode=yes agentdeck 'echo \"--- scan dump (cache del kernel):\"; sudo iw dev wlan0 scan dump | grep -"}
+{"at": "2026-10-25 19:10", "testo": "[O4.T1] bash: ssh -o BatchMode=yes agentdeck 'time_start=$(date +%s%N); sudo iw dev wlan0 scan >/dev/null 2>\"$HOME/scan.err\""}
+{"at": "2026-10-25 19:10", "testo": "[O4.T1] bash: ssh -o BatchMode=yes agentdeck 'resolvectl status --json=short | python -c \"import json,sys; d=json.load(sys.s"}
+{"at": "2026-10-25 19:11", "testo": "[O4.T1] Edit  deck/agentdeck/system.py", "task": "O4.T1", "tipo": "file", "tool": "Edit", "file": "deck/agentdeck/system.py"}
+{"at": "2026-10-25 19:11", "testo": "[O4.T1] Edit  deck/agentdeck/system.py", "task": "O4.T1", "tipo": "file", "tool": "Edit", "file": "deck/agentdeck/system.py"}
+{"at": "2026-10-25 19:11", "testo": "[O4.T1] Write  deck/agentdeck/components/network.py", "task": "O4.T1", "tipo": "file", "tool": "Write", "file": "deck/agentdeck/components/network.py"}
+{"at": "2026-10-25 19:11", "testo": "[O4.T1] Edit  deck/agentdeck/components/network.py", "task": "O4.T1", "tipo": "file", "tool": "Edit", "file": "deck/agentdeck/components/network.py"}
+{"at": "2026-10-25 19:11", "testo": "[O4.T1] Edit  deck/agentdeck/components/__init__.py", "task": "O4.T1", "tipo": "file", "tool": "Edit", "file": "deck/agentdeck/components/__init__.py"}
+{"at": "2026-10-25 19:11", "testo": "[O4.T1] Edit  deck/agentdeck/components/status.py", "task": "O4.T1", "tipo": "file", "tool": "Edit", "file": "deck/agentdeck/components/status.py"}
+{"at": "2026-10-25 19:11", "testo": "[O4.T1] Edit  deck/agentdeck/components/status.py", "task": "O4.T1", "tipo": "file", "tool": "Edit", "file": "deck/agentdeck/components/status.py"}
+{"at": "2026-10-25 19:12", "testo": "[O4.T1] Write  deck/tests/test_network.py", "task": "O4.T1", "tipo": "file", "tool": "Write", "file": "deck/tests/test_network.py"}
+{"at": "2026-10-25 19:12", "testo": "[O4.T1] bash: cd /Users/snj/linuxai-steamdeck/deck && python3 -m unittest discover -s tests 2>&1 | tail -15"}
+{"at": "2026-10-25 19:12", "testo": "[O4.T1] Write  deck/tests/live_network_check.py", "task": "O4.T1", "tipo": "file", "tool": "Write", "file": "deck/tests/live_network_check.py"}
+{"at": "2026-10-25 19:12", "testo": "[O4.T1] bash: cd /Users/snj/linuxai-steamdeck && deck/install.sh > \"$TMPDIR/install15.log\" 2>&1; echo \"installazione: uscita"}
+{"at": "2026-10-25 19:13", "testo": "[O4.T1] bash: ssh agentdeck 'cd /opt/agentdeck && sudo iw dev wlan0 scan dump > /tmp/dump.txt; grep -n -E \"^BSS 58:4b:bc:20:"}
+{"at": "2026-10-25 19:13", "testo": "[O4.T1] Edit  deck/agentdeck/system.py", "task": "O4.T1", "tipo": "file", "tool": "Edit", "file": "deck/agentdeck/system.py"}
+{"at": "2026-10-25 19:13", "testo": "[O4.T1] Edit  deck/agentdeck/system.py", "task": "O4.T1", "tipo": "file", "tool": "Edit", "file": "deck/agentdeck/system.py"}
+{"at": "2026-10-25 19:13", "testo": "[O4.T1] Edit  deck/agentdeck/components/network.py", "task": "O4.T1", "tipo": "file", "tool": "Edit", "file": "deck/agentdeck/components/network.py"}
+{"at": "2026-10-25 19:13", "testo": "[O4.T1] Edit  deck/agentdeck/components/network.py", "task": "O4.T1", "tipo": "file", "tool": "Edit", "file": "deck/agentdeck/components/network.py"}
+{"at": "2026-10-25 19:13", "testo": "[O4.T1] bash: cd /Users/snj/linuxai-steamdeck/deck/tests && python3 - <<'EOF' from pathlib import Path p = Path(\"test_networ"}
+{"at": "2026-10-25 19:14", "testo": "[O4.T1] Edit  deck/tests/live_network_check.py", "task": "O4.T1", "tipo": "file", "tool": "Edit", "file": "deck/tests/live_network_check.py"}
+{"at": "2026-10-25 19:14", "testo": "[O4.T1] Edit  deck/tests/live_network_check.py", "task": "O4.T1", "tipo": "file", "tool": "Edit", "file": "deck/tests/live_network_check.py"}
+{"at": "2026-10-25 19:14", "testo": "[O4.T1] bash: cd /Users/snj/linuxai-steamdeck && deck/install.sh > \"$TMPDIR/install16.log\" 2>&1; echo \"installazione: uscita"}
+{"at": "2026-10-25 19:15", "testo": "RICHIESTA R2 aperta (O4) — Password della rete Wi-Fi a 5 GHz WINDTRE - 2065D6 - 5Ghz, da scrivere in secrets/wifi.env (WIFI_5G_PASS) o confermare che è uguale a quella a 2,4 GHz"}
+{"at": "2026-10-25 19:15", "testo": "ANNOTAZIONE N11 su O4.T2 — Scoperto in O4.T1 (25/10): il router non trasmette la rete di casa su due bande con lo stesso nome; i 5 GHz sono una rete distinta, WINDTRE - 2065D6 - 5Ghz (BSSID 58:4b:bc:20:65:d7, segnale -20 dBm, canale 5500 MHz). prefer_5ghz quindi significa collegarsi a un'altra rete: serve la sua password (richiesta R2); tenere il profilo a 2,4 GHz come riserva e tornarci da soli se dopo il cambio la Deck non è raggiungibile."}
+{"at": "2026-10-25 19:15", "testo": "TRAPPOLA registrata: Cercare la rete di casa per nome con grep o awk trova anche WINDTRE - 2065D6 - 5Ghz -> il router usa un nome distinto per i 5 GHz che inizia come quello a 2,4 GHz -> confrontare il nome esatto (riga SSID del blocco BSS), mai il prefisso."}
+{"at": "2026-10-25 19:15", "testo": "[O4.T1] bash: ~/claude-rules/bin/wf.sh req-add --title \"Password della rete Wi-Fi a 5 GHz WINDTRE - 2065D6 - 5Ghz, da scrive"}
+{"at": "2026-10-25 19:15", "testo": "PERIMETRO ESTESO su O4.T1 (+docs/deck.md)"}
+{"at": "2026-10-25 19:15", "testo": "PERIMETRO ESTESO su O4.T1 (+docs/hardware.md)"}
+{"at": "2026-10-25 19:15", "testo": "[O4.T1] Edit  docs/deck.md", "task": "O4.T1", "tipo": "file", "tool": "Edit", "file": "docs/deck.md"}
+{"at": "2026-10-25 19:15", "testo": "[O4.T1] Edit  docs/deck.md", "task": "O4.T1", "tipo": "file", "tool": "Edit", "file": "docs/deck.md"}
+{"at": "2026-10-25 19:15", "testo": "[O4.T1] Edit  docs/hardware.md", "task": "O4.T1", "tipo": "file", "tool": "Edit", "file": "docs/hardware.md"}
+{"at": "2026-10-25 19:15", "testo": "[O4.T1] Edit  docs/deck.md", "task": "O4.T1", "tipo": "file", "tool": "Edit", "file": "docs/deck.md"}
