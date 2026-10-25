@@ -590,6 +590,31 @@ solita anteprima e le reti di sicurezza:
 - stato: A4.1, politica degli snapshot;
 - eventi: A5.1, traccia separata; A5.2, `OnFailure=` globale; A5.8, tasto di accensione; A5.9, `systemd-oomd`.
 
+### 7.4 bis Esito della revisione (25/10/2026)
+
+Decisioni dell'utente nella revisione dello studio:
+
+| Tema | Decisione |
+|---|---|
+| Impianto generale | Approvato in generale: architettura, mattoni e raccomandazioni delle decisioni D2-D9 restano la direzione. Ogni decisione si conferma quando arriva lo sviluppo che la riguarda |
+| **D1 Harness** | Claude Code, niente API di Claude (sezione 7.5) |
+| **Paradigma** | L'agente è uno strumento senza cognizione propria. **È il sistema operativo a guidarlo e a usarlo per il proprio funzionamento corretto**: in certi procedimenti il sistema fornisce dati, impone obblighi e dà istruzioni. Il modello è la governance, che guida Claude con hook, obblighi e stati |
+| **Prompt interattivi** | Restano, perché sono autoprompting nativo dei programmi e non si può prevedere tutto. Cambia il trattamento di H11 e A2.4: invece di toglierli, un **adattatore** traduce in JSON per l'agente ciò che l'interfaccia mostra a un umano (schermo, domande, scelte, tabelle). Così si gestisce nativamente una moltitudine di programmi, senza strutturare ogni cosa su misura |
+| **Profili dell'adattatore** | Li crea l'agente del sistema, dentro il sistema. Ad esempio, dopo l'installazione di un pacchetto, il sistema chiede all'agente di scrivere il profilo dei programmi nuovi |
+| **Obblighi** | Si parte con obblighi solo di avviso, non bloccanti; la loro forza si decide con l'uso |
+| **D6 e primo passo** | Lo sviluppo parte **inserendo Claude Code nel sistema**, sulla Deck. L'uso reale della chat e la configurazione diranno cosa serve, prima dell'adattatore e del resto |
+
+**La schermata dell'adattatore**, proposta in revisione e da precisare con l'uso. Resta dentro il protocollo di
+`deck`, più il campo nuovo `obligations`:
+- `data.session`: programma, stato (`running`, `waiting_input`, `exited`, `stalled`), durata;
+- `data.terminal`: righe visibili, righe nuove, cursore;
+- `data.question`: testo originale, tipo (`confirm`, `choice`, `text`, `secret`, `menu`, `pager`, `unknown`),
+  opzioni, predefinito, origine del riconoscimento;
+- `data.parsed`: ciò che il profilo estrae;
+- `actions`: rispondere, anche con un riferimento a un segreto, scegliere, premere un tasto, aspettare,
+  interrompere;
+- `prompt` e `obligations`: istruzioni e doveri scritti dal sistema, mai dal programma (INV-4).
+
 ### 7.5 Harness: perché Claude Code senza modifiche
 
 - **Un fork non si può fare, nemmeno in privato.** La licenza di Claude Code non parla di vendita: dice

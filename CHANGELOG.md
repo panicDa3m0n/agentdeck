@@ -4,6 +4,20 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.3.7 — 2026-10-25
+
+Ciclo 03, task O8.T7: sintesi dello studio e revisione con l'utente.
+
+- Sezione 7 di `docs/architettura.md`: 33 presupposti umani in cinque famiglie, i cinque mattoni
+  dell'architettura, l'architettura in una pagina, le decisioni e la roadmap proposta.
+- Licenza e termini di Claude Code verificati su fonti primarie: modificarlo non è permesso, anche in privato.
+- Esito della revisione (sezione 7.4 bis e `PRINCIPI.md`):
+  - harness Claude Code senza API di Claude;
+  - **il sistema guida l'agente**, che è uno strumento senza cognizione propria;
+  - i prompt interattivi restano, tradotti in JSON da un adattatore con profili creati dall'agente;
+  - obblighi per ora solo come avvisi;
+  - lo sviluppo riparte inserendo Claude Code nel sistema.
+
 ## 0.3.6 — 2026-10-25
 
 Ciclo 03, task O8.T6: studio dell'harness dell'agente.

@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-25 20:24",
-  "updated": "2026-10-25 23:27",
+  "updated": "2026-10-25 23:46",
   "objectives": [
     {
       "id": "O8",
@@ -83,8 +83,8 @@
           "title": "Sintesi: architettura proposta e decisioni",
           "scope": "docs/architettura.md, PRINCIPI.md",
           "gate_pre": "Architettura complessiva in una pagina, con le interfacce per l'umano come canale futuro ed effimero; elenco delle decisioni approvate una per una dall'utente; roadmap degli sviluppi che ne deriva, pronta per il ciclo successivo.",
-          "gate_post": "",
-          "state": "doing",
+          "gate_post": "Sintesi e revisione: Claude Code come harness, il sistema guida l'agente, adattatore dei prompt, obblighi come avvisi, si parte da Claude Code sulla Deck",
+          "state": "done",
           "risk": 5,
           "risk_why": "Sintesi scritta in docs/architettura.md e PRINCIPI.md, nessuna modifica alla Deck; le decisioni le prende l'utente in revisione.",
           "docs": []
@@ -144,21 +144,35 @@
       "text": "Verifica dei termini (25/10, fonti primarie): Consumer Terms vietano reverse engineering e accesso automatizzato salvo chiave API o permesso esplicito; il login dell'abbonamento è per l'uso ordinario di Claude Code; il binario non va modificato. Sessioni interattive e Remote Control in regola; sessioni avviate da eventi con claude -p sull'abbonamento da chiarire prima di A5.5/A6.5 (decisione D7).",
       "docs": [],
       "created": "2026-10-25 23:27"
+    },
+    {
+      "id": "N24",
+      "task": "O8.T7",
+      "text": "Decisione di direzione dell'utente (25/10, revisione): i prompt interattivi dei programmi restano, perché sono autoprompting nativo del sistema e non si può prevedere tutto. Al posto di eliminarli (H11, A2.4) serve un adattatore che converta ciò che l'interfaccia fa per un umano (schermo, domande, scelte, tabelle) in JSON per l'agente, così da gestire nativamente una moltitudine di servizi senza strutturare ogni cosa su misura. Si procede passo passo con l'utente, partendo da un esempio di come lavora l'agente.",
+      "docs": [],
+      "created": "2026-10-25 23:34"
+    },
+    {
+      "id": "N25",
+      "task": "O8.T7",
+      "text": "Paradigma dell'utente (25/10, revisione): l'agente è uno strumento privo di cognizione; è il sistema operativo che guida l'agente e lo sfrutta per il proprio funzionamento corretto. In certi procedimenti il sistema fornisce dati, impone obblighi e dà prompt: ad esempio l'installazione di un pacchetto obbliga l'agente a creare il profilo dell'adattatore per quel programma. I profili li crea l'agente del sistema, dentro il sistema. Modello già funzionante: la governance che guida Claude con hook, obblighi e stati bloccanti. Si esce dal paradigma degli OS per umani.",
+      "docs": [],
+      "created": "2026-10-25 23:40"
     }
   ],
   "active": {
     "objective": "O8",
-    "task": "O8.T7",
-    "phase": "in_progress",
-    "risk": 5,
-    "risk_why": "Sintesi scritta in docs/architettura.md e PRINCIPI.md, nessuna modifica alla Deck; le decisioni le prende l'utente in revisione.",
+    "task": "",
+    "phase": "objective_gate_pending",
+    "risk": null,
+    "risk_why": "",
     "hold_invariants": "",
     "hold_plan": ""
   },
   "previous": {
-    "task": "O8.T6",
+    "task": "O8.T7",
     "state": "done",
-    "note": "Sezione 6 di architettura.md: fork di Claude Code non permesso (licenza), Agent SDK, hook, MCP, Remote Control verificati; dove vivono le sessioni; 6 proposte"
+    "note": "Sintesi e revisione: Claude Code come harness, il sistema guida l'agente, adattatore dei prompt, obblighi come avvisi, si parte da Claude Code sulla Deck"
   },
   "cycle": {
     "n": 3,
@@ -169,6 +183,6 @@
     "objective": 9,
     "cycle": 3,
     "request": 3,
-    "note": 23
+    "note": 25
   }
 }

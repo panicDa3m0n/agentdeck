@@ -84,7 +84,11 @@ Perché salire di livello solo quando serve:
 | 2026-10-25 | Testi rivolti all'agente in inglese; documentazione in italiano | Lingua in cui i modelli sono più affidabili e lingua del sistema |
 | 2026-10-25 | Sistema operativo solo per agenti; l'umano arriverà più avanti con interfacce effimere | Il sistema serve all'agente per una gestione totale secondo interattività e autoprompting; lo schermo della Deck perde priorità |
 | 2026-10-25 | Prima di sviluppare altro, studio dell'architettura del sistema strato per strato ([docs/architettura.md](docs/architettura.md)) | Capire dove il sistema si può intercettare e cambiare per l'uso agentico, invece di avvolgere uno strumento dopo l'altro |
-| 2026-10-25 | Harness degli agenti basato su Claude Code, con la forma da decidere (fork, plugin, Agent SDK, open source) | Sfruttare subito gli agenti Claude, anche da remoto, senza canali o app nostre; la licenza di Claude Code non permette un fork ([docs/architettura.md](docs/architettura.md), sezione 6) |
+| 2026-10-25 | Harness degli agenti: Claude Code non modificato, niente API di Claude (il fork non è permesso dalla licenza) | Sfruttare subito gli agenti Claude, anche da remoto, senza canali o app nostre; la licenza di Claude Code non permette un fork ([docs/architettura.md](docs/architettura.md), sezione 6) |
+| 2026-10-25 | **Il sistema guida l'agente**: l'agente è uno strumento senza cognizione propria, e il sistema operativo gli fornisce dati, obblighi e istruzioni nei procedimenti che lo richiedono | È il nuovo paradigma di OS agentico; il modello è la governance che guida Claude ([docs/architettura.md](docs/architettura.md), 7.4 bis) |
+| 2026-10-25 | I prompt interattivi dei programmi restano; un adattatore li traduce in JSON per l'agente, con profili per programma creati dall'agente stesso | Autoprompting nativo, una moltitudine di programmi gestiti senza lavoro su misura |
+| 2026-10-25 | Obblighi del sistema all'agente: per ora solo avvisi | La forza degli obblighi si decide con l'uso |
+| 2026-10-25 | Lo sviluppo riparte inserendo Claude Code nel sistema | L'uso reale della chat e la configurazione dicono cosa serve |
 
 ## Direzioni da confermare quando ci arriviamo
 
