@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-25 15:54",
-  "updated": "2026-10-25 17:57",
+  "updated": "2026-10-25 18:03",
   "objectives": [
     {
       "id": "O1",
@@ -125,12 +125,12 @@
         {
           "id": "O3.T2",
           "title": "Componente snapshot: elenco e creazione",
-          "scope": "deck/, componente snapshot",
+          "scope": "deck/, componente snapshot, docs/deck.md, docs/accesso.md",
           "gate_pre": "deck snapshot elenca gli stessi snapshot di snapper; la creazione da deck produce uno snapshot visibile in snapper e nel menu snapshot di GRUB.",
           "gate_post": "",
-          "state": "todo",
-          "risk": null,
-          "risk_why": "",
+          "state": "doing",
+          "risk": 15,
+          "risk_why": "Il componente legge gli snapshot e ne crea di nuovi con snapper: creare uno snapshot non cambia il sistema in uso e si annulla cancellandolo; il rollback resta fuori (O3.T3) e compare come azione non disponibile.",
           "docs": []
         },
         {
@@ -233,14 +233,21 @@
       "text": "Idea emersa verificando lo schermo (25/10): poter leggere lo schermo è utile all'agente (INV-2: tutto osservabile). Candidato per un ciclo futuro: componente deck /screen che restituisce in data le righe visibili su tty1 (da /dev/vcsu1) e lo stato del servizio agentdeck-screen.",
       "docs": [],
       "created": "2026-10-25 17:48"
+    },
+    {
+      "id": "N10",
+      "task": "O3.T5",
+      "text": "Riscontro dell'utente (25/10): lo schermo con comandi e risposte è molto verboso, per ora va bene. Miglioramento futuro: modalità compatta (prime N righe di output per comando con il numero di righe nascoste, oppure solo comandi ed esiti) scelta da un'azione deck /screen.",
+      "docs": [],
+      "created": "2026-10-25 18:00"
     }
   ],
   "active": {
     "objective": "O3",
-    "task": "",
-    "phase": "idle",
-    "risk": null,
-    "risk_why": "",
+    "task": "O3.T2",
+    "phase": "in_progress",
+    "risk": 15,
+    "risk_why": "Il componente legge gli snapshot e ne crea di nuovi con snapper: creare uno snapshot non cambia il sistema in uso e si annulla cancellandolo; il rollback resta fuori (O3.T3) e compare come azione non disponibile.",
     "hold_invariants": "",
     "hold_plan": "",
     "gate_done": ""
@@ -259,6 +266,6 @@
     "objective": 3,
     "cycle": 1,
     "request": 0,
-    "note": 9
+    "note": 10
   }
 }

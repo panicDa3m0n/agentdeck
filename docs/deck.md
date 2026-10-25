@@ -22,8 +22,28 @@ Sulla Deck una chiamata dura circa 0,09 secondi (Python 3.14, misura del 25/10/2
 | `/` | [../deck/agentdeck/components/home.py](../deck/agentdeck/components/home.py) | Schermata principale: host, versione, tempo di attività, componenti |
 | `/protocol` | [../deck/agentdeck/components/protocol_info.py](../deck/agentdeck/components/protocol_info.py) | Il protocollo descritto all'agente: campi, stati, effetti, codici d'errore, canale istruzioni |
 | `/status` | [../deck/agentdeck/components/status.py](../deck/agentdeck/components/status.py) | Stato della macchina (vedi sotto) |
+| `/snapshot` | [../deck/agentdeck/components/snapshot.py](../deck/agentdeck/components/snapshot.py) | Snapshot del sistema: elenco e creazione (vedi sotto) |
 
-In arrivo con l'obiettivo O3: `/snapshot` (snapshot e rollback).
+### `/snapshot`: snapshot del sistema
+
+L'equivalente di Time Machine, sopra Snapper e grub-btrfs.
+
+- `deck snapshot` elenca gli snapshot dal più vecchio al più nuovo, come `snapper list`. Per ognuno indica:
+  - `id`, `type` (`single`, oppure `pre`/`post` per le coppie create da pacman), `pre_id`;
+  - `date`, `description`, `cleanup` (`timeline` per quelli orari, `number` per quelli di pacman);
+  - `userdata` (`source: deck` per quelli creati da `deck`);
+  - `in_grub`: vero se è avviabile dal menu snapshot di GRUB, `null` se il menu in quel momento non è
+    leggibile.
+- `deck snapshot create description="…"` crea uno snapshot singolo (descrizione obbligatoria, massimo 100
+  caratteri) e restituisce `done` con il suo `id`. grub-btrfsd lo aggiunge al menu di GRUB in pochi secondi.
+- `rollback` compare già tra le azioni ma non è ancora disponibile (task O3.T3).
+
+| Avviso | Livello | Quando |
+|---|---|---|
+| `SNAPSHOT_NOT_IN_GRUB` | info | Uno o più snapshot non sono ancora nel menu di GRUB (`data.not_in_grub`) |
+| `GRUB_MENU_UNREADABLE` | info | Il menu non è leggibile: grub-btrfsd lo sta riscrivendo, riprovare tra pochi secondi |
+
+Le descrizioni sono testo esterno: stanno solo nei dati (INV-4).
 
 ### `/status`: stato della macchina
 
@@ -75,6 +95,7 @@ Gli avvisi oggi non hanno un'azione collegata: servirà un componente di rete.
 | [../deck/agentdeck/system.py](../deck/agentdeck/system.py) | Letture dello stato della Deck da `/proc`, `/sys` e comandi; parser puri |
 | [../deck/tests/test_deck.py](../deck/tests/test_deck.py) | Test di conformità, iniezione, parametri, conferme, guasti |
 | [../deck/tests/test_status.py](../deck/tests/test_status.py) | Test di `/status`: parser su output reali, avvisi, nomi esterni nei soli dati |
+| [../deck/tests/test_snapshot.py](../deck/tests/test_snapshot.py) | Test di `/snapshot`: elenco, creazione, descrizioni malevole, menu GRUB, guasti |
 | [../deck/tests/live_status_check.py](../deck/tests/live_status_check.py) | Controllo dal vivo sulla Deck: ogni valore di `deck status` contro una lettura indipendente |
 | [../deck/install.sh](../deck/install.sh) | Installazione e aggiornamento sulla Deck, schermo compreso |
 | [../deck/screen/](../deck/screen/agentdeck_screen.py) | Schermo della Deck: registrazione dei comandi, visualizzatore, servizio ([schermo.md](schermo.md)) |

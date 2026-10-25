@@ -35,6 +35,11 @@
       "id": "P7",
       "testo": "Sullo schermo della Deck compaiono frammenti di JSON di deck -> logger spezza i messaggi oltre 1 KB (default di --size), solo il primo pezzo inizia con {\"deck\": -> in ssh-log.sh usare logger --size 65536 per le righe di output.",
       "creata": "2026-10-25 17:56"
+    },
+    {
+      "id": "P8",
+      "testo": "deck snapshot dice per un attimo che nessuno snapshot è nel menu di GRUB -> grub-btrfsd cancella e riscrive /boot/grub/grub-btrfs.cfg a ogni modifica -> un menu non leggibile vale in_grub null (sconosciuto) con l'avviso GRUB_MENU_UNREADABLE, non false.",
+      "creata": "2026-10-25 18:03"
     }
   ]
 }

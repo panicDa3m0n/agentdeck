@@ -68,12 +68,12 @@ Host agentdeck-mdns
 ## Snapshot
 
 ```bash
-ssh agentdeck 'sudo snapper -c root list'
-ssh agentdeck 'sudo snapper -c root create -d "descrizione"'
+ssh agentdeck deck snapshot                                   # elenco, con in_grub per ognuno
+ssh agentdeck 'deck snapshot create description="prima di X"'  # nuovo snapshot
 ```
 
 Gli snapshot compaiono anche nel sottomenu "Arch Linux snapshots" di GRUB e si possono avviare in sola
-lettura. Un comando per tornare indietro (rollback) arriverà con il componente `deck snapshot`.
+lettura. Il rollback con anteprima e conferma arriva con la task O3.T3 (vedi [deck.md](deck.md)).
 
 ## Se la Deck non risponde
 

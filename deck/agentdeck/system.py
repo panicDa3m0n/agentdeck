@@ -104,19 +104,34 @@ def parse_ss(text: str) -> list:
     return sockets
 
 
+def parse_snapper_list(text: str) -> list:
+    """Gli snapshot da `snapper --jsonout list`, escluso lo 0 (il sistema in uso), dal più vecchio."""
+    snapshots = []
+    for e in json.loads(text).get("root", []):
+        if e.get("number", 0) == 0:
+            continue
+        snapshots.append({"id": e["number"], "type": e.get("type"), "pre_id": e.get("pre-number"),
+                          "date": iso_date(e.get("date")), "description": e.get("description"),
+                          "cleanup": e.get("cleanup") or None, "userdata": e.get("userdata") or None})
+    return snapshots
+
+
 def parse_snapper(text: str) -> dict:
-    """Riepilogo degli snapshot da `snapper --jsonout list`."""
-    entries = [e for e in json.loads(text).get("root", []) if e.get("number", 0) != 0]
+    """Riepilogo degli snapshot da `snapper --jsonout list`, per deck status."""
+    entries = parse_snapper_list(text)
+    keys = ("id", "type", "date", "description", "cleanup")
 
     def brief(e: Optional[dict]) -> Optional[dict]:
-        if e is None:
-            return None
-        return {"id": e["number"], "type": e["type"], "date": iso_date(e.get("date")),
-                "description": e.get("description"), "cleanup": e.get("cleanup") or None}
+        return None if e is None else {k: e[k] for k in keys}
 
-    manual = [e for e in entries if e.get("type") == "single" and not e.get("cleanup")]
+    manual = [e for e in entries if e["type"] == "single" and not e["cleanup"]]
     return {"count": len(entries), "latest": brief(entries[-1] if entries else None),
             "latest_manual": brief(manual[-1] if manual else None)}
+
+
+def grub_snapshot_ids(text: str) -> set:
+    """Gli snapshot avviabili dal menu di GRUB, dal file generato da grub-btrfs."""
+    return {int(n) for n in re.findall(r"@?snapshots/([0-9]+)/snapshot", text)}
 
 
 def iso_date(value: Optional[str]) -> Optional[str]:
@@ -228,6 +243,33 @@ def services() -> dict:
 def snapshots() -> Optional[dict]:
     text = run(["snapper", "--jsonout", "list"], sudo=True)
     return parse_snapper(text) if text else None
+
+
+GRUB_BTRFS_CFG = Path("/boot/grub/grub-btrfs.cfg")
+
+
+def snapshot_list() -> Optional[list]:
+    """Tutti gli snapshot, ognuno con in_grub: vero se è avviabile dal menu snapshot di GRUB.
+
+    in_grub vale None se il menu non è leggibile: grub-btrfsd lo cancella e lo riscrive a ogni modifica,
+    quindi per un attimo il file non esiste.
+    """
+    text = run(["snapper", "--jsonout", "list"], sudo=True)
+    if not text:
+        return None
+    menu = read(GRUB_BTRFS_CFG)
+    in_grub = grub_snapshot_ids(menu) if menu is not None else None
+    return [dict(s, in_grub=None if in_grub is None else s["id"] in in_grub) for s in parse_snapper_list(text)]
+
+
+def snapshot_create(description: str) -> Optional[int]:
+    """Crea uno snapshot singolo con questa descrizione; restituisce il numero, o None se fallisce."""
+    out = run(["snapper", "-c", "root", "create", "--print-number", "--userdata", "source=deck",
+               "--description", description], sudo=True)
+    try:
+        return int(out.strip()) if out else None
+    except ValueError:
+        return None
 
 
 def time_sync() -> dict:

@@ -339,3 +339,25 @@
 {"at": "2026-10-25 17:57", "testo": "VERSIONE 0.1.10 (O3.T5)"}
 {"at": "2026-10-25 17:57", "testo": "[-] bash: git add -A && git commit -q -F - <<'EOF' Schermo della Deck: anche la risposta di ogni comando (O3.T5)  ssh-lo"}
 {"at": "2026-10-25 17:57", "testo": "[-] Edit  CHANGELOG.md", "task": "-", "tipo": "file", "tool": "Edit", "file": "CHANGELOG.md"}
+{"at": "2026-10-25 17:58", "testo": "[-] bash: printf '0.1.10\\n' > VERSION && git add -A && git commit -q -F - <<'EOF' Versione 0.1.10: risposta dei comandi "}
+{"at": "2026-10-25 18:00", "testo": "ANNOTAZIONE N10 su O3.T5 — Riscontro dell'utente (25/10): lo schermo con comandi e risposte è molto verboso, per ora va bene. Miglioramento futuro: modalità compatta (prime N righe di output per comando con il numero di righe nascoste, oppure solo comandi ed esiti) scelta da un'azione deck /screen."}
+{"at": "2026-10-25 18:00", "testo": "TASK APERTA O3.T2 — Componente snapshot: elenco e creazione | perimetro: deck/, componente snapshot | gate: deck snapshot elenca gli stessi snapshot di snapper; la creazione da deck produce uno snapshot visibile in snapper e nel menu snapshot di GRUB. | rischio: 15"}
+{"at": "2026-10-25 18:00", "testo": "[O3.T2] bash: ~/claude-rules/bin/wf.sh note-add --task O3.T5 --text \"Riscontro dell'utente (25/10): lo schermo con comandi e"}
+{"at": "2026-10-25 18:00", "testo": "[O3.T2] bash: ssh -o BatchMode=yes agentdeck 'ls -l /boot/grub/grub-btrfs.cfg; sudo grep -oE \"snapshots/[0-9]+/snapshot\" /bo"}
+{"at": "2026-10-25 18:00", "testo": "[O3.T2] Edit  deck/agentdeck/system.py", "task": "O3.T2", "tipo": "file", "tool": "Edit", "file": "deck/agentdeck/system.py"}
+{"at": "2026-10-25 18:00", "testo": "[O3.T2] Edit  deck/agentdeck/system.py", "task": "O3.T2", "tipo": "file", "tool": "Edit", "file": "deck/agentdeck/system.py"}
+{"at": "2026-10-25 18:01", "testo": "[O3.T2] Write  deck/agentdeck/components/snapshot.py", "task": "O3.T2", "tipo": "file", "tool": "Write", "file": "deck/agentdeck/components/snapshot.py"}
+{"at": "2026-10-25 18:01", "testo": "[O3.T2] Edit  deck/agentdeck/components/__init__.py", "task": "O3.T2", "tipo": "file", "tool": "Edit", "file": "deck/agentdeck/components/__init__.py"}
+{"at": "2026-10-25 18:01", "testo": "[O3.T2] Write  deck/tests/test_snapshot.py", "task": "O3.T2", "tipo": "file", "tool": "Write", "file": "deck/tests/test_snapshot.py"}
+{"at": "2026-10-25 18:01", "testo": "[O3.T2] bash: cd /Users/snj/linuxai-steamdeck/deck && python3 -m unittest discover -s tests 2>&1 | tail -6"}
+{"at": "2026-10-25 18:02", "testo": "[O3.T2] bash: cd /Users/snj/linuxai-steamdeck && deck/install.sh > \"$TMPDIR/install9.log\" 2>&1; echo \"installazione: uscita "}
+{"at": "2026-10-25 18:02", "testo": "[O3.T2] Edit  deck/agentdeck/system.py", "task": "O3.T2", "tipo": "file", "tool": "Edit", "file": "deck/agentdeck/system.py"}
+{"at": "2026-10-25 18:02", "testo": "[O3.T2] Edit  deck/agentdeck/components/snapshot.py", "task": "O3.T2", "tipo": "file", "tool": "Edit", "file": "deck/agentdeck/components/snapshot.py"}
+{"at": "2026-10-25 18:02", "testo": "[O3.T2] Edit  deck/tests/test_snapshot.py", "task": "O3.T2", "tipo": "file", "tool": "Edit", "file": "deck/tests/test_snapshot.py"}
+{"at": "2026-10-25 18:03", "testo": "TRAPPOLA registrata: deck snapshot dice per un attimo che nessuno snapshot è nel menu di GRUB -> grub-btrfsd cancella e riscrive /boot/grub/grub-btrfs.cfg a ogni modifica -> un menu non leggibile vale in_grub null (sconosciuto) con l'avviso GRUB_MENU_UNREADABLE, non false."}
+{"at": "2026-10-25 18:03", "testo": "[O3.T2] bash: cd /Users/snj/linuxai-steamdeck/deck && python3 -m unittest discover -s tests 2>&1 | tail -3 && cd .. && deck/"}
+{"at": "2026-10-25 18:03", "testo": "PERIMETRO ESTESO su O3.T2 (+docs/deck.md)"}
+{"at": "2026-10-25 18:03", "testo": "PERIMETRO ESTESO su O3.T2 (+docs/accesso.md)"}
+{"at": "2026-10-25 18:03", "testo": "[O3.T2] Edit  docs/deck.md", "task": "O3.T2", "tipo": "file", "tool": "Edit", "file": "docs/deck.md"}
+{"at": "2026-10-25 18:03", "testo": "[O3.T2] Edit  docs/deck.md", "task": "O3.T2", "tipo": "file", "tool": "Edit", "file": "docs/deck.md"}
+{"at": "2026-10-25 18:03", "testo": "[O3.T2] Edit  docs/accesso.md", "task": "O3.T2", "tipo": "file", "tool": "Edit", "file": "docs/accesso.md"}
