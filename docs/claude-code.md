@@ -57,6 +57,31 @@ nell'unità di systemd (O10.T2).
 - Nessuna porta nuova in ascolto: Claude Code non espone servizi (INV-5).
 - Snapshot del sistema prima dell'installazione: numero 35.
 
+## Accesso e sessione persistente (O10.T2, in sospeso)
+
+Preparato il 26/10/2026:
+- `tmux` 3.8 installato, con snapshot 36 di `deck` e 37-38 di snap-pac, per tenere viva la sessione di
+  Remote Control;
+- la cartella di lavoro `~/agentdeck`. Remote Control non salva la fiducia nella home, quindi serve una cartella
+  dedicata.
+
+Manca il **login con l'abbonamento**, rinviato dall'utente (richiesta R4).
+
+**Come si fa il login:**
+- `claude auth login` mostra un link da aprire nel browser, poi aspetta il codice di autorizzazione.
+- Va lanciato da una **scheda del pannello Terminale** o da un terminale vero, non dalla chat: lì il codice non
+  arriva e il processo resta appeso sulla Deck (P18). I login appesi si chiudono con `pgrep` e `kill`, non con
+  `pkill -f` (P17).
+- Il codice lo incolla l'utente.
+- Il token di `claude setup-token` non basta per Remote Control, che vuole il login completo.
+
+**Remote Control:**
+- lavora solo in uscita, in HTTPS verso Anthropic, senza porte aperte;
+- con Remote Control attivo la trascrizione delle sessioni è conservata sui server di Anthropic, mentre
+  l'esecuzione resta sulla Deck;
+- al primo avvio, `claude remote-control` chiede di abilitarlo e di fidarsi della cartella, e lo chiede solo in un
+  terminale interattivo.
+
 ## Aggiornamenti
 
 L'installazione nativa si aggiorna da sola in background, e la nuova versione parte al riavvio successivo di

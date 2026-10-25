@@ -80,6 +80,16 @@
       "id": "P16",
       "testo": "Al setup di un ciclo, setup --confermato rifiuta voci riprese nel ciclo precedente e non completate (restano taken e scoperte) -> la governance le ricontrolla a ogni nuovo ciclo -> prima di roadmap-new, quando debt-resolve è ancora consentito, pronunciarsi anche su queste (task che le nomina o --rimandato), oppure nominarle nei titoli delle task del nuovo ciclo.",
       "creata": "2026-10-25 23:51"
+    },
+    {
+      "id": "P17",
+      "testo": "Un comando via ssh con pkill -f \"<testo>\" chiude la sessione stessa (uscita 255) -> pkill -f confronta anche la riga di comando della shell remota, che contiene lo stesso testo -> usare un pattern che non trova se stesso, ad esempio pkill -f \"[c]laude auth login\", oppure pgrep per prendere i PID e poi kill.",
+      "creata": "2026-10-26 00:01"
+    },
+    {
+      "id": "P18",
+      "testo": "claude auth login lanciato via ssh dalla chat (input con punto esclamativo) non riceve il codice e resta appeso sulla Deck -> la chat non offre un terminale interattivo in cui incollare -> aprire il comando in una scheda del pannello Terminale (run_in_terminal) dove l'utente incolla il codice, e chiudere i login appesi con pgrep e kill (P17).",
+      "creata": "2026-10-26 00:02"
     }
   ]
 }

@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-25 23:48",
-  "updated": "2026-10-25 23:56",
+  "updated": "2026-10-26 00:03",
   "objectives": [
     {
       "id": "O10",
@@ -26,12 +26,12 @@
         {
           "id": "O10.T2",
           "title": "Accesso: abbonamento, sessione persistente e Remote Control (N22, N23)",
-          "scope": "configurazione di Claude Code e unità systemd sulla Deck, docs/",
+          "scope": "configurazione di Claude Code e unità systemd sulla Deck, docs/, pacchetto tmux sulla Deck",
           "gate_pre": "Login con l'abbonamento fatto dall'utente, token solo sulla Deck (INV-6); prima richiesta di prova riuscita; sessione di Claude Code come servizio che sopravvive alla caduta di SSH; raggiungibile con Remote Control da claude.ai o dal telefono; termini dell'abbonamento per sessioni automatiche verificati e riportati; proposta di nuovo testo per INV-7.",
-          "gate_post": "",
-          "state": "todo",
-          "risk": null,
-          "risk_why": "",
+          "gate_post": "Rinviata dall'utente: manca il login di Claude Code con l'abbonamento (R4). Pronti tmux e ~/agentdeck; si riprende dal login nel Terminale",
+          "state": "blocked",
+          "risk": 30,
+          "risk_why": "Collega l'account dell'utente e lascia un agente in esecuzione sulla Deck: snapshot prima, nessuna porta in ascolto (Remote Control lavora in uscita), token solo sulla Deck e login fatto dall'utente.",
           "docs": []
         },
         {
@@ -79,7 +79,17 @@
       ]
     }
   ],
-  "requests": [],
+  "requests": [
+    {
+      "id": "R4",
+      "objective": "O10",
+      "title": "Login di Claude Code sulla Deck con l'abbonamento: l'utente autorizza dal browser e incolla il codice nella scheda del terminale aperta per il login",
+      "state": "open",
+      "doc": "",
+      "dettaglio": "",
+      "created": "2026-10-26 00:02"
+    }
+  ],
   "notes": [
     {
       "id": "N27",
@@ -87,6 +97,13 @@
       "text": "Da O10.T1 (25/10): le sessioni SSH non interattive di agent non leggono ~/.bashrc, quindi claude non è nel PATH dei comandi lanciati via ssh (PATH di sshd: /usr/local/sbin:/usr/local/bin:/usr/bin). Per il servizio di Claude Code impostare PATH nell'unità systemd; per i comandi via ssh usare ~/.local/bin/claude o decidere un collegamento di sistema (fuori dal perimetro di O10.T1).",
       "docs": [],
       "created": "2026-10-25 23:55"
+    },
+    {
+      "id": "N28",
+      "task": "O10.T2",
+      "text": "Effetto del rinvio del login (26/10, decisione dell'utente): senza login con l'abbonamento (R4) non si fanno richiesta di prova, Remote Control né il servizio persistente; restano pronti tmux 3.8 (snapshot 36-38) e la cartella di lavoro ~/agentdeck. O10.T3 si può preparare (CLAUDE.md, permessi) ma la verifica dalla sessione richiede il login; O10.T4 richiede il login. tmux va aggiunto all'elenco pacchetti di install/install.sh. Per il login usare una scheda del Terminale (P18).",
+      "docs": [],
+      "created": "2026-10-26 00:03"
     }
   ],
   "active": {
@@ -99,9 +116,9 @@
     "hold_plan": ""
   },
   "previous": {
-    "task": "O10.T1",
-    "state": "done",
-    "note": "Claude Code 2.1.310 sulla Deck per agent: firma GPG del manifest e checksum verificate, --version e doctor ok, nessuna porta nuova; install/claude-code.sh"
+    "task": "O10.T2",
+    "state": "blocked",
+    "note": "Rinviata dall'utente: manca il login di Claude Code con l'abbonamento (R4). Pronti tmux e ~/agentdeck; si riprende dal login nel Terminale"
   },
   "cycle": {
     "n": 4,
@@ -111,7 +128,7 @@
   "counters": {
     "objective": 11,
     "cycle": 4,
-    "request": 3,
-    "note": 27
+    "request": 4,
+    "note": 28
   }
 }
