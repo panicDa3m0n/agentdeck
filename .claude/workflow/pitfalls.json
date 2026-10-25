@@ -1,4 +1,10 @@
 {
   "version": 1,
-  "items": []
+  "items": [
+    {
+      "id": "P1",
+      "testo": "Push su GitHub con più account gh -> gh auth git-credential fornisce solo le credenziali dell'account attivo (DavDit94 per SNJ) e un nome utente nell'URL non basta -> il repository agentdeck ha un credential helper locale che chiede a gh il token di panicDa3m0n: non rimuoverlo e non cambiare account per pubblicare.",
+      "creata": "2026-10-25 16:07"
+    }
+  ]
 }

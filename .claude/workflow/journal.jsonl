@@ -37,3 +37,23 @@
 {"at": "2026-10-25 16:06", "testo": "FALLIMENTO [Bash] execution_error: identità locale: Davide <davideditrani94@gmail.com>\nidentità globale (invariata): davide.ditrani@snjmediastudio.com\n?? ."}
 {"at": "2026-10-25 16:06", "testo": "ERRORE RISOLTO — execution_error: identità locale: Davide <davideditrani94@gmail.com> identità globale (invariata): davide.ditrani@snjmediastudio.com ?? . — Exit 1 causato solo da ls su VERSION mancante: identità impostata correttamente; creato VERSION con 0.1.0 come registrato dalla governance.", "tipo": "errore-risolto"}
 {"at": "2026-10-25 16:06", "testo": "[O1.T1] bash: printf '0.1.0\\n' > VERSION && cat VERSION && ~/claude-rules/bin/wf.sh errore --risolto \"Exit 1 causato solo da"}
+{"at": "2026-10-25 16:06", "testo": "[O1.T1] bash: git commit -q --amend --reset-author --no-edit && git add .claude PROGETTO.md ROADMAP.md VERSION && git commit"}
+{"at": "2026-10-25 16:06", "testo": "[O1.T1] bash: echo \"--- file tracciati:\" && git ls-files && echo \"--- ricerca credenziali in tutta la storia:\" && (git grep "}
+{"at": "2026-10-25 16:06", "testo": "[O1.T1] bash: gh auth status 2>&1 | grep -E \"Logged in|Active account|account\""}
+{"at": "2026-10-25 16:06", "testo": "[O1.T1] bash: gh auth switch --user panicDa3m0n && gh auth status 2>&1 | grep -B1 \"Active account: true\" | head -1 && (gh re"}
+{"at": "2026-10-25 16:06", "testo": "[O1.T1] bash: gh repo create panicDa3m0n/agentdeck --private --description \"Steam Deck trasformata in un sistema operativo a"}
+{"at": "2026-10-25 16:06", "testo": "[O1.T1] bash: gh repo view panicDa3m0n/agentdeck --json visibility,owner,defaultBranchRef,url --jq '\"visibilità: \\(.visibili"}
+{"at": "2026-10-25 16:07", "testo": "[O1.T1] bash: git remote set-url origin https://panicDa3m0n@github.com/panicDa3m0n/agentdeck.git && gh auth switch --user Da"}
+{"at": "2026-10-25 16:07", "testo": "[O1.T1] bash: git config --show-origin --get-all credential.helper; git config --show-origin --get-regexp '^credential\\..*' "}
+{"at": "2026-10-25 16:07", "testo": "[O1.T1] bash: git remote set-url origin https://github.com/panicDa3m0n/agentdeck.git && git config --local --replace-all cre"}
+{"at": "2026-10-25 16:07", "testo": "TRAPPOLA registrata: Push su GitHub con più account gh -> gh auth git-credential fornisce solo le credenziali dell'account attivo (DavDit94 per SNJ) e un nome utente nell'URL non basta -> il repository agentdeck ha un credential helper locale che chiede a gh il token di panicDa3m0n: non rimuoverlo e non cambiare account per pubblicare."}
+{"at": "2026-10-25 16:07", "testo": "[O1.T1] bash: ~/claude-rules/bin/wf.sh pitfall \"Push su GitHub con più account gh -> gh auth git-credential fornisce solo le"}
+{"at": "2026-10-25 16:07", "testo": "ANNOTAZIONE N3 su O1.T4 — Documentare in docs/ il setup git e GitHub: identità personale impostata solo nel repository (Davide, davideditrani94@gmail.com), remote privato https://github.com/panicDa3m0n/agentdeck, credential helper locale che usa gh auth token --user panicDa3m0n (indipendente dall'account gh attivo), tag v<versione> a ogni versione chiusa (INV-8)."}
+{"at": "2026-10-25 16:07", "testo": "[O1.T1] bash: ~/claude-rules/bin/wf.sh note-add --task O1.T4 --text \"Documentare in docs/ il setup git e GitHub: identità pe"}
+{"at": "2026-10-25 16:07", "testo": "[O1.T1] FALLITO Bash: ~/claude-rules/bin/wf.sh task-close --done \"Repository con identità personale locale (Davi"}
+{"at": "2026-10-25 16:07", "testo": "FALLIMENTO [Bash] execution_error: riassuntivissimo troppo lungo (644 caratteri, max 160): è una riga di roadmap.\nSe serve più spazio il posto è una spec, "}
+{"at": "2026-10-25 16:07", "testo": "TASK CHIUSA O1.T1 — completata: Autore personale su tutti i commit; repo privato panicDa3m0n/agentdeck con main e tag v0.1.0, verificato via API; nessuna credenziale online."}
+{"at": "2026-10-25 16:07", "testo": "VERSIONE 0.1.1 (O1.T1)"}
+{"at": "2026-10-25 16:07", "testo": "[-] bash: ~/claude-rules/bin/wf.sh task-close --done \"Autore personale su tutti i commit; repo privato panicDa3m0n/agent"}
+{"at": "2026-10-25 16:07", "testo": "ERRORE RISOLTO — execution_error: riassuntivissimo troppo lungo (644 caratteri, max 160): è una riga di roadmap. Se serve più spazio il posto è una spec, — Riepilogo di chiusura oltre 160 caratteri: accorciato e task chiusa correttamente.", "tipo": "errore-risolto"}
+{"at": "2026-10-25 16:07", "testo": "[-] Write  CHANGELOG.md", "task": "-", "tipo": "file", "tool": "Write", "file": "CHANGELOG.md"}

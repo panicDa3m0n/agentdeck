@@ -10,11 +10,10 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O1` Base operativa affidabile per l'agente — 4 task: 0 completate, 1 in corso, 3 da fare, 0 bloccate
-- **Task attiva:** `O1.T1` Identità git personale e remote privato su GitHub — in corso · rischio 15/100
-- **Ultima task gestita:** —
-- **Fase:** `in_progress`
-- **Ultimo aggiornamento:** 2026-10-25 16:05
+- **Obiettivo attivo:** `O1` Base operativa affidabile per l'agente — 4 task: 1 completate, 0 in corso, 3 da fare, 0 bloccate
+- **Task attiva:** —
+- **Ultima task gestita:** `O1.T1` — completata — Autore personale su tutti i commit; repo privato panicDa3m0n/agentdeck con main e tag v0.1.0, verificato via API; nessuna credenziale online.
+- **Ultimo aggiornamento:** 2026-10-25 16:07
 
 ## Richieste attive
 
@@ -26,8 +25,8 @@ _nessuna richiesta in attesa._
 
 **Gate obiettivo:** Repository con identità git personale e remote privato su GitHub con le versioni pubblicate; documentazione di base indicizzata e collegata al codice; dopo due riavvii consecutivi la Deck mantiene lo stesso IP, risponde subito a ssh agentdeck e il comando hostname funziona.
 
-- [~] `O1.T1` Identità git personale e remote privato su GitHub — *perimetro:* `repository git locale, remote GitHub`
-  *gate previsto:* git log mostra come autore l'identità personale di Davide su tutti i commit, impostata solo per questo repository; esiste un repository GitHub privato sotto l'account personale panicDa3m0n con main pubblicato e il tag della versione corrente; nessuna credenziale sul remote (INV-6).
+- [x] `O1.T1` Identità git personale e remote privato su GitHub — *perimetro:* `repository git locale, remote GitHub`
+  *gate previsto:* git log mostra come autore l'identità personale di Davide su tutti i commit, impostata solo per questo repository; esiste un repository GitHub privato sotto l'account personale panicDa3m0n con main pubblicato e il tag della versione corrente; nessuna credenziale sul remote (INV-6). · *gate confermato:* ✔ Autore personale su tutti i commit; repo privato panicDa3m0n/agentdeck con main e tag v0.1.0, verificato via API; nessuna credenziale online.
   *rischio:* 15/100 — Riscrive l'autore di un solo commit mai pubblicato e crea un repository privato su GitHub: tutto reversibile (si può riscrivere di nuovo o eliminare il repository); unico punto delicato è non pubblicare credenziali, controllato prima del push.
   *annotazioni:* `N1`
 - [ ] `O1.T2` IP stabile della Deck sulla rete di casa — *perimetro:* `configurazione rete sulla Deck, install/install.sh`
@@ -36,7 +35,7 @@ _nessuna richiesta in attesa._
   *gate previsto:* hostname restituisce agentdeck; il pacchetto è installato con pacman e snapper mostra gli snapshot pre e post dell'installazione; il pacchetto è aggiunto all'elenco di install/install.sh.
 - [ ] `O1.T4` Documentazione di base del progetto, indicizzata e collegata al codice — *perimetro:* `README.md, docs/, intestazioni degli script in live/ e install/`
   *gate previsto:* README.md con panoramica e link; docs/README.md come indice; documenti per principi, chiavetta live, installazione e accesso alla Deck; ogni script in live/ e install/ rimanda al suo documento e ogni documento rimanda agli script; tutto pubblicato sul remote.
-  *annotazioni:* `N2`
+  *annotazioni:* `N2`, `N3`
 
 ### `O2` Protocollo dell'interfaccia agentica: schermate interattive e autoprompting — in corso
 
@@ -64,3 +63,4 @@ _Una riga per nota, sempre legata a una task. `wf.sh notes` per leggerle._
 
 - `N1` (`O1.T1`) Richiesta dell'utente alla conferma della roadmap (25/10): appena chiuso il setup registrare due invarianti, non registrabili durante il passo 6. INV-8: ogni versione si pubblica sul remote privato appena chiusa (commit e tag su GitHub, account panicDa3m0n). INV-9: documentazione sempre completa, organizzata per argomento in più file in docs/ con indice e collegata dal codice stesso, e viceversa; una modifica non è conclusa finché la documentazione non la riflette. Rieseguire anche: versione --scegli governance --dove VERSION --pubblica. — 2026-10-25 16:01
 - `N2` (`O1.T4`) Aggiungere a PRINCIPI.md (o al documento dei principi in docs/) il principio approvato dall'utente il 25/10, registrato come INV-10: si interviene al livello più alto che risolve il problema (configurazione, strato agentico, sostituzione di componenti); il codice di base si modifica solo per un bisogno reale e con decisione esplicita. Includere la tabella dei quattro livelli e il paragone con macOS e Android. — 2026-10-25 16:05
+- `N3` (`O1.T4`) Documentare in docs/ il setup git e GitHub: identità personale impostata solo nel repository (Davide, davideditrani94@gmail.com), remote privato https://github.com/panicDa3m0n/agentdeck, credential helper locale che usa gh auth token --user panicDa3m0n (indipendente dall'account gh attivo), tag v<versione> a ogni versione chiusa (INV-8). — 2026-10-25 16:07

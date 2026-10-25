@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-25 15:54",
-  "updated": "2026-10-25 16:05",
+  "updated": "2026-10-25 16:07",
   "objectives": [
     {
       "id": "O1",
@@ -17,8 +17,8 @@
           "title": "Identità git personale e remote privato su GitHub",
           "scope": "repository git locale, remote GitHub",
           "gate_pre": "git log mostra come autore l'identità personale di Davide su tutti i commit, impostata solo per questo repository; esiste un repository GitHub privato sotto l'account personale panicDa3m0n con main pubblicato e il tag della versione corrente; nessuna credenziale sul remote (INV-6).",
-          "gate_post": "",
-          "state": "doing",
+          "gate_post": "Autore personale su tutti i commit; repo privato panicDa3m0n/agentdeck con main e tag v0.1.0, verificato via API; nessuna credenziale online.",
+          "state": "done",
           "risk": 15,
           "risk_why": "Riscrive l'autore di un solo commit mai pubblicato e crea un repository privato su GitHub: tutto reversibile (si può riscrivere di nuovo o eliminare il repository); unico punto delicato è non pubblicare credenziali, controllato prima del push.",
           "docs": []
@@ -147,21 +147,28 @@
       "text": "Aggiungere a PRINCIPI.md (o al documento dei principi in docs/) il principio approvato dall'utente il 25/10, registrato come INV-10: si interviene al livello più alto che risolve il problema (configurazione, strato agentico, sostituzione di componenti); il codice di base si modifica solo per un bisogno reale e con decisione esplicita. Includere la tabella dei quattro livelli e il paragone con macOS e Android.",
       "docs": [],
       "created": "2026-10-25 16:05"
+    },
+    {
+      "id": "N3",
+      "task": "O1.T4",
+      "text": "Documentare in docs/ il setup git e GitHub: identità personale impostata solo nel repository (Davide, davideditrani94@gmail.com), remote privato https://github.com/panicDa3m0n/agentdeck, credential helper locale che usa gh auth token --user panicDa3m0n (indipendente dall'account gh attivo), tag v<versione> a ogni versione chiusa (INV-8).",
+      "docs": [],
+      "created": "2026-10-25 16:07"
     }
   ],
   "active": {
     "objective": "O1",
-    "task": "O1.T1",
-    "phase": "in_progress",
-    "risk": 15,
-    "risk_why": "Riscrive l'autore di un solo commit mai pubblicato e crea un repository privato su GitHub: tutto reversibile (si può riscrivere di nuovo o eliminare il repository); unico punto delicato è non pubblicare credenziali, controllato prima del push.",
+    "task": "",
+    "phase": "idle",
+    "risk": null,
+    "risk_why": "",
     "hold_invariants": "",
     "hold_plan": ""
   },
   "previous": {
-    "task": "",
-    "state": "",
-    "note": ""
+    "task": "O1.T1",
+    "state": "done",
+    "note": "Autore personale su tutti i commit; repo privato panicDa3m0n/agentdeck con main e tag v0.1.0, verificato via API; nessuna credenziale online."
   },
   "cycle": {
     "n": 1,
@@ -172,6 +179,6 @@
     "objective": 3,
     "cycle": 1,
     "request": 0,
-    "note": 2
+    "note": 3
   }
 }
