@@ -4,6 +4,14 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.1.3 — 2026-10-25
+
+Ciclo 01, task O1.T3: comandi di base attesi dagli agenti.
+
+- Installato `inetutils` sulla Deck: ora `hostname` è disponibile e restituisce `agentdeck`.
+- Snapshot automatici prima e dopo l'installazione (snap-pac).
+- Pacchetto aggiunto all'elenco di `install/install.sh`.
+
 ## 0.1.2 — 2026-10-25
 
 Ciclo 01, task O1.T2: IP stabile della Deck sulla rete di casa.

@@ -82,3 +82,12 @@
 {"at": "2026-10-25 16:12", "testo": "VERSIONE 0.1.2 (O1.T2)"}
 {"at": "2026-10-25 16:12", "testo": "[-] bash: ~/claude-rules/bin/wf.sh task-close --done \"SendRelease=no sulla Deck e in install.sh; snapshot 4 prima; dopo "}
 {"at": "2026-10-25 16:12", "testo": "[-] Edit  CHANGELOG.md", "task": "-", "tipo": "file", "tool": "Edit", "file": "CHANGELOG.md"}
+{"at": "2026-10-25 16:12", "testo": "[-] bash: printf '0.1.2\\n' > VERSION && git add -A && git commit -q -F - <<'EOF' Versione 0.1.2: IP stabile della Deck ("}
+{"at": "2026-10-25 16:12", "testo": "TASK APERTA O1.T3 — Comandi di base attesi dagli agenti | perimetro: pacchetti sulla Deck, install/install.sh | gate: hostname restituisce agentdeck; il pacchetto è installato con pacman e snapper mostra gli snapshot pre e post dell'installazione; il pacchetto è aggiunto all'elenco di install/install.sh. | rischio: 10"}
+{"at": "2026-10-25 16:12", "testo": "[O1.T3] bash: ssh -o BatchMode=yes -o ConnectTimeout=8 agentdeck 'sudo pacman -S --noconfirm --needed inetutils 2>&1 | grep "}
+{"at": "2026-10-25 16:12", "testo": "[O1.T3] Edit  install/install.sh", "task": "O1.T3", "tipo": "file", "tool": "Edit", "file": "install/install.sh"}
+{"at": "2026-10-25 16:12", "testo": "[O1.T3] bash: bash -n install/install.sh && echo \"sintassi OK\" && grep -n \"inetutils\" install/install.sh"}
+{"at": "2026-10-25 16:12", "testo": "TASK CHIUSA O1.T3 — completata: inetutils installato con pacman (snapshot pre 5 e post 6 da snap-pac); hostname restituisce agentdeck; pacchetto aggiunto a install/install.sh."}
+{"at": "2026-10-25 16:12", "testo": "VERSIONE 0.1.3 (O1.T3)"}
+{"at": "2026-10-25 16:12", "testo": "[-] bash: ~/claude-rules/bin/wf.sh task-close --done \"inetutils installato con pacman (snapshot pre 5 e post 6 da snap-p"}
+{"at": "2026-10-25 16:12", "testo": "[-] Edit  CHANGELOG.md", "task": "-", "tipo": "file", "tool": "Edit", "file": "CHANGELOG.md"}

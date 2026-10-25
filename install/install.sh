@@ -25,6 +25,7 @@ PACKAGES=(
   btrfs-progs dosfstools grub efibootmgr grub-btrfs inotify-tools snapper snap-pac
   iwd openssh sudo zram-generator terminus-font
   base-devel git vim jq rsync less htop pciutils usbutils smartmontools man-db
+  inetutils  # hostname: comando che gli agenti si aspettano di trovare
 )
 
 die() { echo "ERRORE: $*" >&2; exit 1; }
