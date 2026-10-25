@@ -10,11 +10,11 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O6` Aggiornamenti sicuri: deck update — 1 task: 0 completate, 1 in corso, 0 da fare, 0 bloccate
-- **Task attiva:** `O6.T1` Componente update: anteprima, applicazione e verifica degli aggiornamenti — in corso · rischio 50/100
-- **Ultima task gestita:** `O5.T2` — completata — deck logs: filtri per unità, periodo, gravità uguali a journalctl -o json, traccia agente esclusa, riga malevola solo nei dati, link da service; 11/11, 134 test
-- **Fase:** `in_progress`
-- **Ultimo aggiornamento:** 2026-10-25 20:06
+- **Obiettivo attivo:** `O6` Aggiornamenti sicuri: deck update — 1 task: 0 completate, 0 in corso, 0 da fare, 1 bloccate
+- **Task attiva:** —
+- **Ultima task gestita:** `O6.T1` — bloccata — deck update pronto, provato solo in lettura: manca la prova con un aggiornamento vero di Arch (oggi nessuno). Si riprende al primo aggiornamento
+- **Fase:** `objective_gate_pending`
+- **Ultimo aggiornamento:** 2026-10-25 20:12
 
 ## Richieste attive
 
@@ -52,8 +52,8 @@ _nessuna richiesta in attesa._
 
 **Gate obiettivo:** Un aggiornamento reale del sistema fatto da deck update: anteprima dei pacchetti, snapshot prima e dopo, verifica automatica dopo l'applicazione, rollback indicato se la verifica fallisce; la Deck resta raggiungibile, anche dopo il riavvio se l'aggiornamento lo richiede.
 
-- [~] `O6.T1` Componente update: anteprima, applicazione e verifica degli aggiornamenti — *perimetro:* `deck/, componente update, pacchetti sulla Deck, install/install.sh`
-  *gate previsto:* deck update elenca gli aggiornamenti disponibili con versione attuale e nuova e segnala kernel e GRUB (riavvio, coerenza di GRUB); l'applicazione con conferma crea gli snapshot, aggiorna, verifica servizi e accesso e indica il rollback se qualcosa non va; provato con un aggiornamento reale sulla Deck, riavvio compreso se richiesto.
+- [!] `O6.T1` Componente update: anteprima, applicazione e verifica degli aggiornamenti — *perimetro:* `deck/, componente update, pacchetti sulla Deck, install/install.sh`
+  *gate previsto:* deck update elenca gli aggiornamenti disponibili con versione attuale e nuova e segnala kernel e GRUB (riavvio, coerenza di GRUB); l'applicazione con conferma crea gli snapshot, aggiorna, verifica servizi e accesso e indica il rollback se qualcosa non va; provato con un aggiornamento reale sulla Deck, riavvio compreso se richiesto. · *blocco:* ✖ deck update pronto, provato solo in lettura: manca la prova con un aggiornamento vero di Arch (oggi nessuno). Si riprende al primo aggiornamento
   *rischio:* 50/100 — Aggiorna pacchetti, kernel e GRUB della Deck: un aggiornamento difettoso può lasciarla non avviabile o irraggiungibile (INV-1). Mitigato da snapshot prima e dopo avviabili da GRUB, pacman in unità separata, verifica automatica, GRUB reinstallato coerente, rollback indicato; prova solo con un aggiornamento vero (scelta dell'utente).
   *annotazioni:* `N16`, `N17`, `N18`
 
