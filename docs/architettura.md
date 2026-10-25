@@ -35,7 +35,7 @@ Ogni proposta si misura con i due principi del progetto:
 1. [Avvio, kernel e ripristino](#1-avvio-kernel-e-ripristino) (O8.T1)
 2. [Init, servizi e interfacce del sistema](#2-init-servizi-e-interfacce-del-sistema) (O8.T2)
 3. [Identità, permessi, isolamento e segreti](#3-identità-permessi-isolamento-e-segreti) (O8.T3)
-4. Stato del sistema, software e snapshot (O8.T4)
+4. [Stato del sistema, software e snapshot](#4-stato-del-sistema-software-e-snapshot) (O8.T4)
 5. Eventi, log e osservabilità (O8.T5)
 6. L'harness dell'agente (O8.T6)
 7. Sintesi: architettura proposta e decisioni (O8.T7)
@@ -273,3 +273,69 @@ Misure del 25/10/2026:
   senza privilegi e passa da un broker. La seconda strada è più sicura e più agentica, ma richiede prima il
   servizio di A2.3.
 - **A3.2:** quanti agenti diversi prevediamo all'inizio.
+
+---
+
+## 4. Stato del sistema, software e snapshot
+
+### 4.1 Come funziona oggi
+
+Misure del 25/10/2026:
+
+| Aspetto | Stato sulla Deck |
+|---|---|
+| **Disco** | Btrfs su 2 TB, **2,8 GB usati**. Subvolumi: `@` (sistema, compresi `/boot`, `/etc`, `/opt` e `/var`), `@home`, `@log` (`/var/log`), `@pkg` (cache di pacman, 1 GB), `@snapshots`, più `@old-20261025-180914`, lasciato dal rollback di prova con due subvolumi annidati creati da systemd (`var/lib/machines`, `var/lib/portables`) |
+| **Snapshot** | 32 snapshot con snapper: 3 coppie pre e post di snap-pac (pulizia `number`, limite 20), 7 a orario (`timeline`, 5 orari e 7 giornalieri), **19 "single" senza pulizia**: installazione, prove e tutti quelli creati da `deck` prima di ogni modifica. Snapper non toglierà mai questi ultimi (N15). Le quote di Btrfs sono spente, quindi lo spazio di ogni snapshot non si conosce e `SPACE_LIMIT` non ha effetto |
+| **Ritorno indietro** | `deck snapshot rollback` scambia `@` con una copia dello snapshot (sezione O3 del ciclo 01); oppure si avvia uno snapshot in sola lettura dal menu di grub-btrfs, che però serve a un umano (sezione 1) |
+| **Software** | pacman: 224 pacchetti, 31 installati esplicitamente, nessuno esterno ai repository, nessun orfano. 37 hook di pacman, fra cui snap-pac (snapshot prima e dopo), mkinitcpio, il riavvio di sshd e gli hook di systemd. `pacman.conf` con le impostazioni predefinite (`ParallelDownloads = 5`, firme obbligatorie) |
+| **Configurazione** | **Imperativa**: `install/install.sh` scrive i file, `deck` scrive drop-in. La configurazione di AgentDeck sono **24 file in `/etc` che nessun pacchetto possiede**: rete, sshd, sudo, iwd, resolved, snapper, mkinitcpio, zram, l'unità dello schermo. Per i file dei pacchetti, `pacman -Qkk` segnala come cambiato solo `/etc/resolv.conf`, ma l'installatore ha modificato anche `/etc/default/grub` |
+| **Registro del software** | `/var/log/pacman.log` (225 operazioni) sta in `@log` e non torna indietro con un rollback. Dopo il rollback di prova dice ancora che `tree` è installato, mentre il sistema non lo ha più |
+| **Nostro strato** | `/opt/agentdeck` (812 KB), copiato con rsync da `deck/install.sh` dentro `@`: un rollback lo porta indietro insieme al sistema (P9) |
+| **Strumenti a immagini già presenti** | `systemd-sysext` e `systemd-confext`, cioè estensioni in sola lettura che si attivano e disattivano in un colpo su `/usr`, `/opt` e `/etc`. Poi `portablectl` per i servizi portabili, `systemd-nspawn`, `machinectl`, `importctl`, e l'interfaccia varlink `io.systemd.SysUpdate`. Nessuna estensione attiva; `mkosi` non è installato |
+
+### 4.2 Presupposti umani
+
+| # | Dove | Cosa presuppone | Effetto per un agente |
+|---|---|---|---|
+| H21 | Aggiornamenti di Arch | Che qualcuno legga le notizie di archlinux.org prima di aggiornare (gli "interventi manuali richiesti") e unisca a mano i file `.pacnew` con `pacdiff` | Informazioni critiche in prosa su un sito, e unioni fatte a occhio |
+| H22 | Configurazione | File modificati a mano, nessun registro dello stato voluto | Le differenze fra lo stato voluto e quello reale non si vedono: deriva invisibile |
+| H23 | Snapshot | Un umano che sceglie da un elenco con date e descrizioni libere | Nessuna nozione di "ultimo stato buono"; scegliere a cosa tornare è un giudizio |
+| H24 | Pulizia | Cancellazioni manuali (`@old`, snapshot singoli) | Lo spazio si consuma in silenzio; oggi non è un problema (1%), ma lo diventerà |
+| H25 | Registro | Il log di pacman come racconto cronologico, senza collegamento agli snapshot | Dopo un rollback la storia e lo stato reale divergono |
+
+### 4.3 Punti di intercettazione
+
+- **snapper**:
+  - algoritmi di pulizia per snapshot (`number`, `timeline`) e i dati utente (`important=yes`), cioè ciò che
+    `deck` assegna quando crea uno snapshot;
+  - i limiti nella configurazione;
+  - `--jsonout` per leggere.
+- **Quote di Btrfs**: le quote semplici (squota) o i qgroup danno lo spazio esclusivo di ogni snapshot, con
+  costi diversi.
+- **Disposizione dei subvolumi**: un subvolume a parte per lo strato di AgentDeck lo terrebbe fuori dai
+  rollback del sistema (P9); così anche i carichi di lavoro, ognuno con i suoi snapshot.
+- **Hook di pacman** (`/etc/pacman.d/hooks/`): prima e dopo ogni transazione si può controllare, registrare in
+  forma strutturata, legare la transazione al suo snapshot e raccogliere i `.pacnew`.
+- **Estensioni di systemd** (`sysext`, `confext`): software e configurazione come immagini in sola lettura,
+  attivabili e disattivabili in modo atomico, con ritorno immediato.
+- **Container e servizi portabili** (`systemd-nspawn`, `portablectl`): isolano i carichi senza pacchetti nuovi.
+- **Notizie di Arch**: il feed di archlinux.org si legge come dato prima di ogni aggiornamento.
+
+### 4.4 Proposte
+
+| Id | Livello | Proposta | Perché, per l'agente |
+|---|---|---|---|
+| A4.1 | L1/L2 | **Politica degli snapshot**: quelli automatici di `deck` con pulizia `number` (limite configurabile), quelli che proteggono qualcosa di importante marcati `important`; quote semplici di Btrfs per conoscere lo spazio di ognuno; eliminazione con anteprima di `@old` e degli snapshot superati (O7.T2) | Chiude N15, N20 e O7.T2 con una regola invece che a mano |
+| A4.2 | L2 | **Stati buoni**: uno snapshot diventa "buono" quando un avvio di prova è confermato (A1.6) o una modifica è verificata. `deck snapshot` li distingue e il rollback propone per primo l'ultimo stato buono | Toglie H23: a cosa tornare non è più un giudizio |
+| A4.3 | L2 | **Stato voluto come dato**: un file dichiarativo con pacchetti espliciti, file di configurazione di AgentDeck, servizi abilitati e impostazioni di rete. `deck state` mostra le differenze con lo stato reale e le applica con anteprima e snapshot; ogni azione di `deck` lo aggiorna. `install/install.sh` diventa la prima applicazione di questo stato | Toglie H22: la deriva si vede, il sistema si riproduce, le modifiche dell'agente si possono rivedere |
+| A4.4 | L2 | **Hook di pacman di AgentDeck**: ogni transazione registrata in forma strutturata (pacchetti, versioni, `.pacnew`, snapshot pre e post) e collegata allo stato voluto; i `.pacnew` diventano un avviso con le differenze nei dati | Toglie H21 (unioni) e H25 |
+| A4.5 | L2 | **Notizie di Arch come dato**: `deck update` legge il feed prima di applicare e blocca l'applicazione se c'è un intervento manuale nuovo; il testo della notizia resta nei dati (INV-4) | Toglie H21 (notizie) |
+| A4.6 | L3 | **Lo strato di AgentDeck fuori dal sistema**: `deck` e gli strumenti degli agenti in un'estensione `sysext` su `/opt`, oppure in un subvolume proprio. Si aggiorna e torna indietro da solo, indipendente dai rollback del sistema | Risolve P9 |
+| A4.7 | L3 | **Carichi di lavoro in container**: `systemd-nspawn` o servizi portabili, ognuno con un suo subvolume e i suoi snapshot; lo stesso per gli ambienti di lavoro degli agenti (sezione 6, A3.5) | Isolamento e ritorno indietro per singolo carico, senza toccare il sistema |
+| A4.8 | L3 | **Sistema a immagini**: `/usr` in sola lettura, aggiornato a immagini A/B con `systemd-sysupdate`; personalizzazioni solo con `sysext` e `confext`. È il modello dei sistemi immutabili, ad esempio quelli costruiti con mkosi, anche su base Arch | Aggiornamenti atomici e ritorno indietro banale. Il prezzo è un cambio profondo rispetto ad Arch imperativo: va valutato con INV-7 e con la sezione 1 |
+
+**Da decidere nella sintesi:**
+- **A4.3, stato voluto dichiarativo, contro A4.8, sistema a immagini.** Sono due risposte diverse allo stesso
+  bisogno, sapere e ripristinare lo stato del sistema. A4.3 resta dentro Arch com'è; A4.8 cambia la forma del
+  sistema.
+- **A4.1** è indipendente e si può fare per primo.

@@ -4,6 +4,20 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.3.4 — 2026-10-25
+
+Ciclo 03, task O8.T4: studio dello stato del sistema, del software e degli snapshot.
+
+- Sezione 4 di `docs/architettura.md`.
+- Snapshot: 32 in tutto; 19 sono "single" senza pulizia (N15) e le quote di Btrfs sono spente. Sul disco resta
+  `@old`. Il log di pacman non torna indietro con un rollback.
+- La configurazione di AgentDeck è imperativa: 24 file in `/etc` che nessun pacchetto possiede. pacman non
+  vede tutte le modifiche ai file dei pacchetti.
+- Già presenti: estensioni `sysext` e `confext` (anche su `/opt`), servizi portabili, `systemd-nspawn`.
+- 5 presupposti umani e 8 proposte. Fra queste: una politica degli snapshot, gli stati buoni, lo stato voluto
+  dichiarativo con `deck state`, le notizie di Arch come dato, lo strato di AgentDeck fuori dai rollback,
+  l'alternativa di un sistema a immagini.
+
 ## 0.3.3 — 2026-10-25
 
 Ciclo 03, task O8.T3: studio di identità, permessi, isolamento e segreti dell'agente.

@@ -10,10 +10,10 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O8` Mappa del sistema e architettura agent-first — 7 task: 3 completate, 0 in corso, 4 da fare, 0 bloccate
+- **Obiettivo attivo:** `O8` Mappa del sistema e architettura agent-first — 7 task: 4 completate, 0 in corso, 3 da fare, 0 bloccate
 - **Task attiva:** —
-- **Ultima task gestita:** `O8.T3` — completata — Sezione 3 di architettura.md: sudo ALL senza polkit, nessuna sandbox né audit né firewall, TPM e Landlock pronti; 6 presupposti umani, 8 proposte
-- **Ultimo aggiornamento:** 2026-10-25 23:15
+- **Ultima task gestita:** `O8.T4` — completata — Sezione 4 di architettura.md: 32 snapshot (19 senza pulizia), configurazione imperativa in 24 file, sysext e nspawn pronti; 5 presupposti umani, 8 proposte
+- **Ultimo aggiornamento:** 2026-10-25 23:17
 
 ## Richieste attive
 
@@ -36,8 +36,9 @@ _Mancanze di progetto che l'agente non può risolvere da solo. L'utente le confe
 - [x] `O8.T3` Identità, permessi, isolamento e segreti dell'agente — *perimetro:* `docs/architettura.md, letture sulla Deck`
   *gate previsto:* Sezione identità: utenti, PAM, sudo, polkit, capabilities, sandbox di systemd, Landlock; segreti con systemd-creds e TPM della Deck (N14); dall'agente con sudo totale a permessi mirati e tracciati; proposte per livello. · *gate confermato:* ✔ Sezione 3 di architettura.md: sudo ALL senza polkit, nessuna sandbox né audit né firewall, TPM e Landlock pronti; 6 presupposti umani, 8 proposte
   *rischio:* 5/100 — Solo letture sulla Deck (utenti, PAM, sudo, polkit, sandbox, TPM, credenziali) e scrittura di docs/architettura.md: nessuna modifica al sistema.
-- [ ] `O8.T4` Stato del sistema, software e snapshot — *perimetro:* `docs/architettura.md, letture sulla Deck`
-  *gate previsto:* Sezione stato: subvolumi, pacman e i suoi hook, configurazione imperativa contro stato desiderato con differenze e rollback, isolamento dei carichi, politica degli snapshot e pulizia (N15, N20, O7.T2); proposte per livello.
+- [x] `O8.T4` Stato del sistema, software e snapshot — *perimetro:* `docs/architettura.md, letture sulla Deck`
+  *gate previsto:* Sezione stato: subvolumi, pacman e i suoi hook, configurazione imperativa contro stato desiderato con differenze e rollback, isolamento dei carichi, politica degli snapshot e pulizia (N15, N20, O7.T2); proposte per livello. · *gate confermato:* ✔ Sezione 4 di architettura.md: 32 snapshot (19 senza pulizia), configurazione imperativa in 24 file, sysext e nspawn pronti; 5 presupposti umani, 8 proposte
+  *rischio:* 5/100 — Solo letture sulla Deck (subvolumi, snapper, pacman, /etc, estensioni di systemd) e scrittura di docs/architettura.md: nessuna modifica al sistema.
 - [ ] `O8.T5` Eventi, log e osservabilità — *perimetro:* `docs/architettura.md, letture sulla Deck`
   *gate previsto:* Sezione eventi: journal, udev, eventi di systemd e D-Bus, inotify, audit, timer; cosa può svegliare un agente e come diventa autoprompting (contesto e istruzioni al momento giusto); proposte per livello.
 - [ ] `O8.T6` L'harness dell'agente: Claude Code e alternative — *perimetro:* `docs/architettura.md`
