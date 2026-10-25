@@ -10,10 +10,10 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** —
+- **Obiettivo attivo:** `O8` Mappa del sistema e architettura agent-first — 7 task: 1 completate, 0 in corso, 6 da fare, 0 bloccate
 - **Task attiva:** —
-- **Ultima task gestita:** —
-- **Ultimo aggiornamento:** 2026-10-25 20:44
+- **Ultima task gestita:** `O8.T1` — completata — Sezione 1 di architettura.md: avvio misurato (20 s), 8 presupposti umani (root bloccato in emergenza, panic, watchdog spento), 11 proposte
+- **Ultimo aggiornamento:** 2026-10-25 23:10
 
 ## Richieste attive
 
@@ -27,8 +27,9 @@ _Mancanze di progetto che l'agente non può risolvere da solo. L'utente le confe
 
 **Gate obiettivo:** docs/architettura.md approvato dall'utente: per ogni strato come funziona (misurato sulla Deck), i presupposti umani, i punti in cui il sistema si può intercettare e la proposta per livello (INV-10); decisioni di architettura approvate una per una; nessuna modifica alla Deck durante lo studio.
 
-- [ ] `O8.T1` Avvio, kernel e ripristino — *perimetro:* `docs/architettura.md, letture sulla Deck`
-  *gate previsto:* Sezione avvio: firmware, GRUB, initramfs, avvio di systemd misurati sulla Deck (systemd-analyze, journal, configurazioni); dove serve un umano (console, password di root in emergenza, menu); come ripartire da soli da uno stato buono; limite GRUB ed EFI (N17); proposte per livello.
+- [x] `O8.T1` Avvio, kernel e ripristino — *perimetro:* `docs/architettura.md, letture sulla Deck`
+  *gate previsto:* Sezione avvio: firmware, GRUB, initramfs, avvio di systemd misurati sulla Deck (systemd-analyze, journal, configurazioni); dove serve un umano (console, password di root in emergenza, menu); come ripartire da soli da uno stato buono; limite GRUB ed EFI (N17); proposte per livello. · *gate confermato:* ✔ Sezione 1 di architettura.md: avvio misurato (20 s), 8 presupposti umani (root bloccato in emergenza, panic, watchdog spento), 11 proposte
+  *rischio:* 5/100 — Solo letture sulla Deck (configurazioni, journal, systemd-analyze) e scrittura di docs/architettura.md: nessuna modifica al sistema.
 - [ ] `O8.T2` Init, servizi e interfacce del sistema — *perimetro:* `docs/architettura.md, letture sulla Deck`
   *gate previsto:* Sezione interfacce: systemd, D-Bus, varlink, socket, /proc e /sys contro i comandi testuali per umani; quali parti offrono già API strutturate e quali no; come deck può parlare al sistema senza passare dal testo; proposte per livello.
 - [ ] `O8.T3` Identità, permessi, isolamento e segreti dell'agente — *perimetro:* `docs/architettura.md, letture sulla Deck`

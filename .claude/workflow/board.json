@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-25 20:24",
-  "updated": "2026-10-25 20:44",
+  "updated": "2026-10-25 23:10",
   "objectives": [
     {
       "id": "O8",
@@ -17,10 +17,10 @@
           "title": "Avvio, kernel e ripristino",
           "scope": "docs/architettura.md, letture sulla Deck",
           "gate_pre": "Sezione avvio: firmware, GRUB, initramfs, avvio di systemd misurati sulla Deck (systemd-analyze, journal, configurazioni); dove serve un umano (console, password di root in emergenza, menu); come ripartire da soli da uno stato buono; limite GRUB ed EFI (N17); proposte per livello.",
-          "gate_post": "",
-          "state": "todo",
-          "risk": null,
-          "risk_why": "",
+          "gate_post": "Sezione 1 di architettura.md: avvio misurato (20 s), 8 presupposti umani (root bloccato in emergenza, panic, watchdog spento), 11 proposte",
+          "state": "done",
+          "risk": 5,
+          "risk_why": "Solo letture sulla Deck (configurazioni, journal, systemd-analyze) e scrittura di docs/architettura.md: nessuna modifica al sistema.",
           "docs": []
         },
         {
@@ -125,7 +125,7 @@
   ],
   "notes": [],
   "active": {
-    "objective": "",
+    "objective": "O8",
     "task": "",
     "phase": "idle",
     "risk": null,
@@ -134,9 +134,9 @@
     "hold_plan": ""
   },
   "previous": {
-    "task": "",
-    "state": "",
-    "note": ""
+    "task": "O8.T1",
+    "state": "done",
+    "note": "Sezione 1 di architettura.md: avvio misurato (20 s), 8 presupposti umani (root bloccato in emergenza, panic, watchdog spento), 11 proposte"
   },
   "cycle": {
     "n": 3,

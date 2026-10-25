@@ -4,6 +4,22 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.3.1 — 2026-10-25
+
+Ciclo 03, task O8.T1: studio dello strato di avvio, kernel e ripristino.
+
+- Nuovo `docs/architettura.md`: metodo dello studio (come funziona, presupposti umani, punti di intercettazione,
+  proposte per livello) e sezione 1.
+- Avvio misurato sulla Deck: 20,2 s (firmware 7,0, GRUB 4,2, kernel 6,2, spazio utente 2,8); Secure Boot in
+  setup mode, TPM 2.0 presente.
+- Presupposti umani trovati:
+  - con l'account root bloccato, la shell d'emergenza aspetta un umano alla console e la rete resta spenta;
+  - `kernel.panic=0`;
+  - watchdog hardware presenti ma inattivi;
+  - menu di GRUB solo da tastiera.
+- 11 proposte da decidere a fine studio, fra cui l'emergenza raggiungibile via SSH, gli avvii di prova con
+  conferma o ritorno automatico, `deck boot` e l'alternativa di systemd-boot con kernel unificati.
+
 ## 0.3.0 — 2026-10-25
 
 Chiusura del ciclo 02, "La Deck come server gestito dall'agente: rete, servizi, aggiornamenti, schermo":

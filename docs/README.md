@@ -12,6 +12,11 @@ documento (invariante INV-9). Quando si modifica il codice, si aggiorna il docum
 - [../PROGETTO.md](../PROGETTO.md) e [../ROADMAP.md](../ROADMAP.md): dossier e roadmap generati dalla
   governance; non si modificano a mano.
 
+## Architettura
+
+- [architettura.md](architettura.md): studio dell'architettura agent-first del ciclo 03, strato per strato:
+  come funziona il sistema, i presupposti umani, i punti di intercettazione e le proposte da decidere.
+
 ## Macchina
 
 - [hardware.md](hardware.md): componenti della Steam Deck LCD, dischi, rete, schermo, limiti noti.

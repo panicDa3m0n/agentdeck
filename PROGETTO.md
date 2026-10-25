@@ -9,7 +9,7 @@ AgentDeck: una Steam Deck LCD (APU AMD, 16 GB RAM, NVMe 2 TB) trasformata in ser
 
 **Come si verifica che funziona:** La Deck si riavvia da sola dal disco interno e torna raggiungibile con ssh agentdeck (utente agent, solo chiave); systemctl is-system-running risponde running senza unità fallite; è attivo il kernel principale; snapper elenca gli snapshot e GRUB li rende avviabili. Gli script hanno controlli in sola lettura: install.sh check e verify, prepare-stick.sh con DRY_RUN=1. Non esistono ancora test automatici: ogni componente nuovo si verifica usandolo davvero come agente sulla Deck e controllando che la risposta sia JSON valido e coerente con lo stato reale.
 
-**Versioni:** Il numero è MAJOR.MINOR.PATCH: il terzo sale a ogni task completata, qualunque sia il suo obiettivo; il secondo a ogni ciclo chiuso; il primo solo col sì dell'utente, su proposta dell'agente. Versione attuale: 0.3.0; il numero sta in VERSION. Ogni versione si pubblica appena chiusa.
+**Versioni:** Il numero è MAJOR.MINOR.PATCH: il terzo sale a ogni task completata, qualunque sia il suo obiettivo; il secondo a ogni ciclo chiuso; il primo solo col sì dell'utente, su proposta dell'agente. Versione attuale: 0.3.1; il numero sta in VERSION. Ogni versione si pubblica appena chiusa.
 
 ## Dettagli
 
@@ -60,7 +60,7 @@ AgentDeck: una Steam Deck LCD (APU AMD, 16 GB RAM, NVMe 2 TB) trasformata in ser
 ### `03` Studio dell'architettura agent-first: come funziona il sistema e dove intercettarlo — **in corso**
 
 - Roadmap: [ROADMAP.md](ROADMAP.md)
-- Aperto il 2026-10-25 20:24 · ultimo aggiornamento 2026-10-25 20:44
+- Aperto il 2026-10-25 20:24 · ultimo aggiornamento 2026-10-25 23:10
 
 ## Debito ereditato
 
