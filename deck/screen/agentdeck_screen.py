@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Schermo della Deck: mostra in tempo reale, come un terminale, i comandi dell'agente e l'esito di deck.
+"""Schermo della Deck: mostra in tempo reale, come un terminale, i comandi dell'agente, la loro risposta
+e l'esito di deck.
 
-Segue il journal (identificatori agentdeck-cmd, scritto da ssh-log.sh, e agentdeck, scritto da deck) e
-stampa sul terminale di tty1. È un canale verso l'umano: testi in italiano; caratteri di controllo ripuliti
+Segue il journal (agentdeck-cmd, agentdeck-out e agentdeck-err scritti da ssh-log.sh; agentdeck scritto da
+deck) e stampa sul terminale di tty1. È un canale verso l'umano: testi in italiano; caratteri di controllo ripuliti
 e valori che sembrano segreti oscurati.
 Avviato dal servizio agentdeck-screen.service. Documentazione: docs/schermo.md
 """
@@ -60,6 +61,29 @@ def describe_deck(message: str) -> Optional[tuple]:
     return GREEN, f"{where}: ok" + (f", {alerts} avvisi" if alerts not in ("", "0") else "")
 
 
+MAX_ROWS_PER_LINE = 3
+
+
+def wrap(text: str, width: int, max_rows: int = MAX_ROWS_PER_LINE) -> list:
+    """Spezza una riga lunga in righe di schermo, al massimo max_rows; l'ultima finisce con … se taglia."""
+    width = max(width, 10)
+    rows = [text[i:i + width] for i in range(0, len(text), width)] or [""]
+    if len(rows) > max_rows:
+        rows = rows[:max_rows]
+        rows[-1] = rows[-1][: width - 1] + "…"
+    return rows
+
+
+def format_output(ident: str, message: str, when: str, width: int) -> Optional[str]:
+    """Una riga della risposta di un comando, sotto il comando stesso; gli errori in rosso."""
+    text = clean(message).rstrip()
+    if not text.strip() or text.startswith('{"deck":'):  # la risposta di deck è già nella riga "→ deck"
+        return None
+    indent = " " * (len(when) + 1)
+    color, reset = (RED, RESET) if ident == "agentdeck-err" else ("", "")
+    return "\n".join(f"{indent}{color}{row}{reset}" for row in wrap(text, width - len(indent) - 1))
+
+
 def format_entry(entry: dict, width: int) -> Optional[str]:
     message = entry.get("MESSAGE")
     if not isinstance(message, str):
@@ -69,6 +93,8 @@ def format_entry(entry: dict, width: int) -> Optional[str]:
     except (KeyError, ValueError):
         when = "--:--:--"
     ident = entry.get("SYSLOG_IDENTIFIER")
+    if ident in ("agentdeck-out", "agentdeck-err"):
+        return format_output(ident, message, when, width)
     if ident == "agentdeck-cmd":
         prompt = "agent@agentdeck:~$ "
         command = shorten(clean(describe_command(message)), width - len(when) - len(prompt) - 2)
@@ -103,8 +129,8 @@ def main() -> int:
     width = shutil.get_terminal_size((106, 33)).columns
     sys.stdout.write("\x1b[?25l" + banner(width))  # cursore nascosto
     sys.stdout.flush()
-    follow = subprocess.Popen(["journalctl", "-f", "-n", "25", "-o", "json", "-t", "agentdeck-cmd", "-t", "agentdeck"],
-                              stdout=subprocess.PIPE, text=True)
+    follow = subprocess.Popen(["journalctl", "-f", "-n", "25", "-o", "json", "-t", "agentdeck-cmd", "-t", "agentdeck",
+                               "-t", "agentdeck-out", "-t", "agentdeck-err"], stdout=subprocess.PIPE, text=True)
     assert follow.stdout is not None
     for line in follow.stdout:
         try:

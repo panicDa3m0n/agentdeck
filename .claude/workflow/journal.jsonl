@@ -306,3 +306,32 @@
 {"at": "2026-10-25 17:49", "testo": "[-] bash: git add -A && git commit -q -F - <<'EOF' Schermo della Deck: attività dell'agente come un terminale (O3.T4)  A"}
 {"at": "2026-10-25 17:49", "testo": "[-] Edit  CHANGELOG.md", "task": "-", "tipo": "file", "tool": "Edit", "file": "CHANGELOG.md"}
 {"at": "2026-10-25 17:50", "testo": "VERSIONI scelte dall'utente: governance"}
+{"at": "2026-10-25 17:50", "testo": "[-] bash: ~/claude-rules/bin/wf.sh versione --scegli governance --da \"0.1.9\" --dove \"VERSION\" --pubblica | grep -o \"Vers"}
+{"at": "2026-10-25 17:53", "testo": "TASK AGGIUNTA O3.T5 in O3 — Schermo della Deck: anche la risposta di ogni comando"}
+{"at": "2026-10-25 17:53", "testo": "TASK APERTA O3.T5 — Schermo della Deck: anche la risposta di ogni comando | perimetro: deck/screen/, deck/install.sh, deck/tests/, docs/schermo.md | gate: Sotto ogni comando lo schermo mostra il suo output (normale e, in rosso, gli errori), le risposte di deck riassunte, i trasferimenti di file esclusi; per chi esegue il comando stdout, stderr, codice di uscita e dati binari restano identici (verificato); ssh, scp e rsync funzionano; rete di sicurezza anche per lo script di registrazione; documentato. | rischio: 35"}
+{"at": "2026-10-25 17:53", "testo": "[O3.T5] bash: ~/claude-rules/bin/wf.sh task-add --obj O3 --title \"Schermo della Deck: anche la risposta di ogni comando\" --g"}
+{"at": "2026-10-25 17:53", "testo": "[O3.T5] Write  deck/screen/ssh-log.sh", "task": "O3.T5", "tipo": "file", "tool": "Write", "file": "deck/screen/ssh-log.sh"}
+{"at": "2026-10-25 17:54", "testo": "[O3.T5] Write  deck/screen/install-screen.sh", "task": "O3.T5", "tipo": "file", "tool": "Write", "file": "deck/screen/install-screen.sh"}
+{"at": "2026-10-25 17:54", "testo": "[O3.T5] Edit  deck/install.sh", "task": "O3.T5", "tipo": "file", "tool": "Edit", "file": "deck/install.sh"}
+{"at": "2026-10-25 17:54", "testo": "[O3.T5] Edit  deck/screen/agentdeck_screen.py", "task": "O3.T5", "tipo": "file", "tool": "Edit", "file": "deck/screen/agentdeck_screen.py"}
+{"at": "2026-10-25 17:54", "testo": "[O3.T5] Edit  deck/screen/agentdeck_screen.py", "task": "O3.T5", "tipo": "file", "tool": "Edit", "file": "deck/screen/agentdeck_screen.py"}
+{"at": "2026-10-25 17:54", "testo": "[O3.T5] Edit  deck/screen/agentdeck_screen.py", "task": "O3.T5", "tipo": "file", "tool": "Edit", "file": "deck/screen/agentdeck_screen.py"}
+{"at": "2026-10-25 17:54", "testo": "[O3.T5] Edit  deck/screen/agentdeck_screen.py", "task": "O3.T5", "tipo": "file", "tool": "Edit", "file": "deck/screen/agentdeck_screen.py"}
+{"at": "2026-10-25 17:54", "testo": "[O3.T5] Edit  deck/tests/test_screen.py", "task": "O3.T5", "tipo": "file", "tool": "Edit", "file": "deck/tests/test_screen.py"}
+{"at": "2026-10-25 17:54", "testo": "[O3.T5] bash: cd /Users/snj/linuxai-steamdeck/deck && python3 -m unittest discover -s tests 2>&1 | tail -6; bash -n screen/s"}
+{"at": "2026-10-25 17:55", "testo": "[O3.T5] bash: out=$(BASH_ENV=$PWD/screen/ssh-log.sh bash -c 'echo uscita; echo errore >&2; exit 7' 2>/tmp/agentdeck-err-test"}
+{"at": "2026-10-25 17:55", "testo": "[O3.T5] bash: cd /Users/snj/linuxai-steamdeck && deck/install.sh 2>&1 | grep -vE \"^\\.+$|^-+$|^\\{\" | sed '/^$/d' | tail -16"}
+{"at": "2026-10-25 17:55", "testo": "[O3.T5] bash: ssh agentdeck 'uptime' >/dev/null; ssh agentdeck 'df -h /' >/dev/null; ssh agentdeck 'ls /nonexiste' >/dev/nul"}
+{"at": "2026-10-25 17:56", "testo": "TRAPPOLA registrata: Sullo schermo della Deck compaiono frammenti di JSON di deck -> logger spezza i messaggi oltre 1 KB (default di --size), solo il primo pezzo inizia con {\"deck\": -> in ssh-log.sh usare logger --size 65536 per le righe di output."}
+{"at": "2026-10-25 17:56", "testo": "[O3.T5] bash: ~/claude-rules/bin/wf.sh pitfall \"Sullo schermo della Deck compaiono frammenti di JSON di deck -> logger spezz"}
+{"at": "2026-10-25 17:56", "testo": "[O3.T5] bash: sed -i '' 's/  logger -t agentdeck-cmd -- /  logger --size 65536 -t agentdeck-cmd -- /' deck/screen/ssh-log.sh"}
+{"at": "2026-10-25 17:56", "testo": "[O3.T5] Edit  docs/schermo.md", "task": "O3.T5", "tipo": "file", "tool": "Edit", "file": "docs/schermo.md"}
+{"at": "2026-10-25 17:56", "testo": "[O3.T5] Edit  docs/schermo.md", "task": "O3.T5", "tipo": "file", "tool": "Edit", "file": "docs/schermo.md"}
+{"at": "2026-10-25 17:56", "testo": "[O3.T5] Edit  docs/schermo.md", "task": "O3.T5", "tipo": "file", "tool": "Edit", "file": "docs/schermo.md"}
+{"at": "2026-10-25 17:56", "testo": "[O3.T5] Edit  docs/schermo.md", "task": "O3.T5", "tipo": "file", "tool": "Edit", "file": "docs/schermo.md"}
+{"at": "2026-10-25 17:56", "testo": "[O3.T5] Edit  docs/schermo.md", "task": "O3.T5", "tipo": "file", "tool": "Edit", "file": "docs/schermo.md"}
+{"at": "2026-10-25 17:56", "testo": "[O3.T5] Edit  docs/schermo.md", "task": "O3.T5", "tipo": "file", "tool": "Edit", "file": "docs/schermo.md"}
+{"at": "2026-10-25 17:57", "testo": "[O3.T5] Edit  docs/schermo.md", "task": "O3.T5", "tipo": "file", "tool": "Edit", "file": "docs/schermo.md"}
+{"at": "2026-10-25 17:57", "testo": "PERIMETRO ESTESO su O3.T5 (+README.md)"}
+{"at": "2026-10-25 17:57", "testo": "PERIMETRO ESTESO su O3.T5 (+docs/README.md)"}
+{"at": "2026-10-25 17:57", "testo": "[O3.T5] bash: ~/claude-rules/bin/wf.sh scope-add \"README.md\" >/dev/null && ~/claude-rules/bin/wf.sh scope-add \"docs/README.m"}

@@ -34,19 +34,25 @@ step "Schermo della Deck"
 screen_out=$(ssh "$HOST" "sudo bash $DEST/screen/install-screen.sh")
 echo "$screen_out"
 if grep -q SSH_CHANGED <<<"$screen_out"; then
-  step "Verifica di ssh, scp e rsync (la modifica SSH si annulla da sola entro 3 minuti se non confermata)"
+  step "Verifica di ssh, scp, rsync, uscite e dati (la modifica SSH si annulla da sola entro 3 minuti)"
   probe=$(mktemp)
-  echo agentdeck > "$probe"
-  if ssh -o ConnectTimeout=10 "$HOST" true \
+  head -c 65536 /dev/urandom > "$probe"
+  sum=$(shasum -a 256 < "$probe" | cut -d' ' -f1)
+  set +e
+  out=$(ssh -o ConnectTimeout=10 "$HOST" 'echo uscita; echo errore >&2; exit 7' 2>"$probe.err"); code=$?
+  set -e
+  if [ "$out" = uscita ] && [ "$(cat "$probe.err")" = errore ] && [ "$code" = 7 ] \
      && scp -q "$probe" "$HOST:/tmp/agentdeck-scp-probe" \
      && rsync -q "$probe" "$HOST:/tmp/agentdeck-rsync-probe" \
+     && [ "$(ssh "$HOST" 'cat /tmp/agentdeck-scp-probe' | shasum -a 256 | cut -d' ' -f1)" = "$sum" ] \
+     && [ "$(ssh "$HOST" 'sha256sum < /tmp/agentdeck-rsync-probe' | cut -d' ' -f1)" = "$sum" ] \
      && ssh "$HOST" 'rm -f /tmp/agentdeck-scp-probe /tmp/agentdeck-rsync-probe && sudo systemctl stop agentdeck-ssh-revert.timer'; then
-    echo "ssh, scp e rsync funzionano: modifica SSH confermata"
+    echo "ssh, scp, rsync, stdout, stderr, codice di uscita e dati binari invariati: modifica SSH confermata"
   else
     echo "ERRORE: verifica SSH fallita; la modifica si annulla da sola entro 3 minuti" >&2
     exit 1
   fi
-  rm -f "$probe"
+  rm -f "$probe" "$probe.err"
 fi
 
 step "Test sulla Deck"

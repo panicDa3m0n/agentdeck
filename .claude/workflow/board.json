@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-25 15:54",
-  "updated": "2026-10-25 17:49",
+  "updated": "2026-10-25 17:57",
   "objectives": [
     {
       "id": "O1",
@@ -154,6 +154,17 @@
           "risk": 35,
           "risk_why": "Tocca la configurazione SSH (solo SetEnv per l'utente agent, nessun cambio di autenticazione) e sostituisce il login su tty1 con un servizio: l'accesso SSH è l'unico canale (INV-1), quindi snapshot prima, sshd -t, e una rete di sicurezza che annulla da sola la modifica SSH dopo 3 minuti se non confermata dopo i test di ssh, scp e rsync.",
           "docs": []
+        },
+        {
+          "id": "O3.T5",
+          "title": "Schermo della Deck: anche la risposta di ogni comando",
+          "scope": "deck/screen/, deck/install.sh, deck/tests/, docs/schermo.md, README.md, docs/README.md",
+          "gate_pre": "Sotto ogni comando lo schermo mostra il suo output (normale e, in rosso, gli errori), le risposte di deck riassunte, i trasferimenti di file esclusi; per chi esegue il comando stdout, stderr, codice di uscita e dati binari restano identici (verificato); ssh, scp e rsync funzionano; rete di sicurezza anche per lo script di registrazione; documentato.",
+          "gate_post": "",
+          "state": "doing",
+          "risk": 35,
+          "risk_why": "Lo script di registrazione passerà da tee l'output di ogni comando SSH dell'agente: tocca il percorso di input/output di tutti i comandi, quindi INV-1. Mitigazioni: trasferimenti e terminali interattivi esclusi, errori dello script non bloccanti, snapshot e ripristino automatico in 3 minuti se le prove falliscono.",
+          "docs": []
         }
       ]
     }
@@ -226,10 +237,10 @@
   ],
   "active": {
     "objective": "O3",
-    "task": "",
-    "phase": "idle",
-    "risk": null,
-    "risk_why": "",
+    "task": "O3.T5",
+    "phase": "in_progress",
+    "risk": 35,
+    "risk_why": "Lo script di registrazione passerà da tee l'output di ogni comando SSH dell'agente: tocca il percorso di input/output di tutti i comandi, quindi INV-1. Mitigazioni: trasferimenti e terminali interattivi esclusi, errori dello script non bloccanti, snapshot e ripristino automatico in 3 minuti se le prove falliscono.",
     "hold_invariants": "",
     "hold_plan": "",
     "gate_done": ""

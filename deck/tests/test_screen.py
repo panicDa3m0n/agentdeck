@@ -60,6 +60,35 @@ class ScreenTests(unittest.TestCase):
             color, text = screen.describe_deck(cli.call_summary(result, argv))
             self.assertEqual(text, expected)
 
+    def test_command_output_is_shown(self):
+        out = screen.format_entry(entry("agentdeck-out", " 17:48:31 up 1:32,  load average: 0.16"), 100)
+        self.assertIn("load average", out)
+        self.assertTrue(out.startswith(" " * 9), "output is indented under the command")
+
+    def test_errors_are_red(self):
+        err = screen.format_entry(entry("agentdeck-err", "ls: cannot access 'x'"), 100)
+        self.assertIn(screen.RED, err)
+
+    def test_output_is_cleaned_and_secrets_hidden(self):
+        out = screen.format_entry(entry("agentdeck-out", "TOKEN=abc123\x1b[31m red"), 100)
+        self.assertNotIn("abc123", out)
+        self.assertNotIn("\x1b[31m", out.replace(screen.RED, ""))
+
+    def test_deck_json_and_empty_lines_are_skipped(self):
+        self.assertIsNone(screen.format_entry(entry("agentdeck-out", '{"deck":1,"screen":"home"}'), 100))
+        self.assertIsNone(screen.format_entry(entry("agentdeck-out", "   "), 100))
+
+    def test_binary_output_is_ignored(self):
+        binary = {"SYSLOG_IDENTIFIER": "agentdeck-out", "MESSAGE": [0, 255, 7], "__REALTIME_TIMESTAMP": "1"}
+        self.assertIsNone(screen.format_entry(binary, 100))
+
+    def test_long_output_wraps_to_three_rows(self):
+        out = screen.format_entry(entry("agentdeck-out", "y" * 1000), 60)
+        rows = out.split("\n")
+        self.assertEqual(len(rows), 3)
+        self.assertTrue(rows[-1].endswith("…"))
+        self.assertTrue(all(len(r) <= 60 for r in rows))
+
     def test_deck_states(self):
         self.assertEqual(screen.describe_deck("/status||ok||3")[1], "/status: ok, 3 avvisi")
         self.assertEqual(screen.describe_deck("/snapshot|rollback|confirm||0")[1],
