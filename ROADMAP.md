@@ -10,10 +10,11 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** —
-- **Task attiva:** —
+- **Obiettivo attivo:** `O3` Primi componenti usati dall'agente: stato del sistema e snapshot — 4 task: 0 completate, 1 in corso, 3 da fare, 0 bloccate
+- **Task attiva:** `O3.T1` Componente status: monitor attività e informazioni di sistema — in corso · rischio 15/100
 - **Ultima task gestita:** `O2.T2` — completata — deck sulla Deck: home con componenti, errori strutturati, 8 chiamate reali conformi, 22 test verdi, ~0,09 s; install.sh ripetuto con successo.
-- **Ultimo aggiornamento:** 2026-10-25 17:37
+- **Fase:** `in_progress`
+- **Ultimo aggiornamento:** 2026-10-25 17:43
 
 ## Richieste attive
 
@@ -61,13 +62,17 @@ _nessuna richiesta in attesa._
 
 **Gate obiettivo:** L'agente usa deck status e deck snapshot al posto dei comandi manuali; un rollback reale riporta il sistema allo stato salvato e ssh agentdeck funziona dopo il riavvio.
 
-- [ ] `O3.T1` Componente status: monitor attività e informazioni di sistema — *perimetro:* `deck/, componente status`
+- [~] `O3.T1` Componente status: monitor attività e informazioni di sistema — *perimetro:* `deck/, componente status, docs/deck.md, install/install.sh`
   *gate previsto:* deck status riporta hardware, temperature, batteria, memoria, disco, rete, servizi falliti e snapshot; ogni valore coincide con quello letto dai comandi di sistema; le anomalie note (per esempio Wi-Fi a 2,4 GHz) compaiono come avvisi con azioni suggerite.
-  *annotazioni:* `N5`
+  *rischio:* 15/100 — Componente in sola lettura: legge /proc, /sys e comandi di stato (alcuni con sudo); l'unica modifica di sistema prevista è installare il piccolo pacchetto ufficiale iw per leggere il Wi-Fi in modo affidabile, con gli snapshot di snap-pac.
+  *annotazioni:* `N5`, `N8`
 - [ ] `O3.T2` Componente snapshot: elenco e creazione — *perimetro:* `deck/, componente snapshot`
   *gate previsto:* deck snapshot elenca gli stessi snapshot di snapper; la creazione da deck produce uno snapshot visibile in snapper e nel menu snapshot di GRUB.
 - [ ] `O3.T3` Rollback con anteprima e conferma — *perimetro:* `deck/, componente snapshot, subvolumi Btrfs sulla Deck`
   *gate previsto:* Prova reale: dopo snapshot e modifica di prova, il rollback mostra l'anteprima delle conseguenze, si conferma con il codice, la Deck riavvia nello stato salvato, la modifica di prova è sparita e ssh agentdeck funziona; lo stato precedente resta recuperabile come snapshot.
+- [ ] `O3.T4` Schermo della Deck: attività dell'agente visibile come un terminale — *perimetro:* `configurazione SSH e servizi sulla Deck, deck/, docs/`
+  *gate previsto:* Al posto del login, sullo schermo della Deck un terminale mostra in tempo reale ogni comando eseguito dall'agente via SSH e l'esito delle chiamate a deck; verificato leggendo il contenuto della console; snapshot prima; ssh agentdeck, scp e rsync funzionano ancora (INV-1); documentato.
+  *annotazioni:* `N7`
 
 ## Annotazioni
 
@@ -79,3 +84,5 @@ _Una riga per nota, sempre legata a una task. `wf.sh notes` per leggerle._
 - `N4` (`O1.T4`) Documentare nell'accesso alla Deck: IP stabile 192.168.1.49 grazie a SendRelease=no (O1.T2, testato con due riavvii); ssh agentdeck usa il nome agentdeck.local; se il nome non si risolve (trappola P2) usare ssh -o HostName=192.168.1.49 agentdeck. Una prenotazione DHCP sul router renderebbe l'IP fisso anche dopo spegnimenti lunghi: richiede l'accesso dell'utente al router. — 2026-10-25 16:12
 - `N5` (`O3.T1`) Dalla verifica INV-5 al gate di O1 (25/10): sulla Deck sono in ascolto 22 (SSH), 5355 (LLMNR di systemd-resolved, su tutta la LAN) e 53 solo su localhost. LLMNR non serve perché usiamo mDNS: deck status dovrebbe mostrare le porte in ascolto e segnalare LLMNR come superfluo, con l'azione suggerita LLMNR=no in resolved.conf. — 2026-10-25 16:18
 - `N6` (`O2.T2`) Dall'approvazione di O2.T1 (25/10): implementare deck seguendo docs/protocollo.md, approvato; Python 3 solo libreria standard; testi per l'agente in inglese. Da fare: installare il pacchetto python sulla Deck con snapshot (INV-3); ogni modulo rimanda a docs/protocollo.md (INV-9); test di conformità di ogni schermata e test di iniezione nel canale istruzioni (INV-4); aggiungere a PRINCIPI.md le righe di decisione: protocollo deck v1, Python 3, testi agente in inglese. — 2026-10-25 17:20
+- `N7` (`O3.T4`) Richiesta dell'utente del 25/10: sullo schermo della Deck vede solo agentdeck login; vuole vedere, come in un terminale, cosa sta facendo l'agente in base ai comandi. Da lavorare subito dopo O3.T1. Idea da discutere nel brief: wrapper dei comandi SSH dell'agente che registra ogni comando nel journal, servizio su tty1 al posto di getty che lo mostra; verifica leggendo /dev/vcs1. Attenzione: un comando con segreti sulla riga di comando comparirebbe a schermo e nel journal. — 2026-10-25 17:40
+- `N8` (`O3.T1`) Bisogno emerso usando deck status (25/10): gli avvisi WIFI_BAND_2G e LLMNR_LISTENING hanno action null perché manca un componente di rete su cui agire. Candidato per il prossimo ciclo: componente /network (banda Wi-Fi preferita, LLMNR=no, porte in ascolto) collegato dagli avvisi di status. — 2026-10-25 17:43

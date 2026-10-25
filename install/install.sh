@@ -28,6 +28,7 @@ PACKAGES=(
   iwd openssh sudo zram-generator terminus-font
   base-devel git vim jq rsync less htop pciutils usbutils smartmontools man-db
   inetutils  # hostname: comando che gli agenti si aspettano di trovare
+  iw         # frequenza, segnale e velocità del Wi-Fi per deck status
 )
 
 die() { echo "ERRORE: $*" >&2; exit 1; }

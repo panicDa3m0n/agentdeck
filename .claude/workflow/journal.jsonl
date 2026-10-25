@@ -233,3 +233,28 @@
 {"at": "2026-10-25 17:28", "testo": "[-] bash: git grep -IlE 'PRIVATE KEY|ghp_|github_pat_|sk-ant-' $(git rev-list --all) | sed 's/^[0-9a-f]*://' | sort | un"}
 {"at": "2026-10-25 17:28", "testo": "[-] Write  ../../../private/tmp/claude-502/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/scratchpad/bilancio-o2.html", "task": "-", "tipo": "file", "tool": "Write", "file": "../../../private/tmp/claude-502/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/scratchpad/bilancio-o2.html"}
 {"at": "2026-10-25 17:37", "testo": "OBIETTIVO CHIUSO O2 (completo) — approvato"}
+{"at": "2026-10-25 17:37", "testo": "[-] bash: ~/claude-rules/bin/wf.sh obj-close approvato | head -3 && git add ROADMAP.md PROGETTO.md .claude/workflow && g"}
+{"at": "2026-10-25 17:40", "testo": "TASK AGGIUNTA O3.T4 in O3 — Schermo della Deck: attività dell'agente visibile come un terminale"}
+{"at": "2026-10-25 17:40", "testo": "ANNOTAZIONE N7 su O3.T4 — Richiesta dell'utente del 25/10: sullo schermo della Deck vede solo agentdeck login; vuole vedere, come in un terminale, cosa sta facendo l'agente in base ai comandi. Da lavorare subito dopo O3.T1. Idea da discutere nel brief: wrapper dei comandi SSH dell'agente che registra ogni comando nel journal, servizio su tty1 al posto di getty che lo mostra; verifica leggendo /dev/vcs1. Attenzione: un comando con segreti sulla riga di comando comparirebbe a schermo e nel journal."}
+{"at": "2026-10-25 17:40", "testo": "[-] bash: ~/claude-rules/bin/wf.sh task-add --obj O3 --title \"Schermo della Deck: attività dell'agente visibile come un "}
+{"at": "2026-10-25 17:40", "testo": "TASK APERTA O3.T1 — Componente status: monitor attività e informazioni di sistema | perimetro: deck/, componente status | gate: deck status riporta hardware, temperature, batteria, memoria, disco, rete, servizi falliti e snapshot; ogni valore coincide con quello letto dai comandi di sistema; le anomalie note (per esempio Wi-Fi a 2,4 GHz) compaiono come avvisi con azioni suggerite. | rischio: 15"}
+{"at": "2026-10-25 17:40", "testo": "[O3.T1] bash: ~/claude-rules/bin/wf.sh task-start --id O3.T1 --risk 15 --why \"Componente in sola lettura: legge /proc, /sys "}
+{"at": "2026-10-25 17:40", "testo": "PERIMETRO ESTESO su O3.T1 (+docs/deck.md)"}
+{"at": "2026-10-25 17:40", "testo": "PERIMETRO ESTESO su O3.T1 (+install/install.sh)"}
+{"at": "2026-10-25 17:40", "testo": "[O3.T1] bash: ~/claude-rules/bin/wf.sh scope-add \"docs/deck.md\" >/dev/null && ~/claude-rules/bin/wf.sh scope-add \"install/in"}
+{"at": "2026-10-25 17:40", "testo": "[O3.T1] bash: ssh -o BatchMode=yes agentdeck 'sudo pacman -S --noconfirm --needed iw 2>&1 | grep -E \"^(Packages|installing)|"}
+{"at": "2026-10-25 17:40", "testo": "[O3.T1] bash: ssh -o BatchMode=yes agentdeck 'sudo snapper --jsonout list | python -c \"import json,sys; d=json.load(sys.stdi"}
+{"at": "2026-10-25 17:40", "testo": "[O3.T1] Edit  install/install.sh", "task": "O3.T1", "tipo": "file", "tool": "Edit", "file": "install/install.sh"}
+{"at": "2026-10-25 17:41", "testo": "[O3.T1] Write  deck/agentdeck/system.py", "task": "O3.T1", "tipo": "file", "tool": "Write", "file": "deck/agentdeck/system.py"}
+{"at": "2026-10-25 17:41", "testo": "[O3.T1] Edit  deck/agentdeck/system.py", "task": "O3.T1", "tipo": "file", "tool": "Edit", "file": "deck/agentdeck/system.py"}
+{"at": "2026-10-25 17:41", "testo": "[O3.T1] Write  deck/agentdeck/components/status.py", "task": "O3.T1", "tipo": "file", "tool": "Write", "file": "deck/agentdeck/components/status.py"}
+{"at": "2026-10-25 17:41", "testo": "[O3.T1] Edit  deck/agentdeck/components/__init__.py", "task": "O3.T1", "tipo": "file", "tool": "Edit", "file": "deck/agentdeck/components/__init__.py"}
+{"at": "2026-10-25 17:42", "testo": "[O3.T1] Write  deck/tests/test_status.py", "task": "O3.T1", "tipo": "file", "tool": "Write", "file": "deck/tests/test_status.py"}
+{"at": "2026-10-25 17:42", "testo": "[O3.T1] bash: cd /Users/snj/linuxai-steamdeck/deck && python3 -m unittest discover -s tests 2>&1 | tail -15"}
+{"at": "2026-10-25 17:42", "testo": "[O3.T1] Write  deck/tests/live_status_check.py", "task": "O3.T1", "tipo": "file", "tool": "Write", "file": "deck/tests/live_status_check.py"}
+{"at": "2026-10-25 17:42", "testo": "[O3.T1] bash: cd /Users/snj/linuxai-steamdeck && deck/install.sh > \"$TMPDIR/install4.log\" 2>&1; echo \"installazione: uscita "}
+{"at": "2026-10-25 17:43", "testo": "[O3.T1] bash: ssh -o BatchMode=yes agentdeck 'deck status' | python3 -c \"import json,sys; s=json.load(sys.stdin); print('PRO"}
+{"at": "2026-10-25 17:43", "testo": "ANNOTAZIONE N8 su O3.T1 — Bisogno emerso usando deck status (25/10): gli avvisi WIFI_BAND_2G e LLMNR_LISTENING hanno action null perché manca un componente di rete su cui agire. Candidato per il prossimo ciclo: componente /network (banda Wi-Fi preferita, LLMNR=no, porte in ascolto) collegato dagli avvisi di status."}
+{"at": "2026-10-25 17:43", "testo": "[O3.T1] Edit  docs/deck.md", "task": "O3.T1", "tipo": "file", "tool": "Edit", "file": "docs/deck.md"}
+{"at": "2026-10-25 17:43", "testo": "[O3.T1] Edit  docs/deck.md", "task": "O3.T1", "tipo": "file", "tool": "Edit", "file": "docs/deck.md"}
+{"at": "2026-10-25 17:43", "testo": "[O3.T1] Edit  docs/deck.md", "task": "O3.T1", "tipo": "file", "tool": "Edit", "file": "docs/deck.md"}

@@ -21,8 +21,46 @@ Sulla Deck una chiamata dura circa 0,09 secondi (Python 3.14, misura del 25/10/2
 |---|---|---|
 | `/` | [../deck/agentdeck/components/home.py](../deck/agentdeck/components/home.py) | Schermata principale: host, versione, tempo di attività, componenti |
 | `/protocol` | [../deck/agentdeck/components/protocol_info.py](../deck/agentdeck/components/protocol_info.py) | Il protocollo descritto all'agente: campi, stati, effetti, codici d'errore, canale istruzioni |
+| `/status` | [../deck/agentdeck/components/status.py](../deck/agentdeck/components/status.py) | Stato della macchina (vedi sotto) |
 
-In arrivo con l'obiettivo O3: `/status` (stato del sistema) e `/snapshot` (snapshot e rollback).
+In arrivo con l'obiettivo O3: `/snapshot` (snapshot e rollback).
+
+### `/status`: stato della macchina
+
+L'equivalente di Monitor Attività e Informazioni di sistema. Le letture stanno in
+[../deck/agentdeck/system.py](../deck/agentdeck/system.py): una lettura che fallisce vale `null` e compare in
+`data.read_errors`, senza rompere la schermata. Risponde in circa 0,27 secondi.
+
+| Sezione di `data` | Contenuto | Fonte |
+|---|---|---|
+| `system` | Nome, sistema operativo, kernel, tempo di attività | `/etc/os-release`, `uname`, `/proc/uptime` |
+| `hardware` | Produttore, modello, BIOS, CPU | `/sys/class/dmi/id`, `/proc/cpuinfo` |
+| `load` | Carico medio a 1, 5, 15 minuti | `/proc/loadavg` |
+| `battery` | Percentuale, stato, alimentatore | `/sys/class/power_supply` |
+| `sensors` | Temperature di APU, GPU, NVMe, ACPI; giri ventola | `/sys/class/hwmon` |
+| `memory_bytes` | RAM totale, usata, disponibile; zram | `/proc/meminfo` |
+| `disk_bytes` | Spazio della radice | `statvfs("/")` |
+| `network` | Interfacce, gateway, Wi-Fi (SSID, frequenza, banda, segnale, velocità) | `ip -j`, `iw dev <if> link` |
+| `listening` | Porte in ascolto con il processo | `sudo ss -Hltunp` |
+| `services` | Stato del sistema, servizi falliti | `systemctl --output=json` |
+| `snapshots` | Numero, ultimo, ultimo manuale | `sudo snapper --jsonout list` |
+| `time` | Sincronizzazione NTP, fuso | `timedatectl show` |
+
+| Avviso | Livello | Quando |
+|---|---|---|
+| `SERVICES_FAILED` | critical | Almeno un servizio fallito |
+| `TEMP_HIGH` | warning / critical | APU ≥ 85 °C / ≥ 95 °C |
+| `DISK_LOW`, `MEMORY_LOW` | warning | Meno del 10% libero |
+| `BATTERY_LOW` | warning / critical | A batteria sotto il 20% / 10% |
+| `WIFI_BAND_2G` | warning | Wi-Fi sulla banda a 2,4 GHz |
+| `WIFI_SIGNAL_WEAK` | warning | Segnale sotto -75 dBm |
+| `TIME_NOT_SYNCED` | warning | Orologio non sincronizzato |
+| `LLMNR_LISTENING` | info | LLMNR in ascolto sulla LAN (superfluo: si usa mDNS) |
+| `FAN_UNREADABLE` | info | Giri della ventola non leggibili (la gestisce il firmware) |
+| `READ_FAILED` | warning | Una sezione non è stata letta |
+
+SSID, nomi dei servizi e descrizioni degli snapshot sono testo esterno: stanno solo nei dati (INV-4).
+Gli avvisi oggi non hanno un'azione collegata: servirà un componente di rete.
 
 ## Codice
 
@@ -34,7 +72,10 @@ In arrivo con l'obiettivo O3: `/status` (stato del sistema) e `/snapshot` (snaps
 | [../deck/agentdeck/protocol.py](../deck/agentdeck/protocol.py) | Costruzione e validazione delle schermate; `SysText` e `sys_text()` per il canale istruzioni |
 | [../deck/agentdeck/confirm.py](../deck/agentdeck/confirm.py) | Codici di conferma: una azione, quei parametri, 5 minuti, una volta sola |
 | [../deck/agentdeck/components/](../deck/agentdeck/components/__init__.py) | Un modulo per componente; l'elenco dei componenti attivi è in `__init__.py` |
+| [../deck/agentdeck/system.py](../deck/agentdeck/system.py) | Letture dello stato della Deck da `/proc`, `/sys` e comandi; parser puri |
 | [../deck/tests/test_deck.py](../deck/tests/test_deck.py) | Test di conformità, iniezione, parametri, conferme, guasti |
+| [../deck/tests/test_status.py](../deck/tests/test_status.py) | Test di `/status`: parser su output reali, avvisi, nomi esterni nei soli dati |
+| [../deck/tests/live_status_check.py](../deck/tests/live_status_check.py) | Controllo dal vivo sulla Deck: ogni valore di `deck status` contro una lettura indipendente |
 | [../deck/install.sh](../deck/install.sh) | Installazione e aggiornamento sulla Deck |
 
 Solo libreria standard di Python, compatibile da Python 3.10 (Mac) in su (Deck: 3.14).
@@ -63,6 +104,12 @@ Lo script, ripetibile:
    al file `VERSION`;
 4. collega `/usr/local/bin/deck` a `/opt/agentdeck/deck`;
 5. lancia i test sulla Deck e prova `deck` e un indirizzo inesistente.
+
+Dopo modifiche a `/status`, il controllo dal vivo confronta ogni valore con gli strumenti classici:
+
+```bash
+ssh agentdeck python /opt/agentdeck/tests/live_status_check.py
+```
 
 I codici di conferma in sospeso stanno in `~/.local/state/agentdeck/confirm.json` dell'utente `agent`.
 
