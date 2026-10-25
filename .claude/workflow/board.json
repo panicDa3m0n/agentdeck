@@ -1,0 +1,177 @@
+{
+  "version": 5,
+  "project": "linuxai-steamdeck",
+  "mode": "cycle",
+  "created": "2026-10-25 15:54",
+  "updated": "2026-10-25 16:05",
+  "objectives": [
+    {
+      "id": "O1",
+      "title": "Base operativa affidabile per l'agente",
+      "gate": "Repository con identità git personale e remote privato su GitHub con le versioni pubblicate; documentazione di base indicizzata e collegata al codice; dopo due riavvii consecutivi la Deck mantiene lo stesso IP, risponde subito a ssh agentdeck e il comando hostname funziona.",
+      "state": "open",
+      "docs": [],
+      "tasks": [
+        {
+          "id": "O1.T1",
+          "title": "Identità git personale e remote privato su GitHub",
+          "scope": "repository git locale, remote GitHub",
+          "gate_pre": "git log mostra come autore l'identità personale di Davide su tutti i commit, impostata solo per questo repository; esiste un repository GitHub privato sotto l'account personale panicDa3m0n con main pubblicato e il tag della versione corrente; nessuna credenziale sul remote (INV-6).",
+          "gate_post": "",
+          "state": "doing",
+          "risk": 15,
+          "risk_why": "Riscrive l'autore di un solo commit mai pubblicato e crea un repository privato su GitHub: tutto reversibile (si può riscrivere di nuovo o eliminare il repository); unico punto delicato è non pubblicare credenziali, controllato prima del push.",
+          "docs": []
+        },
+        {
+          "id": "O1.T2",
+          "title": "IP stabile della Deck sulla rete di casa",
+          "scope": "configurazione rete sulla Deck, install/install.sh",
+          "gate_pre": "Snapshot creato prima della modifica; dopo due riavvii consecutivi l'IPv4 di wlan0 resta lo stesso e ssh agentdeck funziona al primo tentativo; la correzione è riportata anche in install/install.sh.",
+          "gate_post": "",
+          "state": "todo",
+          "risk": null,
+          "risk_why": "",
+          "docs": []
+        },
+        {
+          "id": "O1.T3",
+          "title": "Comandi di base attesi dagli agenti",
+          "scope": "pacchetti sulla Deck, install/install.sh",
+          "gate_pre": "hostname restituisce agentdeck; il pacchetto è installato con pacman e snapper mostra gli snapshot pre e post dell'installazione; il pacchetto è aggiunto all'elenco di install/install.sh.",
+          "gate_post": "",
+          "state": "todo",
+          "risk": null,
+          "risk_why": "",
+          "docs": []
+        },
+        {
+          "id": "O1.T4",
+          "title": "Documentazione di base del progetto, indicizzata e collegata al codice",
+          "scope": "README.md, docs/, intestazioni degli script in live/ e install/",
+          "gate_pre": "README.md con panoramica e link; docs/README.md come indice; documenti per principi, chiavetta live, installazione e accesso alla Deck; ogni script in live/ e install/ rimanda al suo documento e ogni documento rimanda agli script; tutto pubblicato sul remote.",
+          "gate_post": "",
+          "state": "todo",
+          "risk": null,
+          "risk_why": "",
+          "docs": []
+        }
+      ]
+    },
+    {
+      "id": "O2",
+      "title": "Protocollo dell'interfaccia agentica: schermate interattive e autoprompting",
+      "gate": "Protocollo scritto e approvato dall'utente; il comando deck installato sulla Deck risponde con schermate JSON conformi al protocollo, con le istruzioni separate dai dati (INV-4).",
+      "state": "open",
+      "docs": [],
+      "tasks": [
+        {
+          "id": "O2.T1",
+          "title": "Specifica del protocollo di schermata e autoprompting",
+          "scope": "docs/",
+          "gate_pre": "docs/protocollo.md descrive la struttura della schermata (dati, azioni, navigazione, avvisi, errori, conferme con anteprima, istruzioni), le regole di autoprompting e di sicurezza del canale istruzioni, con esempi reali; linguaggio di implementazione deciso; approvato esplicitamente dall'utente.",
+          "gate_post": "",
+          "state": "todo",
+          "risk": null,
+          "risk_why": "",
+          "docs": []
+        },
+        {
+          "id": "O2.T2",
+          "title": "Motore deck e installazione sulla Deck",
+          "scope": "deck/, script di installazione del comando",
+          "gate_pre": "Sulla Deck: deck senza argomenti restituisce la schermata principale con l'elenco dei componenti; un indirizzo inesistente restituisce una schermata di errore strutturata con azioni per uscirne; ogni risposta è JSON valido conforme al protocollo; l'installazione è ripetibile da uno script nel repository.",
+          "gate_post": "",
+          "state": "todo",
+          "risk": null,
+          "risk_why": "",
+          "docs": []
+        }
+      ]
+    },
+    {
+      "id": "O3",
+      "title": "Primi componenti usati dall'agente: stato del sistema e snapshot",
+      "gate": "L'agente usa deck status e deck snapshot al posto dei comandi manuali; un rollback reale riporta il sistema allo stato salvato e ssh agentdeck funziona dopo il riavvio.",
+      "state": "open",
+      "docs": [],
+      "tasks": [
+        {
+          "id": "O3.T1",
+          "title": "Componente status: monitor attività e informazioni di sistema",
+          "scope": "deck/, componente status",
+          "gate_pre": "deck status riporta hardware, temperature, batteria, memoria, disco, rete, servizi falliti e snapshot; ogni valore coincide con quello letto dai comandi di sistema; le anomalie note (per esempio Wi-Fi a 2,4 GHz) compaiono come avvisi con azioni suggerite.",
+          "gate_post": "",
+          "state": "todo",
+          "risk": null,
+          "risk_why": "",
+          "docs": []
+        },
+        {
+          "id": "O3.T2",
+          "title": "Componente snapshot: elenco e creazione",
+          "scope": "deck/, componente snapshot",
+          "gate_pre": "deck snapshot elenca gli stessi snapshot di snapper; la creazione da deck produce uno snapshot visibile in snapper e nel menu snapshot di GRUB.",
+          "gate_post": "",
+          "state": "todo",
+          "risk": null,
+          "risk_why": "",
+          "docs": []
+        },
+        {
+          "id": "O3.T3",
+          "title": "Rollback con anteprima e conferma",
+          "scope": "deck/, componente snapshot, subvolumi Btrfs sulla Deck",
+          "gate_pre": "Prova reale: dopo snapshot e modifica di prova, il rollback mostra l'anteprima delle conseguenze, si conferma con il codice, la Deck riavvia nello stato salvato, la modifica di prova è sparita e ssh agentdeck funziona; lo stato precedente resta recuperabile come snapshot.",
+          "gate_post": "",
+          "state": "todo",
+          "risk": null,
+          "risk_why": "",
+          "docs": []
+        }
+      ]
+    }
+  ],
+  "requests": [],
+  "notes": [
+    {
+      "id": "N1",
+      "task": "O1.T1",
+      "text": "Richiesta dell'utente alla conferma della roadmap (25/10): appena chiuso il setup registrare due invarianti, non registrabili durante il passo 6. INV-8: ogni versione si pubblica sul remote privato appena chiusa (commit e tag su GitHub, account panicDa3m0n). INV-9: documentazione sempre completa, organizzata per argomento in più file in docs/ con indice e collegata dal codice stesso, e viceversa; una modifica non è conclusa finché la documentazione non la riflette. Rieseguire anche: versione --scegli governance --dove VERSION --pubblica.",
+      "docs": [],
+      "created": "2026-10-25 16:01"
+    },
+    {
+      "id": "N2",
+      "task": "O1.T4",
+      "text": "Aggiungere a PRINCIPI.md (o al documento dei principi in docs/) il principio approvato dall'utente il 25/10, registrato come INV-10: si interviene al livello più alto che risolve il problema (configurazione, strato agentico, sostituzione di componenti); il codice di base si modifica solo per un bisogno reale e con decisione esplicita. Includere la tabella dei quattro livelli e il paragone con macOS e Android.",
+      "docs": [],
+      "created": "2026-10-25 16:05"
+    }
+  ],
+  "active": {
+    "objective": "O1",
+    "task": "O1.T1",
+    "phase": "in_progress",
+    "risk": 15,
+    "risk_why": "Riscrive l'autore di un solo commit mai pubblicato e crea un repository privato su GitHub: tutto reversibile (si può riscrivere di nuovo o eliminare il repository); unico punto delicato è non pubblicare credenziali, controllato prima del push.",
+    "hold_invariants": "",
+    "hold_plan": ""
+  },
+  "previous": {
+    "task": "",
+    "state": "",
+    "note": ""
+  },
+  "cycle": {
+    "n": 1,
+    "title": "Prima interfaccia agentica: protocollo, stato e snapshot",
+    "slug": "prima-interfaccia-agentica-protocollo-st"
+  },
+  "counters": {
+    "objective": 3,
+    "cycle": 1,
+    "request": 0,
+    "note": 2
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "items": [
+    {
+      "id": "INV-1",
+      "testo": "L'accesso remoto dell'agente non si perde mai: ogni modifica a rete, SSH, utenti o avvio deve lasciare funzionante ssh agentdeck (utente agent, chiave), verificato prima di considerarla conclusa.",
+      "creata": "2026-10-25 15:49"
+    },
+    {
+      "id": "INV-2",
+      "testo": "Ogni funzione del sistema è utilizzabile da un agente via testo, CLI o API con risposta strutturata, senza interazione umana: nessuna password richiesta, nessun passaggio solo grafico, nessun prompt interattivo che blocca.",
+      "creata": "2026-10-25 15:49"
+    },
+    {
+      "id": "INV-3",
+      "testo": "Le modifiche al sistema della Deck restano reversibili: prima di ogni modifica rischiosa (pacchetti, avvio, rete, servizi) deve esistere uno snapshot Btrfs da cui ripartire.",
+      "creata": "2026-10-25 15:49"
+    },
+    {
+      "id": "INV-4",
+      "testo": "Nel canale istruzioni dell'autoprompting finisce solo testo scritto dal sistema: contenuti esterni o non fidati (log, file, pagine web, output di programmi) stanno sempre nei dati, mai nelle istruzioni.",
+      "creata": "2026-10-25 15:49"
+    },
+    {
+      "id": "INV-5",
+      "testo": "Difese verso l'esterno sempre attive: SSH solo con chiave, password e root via SSH disabilitati, nessun servizio esposto su internet senza decisione esplicita dell'utente.",
+      "creata": "2026-10-25 15:49"
+    },
+    {
+      "id": "INV-6",
+      "testo": "Nessuna credenziale nel repository git: password, chiavi private e token stanno solo in secrets/ (escluso da git) o sulla Deck.",
+      "creata": "2026-10-25 15:49"
+    },
+    {
+      "id": "INV-7",
+      "testo": "Stack imposto: Arch Linux sulla Deck; l'agente interno userà solo modelli via API cloud, nessun modello eseguito in locale.",
+      "creata": "2026-10-25 15:49"
+    },
+    {
+      "id": "INV-8",
+      "testo": "Ogni versione si pubblica sul remote privato appena chiusa: commit e tag della versione su GitHub (account personale panicDa3m0n), così la storia del progetto resta granulare e consultabile.",
+      "creata": "2026-10-25 16:04"
+    },
+    {
+      "id": "INV-9",
+      "testo": "Documentazione sempre completa e aggiornata insieme al codice: organizzata per argomento in più file in docs/ con un indice, e collegata dal codice stesso (ogni modulo o script rimanda al documento che lo descrive, e il documento al codice); una modifica non è conclusa finché la documentazione non la riflette.",
+      "creata": "2026-10-25 16:05"
+    },
+    {
+      "id": "INV-10",
+      "testo": "Si interviene sul sistema al livello più alto che risolve il problema: configurazione, poi strato agentico nostro, poi sostituzione di componenti; modifiche al codice di base (kernel, programmi di sistema, pacchetti ricompilati) solo per un bisogno reale e con decisione esplicita dell'utente.",
+      "creata": "2026-10-25 16:05"
+    }
+  ]
+}

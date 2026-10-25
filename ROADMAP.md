@@ -1,0 +1,66 @@
+<!-- FILE GENERATO DALLA GOVERNANCE — non modificarlo a mano.
+     Ogni modifica manuale viene rilevata e scartata al comando successivo.
+     Si aggiorna SOLO con i comandi wf.sh (obj-add, task-add, task-start,
+     task-close, note-add, req-add, ...). -->
+
+
+# ROADMAP — linuxai-steamdeck  ·  ciclo 01: Prima interfaccia agentica: protocollo, stato e snapshot
+
+_Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
+
+## Stato corrente
+
+- **Obiettivo attivo:** `O1` Base operativa affidabile per l'agente — 4 task: 0 completate, 1 in corso, 3 da fare, 0 bloccate
+- **Task attiva:** `O1.T1` Identità git personale e remote privato su GitHub — in corso · rischio 15/100
+- **Ultima task gestita:** —
+- **Fase:** `in_progress`
+- **Ultimo aggiornamento:** 2026-10-25 16:05
+
+## Richieste attive
+
+_nessuna richiesta in attesa._
+
+## Obiettivi
+
+### `O1` Base operativa affidabile per l'agente — in corso
+
+**Gate obiettivo:** Repository con identità git personale e remote privato su GitHub con le versioni pubblicate; documentazione di base indicizzata e collegata al codice; dopo due riavvii consecutivi la Deck mantiene lo stesso IP, risponde subito a ssh agentdeck e il comando hostname funziona.
+
+- [~] `O1.T1` Identità git personale e remote privato su GitHub — *perimetro:* `repository git locale, remote GitHub`
+  *gate previsto:* git log mostra come autore l'identità personale di Davide su tutti i commit, impostata solo per questo repository; esiste un repository GitHub privato sotto l'account personale panicDa3m0n con main pubblicato e il tag della versione corrente; nessuna credenziale sul remote (INV-6).
+  *rischio:* 15/100 — Riscrive l'autore di un solo commit mai pubblicato e crea un repository privato su GitHub: tutto reversibile (si può riscrivere di nuovo o eliminare il repository); unico punto delicato è non pubblicare credenziali, controllato prima del push.
+  *annotazioni:* `N1`
+- [ ] `O1.T2` IP stabile della Deck sulla rete di casa — *perimetro:* `configurazione rete sulla Deck, install/install.sh`
+  *gate previsto:* Snapshot creato prima della modifica; dopo due riavvii consecutivi l'IPv4 di wlan0 resta lo stesso e ssh agentdeck funziona al primo tentativo; la correzione è riportata anche in install/install.sh.
+- [ ] `O1.T3` Comandi di base attesi dagli agenti — *perimetro:* `pacchetti sulla Deck, install/install.sh`
+  *gate previsto:* hostname restituisce agentdeck; il pacchetto è installato con pacman e snapper mostra gli snapshot pre e post dell'installazione; il pacchetto è aggiunto all'elenco di install/install.sh.
+- [ ] `O1.T4` Documentazione di base del progetto, indicizzata e collegata al codice — *perimetro:* `README.md, docs/, intestazioni degli script in live/ e install/`
+  *gate previsto:* README.md con panoramica e link; docs/README.md come indice; documenti per principi, chiavetta live, installazione e accesso alla Deck; ogni script in live/ e install/ rimanda al suo documento e ogni documento rimanda agli script; tutto pubblicato sul remote.
+  *annotazioni:* `N2`
+
+### `O2` Protocollo dell'interfaccia agentica: schermate interattive e autoprompting — in corso
+
+**Gate obiettivo:** Protocollo scritto e approvato dall'utente; il comando deck installato sulla Deck risponde con schermate JSON conformi al protocollo, con le istruzioni separate dai dati (INV-4).
+
+- [ ] `O2.T1` Specifica del protocollo di schermata e autoprompting — *perimetro:* `docs/`
+  *gate previsto:* docs/protocollo.md descrive la struttura della schermata (dati, azioni, navigazione, avvisi, errori, conferme con anteprima, istruzioni), le regole di autoprompting e di sicurezza del canale istruzioni, con esempi reali; linguaggio di implementazione deciso; approvato esplicitamente dall'utente.
+- [ ] `O2.T2` Motore deck e installazione sulla Deck — *perimetro:* `deck/, script di installazione del comando`
+  *gate previsto:* Sulla Deck: deck senza argomenti restituisce la schermata principale con l'elenco dei componenti; un indirizzo inesistente restituisce una schermata di errore strutturata con azioni per uscirne; ogni risposta è JSON valido conforme al protocollo; l'installazione è ripetibile da uno script nel repository.
+
+### `O3` Primi componenti usati dall'agente: stato del sistema e snapshot — in corso
+
+**Gate obiettivo:** L'agente usa deck status e deck snapshot al posto dei comandi manuali; un rollback reale riporta il sistema allo stato salvato e ssh agentdeck funziona dopo il riavvio.
+
+- [ ] `O3.T1` Componente status: monitor attività e informazioni di sistema — *perimetro:* `deck/, componente status`
+  *gate previsto:* deck status riporta hardware, temperature, batteria, memoria, disco, rete, servizi falliti e snapshot; ogni valore coincide con quello letto dai comandi di sistema; le anomalie note (per esempio Wi-Fi a 2,4 GHz) compaiono come avvisi con azioni suggerite.
+- [ ] `O3.T2` Componente snapshot: elenco e creazione — *perimetro:* `deck/, componente snapshot`
+  *gate previsto:* deck snapshot elenca gli stessi snapshot di snapper; la creazione da deck produce uno snapshot visibile in snapper e nel menu snapshot di GRUB.
+- [ ] `O3.T3` Rollback con anteprima e conferma — *perimetro:* `deck/, componente snapshot, subvolumi Btrfs sulla Deck`
+  *gate previsto:* Prova reale: dopo snapshot e modifica di prova, il rollback mostra l'anteprima delle conseguenze, si conferma con il codice, la Deck riavvia nello stato salvato, la modifica di prova è sparita e ssh agentdeck funziona; lo stato precedente resta recuperabile come snapshot.
+
+## Annotazioni
+
+_Una riga per nota, sempre legata a una task. `wf.sh notes` per leggerle._
+
+- `N1` (`O1.T1`) Richiesta dell'utente alla conferma della roadmap (25/10): appena chiuso il setup registrare due invarianti, non registrabili durante il passo 6. INV-8: ogni versione si pubblica sul remote privato appena chiusa (commit e tag su GitHub, account panicDa3m0n). INV-9: documentazione sempre completa, organizzata per argomento in più file in docs/ con indice e collegata dal codice stesso, e viceversa; una modifica non è conclusa finché la documentazione non la riflette. Rieseguire anche: versione --scegli governance --dove VERSION --pubblica. — 2026-10-25 16:01
+- `N2` (`O1.T4`) Aggiungere a PRINCIPI.md (o al documento dei principi in docs/) il principio approvato dall'utente il 25/10, registrato come INV-10: si interviene al livello più alto che risolve il problema (configurazione, strato agentico, sostituzione di componenti); il codice di base si modifica solo per un bisogno reale e con decisione esplicita. Includere la tabella dei quattro livelli e il paragone con macOS e Android. — 2026-10-25 16:05
