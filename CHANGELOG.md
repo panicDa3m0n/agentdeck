@@ -4,6 +4,17 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.1.9 — 2026-10-25
+
+Ciclo 01, task O3.T4: schermo della Deck come terminale dell'agente (richiesta dell'utente).
+
+- Al posto del login su `tty1` lo schermo mostra in tempo reale ogni comando SSH dell'agente e l'esito di
+  ogni chiamata a `deck`, con testo ripulito e segreti oscurati.
+- Comandi registrati tramite `BASH_ENV` per l'utente `agent`: autenticazione SSH invariata, e un errore
+  nello script di registrazione non blocca i comandi.
+- Installazione con snapshot e rete di sicurezza SSH (ripristino automatico in 3 minuti se `ssh`, `scp` o
+  `rsync` non funzionano dopo la modifica). 42 test; documentazione in `docs/schermo.md`.
+
 ## 0.1.8 — 2026-10-25
 
 Ciclo 01, task O3.T1: componente `deck status`.

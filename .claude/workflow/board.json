@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-25 15:54",
-  "updated": "2026-10-25 17:48",
+  "updated": "2026-10-25 17:49",
   "objectives": [
     {
       "id": "O1",
@@ -149,8 +149,8 @@
           "title": "Schermo della Deck: attività dell'agente visibile come un terminale",
           "scope": "configurazione SSH e servizi sulla Deck, deck/, docs/, README.md",
           "gate_pre": "Al posto del login, sullo schermo della Deck un terminale mostra in tempo reale ogni comando eseguito dall'agente via SSH e l'esito delle chiamate a deck; verificato leggendo il contenuto della console; snapshot prima; ssh agentdeck, scp e rsync funzionano ancora (INV-1); documentato.",
-          "gate_post": "",
-          "state": "doing",
+          "gate_post": "Schermo Deck: comandi agente ed esiti deck in tempo reale (verificato da /dev/vcsu1); snapshot 10; ssh, scp, rsync ok; docs/schermo.md.",
+          "state": "done",
           "risk": 35,
           "risk_why": "Tocca la configurazione SSH (solo SetEnv per l'utente agent, nessun cambio di autenticazione) e sostituisce il login su tty1 con un servizio: l'accesso SSH è l'unico canale (INV-1), quindi snapshot prima, sshd -t, e una rete di sicurezza che annulla da sola la modifica SSH dopo 3 minuti se non confermata dopo i test di ssh, scp e rsync.",
           "docs": []
@@ -226,18 +226,18 @@
   ],
   "active": {
     "objective": "O3",
-    "task": "O3.T4",
-    "phase": "in_progress",
-    "risk": 35,
-    "risk_why": "Tocca la configurazione SSH (solo SetEnv per l'utente agent, nessun cambio di autenticazione) e sostituisce il login su tty1 con un servizio: l'accesso SSH è l'unico canale (INV-1), quindi snapshot prima, sshd -t, e una rete di sicurezza che annulla da sola la modifica SSH dopo 3 minuti se non confermata dopo i test di ssh, scp e rsync.",
+    "task": "",
+    "phase": "idle",
+    "risk": null,
+    "risk_why": "",
     "hold_invariants": "",
     "hold_plan": "",
     "gate_done": ""
   },
   "previous": {
-    "task": "O3.T1",
+    "task": "O3.T4",
     "state": "done",
-    "note": "deck status sulla Deck: 23/23 valori coincidono con gli strumenti classici, avvisi WIFI_BAND_2G, LLMNR, ventola; 34 test verdi; 0,27 s."
+    "note": "Schermo Deck: comandi agente ed esiti deck in tempo reale (verificato da /dev/vcsu1); snapshot 10; ssh, scp, rsync ok; docs/schermo.md."
   },
   "cycle": {
     "n": 1,

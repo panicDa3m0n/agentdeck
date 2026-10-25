@@ -10,11 +10,10 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O3` Primi componenti usati dall'agente: stato del sistema e snapshot — 4 task: 1 completate, 1 in corso, 2 da fare, 0 bloccate
-- **Task attiva:** `O3.T4` Schermo della Deck: attività dell'agente visibile come un terminale — in corso · rischio 35/100
-- **Ultima task gestita:** `O3.T1` — completata — deck status sulla Deck: 23/23 valori coincidono con gli strumenti classici, avvisi WIFI_BAND_2G, LLMNR, ventola; 34 test verdi; 0,27 s.
-- **Fase:** `in_progress`
-- **Ultimo aggiornamento:** 2026-10-25 17:48
+- **Obiettivo attivo:** `O3` Primi componenti usati dall'agente: stato del sistema e snapshot — 4 task: 2 completate, 0 in corso, 2 da fare, 0 bloccate
+- **Task attiva:** —
+- **Ultima task gestita:** `O3.T4` — completata — Schermo Deck: comandi agente ed esiti deck in tempo reale (verificato da /dev/vcsu1); snapshot 10; ssh, scp, rsync ok; docs/schermo.md.
+- **Ultimo aggiornamento:** 2026-10-25 17:49
 
 ## Richieste attive
 
@@ -70,8 +69,8 @@ _nessuna richiesta in attesa._
   *gate previsto:* deck snapshot elenca gli stessi snapshot di snapper; la creazione da deck produce uno snapshot visibile in snapper e nel menu snapshot di GRUB.
 - [ ] `O3.T3` Rollback con anteprima e conferma — *perimetro:* `deck/, componente snapshot, subvolumi Btrfs sulla Deck`
   *gate previsto:* Prova reale: dopo snapshot e modifica di prova, il rollback mostra l'anteprima delle conseguenze, si conferma con il codice, la Deck riavvia nello stato salvato, la modifica di prova è sparita e ssh agentdeck funziona; lo stato precedente resta recuperabile come snapshot.
-- [~] `O3.T4` Schermo della Deck: attività dell'agente visibile come un terminale — *perimetro:* `configurazione SSH e servizi sulla Deck, deck/, docs/, README.md`
-  *gate previsto:* Al posto del login, sullo schermo della Deck un terminale mostra in tempo reale ogni comando eseguito dall'agente via SSH e l'esito delle chiamate a deck; verificato leggendo il contenuto della console; snapshot prima; ssh agentdeck, scp e rsync funzionano ancora (INV-1); documentato.
+- [x] `O3.T4` Schermo della Deck: attività dell'agente visibile come un terminale — *perimetro:* `configurazione SSH e servizi sulla Deck, deck/, docs/, README.md`
+  *gate previsto:* Al posto del login, sullo schermo della Deck un terminale mostra in tempo reale ogni comando eseguito dall'agente via SSH e l'esito delle chiamate a deck; verificato leggendo il contenuto della console; snapshot prima; ssh agentdeck, scp e rsync funzionano ancora (INV-1); documentato. · *gate confermato:* ✔ Schermo Deck: comandi agente ed esiti deck in tempo reale (verificato da /dev/vcsu1); snapshot 10; ssh, scp, rsync ok; docs/schermo.md.
   *rischio:* 35/100 — Tocca la configurazione SSH (solo SetEnv per l'utente agent, nessun cambio di autenticazione) e sostituisce il login su tty1 con un servizio: l'accesso SSH è l'unico canale (INV-1), quindi snapshot prima, sshd -t, e una rete di sicurezza che annulla da sola la modifica SSH dopo 3 minuti se non confermata dopo i test di ssh, scp e rsync.
   *annotazioni:* `N7`, `N9`
 

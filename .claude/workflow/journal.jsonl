@@ -301,3 +301,8 @@
 {"at": "2026-10-25 17:49", "testo": "[O3.T4] Edit  docs/deck.md", "task": "O3.T4", "tipo": "file", "tool": "Edit", "file": "docs/deck.md"}
 {"at": "2026-10-25 17:49", "testo": "[O3.T4] Edit  README.md", "task": "O3.T4", "tipo": "file", "tool": "Edit", "file": "README.md"}
 {"at": "2026-10-25 17:49", "testo": "[O3.T4] bash: bash -c 'b=0; for f in README.md PRINCIPI.md CHANGELOG.md docs/*.md; do d=$(dirname \"$f\"); for l in $(grep -oE"}
+{"at": "2026-10-25 17:49", "testo": "TASK CHIUSA O3.T4 — completata: Schermo Deck: comandi agente ed esiti deck in tempo reale (verificato da /dev/vcsu1); snapshot 10; ssh, scp, rsync ok; docs/schermo.md."}
+{"at": "2026-10-25 17:49", "testo": "VERSIONE 0.1.9 (O3.T4)"}
+{"at": "2026-10-25 17:49", "testo": "[-] bash: git add -A && git commit -q -F - <<'EOF' Schermo della Deck: attività dell'agente come un terminale (O3.T4)  A"}
+{"at": "2026-10-25 17:49", "testo": "[-] Edit  CHANGELOG.md", "task": "-", "tipo": "file", "tool": "Edit", "file": "CHANGELOG.md"}
+{"at": "2026-10-25 17:50", "testo": "VERSIONI scelte dall'utente: governance"}
