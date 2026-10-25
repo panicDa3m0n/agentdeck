@@ -3,13 +3,13 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-25 20:24",
-  "updated": "2026-10-25 23:46",
+  "updated": "2026-10-25 23:47",
   "objectives": [
     {
       "id": "O8",
       "title": "Mappa del sistema e architettura agent-first",
       "gate": "docs/architettura.md approvato dall'utente: per ogni strato come funziona (misurato sulla Deck), i presupposti umani, i punti in cui il sistema si può intercettare e la proposta per livello (INV-10); decisioni di architettura approvate una per una; nessuna modifica alla Deck durante lo studio.",
-      "state": "open",
+      "state": "closed",
       "docs": [],
       "tasks": [
         {
@@ -89,13 +89,15 @@
           "risk_why": "Sintesi scritta in docs/architettura.md e PRINCIPI.md, nessuna modifica alla Deck; le decisioni le prende l'utente in revisione.",
           "docs": []
         }
-      ]
+      ],
+      "closed_at": "2026-10-25 23:47",
+      "closed_note": "approvato"
     },
     {
       "id": "O9",
       "title": "Aggiornamento reale della Deck con deck update",
       "gate": "Il primo aggiornamento vero di Arch applicato con deck update: anteprima, snapshot prima e dopo, verifica, riavvio se richiesto; la Deck resta raggiungibile (INV-1).",
-      "state": "open",
+      "state": "blocked",
       "docs": [],
       "tasks": [
         {
@@ -103,13 +105,15 @@
           "title": "Prova di deck update con un aggiornamento vero (ripresa di O6.T1, con N16, N18, N19)",
           "scope": "deck/, componente update, pacchetti sulla Deck",
           "gate_pre": "deck update elenca l'aggiornamento con versioni e segnala kernel e GRUB; apply con conferma crea gli snapshot, aggiorna, verifica servizi e accesso; riavvio e verify se richiesti; ssh agentdeck funziona dopo.",
-          "gate_post": "",
-          "state": "todo",
-          "risk": null,
-          "risk_why": "",
+          "gate_post": "Nessun aggiornamento vero di Arch disponibile durante il ciclo 03; si riprende al primo aggiornamento, nel ciclo 04",
+          "state": "blocked",
+          "risk": 0,
+          "risk_why": "Nessun lavoro: la task si chiude subito come bloccata perché manca ancora un aggiornamento vero di Arch.",
           "docs": []
         }
-      ]
+      ],
+      "closed_at": "2026-10-25 23:47",
+      "closed_note": "deck update pronto; manca ancora la prova con un aggiornamento vero di Arch, rinviata al ciclo 04"
     }
   ],
   "requests": [
@@ -117,10 +121,11 @@
       "id": "R3",
       "objective": "",
       "title": "Confermare il ciclo 03: eseguire dal terminale dell'utente i 15 debt-resolve approvati il 25/10, negati all'agente nel passo 6 del setup (P10)",
-      "state": "open",
+      "state": "resolved",
       "doc": "",
       "dettaglio": "",
-      "created": "2026-10-25 20:39"
+      "created": "2026-10-25 20:39",
+      "resolved": "2026-10-25 23:46"
     }
   ],
   "notes": [
@@ -158,21 +163,29 @@
       "text": "Paradigma dell'utente (25/10, revisione): l'agente è uno strumento privo di cognizione; è il sistema operativo che guida l'agente e lo sfrutta per il proprio funzionamento corretto. In certi procedimenti il sistema fornisce dati, impone obblighi e dà prompt: ad esempio l'installazione di un pacchetto obbliga l'agente a creare il profilo dell'adattatore per quel programma. I profili li crea l'agente del sistema, dentro il sistema. Modello già funzionante: la governance che guida Claude con hook, obblighi e stati bloccanti. Si esce dal paradigma degli OS per umani.",
       "docs": [],
       "created": "2026-10-25 23:40"
+    },
+    {
+      "id": "N26",
+      "task": "O9.T1",
+      "text": "Effetto del blocco di O9 (25/10): resta valido N19, la Deck non viene aggiornata finché la prova non si fa; deck update check e l'avviso UPDATES_UNCHECKED dicono quando arriva un aggiornamento. La prova passa al ciclo 04 come debito.",
+      "docs": [],
+      "created": "2026-10-25 23:47"
     }
   ],
   "active": {
-    "objective": "O8",
+    "objective": "",
     "task": "",
-    "phase": "objective_gate_pending",
+    "phase": "idle",
     "risk": null,
     "risk_why": "",
     "hold_invariants": "",
-    "hold_plan": ""
+    "hold_plan": "",
+    "gate_done": ""
   },
   "previous": {
-    "task": "O8.T7",
-    "state": "done",
-    "note": "Sintesi e revisione: Claude Code come harness, il sistema guida l'agente, adattatore dei prompt, obblighi come avvisi, si parte da Claude Code sulla Deck"
+    "task": "O9.T1",
+    "state": "blocked",
+    "note": "Nessun aggiornamento vero di Arch disponibile durante il ciclo 03; si riprende al primo aggiornamento, nel ciclo 04"
   },
   "cycle": {
     "n": 3,
@@ -183,6 +196,6 @@
     "objective": 9,
     "cycle": 3,
     "request": 3,
-    "note": 25
+    "note": 26
   }
 }

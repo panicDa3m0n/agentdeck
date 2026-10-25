@@ -10,23 +10,21 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O8` Mappa del sistema e architettura agent-first — 7 task: 7 completate, 0 in corso, 0 da fare, 0 bloccate
+- **Obiettivo attivo:** —
 - **Task attiva:** —
-- **Ultima task gestita:** `O8.T7` — completata — Sintesi e revisione: Claude Code come harness, il sistema guida l'agente, adattatore dei prompt, obblighi come avvisi, si parte da Claude Code sulla Deck
-- **Fase:** `objective_gate_pending`
-- **Ultimo aggiornamento:** 2026-10-25 23:46
+- **Ultima task gestita:** `O9.T1` — bloccata — Nessun aggiornamento vero di Arch disponibile durante il ciclo 03; si riprende al primo aggiornamento, nel ciclo 04
+- **Ultimo aggiornamento:** 2026-10-25 23:47
 
 ## Richieste attive
 
-_Mancanze di progetto che l'agente non può risolvere da solo. L'utente le conferma in chat, poi vengono chiuse con `req-resolve`._
-
-- `R3` (generale) Confermare il ciclo 03: eseguire dal terminale dell'utente i 15 debt-resolve approvati il 25/10, negati all'agente nel passo 6 del setup (P10)
+_nessuna richiesta in attesa._
 
 ## Obiettivi
 
-### `O8` Mappa del sistema e architettura agent-first — in corso
+### `O8` Mappa del sistema e architettura agent-first — chiuso
 
 **Gate obiettivo:** docs/architettura.md approvato dall'utente: per ogni strato come funziona (misurato sulla Deck), i presupposti umani, i punti in cui il sistema si può intercettare e la proposta per livello (INV-10); decisioni di architettura approvate una per una; nessuna modifica alla Deck durante lo studio.
+**Chiuso:** 2026-10-25 23:47 — approvato
 
 - [x] `O8.T1` Avvio, kernel e ripristino — *perimetro:* `docs/architettura.md, letture sulla Deck`
   *gate previsto:* Sezione avvio: firmware, GRUB, initramfs, avvio di systemd misurati sulla Deck (systemd-analyze, journal, configurazioni); dove serve un umano (console, password di root in emergenza, menu); come ripartire da soli da uno stato buono; limite GRUB ed EFI (N17); proposte per livello. · *gate confermato:* ✔ Sezione 1 di architettura.md: avvio misurato (20 s), 8 presupposti umani (root bloccato in emergenza, panic, watchdog spento), 11 proposte
@@ -51,12 +49,15 @@ _Mancanze di progetto che l'agente non può risolvere da solo. L'utente le confe
   *rischio:* 5/100 — Sintesi scritta in docs/architettura.md e PRINCIPI.md, nessuna modifica alla Deck; le decisioni le prende l'utente in revisione.
   *annotazioni:* `N21`, `N22`, `N23`, `N24`, `N25`
 
-### `O9` Aggiornamento reale della Deck con deck update — in corso
+### `O9` Aggiornamento reale della Deck con deck update — BLOCCATO
 
 **Gate obiettivo:** Il primo aggiornamento vero di Arch applicato con deck update: anteprima, snapshot prima e dopo, verifica, riavvio se richiesto; la Deck resta raggiungibile (INV-1).
+**Blocco:** 2026-10-25 23:47 — deck update pronto; manca ancora la prova con un aggiornamento vero di Arch, rinviata al ciclo 04
 
-- [ ] `O9.T1` Prova di deck update con un aggiornamento vero (ripresa di O6.T1, con N16, N18, N19) — *perimetro:* `deck/, componente update, pacchetti sulla Deck`
-  *gate previsto:* deck update elenca l'aggiornamento con versioni e segnala kernel e GRUB; apply con conferma crea gli snapshot, aggiorna, verifica servizi e accesso; riavvio e verify se richiesti; ssh agentdeck funziona dopo.
+- [!] `O9.T1` Prova di deck update con un aggiornamento vero (ripresa di O6.T1, con N16, N18, N19) — *perimetro:* `deck/, componente update, pacchetti sulla Deck`
+  *gate previsto:* deck update elenca l'aggiornamento con versioni e segnala kernel e GRUB; apply con conferma crea gli snapshot, aggiorna, verifica servizi e accesso; riavvio e verify se richiesti; ssh agentdeck funziona dopo. · *blocco:* ✖ Nessun aggiornamento vero di Arch disponibile durante il ciclo 03; si riprende al primo aggiornamento, nel ciclo 04
+  *rischio:* 0/100 — Nessun lavoro: la task si chiude subito come bloccata perché manca ancora un aggiornamento vero di Arch.
+  *annotazioni:* `N26`
 
 ## Annotazioni
 
@@ -67,3 +68,4 @@ _Una riga per nota, sempre legata a una task. `wf.sh notes` per leggerle._
 - `N23` (`O8.T7`) Verifica dei termini (25/10, fonti primarie): Consumer Terms vietano reverse engineering e accesso automatizzato salvo chiave API o permesso esplicito; il login dell'abbonamento è per l'uso ordinario di Claude Code; il binario non va modificato. Sessioni interattive e Remote Control in regola; sessioni avviate da eventi con claude -p sull'abbonamento da chiarire prima di A5.5/A6.5 (decisione D7). — 2026-10-25 23:27
 - `N24` (`O8.T7`) Decisione di direzione dell'utente (25/10, revisione): i prompt interattivi dei programmi restano, perché sono autoprompting nativo del sistema e non si può prevedere tutto. Al posto di eliminarli (H11, A2.4) serve un adattatore che converta ciò che l'interfaccia fa per un umano (schermo, domande, scelte, tabelle) in JSON per l'agente, così da gestire nativamente una moltitudine di servizi senza strutturare ogni cosa su misura. Si procede passo passo con l'utente, partendo da un esempio di come lavora l'agente. — 2026-10-25 23:34
 - `N25` (`O8.T7`) Paradigma dell'utente (25/10, revisione): l'agente è uno strumento privo di cognizione; è il sistema operativo che guida l'agente e lo sfrutta per il proprio funzionamento corretto. In certi procedimenti il sistema fornisce dati, impone obblighi e dà prompt: ad esempio l'installazione di un pacchetto obbliga l'agente a creare il profilo dell'adattatore per quel programma. I profili li crea l'agente del sistema, dentro il sistema. Modello già funzionante: la governance che guida Claude con hook, obblighi e stati bloccanti. Si esce dal paradigma degli OS per umani. — 2026-10-25 23:40
+- `N26` (`O9.T1`) Effetto del blocco di O9 (25/10): resta valido N19, la Deck non viene aggiornata finché la prova non si fa; deck update check e l'avviso UPDATES_UNCHECKED dicono quando arriva un aggiornamento. La prova passa al ciclo 04 come debito. — 2026-10-25 23:47

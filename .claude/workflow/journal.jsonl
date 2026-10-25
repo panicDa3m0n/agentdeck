@@ -770,3 +770,15 @@
 {"at": "2026-10-25 23:46", "testo": "TASK CHIUSA O8.T7 — completata: Sintesi e revisione: Claude Code come harness, il sistema guida l'agente, adattatore dei prompt, obblighi come avvisi, si parte da Claude Code sulla Deck"}
 {"at": "2026-10-25 23:46", "testo": "VERSIONE 0.3.7 (O8.T7)"}
 {"at": "2026-10-25 23:46", "testo": "VERSIONI scelte dall'utente: governance"}
+{"at": "2026-10-25 23:46", "testo": "[-] bash: ~/claude-rules/bin/wf.sh task-close --done \"Sintesi e revisione: Claude Code come harness, il sistema guida l'"}
+{"at": "2026-10-25 23:46", "testo": "GATE OBIETTIVO APERTO O8"}
+{"at": "2026-10-25 23:46", "testo": "[-] bash: ~/claude-rules/bin/wf.sh obj-gate O8 2>&1 | sed -n '/Numeri/,/Task e loro esito/p' | head -6; ~/claude-rules/b"}
+{"at": "2026-10-25 23:46", "testo": "RICHIESTA R3 risolta"}
+{"at": "2026-10-25 23:46", "testo": "[-] bash: ~/claude-rules/bin/wf.sh req-resolve R3 2>&1 | head -1; grep -cE \"^## [1-7]\\. \" docs/architettura.md; ssh -o B"}
+{"at": "2026-10-25 23:47", "testo": "OBIETTIVO CHIUSO O8 (completo) — approvato"}
+{"at": "2026-10-25 23:47", "testo": "TASK APERTA O9.T1 — Prova di deck update con un aggiornamento vero (ripresa di O6.T1, con N16, N18, N19) | perimetro: deck/, componente update, pacchetti sulla Deck | gate: deck update elenca l'aggiornamento con versioni e segnala kernel e GRUB; apply con conferma crea gli snapshot, aggiorna, verifica servizi e accesso; riavvio e verify se richiesti; ssh agentdeck funziona dopo. | rischio: 0"}
+{"at": "2026-10-25 23:47", "testo": "TASK CHIUSA O9.T1 — bloccata: Nessun aggiornamento vero di Arch disponibile durante il ciclo 03; si riprende al primo aggiornamento, nel ciclo 04"}
+{"at": "2026-10-25 23:47", "testo": "ANNOTAZIONE N26 su O9.T1 — Effetto del blocco di O9 (25/10): resta valido N19, la Deck non viene aggiornata finché la prova non si fa; deck update check e l'avviso UPDATES_UNCHECKED dicono quando arriva un aggiornamento. La prova passa al ciclo 04 come debito."}
+{"at": "2026-10-25 23:47", "testo": "GATE OBIETTIVO APERTO O9"}
+{"at": "2026-10-25 23:47", "testo": "OBIETTIVO CHIUSO O9 (bloccato) — deck update pronto; manca ancora la prova con un aggiornamento vero di Arch, rinviata al ciclo 04"}
+{"at": "2026-10-25 23:47", "testo": "[-] bash: ~/claude-rules/bin/wf.sh obj-close approvato 2>&1 | head -2; ~/claude-rules/bin/wf.sh task-start --id O9.T1 --"}
