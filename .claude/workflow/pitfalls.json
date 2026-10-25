@@ -75,6 +75,11 @@
       "id": "P15",
       "testo": "Il commit di una versione esce con il numero vecchio in VERSION (successo con v0.3.1) -> versione --scegli ... --dove VERSION riallinea il contatore della governance ma non scrive il file -> scrivere VERSION con printf nello stesso comando del commit e controllare con cat VERSION prima di creare il tag.",
       "creata": "2026-10-25 23:10"
+    },
+    {
+      "id": "P16",
+      "testo": "Al setup di un ciclo, setup --confermato rifiuta voci riprese nel ciclo precedente e non completate (restano taken e scoperte) -> la governance le ricontrolla a ogni nuovo ciclo -> prima di roadmap-new, quando debt-resolve è ancora consentito, pronunciarsi anche su queste (task che le nomina o --rimandato), oppure nominarle nei titoli delle task del nuovo ciclo.",
+      "creata": "2026-10-25 23:51"
     }
   ]
 }

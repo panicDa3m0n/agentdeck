@@ -9,7 +9,7 @@ AgentDeck: una Steam Deck LCD (APU AMD, 16 GB RAM, NVMe 2 TB) trasformata in ser
 
 **Come si verifica che funziona:** La Deck si riavvia da sola dal disco interno e torna raggiungibile con ssh agentdeck (utente agent, solo chiave); systemctl is-system-running risponde running senza unità fallite; è attivo il kernel principale; snapper elenca gli snapshot e GRUB li rende avviabili. Gli script hanno controlli in sola lettura: install.sh check e verify, prepare-stick.sh con DRY_RUN=1. Non esistono ancora test automatici: ogni componente nuovo si verifica usandolo davvero come agente sulla Deck e controllando che la risposta sia JSON valido e coerente con lo stato reale.
 
-**Versioni:** Il numero è MAJOR.MINOR.PATCH: il terzo sale a ogni task completata, qualunque sia il suo obiettivo; il secondo a ogni ciclo chiuso; il primo solo col sì dell'utente, su proposta dell'agente. Versione attuale: 0.3.7; il numero sta in VERSION. Ogni versione si pubblica appena chiusa.
+**Versioni:** Il numero è MAJOR.MINOR.PATCH: il terzo sale a ogni task completata, qualunque sia il suo obiettivo; il secondo a ogni ciclo chiuso; il primo solo col sì dell'utente, su proposta dell'agente. Versione attuale: 0.4.0; il numero sta in VERSION. Ogni versione si pubblica appena chiusa.
 
 ## Dettagli
 
@@ -57,10 +57,25 @@ AgentDeck: una Steam Deck LCD (APU AMD, 16 GB RAM, NVMe 2 TB) trasformata in ser
   - `O6` Aggiornamenti sicuri: deck update — deck update pronto e installato; manca la prova con un aggiornamento vero di Arch, da fare al primo disponibile (decisione dell'utente)
   - `O7` Schermo leggibile e compatto, sistema pulito: deck screen — Rinviato dall'utente a dopo lo studio dell'architettura agent-first: schermo compatto e pulizia passano come debito al ciclo 03
 
-### `03` Studio dell'architettura agent-first: come funziona il sistema e dove intercettarlo — **in corso**
+### `03` Studio dell'architettura agent-first: come funziona il sistema e dove intercettarlo — concluso il 2026-10-25 23:47
+
+- Roadmap archiviata: [03-studio-dell-architettura-agent-first-com.md](.claude/workflow/roadmaps/03-studio-dell-architettura-agent-first-com.md)
+- Aperto il 2026-10-25 20:24 · concluso il 2026-10-25 23:47
+- **Risultato:** 2 obiettivi, 7 task completate, 1 rimaste bloccate
+  - `O8` Mappa del sistema e architettura agent-first — approvato
+    • O8.T1: Sezione 1 di architettura.md: avvio misurato (20 s), 8 presupposti umani (root bloccato in emergenza, panic, watchdog spento), 11 proposte
+    • O8.T2: Sezione 2 di architettura.md: 18 socket varlink e D-Bus misurati (8 ms), deck usa 12 parser di testo; 6 presupposti umani, 7 proposte
+    • O8.T3: Sezione 3 di architettura.md: sudo ALL senza polkit, nessuna sandbox né audit né firewall, TPM e Landlock pronti; 6 presupposti umani, 8 proposte
+    • O8.T4: Sezione 4 di architettura.md: 32 snapshot (19 senza pulizia), configurazione imperativa in 24 file, sysext e nspawn pronti; 5 presupposti umani, 8 proposte
+    • O8.T5: Sezione 5 di architettura.md: journal (28% traccia agente, 42% eventi riconoscibili), sistema silenzioso, nessuno sveglia l'agente; 5 presupposti, 9 proposte
+    • O8.T6: Sezione 6 di architettura.md: fork di Claude Code non permesso (licenza), Agent SDK, hook, MCP, Remote Control verificati; dove vivono le sessioni; 6 proposte
+    • O8.T7: Sintesi e revisione: Claude Code come harness, il sistema guida l'agente, adattatore dei prompt, obblighi come avvisi, si parte da Claude Code sulla Deck
+  - `O9` Aggiornamento reale della Deck con deck update — deck update pronto; manca ancora la prova con un aggiornamento vero di Arch, rinviata al ciclo 04
+
+### `04` Claude Code dentro AgentDeck: installazione, configurazione e uso reale — **in corso**
 
 - Roadmap: [ROADMAP.md](ROADMAP.md)
-- Aperto il 2026-10-25 20:24 · ultimo aggiornamento 2026-10-25 23:47
+- Aperto il 2026-10-25 23:48 · ultimo aggiornamento 2026-10-25 23:50
 
 ## Debito ereditato
 

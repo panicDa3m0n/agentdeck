@@ -4,6 +4,23 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.4.0 — 2026-10-25
+
+Chiusura del ciclo 03, "Studio dell'architettura agent-first: come funziona il sistema e dove intercettarlo":
+2 obiettivi, 7 task completate, 1 bloccata. Roadmap archiviata in `.claude/workflow/roadmaps/`.
+
+- O8 completo: `docs/architettura.md`, con sei strati misurati sulla Deck, 33 presupposti umani, 49 proposte,
+  la sintesi e l'esito della revisione con l'utente.
+- O9 bloccato: la prova di `deck update` aspetta ancora un aggiornamento vero di Arch e passa al ciclo 04
+  (O11).
+- Aperto il ciclo 04, "Claude Code dentro AgentDeck: installazione, configurazione e uso reale".
+- Debito rimandato, ancora da fare:
+  - pulizia degli snapshot e di `@old`;
+  - `deck secrets`;
+  - rollback dopo un aggiornamento di GRUB;
+  - adattatore dei prompt;
+  - lettura e modalità compatta dello schermo.
+
 ## 0.3.7 — 2026-10-25
 
 Ciclo 03, task O8.T7: sintesi dello studio e revisione con l'utente.

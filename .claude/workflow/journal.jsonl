@@ -782,3 +782,16 @@
 {"at": "2026-10-25 23:47", "testo": "GATE OBIETTIVO APERTO O9"}
 {"at": "2026-10-25 23:47", "testo": "OBIETTIVO CHIUSO O9 (bloccato) — deck update pronto; manca ancora la prova con un aggiornamento vero di Arch, rinviata al ciclo 04"}
 {"at": "2026-10-25 23:47", "testo": "[-] bash: ~/claude-rules/bin/wf.sh obj-close approvato 2>&1 | head -2; ~/claude-rules/bin/wf.sh task-start --id O9.T1 --"}
+{"at": "2026-10-25 23:47", "testo": "VERSIONE 0.4.0 (ciclo 03 chiuso)"}
+{"at": "2026-10-25 23:48", "testo": "CICLO 04 APERTO — Claude Code dentro AgentDeck: installazione, configurazione e uso reale"}
+{"at": "2026-10-25 23:48", "testo": "OBIETTIVO AGGIUNTO O10 — Claude Code sulla Deck, usato davvero"}
+{"at": "2026-10-25 23:48", "testo": "TASK AGGIUNTA O10.T1 in O10 — Installazione di Claude Code sulla Deck"}
+{"at": "2026-10-25 23:48", "testo": "TASK AGGIUNTA O10.T2 in O10 — Accesso: abbonamento, sessione persistente e Remote Control (N22, N23)"}
+{"at": "2026-10-25 23:48", "testo": "TASK AGGIUNTA O10.T3 in O10 — Prima configurazione: AgentDeck spiegato a Claude Code"}
+{"at": "2026-10-25 23:48", "testo": "TASK AGGIUNTA O10.T4 in O10 — Uso reale dalla chat e bisogni emersi"}
+{"at": "2026-10-25 23:48", "testo": "OBIETTIVO AGGIUNTO O11 — Aggiornamento reale della Deck con deck update (O9)"}
+{"at": "2026-10-25 23:48", "testo": "TASK AGGIUNTA O11.T1 in O11 — Prova di deck update con un aggiornamento vero (O9.T1, N26)"}
+{"at": "2026-10-25 23:50", "testo": "TASK CORRETTA O11.T1 — title: «Prova di deck update con un aggiornamento vero (O9.T1, N26)» -> «Prova di deck update con un aggiornamento vero (O9.T1, N26; da O6.T1, O6, N16, N18, N19)»"}
+{"at": "2026-10-25 23:51", "testo": "ROADMAP CONFERMATA — ciclo 04"}
+{"at": "2026-10-25 23:51", "testo": "TRAPPOLA registrata: Al setup di un ciclo, setup --confermato rifiuta voci riprese nel ciclo precedente e non completate (restano taken e scoperte) -> la governance le ricontrolla a ogni nuovo ciclo -> prima di roadmap-new, quando debt-resolve è ancora consentito, pronunciarsi anche su queste (task che le nomina o --rimandato), oppure nominarle nei titoli delle task del nuovo ciclo."}
+{"at": "2026-10-25 23:51", "testo": "[-] bash: ~/claude-rules/bin/wf.sh versione 2>&1 | grep -o \"Versione attuale: [0-9.]*\"; git ls-remote --tags origin | gr"}

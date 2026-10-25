@@ -2,176 +2,85 @@
   "version": 5,
   "project": "linuxai-steamdeck",
   "mode": "cycle",
-  "created": "2026-10-25 20:24",
-  "updated": "2026-10-25 23:47",
+  "created": "2026-10-25 23:48",
+  "updated": "2026-10-25 23:50",
   "objectives": [
     {
-      "id": "O8",
-      "title": "Mappa del sistema e architettura agent-first",
-      "gate": "docs/architettura.md approvato dall'utente: per ogni strato come funziona (misurato sulla Deck), i presupposti umani, i punti in cui il sistema si può intercettare e la proposta per livello (INV-10); decisioni di architettura approvate una per una; nessuna modifica alla Deck durante lo studio.",
-      "state": "closed",
+      "id": "O10",
+      "title": "Claude Code sulla Deck, usato davvero",
+      "gate": "Claude Code gira sulla Deck per l'utente agent, autenticato con l'abbonamento e seguibile con Remote Control; conosce AgentDeck da un CLAUDE.md ricavato da docs/ e usa deck; una sessione di lavoro reale dalla chat produce i bisogni per il ciclo successivo; snapshot prima di ogni modifica e ssh agentdeck sempre funzionante (INV-1).",
+      "state": "open",
       "docs": [],
       "tasks": [
         {
-          "id": "O8.T1",
-          "title": "Avvio, kernel e ripristino",
-          "scope": "docs/architettura.md, letture sulla Deck",
-          "gate_pre": "Sezione avvio: firmware, GRUB, initramfs, avvio di systemd misurati sulla Deck (systemd-analyze, journal, configurazioni); dove serve un umano (console, password di root in emergenza, menu); come ripartire da soli da uno stato buono; limite GRUB ed EFI (N17); proposte per livello.",
-          "gate_post": "Sezione 1 di architettura.md: avvio misurato (20 s), 8 presupposti umani (root bloccato in emergenza, panic, watchdog spento), 11 proposte",
-          "state": "done",
-          "risk": 5,
-          "risk_why": "Solo letture sulla Deck (configurazioni, journal, systemd-analyze) e scrittura di docs/architettura.md: nessuna modifica al sistema.",
+          "id": "O10.T1",
+          "title": "Installazione di Claude Code sulla Deck",
+          "scope": "pacchetti e file dell'utente agent sulla Deck, install/, deck/, docs/",
+          "gate_pre": "Snapshot prima; binario nativo di Claude Code installato per l'utente agent; claude --version e una richiesta di prova funzionano su Arch; nessun servizio esposto in rete; installazione ripetibile da script del repository; documentazione aggiornata.",
+          "gate_post": "",
+          "state": "todo",
+          "risk": null,
+          "risk_why": "",
           "docs": []
         },
         {
-          "id": "O8.T2",
-          "title": "Init, servizi e interfacce del sistema",
-          "scope": "docs/architettura.md, letture sulla Deck",
-          "gate_pre": "Sezione interfacce: systemd, D-Bus, varlink, socket, /proc e /sys contro i comandi testuali per umani; quali parti offrono già API strutturate e quali no; come deck può parlare al sistema senza passare dal testo; proposte per livello.",
-          "gate_post": "Sezione 2 di architettura.md: 18 socket varlink e D-Bus misurati (8 ms), deck usa 12 parser di testo; 6 presupposti umani, 7 proposte",
-          "state": "done",
-          "risk": 5,
-          "risk_why": "Solo letture sulla Deck (bus di sistema, socket varlink, uscite dei comandi) e scrittura di docs/architettura.md: nessuna modifica al sistema.",
+          "id": "O10.T2",
+          "title": "Accesso: abbonamento, sessione persistente e Remote Control (N22, N23)",
+          "scope": "configurazione di Claude Code e unità systemd sulla Deck, docs/",
+          "gate_pre": "Login con l'abbonamento fatto dall'utente, token solo sulla Deck (INV-6); sessione di Claude Code come servizio che sopravvive alla caduta di SSH; raggiungibile con Remote Control da claude.ai o dal telefono; termini dell'abbonamento per sessioni automatiche verificati e riportati; proposta di nuovo testo per INV-7.",
+          "gate_post": "",
+          "state": "todo",
+          "risk": null,
+          "risk_why": "",
           "docs": []
         },
         {
-          "id": "O8.T3",
-          "title": "Identità, permessi, isolamento e segreti dell'agente",
-          "scope": "docs/architettura.md, letture sulla Deck",
-          "gate_pre": "Sezione identità: utenti, PAM, sudo, polkit, capabilities, sandbox di systemd, Landlock; segreti con systemd-creds e TPM della Deck (N14); dall'agente con sudo totale a permessi mirati e tracciati; proposte per livello.",
-          "gate_post": "Sezione 3 di architettura.md: sudo ALL senza polkit, nessuna sandbox né audit né firewall, TPM e Landlock pronti; 6 presupposti umani, 8 proposte",
-          "state": "done",
-          "risk": 5,
-          "risk_why": "Solo letture sulla Deck (utenti, PAM, sudo, polkit, sandbox, TPM, credenziali) e scrittura di docs/architettura.md: nessuna modifica al sistema.",
+          "id": "O10.T3",
+          "title": "Prima configurazione: AgentDeck spiegato a Claude Code",
+          "scope": "CLAUDE.md e impostazioni di Claude Code sulla Deck, deck/, docs/",
+          "gate_pre": "CLAUDE.md di AgentDeck ricavato da docs/ (fonte unica, INV-9) con principi, invarianti e uso di deck; permessi di Claude Code che proteggono l'accesso (niente stop o disable di sshd, rete, iwd, dbus); uso di deck dalla sessione verificato.",
+          "gate_post": "",
+          "state": "todo",
+          "risk": null,
+          "risk_why": "",
           "docs": []
         },
         {
-          "id": "O8.T4",
-          "title": "Stato del sistema, software e snapshot",
-          "scope": "docs/architettura.md, letture sulla Deck",
-          "gate_pre": "Sezione stato: subvolumi, pacman e i suoi hook, configurazione imperativa contro stato desiderato con differenze e rollback, isolamento dei carichi, politica degli snapshot e pulizia (N15, N20, O7.T2); proposte per livello.",
-          "gate_post": "Sezione 4 di architettura.md: 32 snapshot (19 senza pulizia), configurazione imperativa in 24 file, sysext e nspawn pronti; 5 presupposti umani, 8 proposte",
-          "state": "done",
-          "risk": 5,
-          "risk_why": "Solo letture sulla Deck (subvolumi, snapper, pacman, /etc, estensioni di systemd) e scrittura di docs/architettura.md: nessuna modifica al sistema.",
-          "docs": []
-        },
-        {
-          "id": "O8.T5",
-          "title": "Eventi, log e osservabilità",
-          "scope": "docs/architettura.md, letture sulla Deck",
-          "gate_pre": "Sezione eventi: journal, udev, eventi di systemd e D-Bus, inotify, audit, timer; cosa può svegliare un agente e come diventa autoprompting (contesto e istruzioni al momento giusto); proposte per livello.",
-          "gate_post": "Sezione 5 di architettura.md: journal (28% traccia agente, 42% eventi riconoscibili), sistema silenzioso, nessuno sveglia l'agente; 5 presupposti, 9 proposte",
-          "state": "done",
-          "risk": 5,
-          "risk_why": "Solo letture e osservazioni di pochi secondi sulla Deck (journal, D-Bus, udev, timer, logind) e scrittura di docs/architettura.md: nessuna modifica al sistema.",
-          "docs": []
-        },
-        {
-          "id": "O8.T6",
-          "title": "L'harness dell'agente: Claude Code e alternative",
-          "scope": "docs/architettura.md",
-          "gate_pre": "Sezione harness: licenza di Claude Code e possibilità di fork verificate su fonti ufficiali; Claude Agent SDK; estensione senza fork (hook, MCP, plugin, skill, modalità senza interfaccia, Remote Control); dove vivono le sessioni e come il sistema alimenta comandi interattivi e autoprompting; proposta motivata.",
-          "gate_post": "Sezione 6 di architettura.md: fork di Claude Code non permesso (licenza), Agent SDK, hook, MCP, Remote Control verificati; dove vivono le sessioni; 6 proposte",
-          "state": "done",
-          "risk": 5,
-          "risk_why": "Ricerca su fonti ufficiali e letture sulla Deck; scrittura di docs/architettura.md: nessuna modifica al sistema.",
-          "docs": []
-        },
-        {
-          "id": "O8.T7",
-          "title": "Sintesi: architettura proposta e decisioni",
-          "scope": "docs/architettura.md, PRINCIPI.md",
-          "gate_pre": "Architettura complessiva in una pagina, con le interfacce per l'umano come canale futuro ed effimero; elenco delle decisioni approvate una per una dall'utente; roadmap degli sviluppi che ne deriva, pronta per il ciclo successivo.",
-          "gate_post": "Sintesi e revisione: Claude Code come harness, il sistema guida l'agente, adattatore dei prompt, obblighi come avvisi, si parte da Claude Code sulla Deck",
-          "state": "done",
-          "risk": 5,
-          "risk_why": "Sintesi scritta in docs/architettura.md e PRINCIPI.md, nessuna modifica alla Deck; le decisioni le prende l'utente in revisione.",
+          "id": "O10.T4",
+          "title": "Uso reale dalla chat e bisogni emersi",
+          "scope": "sessioni di Claude Code sulla Deck, annotazioni della governance, docs/",
+          "gate_pre": "Almeno una sessione di lavoro reale dalla chat di Claude Code sulla Deck, scelta con l'utente; ogni bisogno emerso registrato come annotazione; proposta di roadmap del ciclo successivo che nasce da quei bisogni.",
+          "gate_post": "",
+          "state": "todo",
+          "risk": null,
+          "risk_why": "",
           "docs": []
         }
-      ],
-      "closed_at": "2026-10-25 23:47",
-      "closed_note": "approvato"
+      ]
     },
     {
-      "id": "O9",
-      "title": "Aggiornamento reale della Deck con deck update",
+      "id": "O11",
+      "title": "Aggiornamento reale della Deck con deck update (O9)",
       "gate": "Il primo aggiornamento vero di Arch applicato con deck update: anteprima, snapshot prima e dopo, verifica, riavvio se richiesto; la Deck resta raggiungibile (INV-1).",
-      "state": "blocked",
+      "state": "open",
       "docs": [],
       "tasks": [
         {
-          "id": "O9.T1",
-          "title": "Prova di deck update con un aggiornamento vero (ripresa di O6.T1, con N16, N18, N19)",
+          "id": "O11.T1",
+          "title": "Prova di deck update con un aggiornamento vero (O9.T1, N26; da O6.T1, O6, N16, N18, N19)",
           "scope": "deck/, componente update, pacchetti sulla Deck",
           "gate_pre": "deck update elenca l'aggiornamento con versioni e segnala kernel e GRUB; apply con conferma crea gli snapshot, aggiorna, verifica servizi e accesso; riavvio e verify se richiesti; ssh agentdeck funziona dopo.",
-          "gate_post": "Nessun aggiornamento vero di Arch disponibile durante il ciclo 03; si riprende al primo aggiornamento, nel ciclo 04",
-          "state": "blocked",
-          "risk": 0,
-          "risk_why": "Nessun lavoro: la task si chiude subito come bloccata perché manca ancora un aggiornamento vero di Arch.",
+          "gate_post": "",
+          "state": "todo",
+          "risk": null,
+          "risk_why": "",
           "docs": []
         }
-      ],
-      "closed_at": "2026-10-25 23:47",
-      "closed_note": "deck update pronto; manca ancora la prova con un aggiornamento vero di Arch, rinviata al ciclo 04"
+      ]
     }
   ],
-  "requests": [
-    {
-      "id": "R3",
-      "objective": "",
-      "title": "Confermare il ciclo 03: eseguire dal terminale dell'utente i 15 debt-resolve approvati il 25/10, negati all'agente nel passo 6 del setup (P10)",
-      "state": "resolved",
-      "doc": "",
-      "dettaglio": "",
-      "created": "2026-10-25 20:39",
-      "resolved": "2026-10-25 23:46"
-    }
-  ],
-  "notes": [
-    {
-      "id": "N21",
-      "task": "O8.T7",
-      "text": "Da portare alla revisione (O8.T6, 25/10): la licenza di Claude Code (LICENSE.md: All rights reserved, termini commerciali di Anthropic) non permette un fork. Proposta A6.1: Claude Code non modificato più un plugin di AgentDeck (hook, MCP con deck mcp, skill, CLAUDE.md), Agent SDK per gli agenti nostri, Remote Control per seguire le sessioni dal telefono. Cambia l'idea iniziale dell'utente: va decisa esplicitamente.",
-      "docs": [],
-      "created": "2026-10-25 23:22"
-    },
-    {
-      "id": "N22",
-      "task": "O8.T7",
-      "text": "Decisione dell'utente (25/10, D1): niente API di Claude, l'harness è Claude Code. Sessioni interattive: Claude Code sulla Deck con il plugin di AgentDeck (hook, deck mcp, skill), seguite con Remote Control. Agente autonomo: Claude Code senza interfaccia (claude -p, --resume), non Agent SDK con chiave API; fork open source escluso. Da verificare: condizioni d'uso dell'abbonamento per sessioni automatiche; testo di INV-7 (modelli via API cloud) da allineare con il sì dell'utente.",
-      "docs": [],
-      "created": "2026-10-25 23:25"
-    },
-    {
-      "id": "N23",
-      "task": "O8.T7",
-      "text": "Verifica dei termini (25/10, fonti primarie): Consumer Terms vietano reverse engineering e accesso automatizzato salvo chiave API o permesso esplicito; il login dell'abbonamento è per l'uso ordinario di Claude Code; il binario non va modificato. Sessioni interattive e Remote Control in regola; sessioni avviate da eventi con claude -p sull'abbonamento da chiarire prima di A5.5/A6.5 (decisione D7).",
-      "docs": [],
-      "created": "2026-10-25 23:27"
-    },
-    {
-      "id": "N24",
-      "task": "O8.T7",
-      "text": "Decisione di direzione dell'utente (25/10, revisione): i prompt interattivi dei programmi restano, perché sono autoprompting nativo del sistema e non si può prevedere tutto. Al posto di eliminarli (H11, A2.4) serve un adattatore che converta ciò che l'interfaccia fa per un umano (schermo, domande, scelte, tabelle) in JSON per l'agente, così da gestire nativamente una moltitudine di servizi senza strutturare ogni cosa su misura. Si procede passo passo con l'utente, partendo da un esempio di come lavora l'agente.",
-      "docs": [],
-      "created": "2026-10-25 23:34"
-    },
-    {
-      "id": "N25",
-      "task": "O8.T7",
-      "text": "Paradigma dell'utente (25/10, revisione): l'agente è uno strumento privo di cognizione; è il sistema operativo che guida l'agente e lo sfrutta per il proprio funzionamento corretto. In certi procedimenti il sistema fornisce dati, impone obblighi e dà prompt: ad esempio l'installazione di un pacchetto obbliga l'agente a creare il profilo dell'adattatore per quel programma. I profili li crea l'agente del sistema, dentro il sistema. Modello già funzionante: la governance che guida Claude con hook, obblighi e stati bloccanti. Si esce dal paradigma degli OS per umani.",
-      "docs": [],
-      "created": "2026-10-25 23:40"
-    },
-    {
-      "id": "N26",
-      "task": "O9.T1",
-      "text": "Effetto del blocco di O9 (25/10): resta valido N19, la Deck non viene aggiornata finché la prova non si fa; deck update check e l'avviso UPDATES_UNCHECKED dicono quando arriva un aggiornamento. La prova passa al ciclo 04 come debito.",
-      "docs": [],
-      "created": "2026-10-25 23:47"
-    }
-  ],
+  "requests": [],
+  "notes": [],
   "active": {
     "objective": "",
     "task": "",
@@ -179,22 +88,21 @@
     "risk": null,
     "risk_why": "",
     "hold_invariants": "",
-    "hold_plan": "",
-    "gate_done": ""
+    "hold_plan": ""
   },
   "previous": {
-    "task": "O9.T1",
-    "state": "blocked",
-    "note": "Nessun aggiornamento vero di Arch disponibile durante il ciclo 03; si riprende al primo aggiornamento, nel ciclo 04"
+    "task": "",
+    "state": "",
+    "note": ""
   },
   "cycle": {
-    "n": 3,
-    "title": "Studio dell'architettura agent-first: come funziona il sistema e dove intercettarlo",
-    "slug": "studio-dell-architettura-agent-first-com"
+    "n": 4,
+    "title": "Claude Code dentro AgentDeck: installazione, configurazione e uso reale",
+    "slug": "claude-code-dentro-agentdeck-installazio"
   },
   "counters": {
-    "objective": 9,
-    "cycle": 3,
+    "objective": 11,
+    "cycle": 4,
     "request": 3,
     "note": 26
   }
