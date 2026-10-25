@@ -57,3 +57,28 @@
 {"at": "2026-10-25 16:07", "testo": "[-] bash: ~/claude-rules/bin/wf.sh task-close --done \"Autore personale su tutti i commit; repo privato panicDa3m0n/agent"}
 {"at": "2026-10-25 16:07", "testo": "ERRORE RISOLTO — execution_error: riassuntivissimo troppo lungo (644 caratteri, max 160): è una riga di roadmap. Se serve più spazio il posto è una spec, — Riepilogo di chiusura oltre 160 caratteri: accorciato e task chiusa correttamente.", "tipo": "errore-risolto"}
 {"at": "2026-10-25 16:07", "testo": "[-] Write  CHANGELOG.md", "task": "-", "tipo": "file", "tool": "Write", "file": "CHANGELOG.md"}
+{"at": "2026-10-25 16:07", "testo": "[-] bash: printf '0.1.1\\n' > VERSION && git add -A && git status --short && git commit -q -F - <<'EOF' Versione 0.1.1: i"}
+{"at": "2026-10-25 16:08", "testo": "TASK APERTA O1.T2 — IP stabile della Deck sulla rete di casa | perimetro: configurazione rete sulla Deck, install/install.sh | gate: Snapshot creato prima della modifica; dopo due riavvii consecutivi l'IPv4 di wlan0 resta lo stesso e ssh agentdeck funziona al primo tentativo; la correzione è riportata anche in install/install.sh. | rischio: 25"}
+{"at": "2026-10-25 16:08", "testo": "[O1.T2] bash: ~/claude-rules/bin/wf.sh task-start --id O1.T2 --risk 25 --why \"Tocca la configurazione di rete della Deck, ch"}
+{"at": "2026-10-25 16:08", "testo": "[O1.T2] FALLITO Bash: ssh -o BatchMode=yes -o ConnectTimeout=10 agentdeck 'sudo snapper -c root create -d \"prima"}
+{"at": "2026-10-25 16:08", "testo": "FALLIMENTO [Bash] execution_error: ssh: Could not resolve hostname agentdeck.local: nodename nor servname provided, or not known"}
+{"at": "2026-10-25 16:08", "testo": "[O1.T2] bash: echo -n \"ping .48: \"; ping -c2 -t3 192.168.1.48 >/dev/null 2>&1 && echo ok || echo \"nessuna risposta\"; echo -n"}
+{"at": "2026-10-25 16:08", "testo": "TRAPPOLA registrata: ssh agentdeck fallisce con Could not resolve hostname agentdeck.local -> sul Mac la query .local riceve prima un No Such Record dal DNS del router (interfaccia 0) e poi la risposta mDNS giusta -> usare l'IP stabile (ssh -o HostName=<ip>) invece di affidarsi solo al nome .local."}
+{"at": "2026-10-25 16:08", "testo": "[O1.T2] bash: ~/claude-rules/bin/wf.sh pitfall \"ssh agentdeck fallisce con Could not resolve hostname agentdeck.local -> sul"}
+{"at": "2026-10-25 16:09", "testo": "[O1.T2] bash: ssh -o BatchMode=yes -o ConnectTimeout=10 -o HostName=192.168.1.48 agentdeck 'sudo snapper -c root create -d \""}
+{"at": "2026-10-25 16:09", "testo": "[O1.T2] bash: ssh -o BatchMode=yes -o ConnectTimeout=10 -o HostName=192.168.1.48 agentdeck 'for f in /etc/systemd/network/20"}
+{"at": "2026-10-25 16:09", "testo": "[O1.T2] Write  ../../../private/tmp/claude-502/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/scratchpad/reboot-test.sh", "task": "O1.T2", "tipo": "file", "tool": "Write", "file": "../../../private/tmp/claude-502/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/scratchpad/reboot-test.sh"}
+{"at": "2026-10-25 16:09", "testo": "[O1.T2] Edit  ../../../private/tmp/claude-502/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/scratchpad/reboot-test.sh", "task": "O1.T2", "tipo": "file", "tool": "Edit", "file": "../../../private/tmp/claude-502/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/scratchpad/reboot-test.sh"}
+{"at": "2026-10-25 16:09", "testo": "[O1.T2] bash: bash -n /private/tmp/claude-502/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/scratchpad/r"}
+{"at": "2026-10-25 16:09", "testo": "[O1.T2] Edit  install/install.sh", "task": "O1.T2", "tipo": "file", "tool": "Edit", "file": "install/install.sh"}
+{"at": "2026-10-25 16:09", "testo": "[O1.T2] Edit  install/install.sh", "task": "O1.T2", "tipo": "file", "tool": "Edit", "file": "install/install.sh"}
+{"at": "2026-10-25 16:09", "testo": "[O1.T2] Edit  install/install.sh", "task": "O1.T2", "tipo": "file", "tool": "Edit", "file": "install/install.sh"}
+{"at": "2026-10-25 16:09", "testo": "[O1.T2] bash: bash -n install/install.sh && echo \"sintassi OK\" && git diff --stat install/install.sh"}
+{"at": "2026-10-25 16:12", "testo": "[O1.T2] bash: for i in 1 2 3 4 5; do printf \"tentativo $i: \"; ssh -o BatchMode=yes -o ConnectTimeout=8 agentdeck 'echo \"ok ("}
+{"at": "2026-10-25 16:12", "testo": "[O1.T2] bash: ssh -o BatchMode=yes -o ConnectTimeout=8 agentdeck 'echo \"avvisi networkd in questo avvio: $(journalctl -b -u "}
+{"at": "2026-10-25 16:12", "testo": "ANNOTAZIONE N4 su O1.T4 — Documentare nell'accesso alla Deck: IP stabile 192.168.1.49 grazie a SendRelease=no (O1.T2, testato con due riavvii); ssh agentdeck usa il nome agentdeck.local; se il nome non si risolve (trappola P2) usare ssh -o HostName=192.168.1.49 agentdeck. Una prenotazione DHCP sul router renderebbe l'IP fisso anche dopo spegnimenti lunghi: richiede l'accesso dell'utente al router."}
+{"at": "2026-10-25 16:12", "testo": "[O1.T2] bash: ~/claude-rules/bin/wf.sh note-add --task O1.T4 --text \"Documentare nell'accesso alla Deck: IP stabile 192.168."}
+{"at": "2026-10-25 16:12", "testo": "TASK CHIUSA O1.T2 — completata: SendRelease=no sulla Deck e in install.sh; snapshot 4 prima; dopo 2 riavvii consecutivi IP sempre .49; ssh agentdeck riuscito 5 volte su 5 al primo tentativo."}
+{"at": "2026-10-25 16:12", "testo": "VERSIONE 0.1.2 (O1.T2)"}
+{"at": "2026-10-25 16:12", "testo": "[-] bash: ~/claude-rules/bin/wf.sh task-close --done \"SendRelease=no sulla Deck e in install.sh; snapshot 4 prima; dopo "}
+{"at": "2026-10-25 16:12", "testo": "[-] Edit  CHANGELOG.md", "task": "-", "tipo": "file", "tool": "Edit", "file": "CHANGELOG.md"}

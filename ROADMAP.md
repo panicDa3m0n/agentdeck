@@ -10,10 +10,10 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O1` Base operativa affidabile per l'agente — 4 task: 1 completate, 0 in corso, 3 da fare, 0 bloccate
+- **Obiettivo attivo:** `O1` Base operativa affidabile per l'agente — 4 task: 2 completate, 0 in corso, 2 da fare, 0 bloccate
 - **Task attiva:** —
-- **Ultima task gestita:** `O1.T1` — completata — Autore personale su tutti i commit; repo privato panicDa3m0n/agentdeck con main e tag v0.1.0, verificato via API; nessuna credenziale online.
-- **Ultimo aggiornamento:** 2026-10-25 16:07
+- **Ultima task gestita:** `O1.T2` — completata — SendRelease=no sulla Deck e in install.sh; snapshot 4 prima; dopo 2 riavvii consecutivi IP sempre .49; ssh agentdeck riuscito 5 volte su 5 al primo tentativo.
+- **Ultimo aggiornamento:** 2026-10-25 16:12
 
 ## Richieste attive
 
@@ -29,13 +29,14 @@ _nessuna richiesta in attesa._
   *gate previsto:* git log mostra come autore l'identità personale di Davide su tutti i commit, impostata solo per questo repository; esiste un repository GitHub privato sotto l'account personale panicDa3m0n con main pubblicato e il tag della versione corrente; nessuna credenziale sul remote (INV-6). · *gate confermato:* ✔ Autore personale su tutti i commit; repo privato panicDa3m0n/agentdeck con main e tag v0.1.0, verificato via API; nessuna credenziale online.
   *rischio:* 15/100 — Riscrive l'autore di un solo commit mai pubblicato e crea un repository privato su GitHub: tutto reversibile (si può riscrivere di nuovo o eliminare il repository); unico punto delicato è non pubblicare credenziali, controllato prima del push.
   *annotazioni:* `N1`
-- [ ] `O1.T2` IP stabile della Deck sulla rete di casa — *perimetro:* `configurazione rete sulla Deck, install/install.sh`
-  *gate previsto:* Snapshot creato prima della modifica; dopo due riavvii consecutivi l'IPv4 di wlan0 resta lo stesso e ssh agentdeck funziona al primo tentativo; la correzione è riportata anche in install/install.sh.
+- [x] `O1.T2` IP stabile della Deck sulla rete di casa — *perimetro:* `configurazione rete sulla Deck, install/install.sh`
+  *gate previsto:* Snapshot creato prima della modifica; dopo due riavvii consecutivi l'IPv4 di wlan0 resta lo stesso e ssh agentdeck funziona al primo tentativo; la correzione è riportata anche in install/install.sh. · *gate confermato:* ✔ SendRelease=no sulla Deck e in install.sh; snapshot 4 prima; dopo 2 riavvii consecutivi IP sempre .49; ssh agentdeck riuscito 5 volte su 5 al primo tentativo.
+  *rischio:* 25/100 — Tocca la configurazione di rete della Deck, che è l'unico canale dell'agente (INV-1): la modifica è minima (non rilasciare il lease DHCP allo spegnimento), una chiave sconosciuta verrebbe solo ignorata; snapshot prima della modifica e due riavvii di prova. Se la rete non tornasse servirebbe la chiavetta di recupero.
 - [ ] `O1.T3` Comandi di base attesi dagli agenti — *perimetro:* `pacchetti sulla Deck, install/install.sh`
   *gate previsto:* hostname restituisce agentdeck; il pacchetto è installato con pacman e snapper mostra gli snapshot pre e post dell'installazione; il pacchetto è aggiunto all'elenco di install/install.sh.
 - [ ] `O1.T4` Documentazione di base del progetto, indicizzata e collegata al codice — *perimetro:* `README.md, docs/, intestazioni degli script in live/ e install/`
   *gate previsto:* README.md con panoramica e link; docs/README.md come indice; documenti per principi, chiavetta live, installazione e accesso alla Deck; ogni script in live/ e install/ rimanda al suo documento e ogni documento rimanda agli script; tutto pubblicato sul remote.
-  *annotazioni:* `N2`, `N3`
+  *annotazioni:* `N2`, `N3`, `N4`
 
 ### `O2` Protocollo dell'interfaccia agentica: schermate interattive e autoprompting — in corso
 
@@ -64,3 +65,4 @@ _Una riga per nota, sempre legata a una task. `wf.sh notes` per leggerle._
 - `N1` (`O1.T1`) Richiesta dell'utente alla conferma della roadmap (25/10): appena chiuso il setup registrare due invarianti, non registrabili durante il passo 6. INV-8: ogni versione si pubblica sul remote privato appena chiusa (commit e tag su GitHub, account panicDa3m0n). INV-9: documentazione sempre completa, organizzata per argomento in più file in docs/ con indice e collegata dal codice stesso, e viceversa; una modifica non è conclusa finché la documentazione non la riflette. Rieseguire anche: versione --scegli governance --dove VERSION --pubblica. — 2026-10-25 16:01
 - `N2` (`O1.T4`) Aggiungere a PRINCIPI.md (o al documento dei principi in docs/) il principio approvato dall'utente il 25/10, registrato come INV-10: si interviene al livello più alto che risolve il problema (configurazione, strato agentico, sostituzione di componenti); il codice di base si modifica solo per un bisogno reale e con decisione esplicita. Includere la tabella dei quattro livelli e il paragone con macOS e Android. — 2026-10-25 16:05
 - `N3` (`O1.T4`) Documentare in docs/ il setup git e GitHub: identità personale impostata solo nel repository (Davide, davideditrani94@gmail.com), remote privato https://github.com/panicDa3m0n/agentdeck, credential helper locale che usa gh auth token --user panicDa3m0n (indipendente dall'account gh attivo), tag v<versione> a ogni versione chiusa (INV-8). — 2026-10-25 16:07
+- `N4` (`O1.T4`) Documentare nell'accesso alla Deck: IP stabile 192.168.1.49 grazie a SendRelease=no (O1.T2, testato con due riavvii); ssh agentdeck usa il nome agentdeck.local; se il nome non si risolve (trappola P2) usare ssh -o HostName=192.168.1.49 agentdeck. Una prenotazione DHCP sul router renderebbe l'IP fisso anche dopo spegnimenti lunghi: richiede l'accesso dell'utente al router. — 2026-10-25 16:12

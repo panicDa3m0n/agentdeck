@@ -4,6 +4,15 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.1.2 — 2026-10-25
+
+Ciclo 01, task O1.T2: IP stabile della Deck sulla rete di casa.
+
+- `SendRelease=no` nella configurazione DHCP (Wi-Fi e cavo): allo spegnimento la Deck non restituisce
+  l'indirizzo e il router le riassegna lo stesso. Prima ogni riavvio portava all'IP successivo.
+- Verificato con due riavvii consecutivi: IP sempre `192.168.1.49`, `ssh agentdeck` al primo tentativo.
+- Correzione riportata in `install/install.sh`.
+
 ## 0.1.1 — 2026-10-25
 
 Ciclo 01, task O1.T1: identità git personale e remote privato su GitHub.

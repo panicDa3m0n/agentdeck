@@ -5,6 +5,11 @@
       "id": "P1",
       "testo": "Push su GitHub con più account gh -> gh auth git-credential fornisce solo le credenziali dell'account attivo (DavDit94 per SNJ) e un nome utente nell'URL non basta -> il repository agentdeck ha un credential helper locale che chiede a gh il token di panicDa3m0n: non rimuoverlo e non cambiare account per pubblicare.",
       "creata": "2026-10-25 16:07"
+    },
+    {
+      "id": "P2",
+      "testo": "ssh agentdeck fallisce con Could not resolve hostname agentdeck.local -> sul Mac la query .local riceve prima un No Such Record dal DNS del router (interfaccia 0) e poi la risposta mDNS giusta -> usare l'IP stabile (ssh -o HostName=<ip>) invece di affidarsi solo al nome .local.",
+      "creata": "2026-10-25 16:08"
     }
   ]
 }

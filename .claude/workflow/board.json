@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-25 15:54",
-  "updated": "2026-10-25 16:07",
+  "updated": "2026-10-25 16:12",
   "objectives": [
     {
       "id": "O1",
@@ -28,10 +28,10 @@
           "title": "IP stabile della Deck sulla rete di casa",
           "scope": "configurazione rete sulla Deck, install/install.sh",
           "gate_pre": "Snapshot creato prima della modifica; dopo due riavvii consecutivi l'IPv4 di wlan0 resta lo stesso e ssh agentdeck funziona al primo tentativo; la correzione è riportata anche in install/install.sh.",
-          "gate_post": "",
-          "state": "todo",
-          "risk": null,
-          "risk_why": "",
+          "gate_post": "SendRelease=no sulla Deck e in install.sh; snapshot 4 prima; dopo 2 riavvii consecutivi IP sempre .49; ssh agentdeck riuscito 5 volte su 5 al primo tentativo.",
+          "state": "done",
+          "risk": 25,
+          "risk_why": "Tocca la configurazione di rete della Deck, che è l'unico canale dell'agente (INV-1): la modifica è minima (non rilasciare il lease DHCP allo spegnimento), una chiave sconosciuta verrebbe solo ignorata; snapshot prima della modifica e due riavvii di prova. Se la rete non tornasse servirebbe la chiavetta di recupero.",
           "docs": []
         },
         {
@@ -154,6 +154,13 @@
       "text": "Documentare in docs/ il setup git e GitHub: identità personale impostata solo nel repository (Davide, davideditrani94@gmail.com), remote privato https://github.com/panicDa3m0n/agentdeck, credential helper locale che usa gh auth token --user panicDa3m0n (indipendente dall'account gh attivo), tag v<versione> a ogni versione chiusa (INV-8).",
       "docs": [],
       "created": "2026-10-25 16:07"
+    },
+    {
+      "id": "N4",
+      "task": "O1.T4",
+      "text": "Documentare nell'accesso alla Deck: IP stabile 192.168.1.49 grazie a SendRelease=no (O1.T2, testato con due riavvii); ssh agentdeck usa il nome agentdeck.local; se il nome non si risolve (trappola P2) usare ssh -o HostName=192.168.1.49 agentdeck. Una prenotazione DHCP sul router renderebbe l'IP fisso anche dopo spegnimenti lunghi: richiede l'accesso dell'utente al router.",
+      "docs": [],
+      "created": "2026-10-25 16:12"
     }
   ],
   "active": {
@@ -166,9 +173,9 @@
     "hold_plan": ""
   },
   "previous": {
-    "task": "O1.T1",
+    "task": "O1.T2",
     "state": "done",
-    "note": "Autore personale su tutti i commit; repo privato panicDa3m0n/agentdeck con main e tag v0.1.0, verificato via API; nessuna credenziale online."
+    "note": "SendRelease=no sulla Deck e in install.sh; snapshot 4 prima; dopo 2 riavvii consecutivi IP sempre .49; ssh agentdeck riuscito 5 volte su 5 al primo tentativo."
   },
   "cycle": {
     "n": 1,
@@ -179,6 +186,6 @@
     "objective": 3,
     "cycle": 1,
     "request": 0,
-    "note": 3
+    "note": 4
   }
 }

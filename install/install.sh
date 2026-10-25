@@ -123,6 +123,8 @@ EOF
   in_chroot "ssh-keygen -A && sshd -t"
 
   step "Rete: iwd + systemd-networkd + resolved con mDNS"
+  # SendRelease=no: allo spegnimento la Deck non restituisce l'indirizzo, così il router le ridà lo stesso IP
+  # (con il rilascio il router assegnava ogni volta l'indirizzo successivo)
   cat > "$MNT/etc/systemd/network/20-wired.network" <<'EOF'
 [Match]
 Type=ether
@@ -133,6 +135,7 @@ MulticastDNS=yes
 
 [DHCPv4]
 RouteMetric=100
+SendRelease=no
 EOF
   cat > "$MNT/etc/systemd/network/25-wireless.network" <<'EOF'
 [Match]
@@ -145,6 +148,7 @@ IgnoreCarrierLoss=3s
 
 [DHCPv4]
 RouteMetric=600
+SendRelease=no
 EOF
   install -d "$MNT/etc/systemd/resolved.conf.d"
   printf '[Resolve]\nMulticastDNS=yes\n' > "$MNT/etc/systemd/resolved.conf.d/mdns.conf"
