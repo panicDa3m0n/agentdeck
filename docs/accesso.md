@@ -60,8 +60,9 @@ Host agentdeck-mdns
 
 - SSH solo con chiave; password e accesso di root via SSH disattivati; unico utente ammesso `agent`
   (`/etc/ssh/sshd_config.d/10-agentdeck.conf`).
-- Root ha la password bloccata. Il login che compare sullo schermo della Deck è la console di Linux: non
-  serve a nessuno e resta lì finché non arriverà l'interfaccia grafica.
+- Root ha la password bloccata. Sullo schermo della Deck non c'è più il login di Linux: c'è l'attività
+  dell'agente, comando per comando ([schermo.md](schermo.md)). Per farlo sshd imposta per `agent` solo la
+  variabile `BASH_ENV`: autenticazione e permessi non cambiano.
 - Nessun servizio esposto su internet senza una decisione esplicita (INV-5).
 
 ## Snapshot

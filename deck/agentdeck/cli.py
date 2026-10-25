@@ -6,10 +6,12 @@ Specifica: docs/protocollo.md (sezione 2). Documentazione: docs/deck.md.
 from __future__ import annotations
 
 import json
+import os
 import socket
 import sys
 import time
 from datetime import datetime
+from pathlib import Path
 from typing import Optional
 
 from . import version
@@ -53,6 +55,29 @@ def _meta(started: float) -> dict:
             "host": socket.gethostname(), "version": version()}
 
 
+def call_summary(result: dict, argv: list) -> str:
+    """Esito di una chiamata per lo schermo della Deck: "indirizzo|azione|stato|codice|avvisi"."""
+    _, action_id, _, _ = call_tokens([a for a in argv if a != "--pretty"])
+    code = (result.get("error") or {}).get("code", "")
+    fields = [result["path"], action_id or "", result["status"], code, str(len(result.get("alerts", [])))]
+    return "|".join(f.replace("|", "/") for f in fields)
+
+
+def log_call(result: dict, argv: list) -> None:
+    """Scrive l'esito della chiamata nel journal, per lo schermo della Deck (docs/schermo.md).
+
+    Solo sulla Deck, dove esiste il journal, e mai durante i test (AGENTDECK_NO_LOG).
+    """
+    if os.environ.get("AGENTDECK_NO_LOG") or not Path("/run/systemd/journal/socket").exists():
+        return
+    try:
+        import syslog
+        syslog.openlog("agentdeck")
+        syslog.syslog(call_summary(result, argv))
+    except Exception:  # lo schermo è un di più: un problema di registro non deve toccare la risposta
+        pass
+
+
 def main(argv: Optional[list] = None) -> int:
     argv = sys.argv[1:] if argv is None else argv
     result, code = render(Deck(all_components()), argv)
@@ -60,4 +85,5 @@ def main(argv: Optional[list] = None) -> int:
         print(json.dumps(result, ensure_ascii=False, indent=2))
     else:
         print(json.dumps(result, ensure_ascii=False, separators=(",", ":")))
+    log_call(result, argv)
     return code

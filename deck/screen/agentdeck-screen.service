@@ -1,0 +1,28 @@
+# AgentDeck: lo schermo della Deck mostra, come un terminale, l'attività dell'agente.
+# Prende il posto del login su tty1 (getty@tty1 è mascherato). Documentazione: docs/schermo.md
+[Unit]
+Description=AgentDeck: attività dell'agente sullo schermo (tty1)
+After=systemd-journald.service systemd-user-sessions.service
+Conflicts=getty@tty1.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /opt/agentdeck/screen/agentdeck_screen.py
+StandardInput=tty
+StandardOutput=tty
+StandardError=journal
+TTYPath=/dev/tty1
+TTYReset=yes
+TTYVHangup=yes
+TTYVTDisallocate=yes
+Environment=PYTHONUNBUFFERED=1
+Restart=always
+RestartSec=2
+# Legge solo il journal e scrive sul terminale: niente altro
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=read-only
+PrivateTmp=yes
+
+[Install]
+WantedBy=multi-user.target

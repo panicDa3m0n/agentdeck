@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-25 15:54",
-  "updated": "2026-10-25 17:43",
+  "updated": "2026-10-25 17:48",
   "objectives": [
     {
       "id": "O1",
@@ -147,12 +147,12 @@
         {
           "id": "O3.T4",
           "title": "Schermo della Deck: attività dell'agente visibile come un terminale",
-          "scope": "configurazione SSH e servizi sulla Deck, deck/, docs/",
+          "scope": "configurazione SSH e servizi sulla Deck, deck/, docs/, README.md",
           "gate_pre": "Al posto del login, sullo schermo della Deck un terminale mostra in tempo reale ogni comando eseguito dall'agente via SSH e l'esito delle chiamate a deck; verificato leggendo il contenuto della console; snapshot prima; ssh agentdeck, scp e rsync funzionano ancora (INV-1); documentato.",
           "gate_post": "",
-          "state": "todo",
-          "risk": null,
-          "risk_why": "",
+          "state": "doing",
+          "risk": 35,
+          "risk_why": "Tocca la configurazione SSH (solo SetEnv per l'utente agent, nessun cambio di autenticazione) e sostituisce il login su tty1 con un servizio: l'accesso SSH è l'unico canale (INV-1), quindi snapshot prima, sshd -t, e una rete di sicurezza che annulla da sola la modifica SSH dopo 3 minuti se non confermata dopo i test di ssh, scp e rsync.",
           "docs": []
         }
       ]
@@ -215,14 +215,21 @@
       "text": "Bisogno emerso usando deck status (25/10): gli avvisi WIFI_BAND_2G e LLMNR_LISTENING hanno action null perché manca un componente di rete su cui agire. Candidato per il prossimo ciclo: componente /network (banda Wi-Fi preferita, LLMNR=no, porte in ascolto) collegato dagli avvisi di status.",
       "docs": [],
       "created": "2026-10-25 17:43"
+    },
+    {
+      "id": "N9",
+      "task": "O3.T4",
+      "text": "Idea emersa verificando lo schermo (25/10): poter leggere lo schermo è utile all'agente (INV-2: tutto osservabile). Candidato per un ciclo futuro: componente deck /screen che restituisce in data le righe visibili su tty1 (da /dev/vcsu1) e lo stato del servizio agentdeck-screen.",
+      "docs": [],
+      "created": "2026-10-25 17:48"
     }
   ],
   "active": {
     "objective": "O3",
-    "task": "",
-    "phase": "idle",
-    "risk": null,
-    "risk_why": "",
+    "task": "O3.T4",
+    "phase": "in_progress",
+    "risk": 35,
+    "risk_why": "Tocca la configurazione SSH (solo SetEnv per l'utente agent, nessun cambio di autenticazione) e sostituisce il login su tty1 con un servizio: l'accesso SSH è l'unico canale (INV-1), quindi snapshot prima, sshd -t, e una rete di sicurezza che annulla da sola la modifica SSH dopo 3 minuti se non confermata dopo i test di ssh, scp e rsync.",
     "hold_invariants": "",
     "hold_plan": "",
     "gate_done": ""
@@ -241,6 +248,6 @@
     "objective": 3,
     "cycle": 1,
     "request": 0,
-    "note": 8
+    "note": 9
   }
 }

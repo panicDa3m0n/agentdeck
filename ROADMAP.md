@@ -10,10 +10,11 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O3` Primi componenti usati dall'agente: stato del sistema e snapshot — 4 task: 1 completate, 0 in corso, 3 da fare, 0 bloccate
-- **Task attiva:** —
+- **Obiettivo attivo:** `O3` Primi componenti usati dall'agente: stato del sistema e snapshot — 4 task: 1 completate, 1 in corso, 2 da fare, 0 bloccate
+- **Task attiva:** `O3.T4` Schermo della Deck: attività dell'agente visibile come un terminale — in corso · rischio 35/100
 - **Ultima task gestita:** `O3.T1` — completata — deck status sulla Deck: 23/23 valori coincidono con gli strumenti classici, avvisi WIFI_BAND_2G, LLMNR, ventola; 34 test verdi; 0,27 s.
-- **Ultimo aggiornamento:** 2026-10-25 17:43
+- **Fase:** `in_progress`
+- **Ultimo aggiornamento:** 2026-10-25 17:48
 
 ## Richieste attive
 
@@ -69,9 +70,10 @@ _nessuna richiesta in attesa._
   *gate previsto:* deck snapshot elenca gli stessi snapshot di snapper; la creazione da deck produce uno snapshot visibile in snapper e nel menu snapshot di GRUB.
 - [ ] `O3.T3` Rollback con anteprima e conferma — *perimetro:* `deck/, componente snapshot, subvolumi Btrfs sulla Deck`
   *gate previsto:* Prova reale: dopo snapshot e modifica di prova, il rollback mostra l'anteprima delle conseguenze, si conferma con il codice, la Deck riavvia nello stato salvato, la modifica di prova è sparita e ssh agentdeck funziona; lo stato precedente resta recuperabile come snapshot.
-- [ ] `O3.T4` Schermo della Deck: attività dell'agente visibile come un terminale — *perimetro:* `configurazione SSH e servizi sulla Deck, deck/, docs/`
+- [~] `O3.T4` Schermo della Deck: attività dell'agente visibile come un terminale — *perimetro:* `configurazione SSH e servizi sulla Deck, deck/, docs/, README.md`
   *gate previsto:* Al posto del login, sullo schermo della Deck un terminale mostra in tempo reale ogni comando eseguito dall'agente via SSH e l'esito delle chiamate a deck; verificato leggendo il contenuto della console; snapshot prima; ssh agentdeck, scp e rsync funzionano ancora (INV-1); documentato.
-  *annotazioni:* `N7`
+  *rischio:* 35/100 — Tocca la configurazione SSH (solo SetEnv per l'utente agent, nessun cambio di autenticazione) e sostituisce il login su tty1 con un servizio: l'accesso SSH è l'unico canale (INV-1), quindi snapshot prima, sshd -t, e una rete di sicurezza che annulla da sola la modifica SSH dopo 3 minuti se non confermata dopo i test di ssh, scp e rsync.
+  *annotazioni:* `N7`, `N9`
 
 ## Annotazioni
 
@@ -85,3 +87,4 @@ _Una riga per nota, sempre legata a una task. `wf.sh notes` per leggerle._
 - `N6` (`O2.T2`) Dall'approvazione di O2.T1 (25/10): implementare deck seguendo docs/protocollo.md, approvato; Python 3 solo libreria standard; testi per l'agente in inglese. Da fare: installare il pacchetto python sulla Deck con snapshot (INV-3); ogni modulo rimanda a docs/protocollo.md (INV-9); test di conformità di ogni schermata e test di iniezione nel canale istruzioni (INV-4); aggiungere a PRINCIPI.md le righe di decisione: protocollo deck v1, Python 3, testi agente in inglese. — 2026-10-25 17:20
 - `N7` (`O3.T4`) Richiesta dell'utente del 25/10: sullo schermo della Deck vede solo agentdeck login; vuole vedere, come in un terminale, cosa sta facendo l'agente in base ai comandi. Da lavorare subito dopo O3.T1. Idea da discutere nel brief: wrapper dei comandi SSH dell'agente che registra ogni comando nel journal, servizio su tty1 al posto di getty che lo mostra; verifica leggendo /dev/vcs1. Attenzione: un comando con segreti sulla riga di comando comparirebbe a schermo e nel journal. — 2026-10-25 17:40
 - `N8` (`O3.T1`) Bisogno emerso usando deck status (25/10): gli avvisi WIFI_BAND_2G e LLMNR_LISTENING hanno action null perché manca un componente di rete su cui agire. Candidato per il prossimo ciclo: componente /network (banda Wi-Fi preferita, LLMNR=no, porte in ascolto) collegato dagli avvisi di status. — 2026-10-25 17:43
+- `N9` (`O3.T4`) Idea emersa verificando lo schermo (25/10): poter leggere lo schermo è utile all'agente (INV-2: tutto osservabile). Candidato per un ciclo futuro: componente deck /screen che restituisce in data le righe visibili su tty1 (da /dev/vcsu1) e lo stato del servizio agentdeck-screen. — 2026-10-25 17:48

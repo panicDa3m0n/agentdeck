@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Installa o aggiorna deck sulla Deck, dal Mac. Ripetibile: ogni esecuzione porta la Deck allo stato del
 # repository. Fasi: test sul Mac, python sulla Deck (snap-pac fa gli snapshot), copia in /opt/agentdeck,
-# comando /usr/local/bin/deck, test e prove sulla Deck.
+# comando /usr/local/bin/deck, schermo della Deck (docs/schermo.md), test e prove sulla Deck.
 #
 # Uso:  deck/install.sh            (host SSH predefinito: agentdeck)
 #       DECK_HOST=altro deck/install.sh
@@ -29,6 +29,25 @@ scp -q "$ROOT/VERSION" "$HOST:$DEST/VERSION"
 
 step "Comando deck"
 ssh "$HOST" "chmod +x $DEST/deck && sudo ln -sfn $DEST/deck /usr/local/bin/deck && command -v deck"
+
+step "Schermo della Deck"
+screen_out=$(ssh "$HOST" "sudo bash $DEST/screen/install-screen.sh")
+echo "$screen_out"
+if grep -q SSH_CHANGED <<<"$screen_out"; then
+  step "Verifica di ssh, scp e rsync (la modifica SSH si annulla da sola entro 3 minuti se non confermata)"
+  probe=$(mktemp)
+  echo agentdeck > "$probe"
+  if ssh -o ConnectTimeout=10 "$HOST" true \
+     && scp -q "$probe" "$HOST:/tmp/agentdeck-scp-probe" \
+     && rsync -q "$probe" "$HOST:/tmp/agentdeck-rsync-probe" \
+     && ssh "$HOST" 'rm -f /tmp/agentdeck-scp-probe /tmp/agentdeck-rsync-probe && sudo systemctl stop agentdeck-ssh-revert.timer'; then
+    echo "ssh, scp e rsync funzionano: modifica SSH confermata"
+  else
+    echo "ERRORE: verifica SSH fallita; la modifica si annulla da sola entro 3 minuti" >&2
+    exit 1
+  fi
+  rm -f "$probe"
+fi
 
 step "Test sulla Deck"
 ssh "$HOST" "cd $DEST && python -m unittest discover -s tests -q"

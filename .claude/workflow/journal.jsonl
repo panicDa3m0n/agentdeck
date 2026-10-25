@@ -263,3 +263,41 @@
 {"at": "2026-10-25 17:43", "testo": "VERSIONE 0.1.8 (O3.T1)"}
 {"at": "2026-10-25 17:43", "testo": "[-] bash: ~/claude-rules/bin/wf.sh task-close --done \"deck status sulla Deck: 23/23 valori coincidono con gli strumenti "}
 {"at": "2026-10-25 17:43", "testo": "[-] Edit  CHANGELOG.md", "task": "-", "tipo": "file", "tool": "Edit", "file": "CHANGELOG.md"}
+{"at": "2026-10-25 17:44", "testo": "[-] bash: printf '0.1.8\\n' > VERSION && git add -A && git commit -q -F - <<'EOF' Versione 0.1.8: componente deck status "}
+{"at": "2026-10-25 17:46", "testo": "TASK APERTA O3.T4 — Schermo della Deck: attività dell'agente visibile come un terminale | perimetro: configurazione SSH e servizi sulla Deck, deck/, docs/ | gate: Al posto del login, sullo schermo della Deck un terminale mostra in tempo reale ogni comando eseguito dall'agente via SSH e l'esito delle chiamate a deck; verificato leggendo il contenuto della console; snapshot prima; ssh agentdeck, scp e rsync funzionano ancora (INV-1); documentato. | rischio: 35"}
+{"at": "2026-10-25 17:46", "testo": "[O3.T4] bash: ~/claude-rules/bin/wf.sh task-start --id O3.T4 --risk 35 --why \"Tocca la configurazione SSH (solo SetEnv per l"}
+{"at": "2026-10-25 17:46", "testo": "[O3.T4] Write  deck/screen/ssh-log.sh", "task": "O3.T4", "tipo": "file", "tool": "Write", "file": "deck/screen/ssh-log.sh"}
+{"at": "2026-10-25 17:46", "testo": "[O3.T4] Write  deck/screen/20-agentdeck-screen.conf", "task": "O3.T4", "tipo": "file", "tool": "Write", "file": "deck/screen/20-agentdeck-screen.conf"}
+{"at": "2026-10-25 17:46", "testo": "[O3.T4] Write  deck/screen/agentdeck-screen.service", "task": "O3.T4", "tipo": "file", "tool": "Write", "file": "deck/screen/agentdeck-screen.service"}
+{"at": "2026-10-25 17:46", "testo": "[O3.T4] Edit  deck/screen/agentdeck-screen.service", "task": "O3.T4", "tipo": "file", "tool": "Edit", "file": "deck/screen/agentdeck-screen.service"}
+{"at": "2026-10-25 17:46", "testo": "[O3.T4] Write  deck/screen/agentdeck_screen.py", "task": "O3.T4", "tipo": "file", "tool": "Write", "file": "deck/screen/agentdeck_screen.py"}
+{"at": "2026-10-25 17:46", "testo": "[O3.T4] Edit  deck/screen/agentdeck_screen.py", "task": "O3.T4", "tipo": "file", "tool": "Edit", "file": "deck/screen/agentdeck_screen.py"}
+{"at": "2026-10-25 17:46", "testo": "[O3.T4] Edit  deck/agentdeck/cli.py", "task": "O3.T4", "tipo": "file", "tool": "Edit", "file": "deck/agentdeck/cli.py"}
+{"at": "2026-10-25 17:46", "testo": "[O3.T4] Edit  deck/agentdeck/cli.py", "task": "O3.T4", "tipo": "file", "tool": "Edit", "file": "deck/agentdeck/cli.py"}
+{"at": "2026-10-25 17:47", "testo": "[O3.T4] Edit  deck/agentdeck/cli.py", "task": "O3.T4", "tipo": "file", "tool": "Edit", "file": "deck/agentdeck/cli.py"}
+{"at": "2026-10-25 17:47", "testo": "[O3.T4] Edit  deck/agentdeck/cli.py", "task": "O3.T4", "tipo": "file", "tool": "Edit", "file": "deck/agentdeck/cli.py"}
+{"at": "2026-10-25 17:47", "testo": "[O3.T4] Edit  deck/tests/test_deck.py", "task": "O3.T4", "tipo": "file", "tool": "Edit", "file": "deck/tests/test_deck.py"}
+{"at": "2026-10-25 17:47", "testo": "[O3.T4] Write  deck/screen/install-screen.sh", "task": "O3.T4", "tipo": "file", "tool": "Write", "file": "deck/screen/install-screen.sh"}
+{"at": "2026-10-25 17:47", "testo": "[O3.T4] Edit  deck/screen/install-screen.sh", "task": "O3.T4", "tipo": "file", "tool": "Edit", "file": "deck/screen/install-screen.sh"}
+{"at": "2026-10-25 17:47", "testo": "[O3.T4] Edit  deck/install.sh", "task": "O3.T4", "tipo": "file", "tool": "Edit", "file": "deck/install.sh"}
+{"at": "2026-10-25 17:47", "testo": "[O3.T4] Edit  deck/install.sh", "task": "O3.T4", "tipo": "file", "tool": "Edit", "file": "deck/install.sh"}
+{"at": "2026-10-25 17:47", "testo": "[O3.T4] Edit  deck/agentdeck/cli.py", "task": "O3.T4", "tipo": "file", "tool": "Edit", "file": "deck/agentdeck/cli.py"}
+{"at": "2026-10-25 17:47", "testo": "[O3.T4] Write  deck/tests/test_screen.py", "task": "O3.T4", "tipo": "file", "tool": "Write", "file": "deck/tests/test_screen.py"}
+{"at": "2026-10-25 17:47", "testo": "[O3.T4] bash: cd /Users/snj/linuxai-steamdeck/deck && python3 -m unittest discover -s tests 2>&1 | tail -15; bash -n screen/"}
+{"at": "2026-10-25 17:48", "testo": "[O3.T4] Edit  deck/screen/agentdeck_screen.py", "task": "O3.T4", "tipo": "file", "tool": "Edit", "file": "deck/screen/agentdeck_screen.py"}
+{"at": "2026-10-25 17:48", "testo": "[O3.T4] Edit  deck/screen/agentdeck_screen.py", "task": "O3.T4", "tipo": "file", "tool": "Edit", "file": "deck/screen/agentdeck_screen.py"}
+{"at": "2026-10-25 17:48", "testo": "[O3.T4] Edit  deck/tests/test_screen.py", "task": "O3.T4", "tipo": "file", "tool": "Edit", "file": "deck/tests/test_screen.py"}
+{"at": "2026-10-25 17:48", "testo": "[O3.T4] bash: python3 -m unittest discover -s tests 2>&1 | tail -4"}
+{"at": "2026-10-25 17:48", "testo": "[O3.T4] bash: cd /Users/snj/linuxai-steamdeck && deck/install.sh 2>&1 | grep -vE \"^\\.+$|^-+$\" | tail -25"}
+{"at": "2026-10-25 17:48", "testo": "[O3.T4] bash: ssh agentdeck 'uptime' >/dev/null; ssh agentdeck 'deck status' >/dev/null; ssh agentdeck 'deck snapshot' >/dev"}
+{"at": "2026-10-25 17:48", "testo": "[O3.T4] bash: ssh -o BatchMode=yes agentdeck 'cols=$(sudo stty -F /dev/tty1 size | cut -d\" \" -f2); sudo cat /dev/vcsu1 | pyt"}
+{"at": "2026-10-25 17:48", "testo": "TRAPPOLA registrata: Leggere lo schermo della Deck con /dev/vcs1 mostra caratteri sbagliati (�) -> vcs1 contiene i codici dei glifi del font, non testo -> usare /dev/vcsu1 (UTF-32 LE) e spezzare per il numero di colonne di stty -F /dev/tty1 size."}
+{"at": "2026-10-25 17:48", "testo": "ANNOTAZIONE N9 su O3.T4 — Idea emersa verificando lo schermo (25/10): poter leggere lo schermo è utile all'agente (INV-2: tutto osservabile). Candidato per un ciclo futuro: componente deck /screen che restituisce in data le righe visibili su tty1 (da /dev/vcsu1) e lo stato del servizio agentdeck-screen."}
+{"at": "2026-10-25 17:48", "testo": "[O3.T4] bash: ~/claude-rules/bin/wf.sh pitfall \"Leggere lo schermo della Deck con /dev/vcs1 mostra caratteri sbagliati (�) -"}
+{"at": "2026-10-25 17:48", "testo": "PERIMETRO ESTESO su O3.T4 (+README.md)"}
+{"at": "2026-10-25 17:49", "testo": "[O3.T4] Write  docs/schermo.md", "task": "O3.T4", "tipo": "file", "tool": "Write", "file": "docs/schermo.md"}
+{"at": "2026-10-25 17:49", "testo": "[O3.T4] Edit  docs/accesso.md", "task": "O3.T4", "tipo": "file", "tool": "Edit", "file": "docs/accesso.md"}
+{"at": "2026-10-25 17:49", "testo": "[O3.T4] Edit  docs/README.md", "task": "O3.T4", "tipo": "file", "tool": "Edit", "file": "docs/README.md"}
+{"at": "2026-10-25 17:49", "testo": "[O3.T4] Edit  docs/deck.md", "task": "O3.T4", "tipo": "file", "tool": "Edit", "file": "docs/deck.md"}
+{"at": "2026-10-25 17:49", "testo": "[O3.T4] Edit  README.md", "task": "O3.T4", "tipo": "file", "tool": "Edit", "file": "README.md"}
+{"at": "2026-10-25 17:49", "testo": "[O3.T4] bash: bash -c 'b=0; for f in README.md PRINCIPI.md CHANGELOG.md docs/*.md; do d=$(dirname \"$f\"); for l in $(grep -oE"}

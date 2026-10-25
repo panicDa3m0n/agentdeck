@@ -11,6 +11,7 @@ import unittest
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+os.environ["AGENTDECK_NO_LOG"] = "1"  # le chiamate di prova non vanno sullo schermo della Deck
 
 from agentdeck import cli  # noqa: E402
 from agentdeck.components import all_components  # noqa: E402

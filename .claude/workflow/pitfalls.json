@@ -25,6 +25,11 @@
       "id": "P5",
       "testo": "task-close rifiutato con riassuntivissimo troppo lungo -> il riepilogo di chiusura è una riga di roadmap, massimo 160 caratteri -> scriverlo sotto i 150 e mettere i dettagli in docs/ o in un'annotazione.",
       "creata": "2026-10-25 17:20"
+    },
+    {
+      "id": "P6",
+      "testo": "Leggere lo schermo della Deck con /dev/vcs1 mostra caratteri sbagliati (�) -> vcs1 contiene i codici dei glifi del font, non testo -> usare /dev/vcsu1 (UTF-32 LE) e spezzare per il numero di colonne di stty -F /dev/tty1 size.",
+      "creata": "2026-10-25 17:48"
     }
   ]
 }

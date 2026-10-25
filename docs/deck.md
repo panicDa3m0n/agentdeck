@@ -76,7 +76,9 @@ Gli avvisi oggi non hanno un'azione collegata: servirà un componente di rete.
 | [../deck/tests/test_deck.py](../deck/tests/test_deck.py) | Test di conformità, iniezione, parametri, conferme, guasti |
 | [../deck/tests/test_status.py](../deck/tests/test_status.py) | Test di `/status`: parser su output reali, avvisi, nomi esterni nei soli dati |
 | [../deck/tests/live_status_check.py](../deck/tests/live_status_check.py) | Controllo dal vivo sulla Deck: ogni valore di `deck status` contro una lettura indipendente |
-| [../deck/install.sh](../deck/install.sh) | Installazione e aggiornamento sulla Deck |
+| [../deck/install.sh](../deck/install.sh) | Installazione e aggiornamento sulla Deck, schermo compreso |
+| [../deck/screen/](../deck/screen/agentdeck_screen.py) | Schermo della Deck: registrazione dei comandi, visualizzatore, servizio ([schermo.md](schermo.md)) |
+| [../deck/tests/test_screen.py](../deck/tests/test_screen.py) | Test dello schermo: pulizia del testo, segreti oscurati, esiti di `deck` |
 
 Solo libreria standard di Python, compatibile da Python 3.10 (Mac) in su (Deck: 3.14).
 
