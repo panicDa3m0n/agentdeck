@@ -37,7 +37,7 @@ Ogni proposta si misura con i due principi del progetto:
 3. [Identità, permessi, isolamento e segreti](#3-identità-permessi-isolamento-e-segreti) (O8.T3)
 4. [Stato del sistema, software e snapshot](#4-stato-del-sistema-software-e-snapshot) (O8.T4)
 5. [Eventi, log e osservabilità](#5-eventi-log-e-osservabilità) (O8.T5)
-6. L'harness dell'agente (O8.T6)
+6. [L'harness dell'agente](#6-lharness-dellagente) (O8.T6)
 7. Sintesi: architettura proposta e decisioni (O8.T7)
 
 ---
@@ -409,3 +409,96 @@ e solo se si apre la schermata giusta.
 **Da decidere nella sintesi:**
 - quali eventi svegliano subito un agente e quali aspettano la prossima sessione;
 - il limite di spesa per le sessioni aperte da un evento (A5.5).
+
+---
+
+## 6. L'harness dell'agente
+
+L'harness è il programma che fa lavorare un modello come agente: il ciclo di ragionamento, gli strumenti, i
+permessi, il contesto, le sessioni. La richiesta dell'utente è partire da Claude Code, così da usare subito gli
+agenti Claude anche da remoto, senza costruire canali di comunicazione o app.
+
+### 6.1 Cosa dicono le fonti ufficiali
+
+Ricerca del 25/10/2026 sulla documentazione di Anthropic (code.claude.com) e sul repository
+github.com/anthropics/claude-code:
+
+| Tema | Fatto | Fonte |
+|---|---|---|
+| **Licenza** | Claude Code è **proprietario**: "© Anthropic PBC. All rights reserved. Use is subject to Anthropic's Commercial Terms of Service". Il codice non è open source e **un fork, cioè modificarlo e ridistribuirlo, non è permesso** | `LICENSE.md` del repository |
+| **Claude Agent SDK** | Stesso ciclo dell'agente, stessi strumenti e stessa gestione del contesto di Claude Code, da usare dentro programmi propri in Python (`claude-agent-sdk`) o TypeScript (`@anthropic-ai/claude-agent-sdk`). Comprende hook, MCP, subagenti, permessi, sessioni. Licenza: termini commerciali di Anthropic | `agent-sdk/overview` |
+| **Estendere senza fork** | Hook sugli eventi della sessione, che possono aggiungere contesto o bloccare un'azione; server MCP; plugin, che raccolgono hook, MCP e skill; skill; subagenti; stili di output; impostazioni gestite; modalità di permesso | `hooks`, `plugins`, `mcp` |
+| **Senza interfaccia** | `claude -p "<richiesta>"`, uscita `json` o `stream-json`, ripresa di una sessione con `--continue` e `--resume`, strumenti permessi e modalità di permesso da riga di comando | `headless` |
+| **Remote Control** | Collega una sessione di Claude Code che gira su una macchina a claude.ai/code o all'app Claude per telefono. File, strumenti e server MCP restano sulla macchina. Funziona anche su Linux; richiede un abbonamento Pro, Max, Team o Enterprise | `remote-control` |
+| **Linux** | Binario nativo per x86_64 e ARM64, senza bisogno di Node.js; in alternativa il pacchetto npm (Node.js 22 o più). Distribuzioni elencate: Ubuntu, Debian, Alpine. **Arch non è nell'elenco** | `setup` |
+| **Autenticazione senza persona** | Chiave API (`ANTHROPIC_API_KEY`); token OAuth di lunga durata da `claude setup-token` (`CLAUDE_CODE_OAUTH_TOKEN`); `apiKeyHelper`; Bedrock, Vertex, Foundry | `authentication` |
+
+**Hook visti funzionare in questa sessione.** La governance del progetto è essa stessa un'estensione di
+Claude Code fatta di hook:
+- `SessionStart` e `UserPromptSubmit` iniettano regole e stato a ogni turno;
+- `PreToolUse` nega gli strumenti fuori dalle regole, ad esempio durante il setup del ciclo;
+- `PostToolUse` e `PostToolUseFailure` aggiungono istruzioni dopo un comando o un errore;
+- `Stop` impedisce di chiudere un turno con la roadmap disallineata.
+
+È autoprompting a livello di harness, già provato sul campo.
+
+**Sulla Deck oggi:** x86_64, 8 thread, 14 GB di RAM quasi tutti liberi, git installato; Node.js non installato
+ma disponibile nei repository ufficiali (26.12); nessuna installazione di Claude Code.
+
+### 6.2 Dove vivono le sessioni
+
+| Dove | Com'è | Adatto a |
+|---|---|---|
+| **Sul Mac** (oggi) | Claude Code sul Mac, la Deck raggiunta con SSH e `deck` | Sviluppare AgentDeck: repository, governance, documentazione stanno sul Mac |
+| **Sulla Deck** | Claude Code installato sulla Deck, sessioni come unità di systemd, raggiungibili con Remote Control da claude.ai o dal telefono | Gestire AgentDeck dall'interno: l'agente vive nel sistema che governa; l'umano guarda e interviene da remoto senza app nostre |
+| **Nel cloud** | Sessioni di Claude Code sul web, sopra un repository | Lavoro sul codice; non hanno accesso diretto al sistema della Deck |
+
+### 6.3 Presupposti umani dell'harness
+
+| # | Dove | Cosa presuppone | Effetto |
+|---|---|---|---|
+| H31 | Permessi | Una persona che approva le azioni una per una nell'interfaccia | In una sessione senza persona servono regole decise prima: permessi per strumento e i controlli del sistema (sezione 3) |
+| H32 | Avvio | Una persona che apre la sessione e scrive la prima richiesta | L'agente non parte da solo: servono gli eventi (sezione 5) |
+| H33 | Contesto | Un umano che spiega com'è fatto il sistema | Il sistema deve presentarsi da sé: istruzioni, stato, eventi |
+
+### 6.4 Come il sistema alimenta l'harness
+
+- **Interattività con MCP.** Le azioni di `deck` diventano strumenti dichiarati, con i parametri tipizzati
+  presi dalle specifiche del protocollo. Le azioni distruttive restano in due passi: la prima chiamata
+  restituisce anteprima e codice, la seconda conferma. Le schermate sono anche risorse leggibili.
+- **Autoprompting con gli hook di AgentDeck**:
+  - **all'inizio della sessione**, il briefing `deck inbox` (A5.4), insieme a invarianti e stato;
+  - **prima di un comando grezzo**, la politica: dove esiste un'azione di `deck` la indica, e rifiuta ciò che
+    toglierebbe l'accesso (INV-1);
+  - **dopo un'azione**, le istruzioni di verifica;
+  - **alla fine**, la registrazione nel registro delle azioni (A5.6).
+
+  È lo schema che la governance usa già con successo.
+- **Conoscenza:**
+  - un `CLAUDE.md` di AgentDeck e skill per componente, generati da `docs/`, così la fonte resta una (INV-9);
+  - subagenti per ruoli diversi: amministrazione, sviluppo, casa.
+- **Identità e limiti:** ogni sessione è un agente con la sua identità (A3.2), gira senza privilegi e passa
+  dal broker (A3.3); in senza interfaccia, strumenti e modalità di permesso sono fissati dal profilo
+  dell'agente.
+
+### 6.5 Proposte
+
+| Id | Livello | Proposta | Perché |
+|---|---|---|---|
+| A6.1 | — | **Niente fork**: la licenza non lo permette. L'harness di AgentDeck è Claude Code non modificato più un **plugin di AgentDeck** (hook, MCP, skill, `CLAUDE.md`, impostazioni), che è la nostra "distribuzione" di Claude Code. Per gli agenti scritti da noi, come l'agente interno o i lavori avviati da un evento, si usa l'Agent SDK con lo stesso motore | Ottiene ciò che il fork avrebbe dato (Claude come agente nativo di AgentDeck) restando dentro i termini, e riceve gli aggiornamenti di Claude Code senza doverli fondere |
+| A6.2 | L2 | **`deck mcp`**: server MCP che serve il protocollo di `deck`, con strumenti, anteprime, conferme e risorse. In locale sulla Deck, e dal Mac con `ssh agentdeck deck mcp` | Interattività nativa nell'harness. Si costruisce sullo stesso motore di A2.3 |
+| A6.3 | L2 | **Hook di AgentDeck** per Claude Code: briefing all'inizio, politica sui comandi grezzi, verifiche dopo le azioni, registro alla fine. Sono già sviluppati e provati nello schema della governance | Autoprompting nel punto in cui l'agente ragiona |
+| A6.4 | L2 | **Claude Code sulla Deck**: binario nativo, sessioni come unità di systemd per l'utente dell'agente, raggiungibili con **Remote Control** da claude.ai o dal telefono | L'agente vive nel sistema; l'umano lo segue da remoto senza app nostre, come chiesto |
+| A6.5 | L2 | **Sessioni avviate da un evento**: `claude -p` con uscita `stream-json`, ripresa delle sessioni, strumenti limitati e un tetto di spesa, lanciate dal raccoglitore di eventi (A5.5) come unità transitorie. Più avanti, l'agente interno sull'Agent SDK | La Deck risponde da sola agli eventi |
+| A6.6 | L1/L2 | **Credenziali dell'harness** con `deck secrets` (A3.6): chiave API o token OAuth di lunga durata, consegnati alle sessioni senza file in chiaro. Le condizioni d'uso di un abbonamento per agenti che lavorano da soli vanno verificate; la chiave API è la strada pulita per l'agente interno (INV-7) | Nessuna credenziale in chiaro; una revoca per agente |
+
+**Verifiche aperte:**
+- che il binario nativo di Claude Code funzioni su Arch, che non è fra le distribuzioni elencate;
+- se Remote Control funziona con l'autenticazione a chiave API o solo con l'abbonamento;
+- che un server MCP raggiunto via SSH (stdio) funzioni nell'harness: rispetta la specifica, ma non è
+  documentato esplicitamente.
+
+**Da decidere nella sintesi:**
+- **dove vive l'harness di gestione**: sulla Deck subito (A6.4), oppure dopo `deck mcp` e gli hook, provati
+  prima dal Mac;
+- **l'autenticazione** delle sessioni sulla Deck.

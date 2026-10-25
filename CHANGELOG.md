@@ -4,6 +4,20 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.3.6 — 2026-10-25
+
+Ciclo 03, task O8.T6: studio dell'harness dell'agente.
+
+- Sezione 6 di `docs/architettura.md`, verificata su fonti ufficiali di Anthropic.
+- Claude Code è proprietario, quindi **un fork non è permesso** dalla licenza.
+- Strade permesse:
+  - l'Agent SDK, con lo stesso motore;
+  - hook, MCP, plugin e skill;
+  - la modalità senza interfaccia `claude -p`;
+  - Remote Control, che segue una sessione dalla Deck da claude.ai o dal telefono.
+- Proposta A6.1: Claude Code non modificato, più un plugin di AgentDeck con `deck mcp`, hook di autoprompting
+  e skill; l'Agent SDK per gli agenti nostri. Da decidere in revisione (N21).
+
 ## 0.3.5 — 2026-10-25
 
 Ciclo 03, task O8.T5: studio di eventi, log e osservabilità.

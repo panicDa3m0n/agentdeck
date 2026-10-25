@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-25 20:24",
-  "updated": "2026-10-25 23:19",
+  "updated": "2026-10-25 23:22",
   "objectives": [
     {
       "id": "O8",
@@ -72,10 +72,10 @@
           "title": "L'harness dell'agente: Claude Code e alternative",
           "scope": "docs/architettura.md",
           "gate_pre": "Sezione harness: licenza di Claude Code e possibilità di fork verificate su fonti ufficiali; Claude Agent SDK; estensione senza fork (hook, MCP, plugin, skill, modalità senza interfaccia, Remote Control); dove vivono le sessioni e come il sistema alimenta comandi interattivi e autoprompting; proposta motivata.",
-          "gate_post": "",
-          "state": "todo",
-          "risk": null,
-          "risk_why": "",
+          "gate_post": "Sezione 6 di architettura.md: fork di Claude Code non permesso (licenza), Agent SDK, hook, MCP, Remote Control verificati; dove vivono le sessioni; 6 proposte",
+          "state": "done",
+          "risk": 5,
+          "risk_why": "Ricerca su fonti ufficiali e letture sulla Deck; scrittura di docs/architettura.md: nessuna modifica al sistema.",
           "docs": []
         },
         {
@@ -123,7 +123,15 @@
       "created": "2026-10-25 20:39"
     }
   ],
-  "notes": [],
+  "notes": [
+    {
+      "id": "N21",
+      "task": "O8.T7",
+      "text": "Da portare alla revisione (O8.T6, 25/10): la licenza di Claude Code (LICENSE.md: All rights reserved, termini commerciali di Anthropic) non permette un fork. Proposta A6.1: Claude Code non modificato più un plugin di AgentDeck (hook, MCP con deck mcp, skill, CLAUDE.md), Agent SDK per gli agenti nostri, Remote Control per seguire le sessioni dal telefono. Cambia l'idea iniziale dell'utente: va decisa esplicitamente.",
+      "docs": [],
+      "created": "2026-10-25 23:22"
+    }
+  ],
   "active": {
     "objective": "O8",
     "task": "",
@@ -134,9 +142,9 @@
     "hold_plan": ""
   },
   "previous": {
-    "task": "O8.T5",
+    "task": "O8.T6",
     "state": "done",
-    "note": "Sezione 5 di architettura.md: journal (28% traccia agente, 42% eventi riconoscibili), sistema silenzioso, nessuno sveglia l'agente; 5 presupposti, 9 proposte"
+    "note": "Sezione 6 di architettura.md: fork di Claude Code non permesso (licenza), Agent SDK, hook, MCP, Remote Control verificati; dove vivono le sessioni; 6 proposte"
   },
   "cycle": {
     "n": 3,
@@ -147,6 +155,6 @@
     "objective": 9,
     "cycle": 3,
     "request": 3,
-    "note": 20
+    "note": 21
   }
 }

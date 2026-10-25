@@ -724,3 +724,14 @@
 {"at": "2026-10-25 23:19", "testo": "TASK CHIUSA O8.T5 — completata: Sezione 5 di architettura.md: journal (28% traccia agente, 42% eventi riconoscibili), sistema silenzioso, nessuno sveglia l'agente; 5 presupposti, 9 proposte"}
 {"at": "2026-10-25 23:19", "testo": "VERSIONE 0.3.5 (O8.T5)"}
 {"at": "2026-10-25 23:19", "testo": "VERSIONI scelte dall'utente: governance"}
+{"at": "2026-10-25 23:19", "testo": "[-] bash: ~/claude-rules/bin/wf.sh task-close --done \"Sezione 5 di architettura.md: journal (28% traccia agente, 42% eve"}
+{"at": "2026-10-25 23:19", "testo": "TASK APERTA O8.T6 — L'harness dell'agente: Claude Code e alternative | perimetro: docs/architettura.md | gate: Sezione harness: licenza di Claude Code e possibilità di fork verificate su fonti ufficiali; Claude Agent SDK; estensione senza fork (hook, MCP, plugin, skill, modalità senza interfaccia, Remote Control); dove vivono le sessioni e come il sistema alimenta comandi interattivi e autoprompting; proposta motivata. | rischio: 5"}
+{"at": "2026-10-25 23:19", "testo": "[O8.T6] bash: ~/claude-rules/bin/wf.sh task-start --id O8.T6 --risk 5 --why \"Ricerca su fonti ufficiali e letture sulla Deck"}
+{"at": "2026-10-25 23:20", "testo": "[O8.T6] bash: ssh -o BatchMode=yes agentdeck 'pacman -Q nodejs npm git 2>&1 | tr \"\\n\" \";\"; echo; pacman -Si nodejs 2>/dev/nu"}
+{"at": "2026-10-25 23:21", "testo": "[O8.T6] Edit  docs/architettura.md", "task": "O8.T6", "tipo": "file", "tool": "Edit", "file": "docs/architettura.md"}
+{"at": "2026-10-25 23:22", "testo": "[O8.T6] bash: cat >> docs/architettura.md <<'EOF'  ---  ## 6. L'harness dell'agente  L'harness è il programma che fa lavorar"}
+{"at": "2026-10-25 23:22", "testo": "ANNOTAZIONE N21 su O8.T7 — Da portare alla revisione (O8.T6, 25/10): la licenza di Claude Code (LICENSE.md: All rights reserved, termini commerciali di Anthropic) non permette un fork. Proposta A6.1: Claude Code non modificato più un plugin di AgentDeck (hook, MCP con deck mcp, skill, CLAUDE.md), Agent SDK per gli agenti nostri, Remote Control per seguire le sessioni dal telefono. Cambia l'idea iniziale dell'utente: va decisa esplicitamente."}
+{"at": "2026-10-25 23:22", "testo": "TASK CHIUSA O8.T6 — completata: Sezione 6 di architettura.md: fork di Claude Code non permesso (licenza), Agent SDK, hook, MCP, Remote Control verificati; dove vivono le sessioni; 6 proposte"}
+{"at": "2026-10-25 23:22", "testo": "VERSIONE 0.3.6 (O8.T6)"}
+{"at": "2026-10-25 23:22", "testo": "VERSIONI scelte dall'utente: governance"}
+{"at": "2026-10-25 23:22", "testo": "[-] bash: ~/claude-rules/bin/wf.sh note-add --task O8.T7 --text \"Da portare alla revisione (O8.T6, 25/10): la licenza di"}

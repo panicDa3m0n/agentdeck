@@ -10,10 +10,10 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O8` Mappa del sistema e architettura agent-first — 7 task: 5 completate, 0 in corso, 2 da fare, 0 bloccate
+- **Obiettivo attivo:** `O8` Mappa del sistema e architettura agent-first — 7 task: 6 completate, 0 in corso, 1 da fare, 0 bloccate
 - **Task attiva:** —
-- **Ultima task gestita:** `O8.T5` — completata — Sezione 5 di architettura.md: journal (28% traccia agente, 42% eventi riconoscibili), sistema silenzioso, nessuno sveglia l'agente; 5 presupposti, 9 proposte
-- **Ultimo aggiornamento:** 2026-10-25 23:19
+- **Ultima task gestita:** `O8.T6` — completata — Sezione 6 di architettura.md: fork di Claude Code non permesso (licenza), Agent SDK, hook, MCP, Remote Control verificati; dove vivono le sessioni; 6 proposte
+- **Ultimo aggiornamento:** 2026-10-25 23:22
 
 ## Richieste attive
 
@@ -42,10 +42,12 @@ _Mancanze di progetto che l'agente non può risolvere da solo. L'utente le confe
 - [x] `O8.T5` Eventi, log e osservabilità — *perimetro:* `docs/architettura.md, letture sulla Deck`
   *gate previsto:* Sezione eventi: journal, udev, eventi di systemd e D-Bus, inotify, audit, timer; cosa può svegliare un agente e come diventa autoprompting (contesto e istruzioni al momento giusto); proposte per livello. · *gate confermato:* ✔ Sezione 5 di architettura.md: journal (28% traccia agente, 42% eventi riconoscibili), sistema silenzioso, nessuno sveglia l'agente; 5 presupposti, 9 proposte
   *rischio:* 5/100 — Solo letture e osservazioni di pochi secondi sulla Deck (journal, D-Bus, udev, timer, logind) e scrittura di docs/architettura.md: nessuna modifica al sistema.
-- [ ] `O8.T6` L'harness dell'agente: Claude Code e alternative — *perimetro:* `docs/architettura.md`
-  *gate previsto:* Sezione harness: licenza di Claude Code e possibilità di fork verificate su fonti ufficiali; Claude Agent SDK; estensione senza fork (hook, MCP, plugin, skill, modalità senza interfaccia, Remote Control); dove vivono le sessioni e come il sistema alimenta comandi interattivi e autoprompting; proposta motivata.
+- [x] `O8.T6` L'harness dell'agente: Claude Code e alternative — *perimetro:* `docs/architettura.md`
+  *gate previsto:* Sezione harness: licenza di Claude Code e possibilità di fork verificate su fonti ufficiali; Claude Agent SDK; estensione senza fork (hook, MCP, plugin, skill, modalità senza interfaccia, Remote Control); dove vivono le sessioni e come il sistema alimenta comandi interattivi e autoprompting; proposta motivata. · *gate confermato:* ✔ Sezione 6 di architettura.md: fork di Claude Code non permesso (licenza), Agent SDK, hook, MCP, Remote Control verificati; dove vivono le sessioni; 6 proposte
+  *rischio:* 5/100 — Ricerca su fonti ufficiali e letture sulla Deck; scrittura di docs/architettura.md: nessuna modifica al sistema.
 - [ ] `O8.T7` Sintesi: architettura proposta e decisioni — *perimetro:* `docs/architettura.md, PRINCIPI.md`
   *gate previsto:* Architettura complessiva in una pagina, con le interfacce per l'umano come canale futuro ed effimero; elenco delle decisioni approvate una per una dall'utente; roadmap degli sviluppi che ne deriva, pronta per il ciclo successivo.
+  *annotazioni:* `N21`
 
 ### `O9` Aggiornamento reale della Deck con deck update — in corso
 
@@ -56,4 +58,6 @@ _Mancanze di progetto che l'agente non può risolvere da solo. L'utente le confe
 
 ## Annotazioni
 
-_nessuna annotazione._
+_Una riga per nota, sempre legata a una task. `wf.sh notes` per leggerle._
+
+- `N21` (`O8.T7`) Da portare alla revisione (O8.T6, 25/10): la licenza di Claude Code (LICENSE.md: All rights reserved, termini commerciali di Anthropic) non permette un fork. Proposta A6.1: Claude Code non modificato più un plugin di AgentDeck (hook, MCP con deck mcp, skill, CLAUDE.md), Agent SDK per gli agenti nostri, Remote Control per seguire le sessioni dal telefono. Cambia l'idea iniziale dell'utente: va decisa esplicitamente. — 2026-10-25 23:22
