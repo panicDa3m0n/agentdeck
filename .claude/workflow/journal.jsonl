@@ -587,3 +587,9 @@
 {"at": "2026-10-25 19:57", "testo": "[-] bash: python3 - <<'EOF' from pathlib import Path c = Path(\"CHANGELOG.md\") s = c.read_text() entry = '''## 0.2.4 — 20"}
 {"at": "2026-10-25 19:57", "testo": "[-] bash: git ls-remote --tags origin | grep -c \"v0.2.3$\"; git grep -n \"versione --scegli\" -- .claude/workflow/journal.j"}
 {"at": "2026-10-25 19:57", "testo": "VERSIONI scelte dall'utente: governance"}
+{"at": "2026-10-25 19:57", "testo": "[-] bash: cat VERSION; printf '0.2.4\\n' > VERSION && git add -A -- . ':!.claude/workflow/.stop-guard' && git commit -q -"}
+{"at": "2026-10-25 19:57", "testo": "GATE OBIETTIVO APERTO O5"}
+{"at": "2026-10-25 19:57", "testo": "[-] bash: ~/claude-rules/bin/wf.sh obj-gate O5 2>&1 | sed -n '/Numeri/,/fine del riepilogo/p' | grep -v \"^- \\[ \\] \\`INV\""}
+{"at": "2026-10-25 19:58", "testo": "[-] bash: ssh -o BatchMode=yes agentdeck 'echo \"== O5.T1\"; python /opt/agentdeck/tests/live_service_check.py | tail -1; "}
+{"at": "2026-10-25 19:58", "testo": "[-] bash: cd /private/tmp/claude-502/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/scratchpad && pyt"}
+{"at": "2026-10-25 19:59", "testo": "OBIETTIVO CHIUSO O5 (completo) — approvato"}

@@ -10,11 +10,10 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O5` Servizi e log gestiti dall'agente: deck service, deck logs — 2 task: 2 completate, 0 in corso, 0 da fare, 0 bloccate
+- **Obiettivo attivo:** —
 - **Task attiva:** —
 - **Ultima task gestita:** `O5.T2` — completata — deck logs: filtri per unità, periodo, gravità uguali a journalctl -o json, traccia agente esclusa, riga malevola solo nei dati, link da service; 11/11, 134 test
-- **Fase:** `objective_gate_pending`
-- **Ultimo aggiornamento:** 2026-10-25 19:57
+- **Ultimo aggiornamento:** 2026-10-25 19:59
 
 ## Richieste attive
 
@@ -35,9 +34,10 @@ _nessuna richiesta in attesa._
   *rischio:* 45/100 — Cambia la rete della Deck, che è il canale dell'agente (INV-1): LLMNR è a basso rischio, il passaggio a un'altra rete Wi-Fi può far perdere il collegamento o cambiare IP. Mitigazioni: snapshot prima, verifica dopo ogni modifica, e per il Wi-Fi un ritorno automatico ai 2,4 GHz se entro pochi minuti l'agente non conferma di raggiungere la Deck.
   *annotazioni:* `N11`, `N12`, `N13`, `N14`
 
-### `O5` Servizi e log gestiti dall'agente: deck service, deck logs — in corso
+### `O5` Servizi e log gestiti dall'agente: deck service, deck logs — chiuso
 
 **Gate obiettivo:** deck service mostra e governa i servizi di systemd con anteprima per le azioni che interrompono qualcosa e rifiuto per quelli da cui dipende l'accesso (INV-1); deck logs restituisce il journal strutturato con il testo dei log solo nei dati (INV-4).
+**Chiuso:** 2026-10-25 19:59 — approvato
 
 - [x] `O5.T1` Componente service: elenco, stato e azioni sui servizi — *perimetro:* `deck/, componente service`
   *gate previsto:* deck service elenca i servizi come systemctl, con stato, abilitazione e servizi falliti; start, stop, restart, enable e disable funzionano su un servizio di prova, quelli che interrompono qualcosa con anteprima; stop e disable di sshd, systemd-networkd, iwd e systemd-resolved rifiutati con il motivo (INV-1). · *gate confermato:* ✔ deck service: elenco come systemctl, azioni su servizio di prova con anteprima e snapshot, stop e disable dei 5 servizi di accesso rifiutati; 28/28, 122 test
