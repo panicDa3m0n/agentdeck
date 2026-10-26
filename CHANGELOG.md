@@ -4,6 +4,21 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.4.11 — 2026-10-26
+
+Ciclo 04, task O10.T12: l'area dei servizi preparata dall'agente sulla Deck entra nel repository
+([docs/servizi.md](docs/servizi.md)).
+
+- Nuova cartella `servizi/`, con l'unità modello `agentdeck-servizio@.service`, `install-servizi.sh` e
+  `nuovo-servizio.sh`. Unità e comando sono identici a quelli installati sulla Deck: li ho verificati con i
+  checksum.
+- `docs/servizi.md`, scritto dall'agente: struttura di `/srv/servizi`, isolamento di ogni servizio, rete,
+  verifica, cosa resta da fare. Ho aggiunto solo da dove viene e come si installa dal Mac.
+- L'installazione dell'area è un passo a sé, come `remote-access.sh`: `deck/install.sh` non la chiama, perché
+  tocca fstab e i subvolumi.
+- Collegata dall'indice, da `deck.md` (le istanze `agentdeck-servizio@<nome>` si gestiscono con `deck service`),
+  da `installazione.md` e dal README.
+
 ## 0.4.10 — 2026-10-26
 
 Ciclo 04, task O10.T4: l'uso reale e i bisogni emersi.

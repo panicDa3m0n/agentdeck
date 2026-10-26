@@ -10,11 +10,11 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O10` Claude Code sulla Deck, usato davvero — 11 task: 10 completate, 0 in corso, 0 da fare, 1 bloccate
+- **Obiettivo attivo:** `O10` Claude Code sulla Deck, usato davvero — 12 task: 11 completate, 0 in corso, 0 da fare, 1 bloccate
 - **Task attiva:** —
-- **Ultima task gestita:** `O10.T4` — completata — Sessione reale del 26/10: area dei servizi preparata dall'agente e verificata; bisogni N51-N54 annotati; proposta del ciclo 05
+- **Ultima task gestita:** `O10.T12` — completata — Area dei servizi nel repository (servizi/, docs/servizi.md), identica all'installato per checksum; collegata da indice, deck.md, installazione
 - **Fase:** `objective_gate_pending`
-- **Ultimo aggiornamento:** 2026-10-26 09:31
+- **Ultimo aggiornamento:** 2026-10-26 09:32
 
 ## Richieste attive
 
@@ -67,6 +67,10 @@ _nessuna richiesta in attesa._
   *gate previsto:* Snapshot prima; la Deck torna sulla rete a 5 GHz dello stesso router con deck network prefer_5ghz e la conferma keep_5ghz, IP 192.168.1.49 invariato; ssh agentdeck funziona dopo il cambio; WIFI_BAND_2G sparito e nessun avviso nuovo in deck status. · *gate confermato:* ✔ Deck di nuovo a 5 GHz (5180 MHz) con prefer_5ghz e keep_5ghz al secondo tentativo; IP invariato, ssh ok, WIFI_BAND_2G sparito
   *rischio:* 30/100 — Il cambio di rete Wi-Fi tocca il canale dell'agente (INV-1); deck network lo protegge con anteprima, conferma e ritorno automatico alla rete di prima se il cambio non viene confermato.
   *annotazioni:* `N49`, `N50`
+- [x] `O10.T12` Consegna dell'agente: l'area dei servizi della Deck portata nel repository — *perimetro:* `servizi/, docs/, README.md`
+  *gate previsto:* File dell'area dei servizi nel repository identici a quelli installati sulla Deck (checksum); docs/servizi.md collegato dall'indice, da deck.md e da installazione.md; install-servizi.sh documentato come passo a sé; versione pubblicata (INV-8, INV-9). · *gate confermato:* ✔ Area dei servizi nel repository (servizi/, docs/servizi.md), identica all'installato per checksum; collegata da indice, deck.md, installazione
+  *rischio:* 10/100 — Solo file portati nel repository e confronto in sola lettura con la Deck: sul sistema non cambia nulla.
+  *annotazioni:* `N56`
 
 ### `O11` Aggiornamento reale della Deck con deck update (O9) — in corso
 
@@ -108,3 +112,4 @@ _Una riga per nota, sempre legata a una task. `wf.sh notes` per leggerle._
 - `N53` (`O10.T4`) Bisogni dell'area dei servizi, dalla consegna: componente deck servizi (deck service non mostra le istanze ferme; crea, aggiorna da git, rimuovi con anteprima); configurazione snapper per @servizi (gli snapshot di sistema non coprono i dati dei servizi, INV-3); firewall nftables con rete di sicurezza che si annulla da sola (oggi la convenzione HOST=127.0.0.1 non è imposta). — 2026-10-26 09:25
 - `N54` (`O10.T4`) La sessione reale ha lavorato solo con Bash: deck mcp, adattatore, obblighi, hook e skill sono arrivati dopo (0.4.4-0.4.7). La prossima sessione reale deve mostrare se l'agente li usa da solo nel lavoro vero e quanto restano utili i comandi Bash. — 2026-10-26 09:25
 - `N55` (`O10.T4`) Proposta di roadmap del ciclo 05, nata dai bisogni N42, N46, N49, N51-N54: O12 servizi gestiti dal sistema (deck servizi, snapper per @servizi, firewall con rete di sicurezza, primo servizio vero); O13 le modifiche dell'agente sulla Deck arrivano nel repository (canale da decidere: copia con push, consegna, stato voluto D4); O14 meno domande al proprietario e più protezione (permessi per le letture, sshguard protetto, Wi-Fi che ritenta, sessione reale con gli strumenti nuovi). Da decidere prima: O11, INV-7 (N30), D7. Pagina: https://claude.ai/artifact/RsvXPfqirwoyRkX6HXjrt4 — 2026-10-26 09:31
+- `N56` (`O10.T12`) Le regole che l'agente legge sulla Deck (deck/claude/CLAUDE.template.md) non citano l'area dei servizi: le sessioni future la scoprono solo da /srv/servizi. Da aggiungere insieme a deck servizi (O12 della proposta del ciclo 05), fuori dal perimetro di questa task. — 2026-10-26 09:32

@@ -9,6 +9,7 @@ Codice:
 - [../install/post-install.sh](../install/post-install.sh): rifinitura dopo il primo avvio, come `agent`.
 - [../install/claude-code.sh](../install/claude-code.sh): Claude Code per l'utente `agent`, con verifica della firma ([claude-code.md](claude-code.md)).
 - [../install/remote-access.sh](../install/remote-access.sh): accesso da fuori casa, con sshguard e Tailscale spento ([accesso.md](accesso.md)).
+- [../servizi/install-servizi.sh](../servizi/install-servizi.sh): l'area dei servizi ospitati, un passo a sé ([servizi.md](servizi.md)).
 
 Indice: [README.md](README.md).
 
@@ -46,6 +47,9 @@ Infine l'accesso da fuori casa, dal Mac. Serve anche la regola di port forwardin
 ```bash
 bash install/remote-access.sh
 ```
+
+L'area dei servizi ospitati, se serve, è un passo a sé, perché tocca fstab e i subvolumi
+([servizi.md](servizi.md), "Uso").
 
 ## Le fasi
 

@@ -41,6 +41,7 @@ L'indice completo è in [docs/README.md](docs/README.md).
 | [docs/deck.md](docs/deck.md) | Il motore `deck`: uso, server MCP, codice, installazione, nuovi componenti |
 | [docs/adattatore.md](docs/adattatore.md) | L'adattatore dei programmi interattivi (`deck term`) e i profili |
 | [docs/obblighi.md](docs/obblighi.md) | Gli obblighi che il sistema dà all'agente (`deck obligations`) |
+| [docs/servizi.md](docs/servizi.md) | L'area dei servizi ospitati dalla Deck (`/srv/servizi`) |
 | [docs/claude-code.md](docs/claude-code.md) | Claude Code sulla Deck: installazione verificata, percorsi, aggiornamenti |
 | [docs/sviluppo.md](docs/sviluppo.md) | Repository, versioni, pubblicazione su GitHub, governance |
 
@@ -57,6 +58,7 @@ docs/            documentazione per argomento
 deck/            il comando deck: motore del protocollo, componenti, test, installazione
 live/            chiavetta di avvio: preparazione dal Mac e script eseguito sulla Deck
 install/         installazione di Arch sulla Deck e rifinitura dopo il primo avvio
+servizi/         area dei servizi ospitati: unità modello e script (docs/servizi.md)
 secrets/         credenziali locali, escluse da git (es. Wi-Fi)
 cache/           ISO e file scaricati, esclusi da git
 ```

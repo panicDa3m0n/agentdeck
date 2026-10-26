@@ -48,6 +48,9 @@ documento (invariante INV-9). Quando si modifica il codice, si aggiorna il docum
 
 ## Uso quotidiano
 
+- [servizi.md](servizi.md): l'area dei servizi ospitati dalla Deck (`/srv/servizi`): struttura, isolamento, rete,
+  come si aggiunge e si gestisce un servizio. Codice: [../servizi/](../servizi/install-servizi.sh).
+
 - [accesso.md](accesso.md): accesso SSH dell'agente in casa e da fuori casa (scarlethome.ddns.net, sshguard),
   indirizzo della Deck, sicurezza, snapshot e recupero. Codice: [../install/remote-access.sh](../install/remote-access.sh),
   prova da fuori casa [../install/remote-check.sh](../install/remote-check.sh).

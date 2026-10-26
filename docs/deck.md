@@ -162,6 +162,9 @@ ssh agentdeck python /opt/agentdeck/tests/live_network_check.py
 - `deck service show name=<unità>` (effetto `read`) mostra le proprietà di un servizio come `systemctl show`:
   stato, abilitazione, PID, memoria, avvio, file dell'unità, dipendenze. Il suffisso `.service` si può omettere
   e gli alias si risolvono (`dbus` diventa `dbus-broker.service`). Si gestiscono solo unità `.service`.
+- I servizi ospitati dalla Deck sono istanze `agentdeck-servizio@<nome>` e si gestiscono qui, con le stesse
+  anteprime e conferme ([servizi.md](servizi.md)). Un'istanza ferma non compare nell'elenco: per ora la si apre
+  con `show name=agentdeck-servizio@<nome>`.
 
 | Azione | Effetto | Snapshot prima | Note |
 |---|---|---|---|

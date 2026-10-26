@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-25 23:48",
-  "updated": "2026-10-26 09:31",
+  "updated": "2026-10-26 09:32",
   "objectives": [
     {
       "id": "O10",
@@ -131,6 +131,17 @@
           "state": "done",
           "risk": 30,
           "risk_why": "Il cambio di rete Wi-Fi tocca il canale dell'agente (INV-1); deck network lo protegge con anteprima, conferma e ritorno automatico alla rete di prima se il cambio non viene confermato.",
+          "docs": []
+        },
+        {
+          "id": "O10.T12",
+          "title": "Consegna dell'agente: l'area dei servizi della Deck portata nel repository",
+          "scope": "servizi/, docs/, README.md",
+          "gate_pre": "File dell'area dei servizi nel repository identici a quelli installati sulla Deck (checksum); docs/servizi.md collegato dall'indice, da deck.md e da installazione.md; install-servizi.sh documentato come passo a sé; versione pubblicata (INV-8, INV-9).",
+          "gate_post": "Area dei servizi nel repository (servizi/, docs/servizi.md), identica all'installato per checksum; collegata da indice, deck.md, installazione",
+          "state": "done",
+          "risk": 10,
+          "risk_why": "Solo file portati nel repository e confronto in sola lettura con la Deck: sul sistema non cambia nulla.",
           "docs": []
         }
       ]
@@ -391,6 +402,13 @@
       "text": "Proposta di roadmap del ciclo 05, nata dai bisogni N42, N46, N49, N51-N54: O12 servizi gestiti dal sistema (deck servizi, snapper per @servizi, firewall con rete di sicurezza, primo servizio vero); O13 le modifiche dell'agente sulla Deck arrivano nel repository (canale da decidere: copia con push, consegna, stato voluto D4); O14 meno domande al proprietario e più protezione (permessi per le letture, sshguard protetto, Wi-Fi che ritenta, sessione reale con gli strumenti nuovi). Da decidere prima: O11, INV-7 (N30), D7. Pagina: https://claude.ai/artifact/RsvXPfqirwoyRkX6HXjrt4",
       "docs": [],
       "created": "2026-10-26 09:31"
+    },
+    {
+      "id": "N56",
+      "task": "O10.T12",
+      "text": "Le regole che l'agente legge sulla Deck (deck/claude/CLAUDE.template.md) non citano l'area dei servizi: le sessioni future la scoprono solo da /srv/servizi. Da aggiungere insieme a deck servizi (O12 della proposta del ciclo 05), fuori dal perimetro di questa task.",
+      "docs": [],
+      "created": "2026-10-26 09:32"
     }
   ],
   "active": {
@@ -403,9 +421,9 @@
     "hold_plan": ""
   },
   "previous": {
-    "task": "O10.T4",
+    "task": "O10.T12",
     "state": "done",
-    "note": "Sessione reale del 26/10: area dei servizi preparata dall'agente e verificata; bisogni N51-N54 annotati; proposta del ciclo 05"
+    "note": "Area dei servizi nel repository (servizi/, docs/servizi.md), identica all'installato per checksum; collegata da indice, deck.md, installazione"
   },
   "cycle": {
     "n": 4,
@@ -416,6 +434,6 @@
     "objective": 11,
     "cycle": 4,
     "request": 6,
-    "note": 55
+    "note": 56
   }
 }

@@ -1,0 +1,62 @@
+# Unità modello dei servizi ospitati da AgentDeck: un'istanza per servizio, agentdeck-servizio@<nome>.service.
+# Il servizio vive in /srv/servizi/<nome> e gira come utente di sistema srv-<nome>, chiuso nella sua cartella.
+# Si gestisce con deck: deck service start|stop|restart|enable|disable name=agentdeck-servizio@<nome>
+# Impostazioni del singolo servizio (memoria, dipendenze, ...): drop-in in
+# /etc/systemd/system/agentdeck-servizio@<nome>.service.d/
+#
+# Documentazione: docs/servizi.md
+
+[Unit]
+Description=AgentDeck: servizio %i
+Documentation=file:/srv/servizi/%i/LEGGIMI.md
+RequiresMountsFor=/srv/servizi/%i
+ConditionFileIsExecutable=/srv/servizi/%i/avvia
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=300
+StartLimitBurst=5
+
+[Service]
+Type=exec
+User=srv-%i
+Group=srv-%i
+WorkingDirectory=/srv/servizi/%i/app
+Environment=SERVIZIO_NOME=%i SERVIZIO_DIR=/srv/servizi/%i SERVIZIO_DATI=/srv/servizi/%i/dati HOST=127.0.0.1
+EnvironmentFile=-/srv/servizi/%i/config/env
+ExecStart=/srv/servizi/%i/avvia
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=30
+
+# Isolamento: il servizio scrive solo in dati/, non vede le home né gli altri servizi, non ottiene privilegi.
+ProtectSystem=strict
+ReadWritePaths=/srv/servizi/%i/dati
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+NoNewPrivileges=yes
+CapabilityBoundingSet=
+AmbientCapabilities=
+ProtectProc=invisible
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+ProtectClock=yes
+ProtectHostname=yes
+RestrictSUIDSGID=yes
+RestrictRealtime=yes
+RestrictNamespaces=yes
+LockPersonality=yes
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+UMask=0027
+
+# Limiti di base, perché un servizio non tolga risorse all'accesso dell'agente (INV-1).
+MemoryHigh=2G
+MemoryMax=3G
+TasksMax=512
+CPUWeight=80
+OOMScoreAdjust=500
+
+[Install]
+WantedBy=multi-user.target

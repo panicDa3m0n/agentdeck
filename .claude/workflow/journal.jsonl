@@ -1257,3 +1257,16 @@
 {"at": "2026-10-26 09:31", "testo": "VERSIONI scelte dall'utente: governance"}
 {"at": "2026-10-26 09:31", "testo": "[-] bash: W=~/claude-rules/bin/wf.sh; $W note-add --task O10.T4 --text \"Proposta di roadmap del ciclo 05, nata dai bisog"}
 {"at": "2026-10-26 09:31", "testo": "[-] Edit  CHANGELOG.md", "task": "-", "tipo": "file", "tool": "Edit", "file": "CHANGELOG.md"}
+{"at": "2026-10-26 09:31", "testo": "[-] bash: printf '0.4.10\\n' > VERSION && cat VERSION && git add -A && git commit -q -F - <<'EOF' Versione 0.4.10: uso re"}
+{"at": "2026-10-26 09:31", "testo": "TASK AGGIUNTA O10.T12 in O10 — Consegna dell'agente: l'area dei servizi della Deck portata nel repository"}
+{"at": "2026-10-26 09:31", "testo": "TASK APERTA O10.T12 — Consegna dell'agente: l'area dei servizi della Deck portata nel repository | perimetro: servizi/, docs/, README.md | gate: File dell'area dei servizi nel repository identici a quelli installati sulla Deck (checksum); docs/servizi.md collegato dall'indice, da deck.md e da installazione.md; install-servizi.sh documentato come passo a sé; versione pubblicata (INV-8, INV-9). | rischio: 10"}
+{"at": "2026-10-26 09:32", "testo": "[O10.T12] bash: W=~/claude-rules/bin/wf.sh; $W task-add --obj O10 --title \"Consegna dell'agente: l'area dei servizi della Deck"}
+{"at": "2026-10-26 09:32", "testo": "[O10.T12] bash: chmod +x servizi/install-servizi.sh servizi/nuovo-servizio.sh && sed -n '/^### `\\/service`/,/^### `\\/logs`/p' "}
+{"at": "2026-10-26 09:32", "testo": "[O10.T12] bash: python3 - <<'EOF' from pathlib import Path def edit(path, old, new):     p = Path(path); t = p.read_text(); as"}
+{"at": "2026-10-26 09:32", "testo": "ANNOTAZIONE N56 su O10.T12 — Le regole che l'agente legge sulla Deck (deck/claude/CLAUDE.template.md) non citano l'area dei servizi: le sessioni future la scoprono solo da /srv/servizi. Da aggiungere insieme a deck servizi (O12 della proposta del ciclo 05), fuori dal perimetro di questa task."}
+{"at": "2026-10-26 09:32", "testo": "[O10.T12] bash: python3 - <<'EOF' import re from pathlib import Path bad = [] for f in [\"docs/servizi.md\", \"docs/README.md\", \""}
+{"at": "2026-10-26 09:32", "testo": "TASK CHIUSA O10.T12 — completata: Area dei servizi nel repository (servizi/, docs/servizi.md), identica all'installato per checksum; collegata da indice, deck.md, installazione"}
+{"at": "2026-10-26 09:32", "testo": "VERSIONE 0.4.11 (O10.T12)"}
+{"at": "2026-10-26 09:32", "testo": "VERSIONI scelte dall'utente: governance"}
+{"at": "2026-10-26 09:32", "testo": "[-] bash: ~/claude-rules/bin/wf.sh task-close --done \"Area dei servizi nel repository (servizi/, docs/servizi.md), ident"}
+{"at": "2026-10-26 09:32", "testo": "[-] Edit  CHANGELOG.md", "task": "-", "tipo": "file", "tool": "Edit", "file": "CHANGELOG.md"}
