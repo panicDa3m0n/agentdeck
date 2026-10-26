@@ -20,6 +20,10 @@ nobody can fix it remotely.
   `deck <path> <action> name=value`. Every answer is a JSON screen: read `data`, act only through `actions`.
   Destructive actions first return a preview with a confirmation code; check it, then call again with
   `confirm=<code>`.
+- **Obligations**: the system gives you duties when something happens, for example writing the adapter profile of
+  programs a new package installed. They arrive in the `obligations` field of every `deck` screen and in hook
+  messages. Fulfil each as its message says, then close it with `deck obligations done id=<id>` and a note, or
+  dismiss it with the reason it does not apply. For now they only warn; treat them as part of the job.
 - **Snapshots before risky changes** that `deck` does not protect: `deck snapshot create description=<what you
   are about to change>`. Undo with `deck snapshot rollback id=<n>`, which shows a preview first.
 - **Never cut access**: do not stop, disable, mask or kill `sshd`, `systemd-networkd`, `iwd`, `systemd-resolved`

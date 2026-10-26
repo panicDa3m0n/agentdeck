@@ -1,0 +1,14 @@
+# AgentDeck (O10.T8): dopo ogni installazione di pacchetti, il sistema chiede all'agente il profilo dell'adattatore
+# dei programmi nuovi (obbligo PROFILE_NEEDED, solo un avviso). Installato in /etc/pacman.d/hooks/ da deck/install.sh;
+# lo script sta in /usr/local/lib/agentdeck/, di root, perché pacman lo esegue come root.
+# Documentazione: docs/obblighi.md
+[Trigger]
+Operation = Install
+Type = Package
+Target = *
+
+[Action]
+Description = AgentDeck: obligations for newly installed programs
+When = PostTransaction
+Exec = /usr/local/lib/agentdeck/obligations-hook.sh
+NeedsTargets

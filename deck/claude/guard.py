@@ -4,21 +4,60 @@
 Claude Code passa su stdin un JSON con tool_name e tool_input; uscire con 2 blocca il comando e il testo su stderr
 torna all'agente. È il secondo strato dopo le regole deny delle impostazioni gestite: guarda anche dentro sudo,
 catene di comandi e varianti che un prefisso non coglie. In dubbio lascia passare: è una guardia, non un sandbox.
-Installato da deck/claude/install.sh. Documentazione: docs/claude-code.md
+Se il comando passa e deck copre la stessa cosa, aggiunge al contesto l'azione di deck da preferire, senza bloccare
+(politica sui comandi grezzi, O10.T8); per i programmi che fanno domande indica l'adattatore, deck term.
+Installato da deck/install.sh in /opt/agentdeck/claude. Documentazione: docs/claude-code.md
 """
 from __future__ import annotations
 
 import json
+import re
 import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))  # /opt/agentdeck o deck/ del repository
 
 from agentdeck.access import RULES, check  # noqa: E402,F401  le regole stanno con deck: le usa anche deck term
+from agentdeck import term  # noqa: E402
+
+HINTS = [
+    (re.compile(r"\bjournalctl\b"), "`deck logs query` (unit=, since=, priority=, lines=) returns journal lines as data"),
+    (re.compile(r"\bsnapper\b"), "`deck snapshot` lists, creates and rolls back snapshots, with a preview"),
+    (re.compile(r"\bpacman\b[^;&|\n]*\s-S[a-z]*u|\bcheckupdates\b"),
+     "`deck update` checks and applies updates with snapshots before and after and a verification"),
+    (re.compile(r"\bsystemctl\b[^;&|\n]*\b(?:start|stop|restart|enable|disable)\b"),
+     "`deck service <action> name=<unit>` previews the change, protects access and verifies the result"),
+    (re.compile(r"\bsystemctl\b[^;&|\n]*\b(?:status|list-units|list-unit-files|show|is-active|is-enabled)\b"),
+     "`deck service` and `deck service show name=<unit>` give the same facts as data"),
+    (re.compile(r"\b(?:iwctl|nmcli|resolvectl|iw\s+dev|ip\s+(?:a|addr|link|route|r))\b"),
+     "`deck network` shows interfaces, Wi-Fi, name resolution and ports, and changes them safely"),
+]
+INTERACTIVE = re.compile(r"\bpacman\b[^;&|\n]*\s-[SRU](?![a-z]*[sicglp])(?![^;&|\n]*--noconfirm)|\bread\s+-p\b")
 
 MESSAGE = ("AgentDeck guard: refused because this command could cut the agent's access to the Deck ({reason}, "
            "INV-1). Use deck instead: `deck service` and `deck network` preview the change and protect access. If "
            "the change is really needed, explain it to the owner and ask first.")
+
+
+def hint(command: str):
+    """Il suggerimento di deck per un comando che passa, o None. Solo testo scritto qui (INV-4)."""
+    if command.lstrip().startswith("deck "):
+        return None
+    found = [text for pattern, text in HINTS if pattern.search(command)]
+    program = term.program_of(command)
+    # pacman ha un profilo ma chiede solo con certe operazioni: per lui decide INTERACTIVE
+    interactive = bool(INTERACTIVE.search(command)) or (
+        program not in (None, "pacman") and term.load_profile(program)[0] is not None)
+    if not found and not interactive:
+        return None
+    parts = []
+    if found:
+        parts.append("AgentDeck: deck covers this command: " + "; ".join(found) + ". Prefer it, through the MCP tools "
+                     "mcp__deck__<component>_<action>.")
+    if interactive:
+        parts.append("AgentDeck: this program asks questions. Run it with `deck term start command=...` "
+                     "(mcp__deck__term_start) to read them as data and answer them deliberately.")
+    return " ".join(parts) + " The command runs anyway."
 
 
 def main() -> int:
@@ -28,11 +67,15 @@ def main() -> int:
         return 0
     if event.get("tool_name") != "Bash":
         return 0
-    reason = check(str((event.get("tool_input") or {}).get("command", "")))
-    if reason is None:
-        return 0
-    print(MESSAGE.format(reason=reason), file=sys.stderr)
-    return 2
+    command = str((event.get("tool_input") or {}).get("command", ""))
+    reason = check(command)
+    if reason is not None:
+        print(MESSAGE.format(reason=reason), file=sys.stderr)
+        return 2
+    text = hint(command)
+    if text:
+        print(json.dumps({"hookSpecificOutput": {"hookEventName": "PreToolUse", "additionalContext": text}}))
+    return 0
 
 
 if __name__ == "__main__":

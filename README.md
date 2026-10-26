@@ -40,6 +40,7 @@ L'indice completo è in [docs/README.md](docs/README.md).
 | [docs/protocollo.md](docs/protocollo.md) | Protocollo dell'interfaccia agentica: schermate, azioni, conferme, autoprompting |
 | [docs/deck.md](docs/deck.md) | Il motore `deck`: uso, server MCP, codice, installazione, nuovi componenti |
 | [docs/adattatore.md](docs/adattatore.md) | L'adattatore dei programmi interattivi (`deck term`) e i profili |
+| [docs/obblighi.md](docs/obblighi.md) | Gli obblighi che il sistema dà all'agente (`deck obligations`) |
 | [docs/claude-code.md](docs/claude-code.md) | Claude Code sulla Deck: installazione verificata, percorsi, aggiornamenti |
 | [docs/sviluppo.md](docs/sviluppo.md) | Repository, versioni, pubblicazione su GitHub, governance |
 

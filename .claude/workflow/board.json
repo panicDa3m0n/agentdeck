@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-25 23:48",
-  "updated": "2026-10-26 01:42",
+  "updated": "2026-10-26 01:58",
   "objectives": [
     {
       "id": "O10",
@@ -92,12 +92,12 @@
         {
           "id": "O10.T8",
           "title": "Obblighi del sistema e hook di autoprompting per Claude Code (A6.3)",
-          "scope": "deck/, docs/, /etc/claude-code sulla Deck",
+          "scope": "deck/, docs/, /etc/claude-code sulla Deck, /etc/pacman.d/hooks/ sulla Deck (hook di pacman che crea gli obblighi dopo le installazioni)",
           "gate_pre": "deck obligations elenca gli obblighi del sistema (solo avvisi); hook che indicano l'azione di deck al posto dei comandi grezzi, danno le verifiche dopo le azioni, creano l'obbligo del profilo dopo l'installazione di un pacchetto, portano a ogni turno avvisi e obblighi nuovi e registrano la sessione; provati da una sessione di Claude Code sulla Deck; test; documentazione.",
-          "gate_post": "",
-          "state": "todo",
-          "risk": null,
-          "risk_why": "",
+          "gate_post": "deck obligations e hook: obbligo dall'hook di pacman, campo obligations, politica, verifiche, novità del turno, registro; provati dal vivo",
+          "state": "done",
+          "risk": 30,
+          "risk_why": "Gli hook entrano in ogni sessione: un difetto porta rumore o lentezza, non blocchi (solo la guardia esce con 2). L'hook di pacman gira in ogni transazione: esce sempre con 0. Il protocollo guadagna un campo facoltativo.",
           "docs": []
         },
         {
@@ -310,9 +310,9 @@
     "hold_plan": ""
   },
   "previous": {
-    "task": "O10.T7",
+    "task": "O10.T8",
     "state": "done",
-    "note": "deck term: programmi in tmux come schermate, segreti rifiutati, guardia; 20/20 dal vivo; profilo ssh-keygen scritto dall'agente"
+    "note": "deck obligations e hook: obbligo dall'hook di pacman, campo obligations, politica, verifiche, novità del turno, registro; provati dal vivo"
   },
   "cycle": {
     "n": 4,

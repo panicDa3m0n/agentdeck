@@ -30,6 +30,9 @@ scp -q "$ROOT/VERSION" "$HOST:$DEST/VERSION"
 step "Comando deck"
 ssh "$HOST" "chmod +x $DEST/deck && sudo ln -sfn $DEST/deck /usr/local/bin/deck && command -v deck"
 
+step "Hook di pacman per gli obblighi (docs/obblighi.md)"
+ssh "$HOST" "sudo install -D -m 0755 -o root -g root $DEST/system/obligations-hook.sh /usr/local/lib/agentdeck/obligations-hook.sh && sudo install -D -m 0644 $DEST/system/95-agentdeck-obligations.hook /etc/pacman.d/hooks/95-agentdeck-obligations.hook && ls /etc/pacman.d/hooks/"
+
 step "Schermo della Deck"
 screen_out=$(ssh "$HOST" "sudo bash $DEST/screen/install-screen.sh")
 echo "$screen_out"

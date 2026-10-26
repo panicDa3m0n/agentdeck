@@ -36,13 +36,15 @@ documento (invariante INV-9). Quando si modifica il codice, si aggiorna il docum
   un componente. Codice: [../deck/](../deck/deck), [../deck/agentdeck/mcp.py](../deck/agentdeck/mcp.py).
 - [adattatore.md](adattatore.md): l'adattatore dei programmi interattivi, `deck term`: un programma in tmux come
   schermata JSON, domande riconosciute, profili scritti dall'agente. Codice: [../deck/agentdeck/term.py](../deck/agentdeck/term.py).
+- [obblighi.md](obblighi.md): gli obblighi che il sistema dà all'agente (`deck obligations`), dall'hook di pacman
+  al campo `obligations` di ogni schermata. Codice: [../deck/agentdeck/obligations.py](../deck/agentdeck/obligations.py).
 - [schermo.md](schermo.md): lo schermo della Deck mostra, come un terminale, ogni comando dell'agente, la sua risposta e
   l'esito di `deck`. Codice: [../deck/screen/](../deck/screen/agentdeck_screen.py).
 
 ## Agenti
 
 - [claude-code.md](claude-code.md): Claude Code sulla Deck, l'harness degli agenti: installazione verificata,
-  percorsi, aggiornamenti. Codice: [../install/claude-code.sh](../install/claude-code.sh).
+  percorsi, prompt di sistema in strati, strumenti MCP, hook di autoprompting, aggiornamenti. Codice: [../install/claude-code.sh](../install/claude-code.sh).
 
 ## Uso quotidiano
 

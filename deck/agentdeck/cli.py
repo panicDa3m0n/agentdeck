@@ -15,7 +15,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
-from . import version
+from . import obligations, version
 from .components import all_components
 from .engine import Deck, DeckError, call_tokens
 from .protocol import sys_text, validate
@@ -41,6 +41,10 @@ def render(deck: Deck, argv: list) -> tuple:
     except Exception as e:  # un guasto interno resta comunque una schermata valida
         result = deck.failed_screen(e)
 
+    if result.get("path") != "/obligations":  # i doveri aperti viaggiano con ogni schermata (protocollo, 6 bis)
+        pending = obligations.for_screen()
+        if pending:
+            result["obligations"] = pending
     result["meta"] = _meta(started)
     problems = validate(json.loads(json.dumps(result)))
     if problems:

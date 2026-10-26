@@ -153,6 +153,45 @@ Claude Code carica gli strumenti MCP solo quando servono: la sessione li trova c
 così si è comportata nella prova del 26/10/2026 (`open /status`, poi l'anteprima di `snapshot_rollback` senza
 conferma).
 
+## Autoprompting: gli hook (O10.T8)
+
+Il sistema guida l'agente nei momenti in cui ragiona, come fa la governance con chi sviluppa AgentDeck (proposta A6.3
+di [architettura.md](architettura.md)). Gli hook stanno in [../deck/claude/](../deck/claude/hooklib.py), sono
+registrati nelle impostazioni gestite e leggono `deck` importandolo, così le loro letture non finiscono sullo
+schermo della Deck.
+
+| Evento | Script | Cosa dice all'agente |
+|---|---|---|
+| `SessionStart` | [session_start.py](../deck/claude/session_start.py) | Host, versione, avvisi di `deck status` con l'azione che li gestisce, obblighi aperti, come è finita la sessione precedente (strumenti usati), gli strumenti MCP |
+| `UserPromptSubmit` | [turn.py](../deck/claude/turn.py) | Solo le novità dall'ultimo turno: avvisi nuovi o rientrati, obblighi nuovi o chiusi. Se non è cambiato niente, niente |
+| `PreToolUse` su Bash | [guard.py](../deck/claude/guard.py) | Blocca ciò che toglierebbe l'accesso (INV-1). Altrimenti, se `deck` copre il comando (`journalctl`, `snapper`, `pacman -Syu`, `systemctl`, `ip`, `iwctl`…), indica l'azione di `deck` da preferire senza bloccare; per i programmi che fanno domande indica `deck term` |
+| `PostToolUse` su Bash e modifiche di file | [after.py](../deck/claude/after.py) | Le verifiche dopo l'azione: pacchetti installati o rimossi, servizi cambiati (con l'unità), file in `/etc`. Poi gli obblighi nati dall'azione |
+| `SessionEnd` | [session_end.py](../deck/claude/session_end.py) | Niente all'agente: scrive il registro della sessione, cioè strumenti usati, conteggi, motivo della fine, obblighi aperti. Va in `~/.local/state/agentdeck/sessions.jsonl` e nel journal con identificatore `agentdeck-session` |
+
+- **Solo testo del sistema (INV-4).** Codici e messaggi di avvisi e obblighi, indirizzi, nomi di strumenti e unità
+  validati. Il registro non contiene mai testo della conversazione. Ciò che arriva da file scrivibili dall'agente
+  (stato delle sessioni, registro) viene validato prima di entrare nel contesto.
+- **Cosa la sessione ha già ricevuto** sta in `~/.local/state/agentdeck/claude/<session_id>.json`, così ogni
+  novità arriva una volta sola.
+- **Peso**, misurato sulla Deck il 26/10/2026: `session_start` e `turn` circa 0,26 secondi, `after` 0,12, la
+  guardia 0,08.
+- Nessun hook blocca per un obbligo aperto: per ora gli obblighi avvisano soltanto ([obblighi.md](obblighi.md)).
+  Solo la guardia esce con 2.
+
+Verifiche del 26/10/2026, da sessioni di Claude Code sulla Deck:
+- **inizio sessione:** l'agente ha ricevuto avvisi, componenti, strumenti MCP e la sessione precedente ("Previous
+  session ended … 0 tool calls");
+- **politica:** prima di `journalctl -n 2` è arrivato "deck covers this command: `deck logs query` …", e il comando
+  è andato avanti;
+- **dopo un'installazione:** l'obbligo `PROFILE_NEEDED` aperto dall'hook di pacman è arrivato sia nel campo
+  `obligations` delle schermate sia dall'hook dopo il comando Bash;
+- **turno:** in una sessione di due turni, l'obbligo nato nel primo è arrivato all'inizio del secondo
+  ("AgentDeck, changes since your last turn: …"), citato testualmente dall'agente;
+- **registro:** la sessione è finita con 14 chiamate di strumenti, contate per nome, e la successiva l'ha ricevuta
+  nel briefing.
+
+Test: [../deck/tests/test_claude_hooks.py](../deck/tests/test_claude_hooks.py).
+
 ## Aggiornamenti
 
 L'installazione nativa si aggiorna da sola in background, e la nuova versione parte al riavvio successivo di

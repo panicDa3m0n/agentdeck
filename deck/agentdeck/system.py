@@ -483,7 +483,7 @@ def sshd_config_ok() -> bool:
 JOURNAL_PRIORITIES = ("emerg", "alert", "crit", "err", "warning", "notice", "info", "debug")
 # Righe scritte dallo schermo della Deck con i comandi dell'agente e le loro risposte (deck/screen/ssh-log.sh):
 # senza escluderle, ogni risposta di deck logs tornerebbe nelle interrogazioni successive.
-AGENT_TRAIL_IDS = ("agentdeck-cmd", "agentdeck-out", "agentdeck-err")
+AGENT_TRAIL_IDS = ("agentdeck-cmd", "agentdeck-out", "agentdeck-err", "agentdeck-session")
 JOURNAL_FETCH_MAX = 20000
 
 

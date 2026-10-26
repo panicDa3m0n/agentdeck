@@ -10,10 +10,10 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O10` Claude Code sulla Deck, usato davvero — 9 task: 5 completate, 0 in corso, 3 da fare, 1 bloccate
+- **Obiettivo attivo:** `O10` Claude Code sulla Deck, usato davvero — 9 task: 6 completate, 0 in corso, 2 da fare, 1 bloccate
 - **Task attiva:** —
-- **Ultima task gestita:** `O10.T7` — completata — deck term: programmi in tmux come schermate, segreti rifiutati, guardia; 20/20 dal vivo; profilo ssh-keygen scritto dall'agente
-- **Ultimo aggiornamento:** 2026-10-26 01:42
+- **Ultima task gestita:** `O10.T8` — completata — deck obligations e hook: obbligo dall'hook di pacman, campo obligations, politica, verifiche, novità del turno, registro; provati dal vivo
+- **Ultimo aggiornamento:** 2026-10-26 01:58
 
 ## Richieste attive
 
@@ -54,8 +54,9 @@ _Mancanze di progetto che l'agente non può risolvere da solo. L'utente le confe
   *gate previsto:* deck term avvia un programma in tmux e lo presenta come schermata JSON (session, terminal, question, parsed); azioni per rispondere, scegliere, premere tasti, aspettare, interrompere; segreti mai digitati dall'agente; profili per programma scritti dall'agente; riconoscimento provato su programmi veri della Deck; INV-4; test; documentazione. · *gate confermato:* ✔ deck term: programmi in tmux come schermate, segreti rifiutati, guardia; 20/20 dal vivo; profilo ssh-keygen scritto dall'agente
   *rischio:* 35/100 — L'adattatore esegue comandi come agent e digita risposte nei programmi: una risposta sbagliata può confermare un'azione e una shell potrebbe aggirare la guardia. Guardia dell'accesso applicata anche a deck term, segreti rifiutati, snap-pac per i pacchetti.
   *annotazioni:* `N45`
-- [ ] `O10.T8` Obblighi del sistema e hook di autoprompting per Claude Code (A6.3) — *perimetro:* `deck/, docs/, /etc/claude-code sulla Deck`
-  *gate previsto:* deck obligations elenca gli obblighi del sistema (solo avvisi); hook che indicano l'azione di deck al posto dei comandi grezzi, danno le verifiche dopo le azioni, creano l'obbligo del profilo dopo l'installazione di un pacchetto, portano a ogni turno avvisi e obblighi nuovi e registrano la sessione; provati da una sessione di Claude Code sulla Deck; test; documentazione.
+- [x] `O10.T8` Obblighi del sistema e hook di autoprompting per Claude Code (A6.3) — *perimetro:* `deck/, docs/, /etc/claude-code sulla Deck, /etc/pacman.d/hooks/ sulla Deck (hook di pacman che crea gli obblighi dopo le installazioni)`
+  *gate previsto:* deck obligations elenca gli obblighi del sistema (solo avvisi); hook che indicano l'azione di deck al posto dei comandi grezzi, danno le verifiche dopo le azioni, creano l'obbligo del profilo dopo l'installazione di un pacchetto, portano a ogni turno avvisi e obblighi nuovi e registrano la sessione; provati da una sessione di Claude Code sulla Deck; test; documentazione. · *gate confermato:* ✔ deck obligations e hook: obbligo dall'hook di pacman, campo obligations, politica, verifiche, novità del turno, registro; provati dal vivo
+  *rischio:* 30/100 — Gli hook entrano in ogni sessione: un difetto porta rumore o lentezza, non blocchi (solo la guardia esce con 2). L'hook di pacman gira in ogni transazione: esce sempre con 0. Il protocollo guadagna un campo facoltativo.
 - [ ] `O10.T9` Skill di AgentDeck e prova d'insieme da una sessione sulla Deck — *perimetro:* `deck/claude/, docs/, ~/.claude/skills sulla Deck`
   *gate previsto:* Skill di AgentDeck per Claude Code (installare un pacchetto, cambiare un servizio, usare un programma interattivo, gestire avvisi e obblighi, tornare indietro), installate dal repository; prova d'insieme da una sessione di Claude Code sulla Deck che usa strumenti MCP, adattatore e obblighi; documentazione completa.
 

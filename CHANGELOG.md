@@ -4,6 +4,33 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.4.6 — 2026-10-26
+
+Ciclo 04, task O10.T8: gli obblighi del sistema e gli hook di autoprompting per Claude Code
+([docs/obblighi.md](docs/obblighi.md), [docs/claude-code.md](docs/claude-code.md)).
+
+- **`deck obligations`:** i doveri che il sistema dà all'agente, per ora solo avvisi, con `show`, `done` con una
+  nota, `dismiss` con il motivo e `installed`. Il primo è `PROFILE_NEEDED`: dopo un'installazione, il profilo
+  dell'adattatore per i programmi nuovi.
+- **L'obbligo nasce dal sistema:**
+  - un hook di pacman (`/etc/pacman.d/hooks/95-agentdeck-obligations.hook`), con lo script di root in
+    `/usr/local/lib/agentdeck/`, scatta a ogni installazione, chiunque la faccia;
+  - l'obbligo si chiude da sé quando tutti i profili esistono o il pacchetto è rimosso.
+- **Protocollo:** il campo facoltativo `obligations` (sezione 6 bis) porta gli obblighi aperti in ogni schermata e
+  quindi in ogni risultato MCP. I messaggi sono testo del sistema.
+- **Hook di Claude Code:**
+  - `SessionStart` riporta anche obblighi e sessione precedente;
+  - `UserPromptSubmit` porta solo le novità del turno;
+  - `PreToolUse` indica l'azione di `deck` al posto del comando grezzo, senza bloccare;
+  - `PostToolUse` dà le verifiche dopo Bash e le modifiche ai file, più gli obblighi nuovi;
+  - `SessionEnd` scrive il registro delle sessioni.
+- **Provato da sessioni vere sulla Deck:**
+  - installazione di `cowsay`, obbligo ricevuto, verificato e chiuso dall'agente;
+  - obbligo nato in un turno e arrivato all'inizio del successivo;
+  - suggerimento prima di `journalctl`;
+  - registro con 14 chiamate di strumenti.
+- 225 test.
+
 ## 0.4.5 — 2026-10-26
 
 Ciclo 04, task O10.T7: l'adattatore dei programmi interattivi, `deck term` ([docs/adattatore.md](docs/adattatore.md)).

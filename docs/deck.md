@@ -69,6 +69,7 @@ Verifiche del 26/10/2026:
 | `/service` | [../deck/agentdeck/components/service.py](../deck/agentdeck/components/service.py) | Servizi di systemd: elenco, dettaglio, start, stop, restart, enable, disable (vedi sotto) |
 | `/logs` | [../deck/agentdeck/components/logs.py](../deck/agentdeck/components/logs.py) | Journal di systemd: righe per unità, periodo e gravità (vedi sotto) |
 | `/update` | [../deck/agentdeck/components/update.py](../deck/agentdeck/components/update.py) | Aggiornamenti del sistema: controllo, applicazione con snapshot e verifica, riavvio (vedi sotto) |
+| `/obligations` | [../deck/agentdeck/components/obligations.py](../deck/agentdeck/components/obligations.py) | Obblighi del sistema verso l'agente: aperti, chiusi, done e dismiss; nascono dall'hook di pacman ([obblighi.md](obblighi.md)) |
 | `/term` | [../deck/agentdeck/components/term.py](../deck/agentdeck/components/term.py) | Adattatore dei programmi interattivi: un programma in tmux come schermata, domande riconosciute, profili scritti dall'agente ([adattatore.md](adattatore.md)) |
 
 ### `/network`: rete
@@ -395,10 +396,14 @@ hanno ancora un'azione collegata.
 | [../deck/agentdeck/confirm.py](../deck/agentdeck/confirm.py) | Codici di conferma: una azione, quei parametri, 5 minuti, una volta sola |
 | [../deck/agentdeck/mcp.py](../deck/agentdeck/mcp.py) | Server MCP: strumenti dalle azioni, risorse, JSON-RPC su stdio (`deck mcp`) |
 | [../deck/agentdeck/term.py](../deck/agentdeck/term.py) | Adattatore: tmux, stato del processo e del terminale, riconoscimento delle domande, profili, sessioni |
+| [../deck/agentdeck/obligations.py](../deck/agentdeck/obligations.py) | Obblighi: modelli dei messaggi, archivio, nascita dopo un'installazione, chiusura da sé, campo `obligations` di ogni schermata |
+| [../deck/system/](../deck/system/95-agentdeck-obligations.hook) | Hook di pacman che apre gli obblighi dopo le installazioni, con il suo script |
 | [../deck/agentdeck/access.py](../deck/agentdeck/access.py) | Regole che proteggono l'accesso (INV-1), usate dalla guardia di Claude Code e da `deck term` |
 | [../deck/profiles/](../deck/profiles/pacman.json) | Profili dell'adattatore forniti con `deck` |
 | [../deck/tests/test_mcp.py](../deck/tests/test_mcp.py) | Test del server MCP: strumenti e schemi, conferme in due passi, errori, risorse, flusso stdio, INV-4 |
 | [../deck/tests/test_term.py](../deck/tests/test_term.py) | Test dell'adattatore: riconoscimento, profili, sessioni con tmux finto, segreti, guardia dell'accesso, INV-4 |
+| [../deck/tests/test_obligations.py](../deck/tests/test_obligations.py) | Test degli obblighi: database di pacman finto, nascita, chiusura da sé, done e dismiss, campo in ogni schermata, archivio manomesso |
+| [../deck/tests/test_claude_hooks.py](../deck/tests/test_claude_hooks.py) | Test degli hook di autoprompting: politica, novità del turno, verifiche dopo le azioni, registro delle sessioni |
 | [../deck/tests/live_term_check.py](../deck/tests/live_term_check.py) | Controllo dal vivo di `deck term` con programmi veri sulla Deck |
 | [../deck/agentdeck/components/](../deck/agentdeck/components/__init__.py) | Un modulo per componente; l'elenco dei componenti attivi è in `__init__.py` |
 | [../deck/agentdeck/system.py](../deck/agentdeck/system.py) | Letture dello stato della Deck da `/proc`, `/sys` e comandi; parser puri |
@@ -444,7 +449,8 @@ Lo script, ripetibile:
 2. si assicura che `python` sia installato sulla Deck (con pacman, quindi con gli snapshot di snap-pac);
 3. copia `deck/` in `/opt/agentdeck` (proprietario `agent`, così l'agente può correggerlo sul posto) insieme
    al file `VERSION`;
-4. collega `/usr/local/bin/deck` a `/opt/agentdeck/deck`;
+4. collega `/usr/local/bin/deck` a `/opt/agentdeck/deck`, e installa l'hook di pacman degli obblighi in
+   `/etc/pacman.d/hooks/`, con il suo script in `/usr/local/lib/agentdeck/` ([obblighi.md](obblighi.md));
 5. lancia i test sulla Deck e prova `deck` e un indirizzo inesistente.
 
 Dopo modifiche a `/status`, il controllo dal vivo confronta ogni valore con gli strumenti classici:

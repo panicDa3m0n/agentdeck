@@ -18,10 +18,10 @@ ERROR_CODES = ("NOT_FOUND", "BAD_PARAM", "MISSING_PARAM", "NOT_AVAILABLE", "CONF
 PARAM_TYPES = ("string", "int", "bool", "enum")
 INSTRUCTION_FIELDS = (
     "title", "prompt", "actions[].label", "actions[].reason", "actions[].params.*.description",
-    "alerts[].message", "error.message", "nav.children[].title", "nav.children[].summary",
+    "alerts[].message", "error.message", "nav.children[].title", "nav.children[].summary", "obligations[].message",
 )
 TOP_LEVEL = ("deck", "screen", "path", "title", "status", "data", "alerts", "actions", "nav", "prompt",
-             "confirm", "error", "meta")
+             "confirm", "error", "obligations", "meta")
 
 # Oltre ai numeri, nel canale istruzioni entrano solo identificatori senza spazi.
 _SAFE_VALUE = re.compile(r"[A-Za-z0-9_./:=@+-]{1,64}")
@@ -140,6 +140,7 @@ def instruction_texts(s: dict) -> list:
     texts.append((s.get("error") or {}).get("message"))
     for c in (s.get("nav") or {}).get("children", []):
         texts += [c.get("title"), c.get("summary")]
+    texts += [o.get("message") for o in s.get("obligations", []) if isinstance(o, dict)]
     return [t for t in texts if t is not None]
 
 
@@ -221,6 +222,16 @@ def validate(s: Any) -> list:
         if not (isinstance(al, dict) and al.get("level") in LEVELS and isinstance(al.get("code"), str)
                 and _CODE.fullmatch(al["code"]) and isinstance(al.get("message"), str) and "action" in al):
             problems.append("alert needs level, code, message and action")
+
+    obligations = s.get("obligations", [])
+    if not isinstance(obligations, list):
+        problems.append("obligations must be a list")
+    else:
+        for o in obligations:
+            if not (isinstance(o, dict) and isinstance(o.get("id"), str) and isinstance(o.get("code"), str)
+                    and _CODE.fullmatch(o["code"]) and o.get("level") in LEVELS and isinstance(o.get("message"), str)
+                    and "action" in o):
+                problems.append("obligation needs id, code, level, message and action")
 
     meta = s["meta"]
     if not (isinstance(meta.get("time"), str) and isinstance(meta.get("took_ms"), int)

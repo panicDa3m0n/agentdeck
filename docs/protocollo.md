@@ -64,6 +64,7 @@ Ogni risposta è un oggetto JSON con questi campi:
 | `prompt` | sì | Istruzioni per l'agente (sezione 9) | **istruzioni** |
 | `confirm` | solo con `status: confirm` | Codice, scadenza e anteprima (sezione 7) | dati |
 | `error` | solo con `status: error` | Codice e messaggio dell'errore (sezione 8) | misto |
+| `obligations` | solo se ce ne sono | Doveri aperti che il sistema dà all'agente (sezione 6 bis) | **istruzioni** nei messaggi |
 | `meta` | sì | `time` (ISO 8601), `took_ms`, `host`, `version` di AgentDeck | sistema |
 
 Regole sui dati:
@@ -116,6 +117,27 @@ restituisce un errore `BAD_PARAM` che indica il parametro.
 - `message`: testo del sistema (canale istruzioni).
 - `action`: dove andare o cosa eseguire per risolvere (`{"path": …, "action": …}`), oppure `null` se la
   soluzione non esiste ancora come azione.
+
+## 6 bis. Obblighi (aggiunta del 26/10/2026, O10.T8)
+
+Un obbligo è un dovere che il sistema dà all'agente quando succede qualcosa: per esempio, dopo l'installazione di un
+pacchetto, scrivere il profilo dell'adattatore dei programmi nuovi. Deciso nella revisione del 25/10
+([architettura.md](architettura.md), 7.4 bis); per ora gli obblighi avvisano soltanto. Ogni schermata porta gli
+obblighi aperti, al più 5 più un riepilogo, nel campo facoltativo `obligations`. Manca del tutto quando non ce ne
+sono, quindi le schermate di prima restano identiche.
+
+```json
+"obligations": [{"id": "1adb3d", "code": "PROFILE_NEEDED", "level": "warning",
+                 "message": "Package cowsay installed programs without an adapter profile (obligation 1adb3d). ...",
+                 "action": {"path": "/term", "action": "profile_save"}}]
+```
+
+- `id`: identificatore dell'obbligo, da usare con `deck obligations show|done|dismiss id=<id>`;
+- `code` e `level`: come per gli avvisi;
+- `message`: testo del sistema (canale istruzioni), dal modello del codice;
+- `action`: dove si soddisfa.
+
+L'elenco completo, con i dati di ogni obbligo, è la schermata `/obligations` ([obblighi.md](obblighi.md)).
 
 ## 7. Conferme con anteprima
 
@@ -179,7 +201,7 @@ più avanti (sezione 12).
 L'agente esegue ciò che legge nel canale istruzioni: quel canale deve contenere solo testo del sistema.
 
 1. **Canale istruzioni:** `title`, `prompt`, `actions[].label`, `actions[].reason`, `alerts[].message`,
-   `error.message`. Si costruiscono solo da modelli scritti nel codice.
+   `error.message`, `obligations[].message`. Si costruiscono solo da modelli scritti nel codice.
 2. **Valori ammessi nel canale istruzioni:** solo valori validati, cioè numeri, valori di enum e
    identificatori conformi a un formato stretto (es. `^[0-9]+$` per gli snapshot). **Mai** testo libero
    proveniente dal sistema o da altri: descrizioni, nomi di file, SSID, righe di log, output di programmi.
