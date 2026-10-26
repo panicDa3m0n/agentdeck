@@ -10,10 +10,11 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** —
-- **Task attiva:** —
+- **Obiettivo attivo:** `O12` L'agente lavora su AgentDeck senza chiedere permessi (ADR-0001), con più protezione — 5 task: 0 completate, 1 in corso, 4 da fare, 0 bloccate
+- **Task attiva:** `O12.T1` Politica dei permessi ADR-0001 nelle impostazioni gestite e nelle regole dell'agente (N46) — in corso · rischio 30/100
 - **Ultima task gestita:** —
-- **Ultimo aggiornamento:** 2026-10-26 11:38
+- **Fase:** `in_progress`
+- **Ultimo aggiornamento:** 2026-10-26 17:57
 
 ## Richieste attive
 
@@ -25,8 +26,10 @@ _nessuna richiesta in attesa._
 
 **Gate obiettivo:** In una sessione reale con Remote Control l'agente interviene sul sistema senza richieste di permesso e chiede solo per i dati e i singoli servizi dell'utente; i vincoli che proteggono l'accesso (INV-1) e le anteprime di deck restano; sshguard protetto come l'accesso; snapshot prima di ogni modifica rischiosa (INV-3).
 
-- [ ] `O12.T1` Politica dei permessi ADR-0001 nelle impostazioni gestite e nelle regole dell'agente (N46) — *perimetro:* `deck/claude/, deck/tests/, docs/, /etc/claude-code sulla Deck`
+- [~] `O12.T1` Politica dei permessi ADR-0001 nelle impostazioni gestite e nelle regole dell'agente (N46) — *perimetro:* `deck/claude/, deck/tests/, docs/, /etc/claude-code sulla Deck, deck/agentdeck/ownership.py e il prompt della guardia in deck/agentdeck/components/term.py`
   *gate previsto:* Impostazioni gestite che permettono tutto il lavoro di sistema senza richieste e chiedono solo per i dati dell'utente e i singoli servizi dell'utente; deny e guardia dell'accesso invariati; le frasi che fanno chiedere al proprietario modifiche di sistema tolte da CLAUDE.md, guardia e skill; provato con claude -p sulla Deck senza permessi aggiuntivi: comandi di sistema senza richieste, dati dell'utente con richiesta; test; documentazione.
+  *rischio:* 30/100 — Cambia cosa l'agente fa senza chiedere: un errore toccherebbe un servizio o una credenziale dell'utente senza permesso o fermerebbe lavoro legittimo. Deny e guardia dell'accesso invariati; l'installazione riavvia agentdeck-claude, quindi si fa a sessione finita.
+  *annotazioni:* `N58`
 - [ ] `O12.T2` sshguard protetto come l'accesso: regole, guardia e avviso di deck status (N42) — *perimetro:* `deck/, docs/, /etc/claude-code sulla Deck`
   *gate previsto:* Le regole dell'agente dicono che sshguard non si ferma e la sua whitelist non si allarga; guardia e deny rifiutano stop, disable e mask di sshguard; deck status avvisa se sshguard non è attivo; test; documentazione.
 - [ ] `O12.T3` Il cambio di Wi-Fi ritenta prima di tornare indietro (N49) — *perimetro:* `deck/, docs/`
@@ -60,4 +63,6 @@ _nessuna richiesta in attesa._
 
 ## Annotazioni
 
-_nessuna annotazione._
+_Una riga per nota, sempre legata a una task. `wf.sh notes` per leggerle._
+
+- `N58` (`O12.T1`) Precisazione dell'utente (26/10) su ADR-0001, cosa sono i dati dell'utente: i suoi servizi in /srv/servizi/<nome> (codice, configurazione, dati, segreti, avvio, arresto, abilitazione delle unità agentdeck-servizio@<nome>) e le sue credenziali (login di Claude, chiavi SSH). Sui progetti che l'utente chiede all'agente, come /home/agent/frugale, l'agente lavora libero. Vincolo di questo momento: una sessione di Remote Control sta lavorando a frugale; l'installazione sulla Deck riavvia agentdeck-claude e la chiuderebbe, quindi si installa solo quando l'utente dice che la sessione è finita. — 2026-10-26 17:56

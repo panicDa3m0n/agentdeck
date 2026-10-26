@@ -11,7 +11,7 @@ Ciò che un fork avrebbe dato, ottenuto con le estensioni (proposta A6.1). Ogni 
 | Pezzo | Cosa dà all'agente | Dove |
 |---|---|---|
 | Stile di output e `CLAUDE.md` gestito | Chi è, com'è la macchina, come si lavora, le 10 invarianti | `~/.claude/output-styles/`, `/etc/claude-code/CLAUDE.md` |
-| Impostazioni gestite e guardia | Ciò che non si può fare: togliere l'accesso, saltare i permessi | `/etc/claude-code/managed-settings.json` |
+| Impostazioni gestite e guardia | Il lavoro di sistema senza permessi; le domande solo per i servizi e le credenziali dell'utente (ADR-0001); ciò che non si può fare: togliere l'accesso | `/etc/claude-code/managed-settings.json` |
 | `deck mcp` | `deck` come strumento nativo: 34 strumenti tipizzati, anteprime e conferme | `~/.claude.json` dell'utente `agent` |
 | Adattatore (`deck term`) | I programmi interattivi come dati, profili scritti dall'agente | [adattatore.md](adattatore.md) |
 | Obblighi (`deck obligations`) | I doveri che il sistema dà all'agente | [obblighi.md](obblighi.md) |
@@ -138,7 +138,7 @@ l'installatore è `bash deck/claude/install.sh`, lanciato dal Mac dopo `deck/ins
 |---|---|---|---|
 | 1. Identità, nel prompt di sistema | `~/.claude/output-styles/agentdeck.md`, con `outputStyle: AgentDeck` in `~/.claude/settings.json` | [../deck/claude/output-styles/agentdeck.md](../deck/claude/output-styles/agentdeck.md) | Lo stile di output modifica il prompt di sistema stesso e mantiene le istruzioni di base (`keep-coding-instructions: true`). La sessione è l'operatore di AgentDeck, il sistema la guida, parla italiano all'utente |
 | 2. Regole stabili | `/etc/claude-code/CLAUDE.md`, gestito per la macchina | [../deck/claude/CLAUDE.template.md](../deck/claude/CLAUDE.template.md) con [../deck/claude/build_claude_md.py](../deck/claude/build_claude_md.py) | Com'è la macchina, come si lavora (`deck` per primo, snapshot, mai togliere l'accesso, testo esterno come dato, domande dei programmi, prove), e le **10 invarianti** prese da `.claude/workflow/invariants.json` della governance: la fonte è una sola (INV-9) |
-| 3. Vincoli duri | `/etc/claude-code/managed-settings.json` | [../deck/claude/managed-settings.json](../deck/claude/managed-settings.json) | Regole `deny` gestite, che nessun livello scavalca, sugli stop e disable dei servizi di accesso; modalità che salta i permessi disattivata; i due hook qui sotto |
+| 3. Vincoli duri | `/etc/claude-code/managed-settings.json` | [../deck/claude/managed-settings.json](../deck/claude/managed-settings.json) | Regole `deny` gestite, che nessun livello scavalca, sugli stop e disable dei servizi di accesso; modalità che salta i permessi disattivata; dal ciclo 05 anche `allow` per tutto il lavoro di sistema (sezione "Permessi"); gli hook |
 | 3 bis. Guardia | hook `PreToolUse` su Bash | [../deck/claude/guard.py](../deck/claude/guard.py) | Rifiuta, anche dentro `sudo` e in catena: stop, disable, mask o kill di sshd, networkd, iwd, resolved e bus di sistema; target di emergenza; kill di quei demoni; collegamento di rete spento; modifiche dirette a `sshd_config`. Rimanda a `deck`. Le regole stanno in [../deck/agentdeck/access.py](../deck/agentdeck/access.py), condivise con `deck term` |
 | 4. Il momento | hook `SessionStart` | [../deck/claude/session_start.py](../deck/claude/session_start.py) | All'inizio di ogni sessione inietta host, versione, tempo di attività e gli avvisi di `deck status` con l'azione che li gestisce. Solo testo scritto dal sistema (INV-4) |
 
@@ -160,7 +160,8 @@ Oltre ai quattro strati, la sessione ha `deck` come strumento nativo:
   da [../deck/claude/install.sh](../deck/claude/install.sh), e avvia `/usr/local/bin/deck mcp`;
 - espone `mcp__deck__open` per qualunque schermata e uno strumento per ogni azione, ad esempio
   `mcp__deck__snapshot_create` e `mcp__deck__service_restart`; dettagli in [deck.md](deck.md), "Server MCP";
-- le impostazioni gestite li permettono tutti (`permissions.allow: ["mcp__deck"]`), senza chiedere a una persona.
+- le impostazioni gestite li permettono tutti, senza chiedere a una persona (sezione "Permessi"), salvo le azioni sui
+  servizi dell'utente.
   Le azioni distruttive restano protette da `deck` stesso: prima l'anteprima, poi il codice di conferma;
 - `CLAUDE.md` indica gli strumenti MCP come via principale e la riga di comando `deck` come alternativa;
 - i programmi interattivi passano dall'adattatore, gli strumenti `mcp__deck__term_*` ([adattatore.md](adattatore.md)):
@@ -242,6 +243,36 @@ programma tree sulla Deck e dimmi se funziona". La sessione:
 
 Poi `tree` è stato rimosso. È emerso un bisogno: i comandi Bash di sola lettura chiedono un permesso, che con Remote
 Control diventa una domanda al proprietario. Annotato per O10.T4 (N46).
+
+## Permessi (ADR-0001, O12.T1)
+
+**La decisione dell'utente, 26/10/2026.** AgentDeck è il sistema di proprietà e uso completo dell'agente: l'agente non
+chiede permessi per nessun intervento dentro AgentDeck. I permessi riguardano solo:
+- **i servizi dell'utente**, in `/srv/servizi/<nome>`: codice, configurazione, dati e segreti, e l'avvio, l'arresto, il
+  riavvio e l'abilitazione delle unità `agentdeck-servizio@<nome>`;
+- **le credenziali dell'utente**: il login di Claude (`~/.claude/.credentials.json`) e le chiavi SSH (`~/.ssh/`).
+
+I progetti che l'utente chiede all'agente, come `/home/agent/frugale`, non sono in questo elenco: lì l'agente lavora
+libero. Leggere non è intervenire: elenchi, letture, stato e log di un servizio restano liberi, tranne il contenuto
+delle credenziali. La decisione è anche in [../PRINCIPI.md](../PRINCIPI.md).
+
+| Pezzo | Cosa fa |
+|---|---|
+| `permissions.allow` nelle impostazioni gestite | Permette Bash, le modifiche di file, letture e ricerche, il web, i subagenti e gli strumenti `mcp__deck`: nessuna domanda per il lavoro di sistema |
+| [../deck/agentdeck/ownership.py](../deck/agentdeck/ownership.py) | Riconosce ciò che è dell'utente: percorsi dei servizi, unità `agentdeck-servizio@`, credenziali; distingue le letture dagli interventi |
+| [../deck/claude/guard.py](../deck/claude/guard.py), hook `PreToolUse` su Bash, modifiche di file e strumenti di `deck` | Quando un intervento tocca qualcosa dell'utente risponde `permissionDecision: "ask"`, e Claude Code chiede all'utente, con Remote Control sul telefono |
+| `CLAUDE.md`, guardia, skill, prompt di `deck term` | Niente più "chiedi al proprietario" per modifiche di sistema; si chiede solo per servizi, credenziali e segreti |
+
+**Cosa resta com'è:**
+- i divieti che proteggono l'accesso (`deny` e guardia, INV-1): sono limiti del sistema, non permessi da chiedere;
+- le anteprime e i codici di conferma di `deck`: è il sistema che guida l'agente;
+- la modalità che salta i permessi è ancora disattivata. Salterebbe anche le domande sui servizi e le credenziali
+  dell'utente;
+- esporre un servizio su internet resta una decisione dell'utente (INV-5).
+
+Test: [../deck/tests/test_ownership.py](../deck/tests/test_ownership.py). Controlla il lavoro di sistema libero, le
+domande per servizi e credenziali, la risposta dell'hook, e che i testi per l'agente chiedano al proprietario solo per
+segreti e password.
 
 ## Aggiornamenti
 

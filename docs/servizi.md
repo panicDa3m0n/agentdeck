@@ -56,6 +56,11 @@ sta in `config/env` (`PORT=`) e nel suo `LEGGIMI.md`.
 
 ## Uso
 
+I servizi in `/srv/servizi/<nome>` sono dell'utente: l'agente chiede il permesso prima di cambiarne codice,
+configurazione o dati, e prima di avviarli, fermarli o abilitarli. Elenchi, stato e log restano liberi
+([claude-code.md](claude-code.md), "Permessi"). L'area in sé, cioè l'unità modello e gli script, è del sistema.
+
+
 Installare l'area (una volta, ripetibile), dopo uno snapshot:
 
 ```

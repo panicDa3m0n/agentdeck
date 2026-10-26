@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-26 11:36",
-  "updated": "2026-10-26 11:38",
+  "updated": "2026-10-26 17:57",
   "objectives": [
     {
       "id": "O12",
@@ -15,12 +15,12 @@
         {
           "id": "O12.T1",
           "title": "Politica dei permessi ADR-0001 nelle impostazioni gestite e nelle regole dell'agente (N46)",
-          "scope": "deck/claude/, deck/tests/, docs/, /etc/claude-code sulla Deck",
+          "scope": "deck/claude/, deck/tests/, docs/, /etc/claude-code sulla Deck, deck/agentdeck/ownership.py e il prompt della guardia in deck/agentdeck/components/term.py",
           "gate_pre": "Impostazioni gestite che permettono tutto il lavoro di sistema senza richieste e chiedono solo per i dati dell'utente e i singoli servizi dell'utente; deny e guardia dell'accesso invariati; le frasi che fanno chiedere al proprietario modifiche di sistema tolte da CLAUDE.md, guardia e skill; provato con claude -p sulla Deck senza permessi aggiuntivi: comandi di sistema senza richieste, dati dell'utente con richiesta; test; documentazione.",
           "gate_post": "",
-          "state": "todo",
-          "risk": null,
-          "risk_why": "",
+          "state": "doing",
+          "risk": 30,
+          "risk_why": "Cambia cosa l'agente fa senza chiedere: un errore toccherebbe un servizio o una credenziale dell'utente senza permesso o fermerebbe lavoro legittimo. Deny e guardia dell'accesso invariati; l'installazione riavvia agentdeck-claude, quindi si fa a sessione finita.",
           "docs": []
         },
         {
@@ -155,13 +155,21 @@
     }
   ],
   "requests": [],
-  "notes": [],
+  "notes": [
+    {
+      "id": "N58",
+      "task": "O12.T1",
+      "text": "Precisazione dell'utente (26/10) su ADR-0001, cosa sono i dati dell'utente: i suoi servizi in /srv/servizi/<nome> (codice, configurazione, dati, segreti, avvio, arresto, abilitazione delle unità agentdeck-servizio@<nome>) e le sue credenziali (login di Claude, chiavi SSH). Sui progetti che l'utente chiede all'agente, come /home/agent/frugale, l'agente lavora libero. Vincolo di questo momento: una sessione di Remote Control sta lavorando a frugale; l'installazione sulla Deck riavvia agentdeck-claude e la chiuderebbe, quindi si installa solo quando l'utente dice che la sessione è finita.",
+      "docs": [],
+      "created": "2026-10-26 17:56"
+    }
+  ],
   "active": {
-    "objective": "",
-    "task": "",
-    "phase": "idle",
-    "risk": null,
-    "risk_why": "",
+    "objective": "O12",
+    "task": "O12.T1",
+    "phase": "in_progress",
+    "risk": 30,
+    "risk_why": "Cambia cosa l'agente fa senza chiedere: un errore toccherebbe un servizio o una credenziale dell'utente senza permesso o fermerebbe lavoro legittimo. Deny e guardia dell'accesso invariati; l'installazione riavvia agentdeck-claude, quindi si fa a sessione finita.",
     "hold_invariants": "",
     "hold_plan": ""
   },
@@ -179,6 +187,6 @@
     "objective": 14,
     "cycle": 5,
     "request": 6,
-    "note": 57
+    "note": 58
   }
 }

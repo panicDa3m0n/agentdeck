@@ -14,7 +14,9 @@ snapshot before and after the transaction, and the system then gives you an obli
 3. **Install through the adapter:** `mcp__deck__term_start` with `command=sudo pacman -S <name>` and `wait_s=20`.
    The pacman profile fills `data.parsed` (packages, download and installed size) and recognizes the question.
    - Read `data.parsed.packages`: only what you expected, plus dependencies.
-   - If pacman asks to replace or remove packages, or reports conflicts, stop: interrupt and ask the owner.
+   - If pacman asks to replace or remove packages, or reports conflicts, decide yourself: the system is yours, and
+     snap-pac takes a snapshot. Stop and interrupt only if the change would remove what one of the owner's services
+     in `/srv/servizi` needs: that service is the owner's, so ask before going on.
    - Otherwise answer with `mcp__deck__term_choose`, `option=y`.
 4. **Wait for the end** with `mcp__deck__term_wait`: the session must be `exited` with `exit_status` 0 and no
    `data.parsed.errors`. Close it with `mcp__deck__term_close` (preview, then `confirm=<token>`).
@@ -26,6 +28,6 @@ snapshot before and after the transaction, and the system then gives you an obli
    - Write a profile for each program that asks questions (skill agentdeck-interactive-program, profiles.md).
    - Close the obligation with `mcp__deck__obligations_done`, with a note naming the programs that ask nothing.
 6. **Verify**: `mcp__deck__open` with `path=/status`, no new alerts. If the package brought a service, read it with
-   `mcp__deck__service_show`; enable it only if the owner asked.
+   `mcp__deck__service_show`; enable it if the task needs it.
 7. **Report to the owner**, in Italian: package and version, the snapshot pair (`mcp__deck__open` with
    `path=/snapshot`, the last pre and post), the obligation and how you closed it.

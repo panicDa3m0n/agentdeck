@@ -407,12 +407,14 @@ hanno ancora un'azione collegata.
 | [../deck/agentdeck/term.py](../deck/agentdeck/term.py) | Adattatore: tmux, stato del processo e del terminale, riconoscimento delle domande, profili, sessioni |
 | [../deck/agentdeck/obligations.py](../deck/agentdeck/obligations.py) | Obblighi: modelli dei messaggi, archivio, nascita dopo un'installazione, chiusura da sé, campo `obligations` di ogni schermata |
 | [../deck/system/](../deck/system/95-agentdeck-obligations.hook) | Hook di pacman che apre gli obblighi dopo le installazioni, con il suo script |
+| [../deck/agentdeck/ownership.py](../deck/agentdeck/ownership.py) | Ciò che è dell'utente (ADR-0001): servizi e credenziali, per cui l'agente chiede il permesso |
 | [../deck/agentdeck/access.py](../deck/agentdeck/access.py) | Regole che proteggono l'accesso (INV-1), usate dalla guardia di Claude Code e da `deck term` |
 | [../deck/profiles/](../deck/profiles/pacman.json) | Profili dell'adattatore forniti con `deck` |
 | [../deck/tests/test_mcp.py](../deck/tests/test_mcp.py) | Test del server MCP: strumenti e schemi, conferme in due passi, errori, risorse, flusso stdio, INV-4 |
 | [../deck/tests/test_term.py](../deck/tests/test_term.py) | Test dell'adattatore: riconoscimento, profili, sessioni con tmux finto, segreti, guardia dell'accesso, INV-4 |
 | [../deck/tests/test_obligations.py](../deck/tests/test_obligations.py) | Test degli obblighi: database di pacman finto, nascita, chiusura da sé, done e dismiss, campo in ogni schermata, archivio manomesso |
 | [../deck/tests/test_claude_hooks.py](../deck/tests/test_claude_hooks.py) | Test degli hook di autoprompting: politica, novità del turno, verifiche dopo le azioni, registro delle sessioni |
+| [../deck/tests/test_ownership.py](../deck/tests/test_ownership.py) | Test dei permessi (ADR-0001): lavoro di sistema libero, domande per servizi e credenziali dell'utente, risposta dell'hook, testi per l'agente |
 | [../deck/tests/test_skills.py](../deck/tests/test_skills.py) | Test delle skill di Claude Code: intestazione, nomi, file di supporto, strumenti MCP citati che esistono ([claude-code.md](claude-code.md)) |
 | [../deck/tests/live_term_check.py](../deck/tests/live_term_check.py) | Controllo dal vivo di `deck term` con programmi veri sulla Deck |
 | [../deck/agentdeck/components/](../deck/agentdeck/components/__init__.py) | Un modulo per componente; l'elenco dei componenti attivi è in `__init__.py` |

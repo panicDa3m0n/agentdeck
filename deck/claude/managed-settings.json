@@ -1,6 +1,17 @@
 {
   "permissions": {
     "allow": [
+      "Bash",
+      "Edit",
+      "Write",
+      "MultiEdit",
+      "NotebookEdit",
+      "Read",
+      "Glob",
+      "Grep",
+      "WebFetch",
+      "WebSearch",
+      "Task",
       "mcp__deck"
     ],
     "deny": [
@@ -22,7 +33,8 @@
       {"hooks": [{"type": "command", "command": "/usr/bin/python3 /opt/agentdeck/claude/session_start.py"}]}
     ],
     "PreToolUse": [
-      {"matcher": "Bash", "hooks": [{"type": "command", "command": "/usr/bin/python3 /opt/agentdeck/claude/guard.py"}]}
+      {"matcher": "Bash|Edit|Write|MultiEdit|NotebookEdit|mcp__deck__.*",
+       "hooks": [{"type": "command", "command": "/usr/bin/python3 /opt/agentdeck/claude/guard.py"}]}
     ],
     "UserPromptSubmit": [
       {"hooks": [{"type": "command", "command": "/usr/bin/python3 /opt/agentdeck/claude/turn.py"}]}

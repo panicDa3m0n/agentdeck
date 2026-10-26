@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
-"""Hook PreToolUse di Claude Code sulla Deck: rifiuta i comandi Bash che toglierebbero l'accesso all'agente (INV-1).
+"""Hook PreToolUse di Claude Code sulla Deck: protegge l'accesso (INV-1) e i servizi e le credenziali dell'utente (ADR-0001).
 
 Claude Code passa su stdin un JSON con tool_name e tool_input; uscire con 2 blocca il comando e il testo su stderr
 torna all'agente. È il secondo strato dopo le regole deny delle impostazioni gestite: guarda anche dentro sudo,
 catene di comandi e varianti che un prefisso non coglie. In dubbio lascia passare: è una guardia, non un sandbox.
 Se il comando passa e deck copre la stessa cosa, aggiunge al contesto l'azione di deck da preferire, senza bloccare
 (politica sui comandi grezzi, O10.T8); per i programmi che fanno domande indica l'adattatore, deck term.
+Permessi (ADR-0001, O12.T1): AgentDeck è dell'agente, che lavora sul sistema senza chiedere; quando uno strumento tocca
+un servizio o una credenziale dell'utente (agentdeck/ownership.py) l'hook risponde permissionDecision "ask" e Claude Code
+chiede all'utente. Vale per Bash, per le modifiche di file e per gli strumenti MCP di deck.
 Installato da deck/install.sh in /opt/agentdeck/claude. Documentazione: docs/claude-code.md
 """
 from __future__ import annotations
@@ -18,7 +21,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))  # /opt/agentdeck o deck/ del repository
 
 from agentdeck.access import RULES, check  # noqa: E402,F401  le regole stanno con deck: le usa anche deck term
-from agentdeck import term  # noqa: E402
+from agentdeck import ownership, term  # noqa: E402
 
 HINTS = [
     (re.compile(r"\bjournalctl\b"), "`deck logs query` (unit=, since=, priority=, lines=) returns journal lines as data"),
@@ -35,8 +38,11 @@ HINTS = [
 INTERACTIVE = re.compile(r"\bpacman\b[^;&|\n]*\s-[SRU](?![a-z]*[sicglp])(?![^;&|\n]*--noconfirm)|\bread\s+-p\b")
 
 MESSAGE = ("AgentDeck guard: refused because this command could cut the agent's access to the Deck ({reason}, "
-           "INV-1). Use deck instead: `deck service` and `deck network` preview the change and protect access. If "
-           "the change is really needed, explain it to the owner and ask first.")
+           "INV-1). This is a limit of the system, not a permission to ask for. Use deck instead: `deck service` and "
+           "`deck network` preview the change and protect access; if they do not cover it, make the change with a "
+           "safety net that reverts by itself.")
+ASK = ("AgentDeck: this needs the owner's permission because {reason}. Under ADR-0001 the agent works on AgentDeck "
+       "without asking, and asks only for the owner's services and credentials.")
 
 
 def hint(command: str):
@@ -65,13 +71,21 @@ def main() -> int:
         event = json.load(sys.stdin)
     except ValueError:
         return 0
-    if event.get("tool_name") != "Bash":
+    tool = str(event.get("tool_name", ""))
+    tool_input = event.get("tool_input") if isinstance(event.get("tool_input"), dict) else {}
+    command = str(tool_input.get("command", "")) if tool == "Bash" else ""
+    if tool == "Bash":
+        reason = check(command)
+        if reason is not None:
+            print(MESSAGE.format(reason=reason), file=sys.stderr)
+            return 2
+    owner = ownership.tool_reason(tool, tool_input)
+    if owner:
+        print(json.dumps({"hookSpecificOutput": {"hookEventName": "PreToolUse", "permissionDecision": "ask",
+                                                 "permissionDecisionReason": ASK.format(reason=owner)}}))
         return 0
-    command = str((event.get("tool_input") or {}).get("command", ""))
-    reason = check(command)
-    if reason is not None:
-        print(MESSAGE.format(reason=reason), file=sys.stderr)
-        return 2
+    if tool != "Bash":
+        return 0
     text = hint(command)
     if text:
         print(json.dumps({"hookSpecificOutput": {"hookEventName": "PreToolUse", "additionalContext": text}}))

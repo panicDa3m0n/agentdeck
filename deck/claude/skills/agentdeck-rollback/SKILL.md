@@ -23,5 +23,5 @@ Choose the smallest undo that restores the system.
 4. **After the reboot**, in the new session: `mcp__deck__open` with `path=/status` and `path=/snapshot`, to verify
    that the system is back and that nothing is failing.
 5. **Tell the owner**, in Italian: what broke, what you rolled back to, and what was lost. deck itself
-   (`/opt/agentdeck`) also returns to the version of the snapshot, so ask the owner to reinstall deck from the
-   repository if it changed after that snapshot. Adapter profiles and obligations live in `/home` and stay.
+   (`/opt/agentdeck`) also returns to the version of the snapshot, so tell the owner that deck must be reinstalled
+   from the repository if it changed after that snapshot. Adapter profiles and obligations live in `/home` and stay.

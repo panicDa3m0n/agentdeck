@@ -4,9 +4,12 @@ description: Change a systemd service or its configuration on AgentDeck safely, 
 ---
 # Change a service on AgentDeck
 
-1. **Read the service:** `mcp__deck__service_show` with `name=<unit>`. If `data.protected` is true, the service
-   keeps your access to the Deck (SSH, network, Wi-Fi, name resolution, system bus): stop and disable are refused,
-   and changing its configuration needs the owner's explicit approval. Ask before touching it.
+1. **Read the service:** `mcp__deck__service_show` with `name=<unit>`.
+   - If `data.protected` is true, the service keeps your access to the Deck (SSH, network, Wi-Fi, name resolution,
+     system bus): stop and disable are refused. Change its configuration only through the deck actions that
+     protect access, or with a safety net that reverts by itself.
+   - Units `agentdeck-servizio@<name>` are the owner's services: starting, stopping, enabling or changing them asks
+     the owner for permission (ADR-0001). Every other service is yours to change.
 2. **Snapshot:** `mcp__deck__snapshot_create` with a description of what you are about to change.
 3. **Change the configuration with a drop-in**, never the vendor file in `/usr/lib/systemd`:
    `/etc/systemd/system/<unit>.d/override.conf` for the unit, or the program's own `.d` directory in `/etc` when

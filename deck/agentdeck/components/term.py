@@ -272,8 +272,9 @@ class Term(Component):
                                                       "data.refused_because."),
                             title=sys_text("Refused to protect access"), path=self.path, back=self.path,
                             field_name=field, data={"refused_because": reason},
-                            prompt=sys_text("Use `deck service` or `deck network`, which preview the change and "
-                                            "protect access. If the change is really needed, ask the owner first."))
+                            prompt=sys_text("This is a limit of the system, not a permission to ask for. Use "
+                                            "`deck service` or `deck network`, which preview the change and protect "
+                                            "access; if they do not cover it, use a safety net that reverts by itself."))
 
     def _secret_refused(self, sid: str, current: dict) -> DeckError:
         return DeckError("NOT_AVAILABLE", sys_text("The program asks for a secret: the agent never types secrets."),
