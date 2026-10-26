@@ -90,6 +90,16 @@
       "id": "P18",
       "testo": "claude auth login lanciato via ssh dalla chat (input con punto esclamativo) non riceve il codice e resta appeso sulla Deck -> la chat non offre un terminale interattivo in cui incollare -> aprire il comando in una scheda del pannello Terminale (run_in_terminal) dove l'utente incolla il codice, e chiudere i login appesi con pgrep e kill (P17).",
       "creata": "2026-10-26 00:02"
+    },
+    {
+      "id": "P19",
+      "testo": "upnpc sul router ZTE F6746G di casa trova l'IGD ma ogni azione (anche GetExternalIPAddress) fallisce con errore 800 'do not execute action(all)' -> sul router UPnP è spento per le azioni, solo annunciato -> non far aprire porte alla Deck via UPnP: serve una regola fissa di port forwarding dal pannello del router, fatta dall'utente.",
+      "creata": "2026-10-26 01:06"
+    },
+    {
+      "id": "P20",
+      "testo": "Tailscale sul Mac resta in Connecting per sempre (log: cannot establish IPC because IPC is already in the process of being established) -> l'app ha chiesto l'IPC all'estensione di rete prima che l'utente la approvasse e la sessione VPN di macOS resta in IdleIPC; riaprire l'app e kill -9 dell'estensione non bastano -> approvare l'estensione prima di avviare la VPN, altrimenti riavviare il Mac.",
+      "creata": "2026-10-26 01:06"
     }
   ]
 }

@@ -8,6 +8,7 @@ Codice:
 - [../install/install.sh](../install/install.sh): le fasi di installazione, da root sul sistema live.
 - [../install/post-install.sh](../install/post-install.sh): rifinitura dopo il primo avvio, come `agent`.
 - [../install/claude-code.sh](../install/claude-code.sh): Claude Code per l'utente `agent`, con verifica della firma ([claude-code.md](claude-code.md)).
+- [../install/remote-access.sh](../install/remote-access.sh): accesso da fuori casa, con sshguard e Tailscale spento ([accesso.md](accesso.md)).
 
 Indice: [README.md](README.md).
 
@@ -37,6 +38,13 @@ Poi `deck` ([deck.md](deck.md), `deck/install.sh`) e Claude Code:
 
 ```bash
 scp install/claude-code.sh agentdeck:/tmp/ && ssh agentdeck 'bash /tmp/claude-code.sh latest'
+```
+
+Infine l'accesso da fuori casa, dal Mac. Serve anche la regola di port forwarding sul router, descritta in
+[accesso.md](accesso.md):
+
+```bash
+bash install/remote-access.sh
 ```
 
 ## Le fasi

@@ -1,0 +1,5 @@
+# Indirizzi che sshguard non blocca mai (INV-1): la Deck stessa e la rete di casa.
+# Installato in /etc/sshguard/whitelist da install/remote-access.sh. Documentazione: docs/accesso.md
+127.0.0.0/8
+::1/128
+192.168.1.0/24

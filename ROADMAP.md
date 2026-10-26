@@ -10,20 +10,23 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O10` Claude Code sulla Deck, usato davvero — 4 task: 3 completate, 0 in corso, 1 da fare, 0 bloccate
+- **Obiettivo attivo:** `O10` Claude Code sulla Deck, usato davvero — 5 task: 3 completate, 0 in corso, 1 da fare, 1 bloccate
 - **Task attiva:** —
-- **Ultima task gestita:** `O10.T3` — completata — Prompt di sistema in quattro strati (stile, CLAUDE.md gestito, deny e guardia, hook con gli avvisi); provati con claude -p e da Remote Control dall'utente
-- **Ultimo aggiornamento:** 2026-10-26 00:33
+- **Ultima task gestita:** `O10.T5` — bloccata — Deck e Mac pronti (sshguard, ssh agentdeck LAN o internet, Tailscale spento, docs); manca R6, regola sul router, quindi la prova da hotspot
+- **Ultimo aggiornamento:** 2026-10-26 01:11
 
 ## Richieste attive
 
-_nessuna richiesta in attesa._
+_Mancanze di progetto che l'agente non può risolvere da solo. L'utente le conferma in chat, poi vengono chiuse con `req-resolve`._
+
+- `R6` (`O10`) Router ZTE: l'utente crea il port forwarding TCP 49222 -> 192.168.1.49:22 (agentdeck-ssh) e prenota 192.168.1.49 per il MAC 14:d4:24:0a:8e:45
 
 ## Obiettivi
 
 ### `O10` Claude Code sulla Deck, usato davvero — in corso
 
 **Gate obiettivo:** Claude Code gira sulla Deck per l'utente agent, autenticato con l'abbonamento e seguibile con Remote Control; conosce AgentDeck da un CLAUDE.md ricavato da docs/ e usa deck; una sessione di lavoro reale dalla chat produce i bisogni per il ciclo successivo; snapshot prima di ogni modifica e ssh agentdeck sempre funzionante (INV-1).
+**Richieste vincolanti:** `R6` Router ZTE: l'utente crea il port forwarding TCP 49222 -> 192.168.1.49:22 (agentdeck-ssh) e prenota 192.168.1.49 per il MAC 14:d4:24:0a:8e:45
 
 - [x] `O10.T1` Installazione di Claude Code sulla Deck — *perimetro:* `pacchetti e file dell'utente agent sulla Deck, install/, deck/, docs/`
   *gate previsto:* Snapshot prima; binario nativo di Claude Code installato per l'utente agent con firma GPG del manifest e checksum verificate; claude --version e claude doctor funzionano su Arch (la prima richiesta vera passa a O10.T2, dopo il login: decisione dell'utente); nessun servizio esposto in rete; installazione ripetibile da script del repository; documentazione aggiornata. · *gate confermato:* ✔ Claude Code 2.1.310 sulla Deck per agent: firma GPG del manifest e checksum verificate, --version e doctor ok, nessuna porta nuova; install/claude-code.sh
@@ -38,6 +41,11 @@ _nessuna richiesta in attesa._
   *annotazioni:* `N31`, `N32`, `N33`
 - [ ] `O10.T4` Uso reale dalla chat e bisogni emersi — *perimetro:* `sessioni di Claude Code sulla Deck, annotazioni della governance, docs/`
   *gate previsto:* Almeno una sessione di lavoro reale dalla chat di Claude Code sulla Deck, scelta con l'utente; ogni bisogno emerso registrato come annotazione; proposta di roadmap del ciclo successivo che nasce da quei bisogni.
+  *annotazioni:* `N42`
+- [!] `O10.T5` Accesso remoto da fuori casa con SSH esposto su scarlethome.ddns.net — *perimetro:* `pacchetto tailscale e sua configurazione sulla Deck, configurazione SSH del Mac (~/.ssh/config), install/, docs/, pacchetti sshguard e miniupnpc sulla Deck, loro configurazione e unità systemd (mappatura UPnP e rinnovo)`
+  *gate previsto:* Snapshot prima; SSH della Deck raggiungibile da internet su scarlethome.ddns.net con porta esterna non standard, solo chiave (password e root disabilitati), sshguard attivo, mappatura con regola fissa di port forwarding sul router (UPnP del router rifiuta le azioni, N41); ssh agentdeck sceglie da solo LAN o internet, con riserva solo LAN; provato da fuori casa (hotspot): ssh, deck status e deck/install.sh da questa chat; INV-1 e INV-5 rispettati; documentazione. · *blocco:* ✖ Deck e Mac pronti (sshguard, ssh agentdeck LAN o internet, Tailscale spento, docs); manca R6, regola sul router, quindi la prova da hotspot
+  *rischio:* 45/100 — Espone l'SSH della Deck su internet (INV-5, decisione dell'utente) e tocca router e canale dell'agente (INV-1): snapshot prima, sshd invariato e solo chiave, LAN mai bloccata da sshguard, verifica dopo ogni passo.
+  *annotazioni:* `N34`, `N35`, `N36`, `N37`, `N38`, `N39`, `N40`, `N41`, `N43`
 
 ### `O11` Aggiornamento reale della Deck con deck update (O9) — in corso
 
@@ -57,3 +65,13 @@ _Una riga per nota, sempre legata a una task. `wf.sh notes` per leggerle._
 - `N31` (`O10.T3`) Richiesta dell'utente (26/10): verificare come gestire il prompt di sistema di Claude Code per usarlo correttamente negli scopi di gestione dell'OS. Si studia dentro O10.T3: CLAUDE.md a più livelli, opzioni del prompt di sistema, stili di output, hook, agenti, e cosa vale per le sessioni di Remote Control. — 2026-10-26 00:16
 - `N32` (`O10.T3`) Fatto emerso (26/10, aiuto di Claude Code 2.1.310 sulla Deck): il comando principale accetta --system-prompt, --append-system-prompt (anche da file), --agent, --agents, --settings, --setting-sources; claude remote-control (server mode) fra questi accetta solo --permission-mode. Le sessioni aperte da Remote Control vanno configurate con ciò che si legge dalla cartella di lavoro e dalla macchina (CLAUDE.md, impostazioni, hook, agenti), da verificare sulla documentazione. — 2026-10-26 00:17
 - `N33` (`O10.T3`) Avanzamento O10.T3 (26/10): installati i quattro strati (stile AgentDeck, /etc/claude-code/CLAUDE.md generato con le 10 invarianti, managed-settings con deny e niente bypass, hook PreToolUse guardia e SessionStart con gli avvisi di deck). Verificati con claude -p in ~/agentdeck: identità e regole, avvisi di inizio sessione, deny e guardia con marcatori innocui anche con Bash permesso, uso di deck status. 158 test. Manca la conferma dell'utente da una sessione aperta con Remote Control. — 2026-10-26 00:24
+- `N34` (`O10.T5`) Decisione esplicita dell'utente (26/10) per INV-5: accesso da fuori casa con Tailscale, rete privata cifrata con connessione in uscita e nessuna porta pubblica; il coordinamento passa dal servizio di Tailscale. Installato tailscale 1.104.2 (snapshot 43, 44-45), tailscaled attivo, tailscale up con --accept-dns=false e hostname agentdeck in attesa di autorizzazione dall'utente; DNS della Deck invariato. — 2026-10-26 00:37
+- `N35` (`O10.T5`) Stato (26/10): tailscale status sulla Deck dice Logged out, il link di autorizzazione è ancora valido e rimandato all'utente; si aspetta la richiesta R5 (autorizzazione, scadenza della chiave tolta, app sul Mac). — 2026-10-26 00:38
+- `N36` (`O10.T5`) Verifica (26/10): Deck nella tailnet dell'utente (100.83.1.34, agentdeck.tail752ba1.ts.net, online), DNS invariato, sessione tmux del login chiusa. Porte nuove: UDP 41641 su tutte le interfacce (WireGuard, solo traffico autenticato; il router non inoltra) e due porte del peerapi solo su tailscale0. Mancano: app Tailscale sul Mac (non presente in /Applications) e scadenza della chiave tolta (KeyExpiry 2027-04-23 ancora presente). — 2026-10-26 00:39
+- `N37` (`O10.T5`) Verifica dal Mac (26/10): Tailscale.app installata ma la VPN io.tailscale.ipn.macsys è in stato Connecting, nessuna interfaccia con indirizzo 100.x, la Deck non vede altri dispositivi; ssh verso 100.83.1.34 in timeout. Chiesto all'utente di completare il login nell'app e consentire l'estensione di rete di macOS. KeyExpiry della Deck ancora 2027-04-23. — 2026-10-26 00:43
+- `N38` (`O10.T5`) Diagnosi Mac (26/10 00:52): la sessione VPN di macOS è rimasta in NESMVPNSessionStateIdleIPC perché l'app ha chiesto l'IPC alle 00:40:04, prima dell'approvazione dell'estensione (00:40:24). Ogni nuovo tentativo riceve: cannot establish IPC because IPC is already in the process of being established. Chiudere e riaprire l'app non basta; serve chiudere l'estensione (root, pid 35169) con sudo, oppure riavviare il Mac. sudo chiede la password: lo fa l'utente. — 2026-10-26 00:52
+- `N39` (`O10.T5`) Alternativa chiesta dall'utente (26/10 00:58): aprire SSH della Deck verso internet, accesso solo con chiave. Fattibilità verificata: la linea di casa ha IPv4 pubblico (151.81.x, nessun CGNAT: secondo salto 151.7.220.33), router con UPnP, niente IPv6. Servirebbero port forwarding, porta non standard, limite ai tentativi e DDNS per l'IP dinamico; per INV-5 è una decisione esplicita dell'utente. La scheda di riavvio di nesessionmanager è stata chiusa senza eseguirla; la VPN del Mac resta Connecting. — 2026-10-26 00:57
+- `N40` (`O10.T5`) Decisione esplicita dell'utente (26/10, per INV-5): 'fai tutto tu, hai approvazione completa' sul piano presentato. SSH della Deck esposto su internet su scarlethome.ddns.net con porta esterna alta non standard inoltrata alla 22, solo chiave, sshguard contro i tentativi; mappatura sul router aperta dalla Deck via UPnP e rinnovata da un timer; Tailscale sulla Deck fermato e disabilitato (pacchetto lasciato, reversibile). — 2026-10-26 00:59
+- `N41` (`O10.T5`) UPnP non utilizzabile (26/10 01:05): il router ZTE F6746G annuncia l'IGD ma rifiuta ogni azione con errore 800 'do not execute action(all)' (anche GetExternalIPAddress). La mappatura non può farla la Deck: serve una regola fissa di port forwarding sul router (TCP 49222 esterna -> 192.168.1.49:22) e la prenotazione DHCP del MAC 14:d4:24:0a:8e:45, fatte dall'utente dal pannello del router. miniupnpc rimosso. Gate da correggere: mappatura con regola fissa sul router invece che gestita dalla Deck. — 2026-10-26 01:02
+- `N42` (`O10.T4`) Da O10.T5: SSH della Deck ora esposto su internet (porta esterna 49222) con sshguard. Le regole di Claude Code sulla Deck (deck/claude/CLAUDE.template.md) non lo dicono: valutare di aggiungere che sshguard non va fermato né la whitelist allargata, ed eventualmente la guardia su stop o disable di sshguard. Utile anche un avviso di deck status se sshguard non è attivo. — 2026-10-26 01:06
+- `N43` (`O10.T5`) R5 (Tailscale) superata dalla decisione N40: la strada è SSH esposto con port forwarding; tailscaled fermato e disabilitato sulla Deck, nessuna regola o porta rimasta. La Deck resta registrata nella tailnet dell'utente: si può togliere dalla console di Tailscale. — 2026-10-26 01:06

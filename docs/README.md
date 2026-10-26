@@ -44,5 +44,6 @@ documento (invariante INV-9). Quando si modifica il codice, si aggiorna il docum
 
 ## Uso quotidiano
 
-- [accesso.md](accesso.md): accesso SSH dell'agente, indirizzo della Deck, sicurezza, snapshot e recupero.
+- [accesso.md](accesso.md): accesso SSH dell'agente in casa e da fuori casa (scarlethome.ddns.net, sshguard),
+  indirizzo della Deck, sicurezza, snapshot e recupero. Codice: [../install/remote-access.sh](../install/remote-access.sh).
 - [sviluppo.md](sviluppo.md): repository git, identità, remote GitHub, versioni, governance.

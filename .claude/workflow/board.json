@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-25 23:48",
-  "updated": "2026-10-26 00:33",
+  "updated": "2026-10-26 01:11",
   "objectives": [
     {
       "id": "O10",
@@ -55,6 +55,17 @@
           "risk": null,
           "risk_why": "",
           "docs": []
+        },
+        {
+          "id": "O10.T5",
+          "title": "Accesso remoto da fuori casa con SSH esposto su scarlethome.ddns.net",
+          "scope": "pacchetto tailscale e sua configurazione sulla Deck, configurazione SSH del Mac (~/.ssh/config), install/, docs/, pacchetti sshguard e miniupnpc sulla Deck, loro configurazione e unità systemd (mappatura UPnP e rinnovo)",
+          "gate_pre": "Snapshot prima; SSH della Deck raggiungibile da internet su scarlethome.ddns.net con porta esterna non standard, solo chiave (password e root disabilitati), sshguard attivo, mappatura con regola fissa di port forwarding sul router (UPnP del router rifiuta le azioni, N41); ssh agentdeck sceglie da solo LAN o internet, con riserva solo LAN; provato da fuori casa (hotspot): ssh, deck status e deck/install.sh da questa chat; INV-1 e INV-5 rispettati; documentazione.",
+          "gate_post": "Deck e Mac pronti (sshguard, ssh agentdeck LAN o internet, Tailscale spento, docs); manca R6, regola sul router, quindi la prova da hotspot",
+          "state": "blocked",
+          "risk": 45,
+          "risk_why": "Espone l'SSH della Deck su internet (INV-5, decisione dell'utente) e tocca router e canale dell'agente (INV-1): snapshot prima, sshd invariato e solo chiave, LAN mai bloccata da sshguard, verifica dopo ogni passo.",
+          "docs": []
         }
       ]
     },
@@ -89,6 +100,25 @@
       "dettaglio": "",
       "created": "2026-10-26 00:02",
       "resolved": "2026-10-26 00:11"
+    },
+    {
+      "id": "R5",
+      "objective": "O10",
+      "title": "Tailscale: l'utente autorizza la Deck dal link, toglie la scadenza della chiave di agentdeck e installa Tailscale sul Mac con lo stesso account",
+      "state": "resolved",
+      "doc": "",
+      "dettaglio": "",
+      "created": "2026-10-26 00:37",
+      "resolved": "2026-10-26 01:06"
+    },
+    {
+      "id": "R6",
+      "objective": "O10",
+      "title": "Router ZTE: l'utente crea il port forwarding TCP 49222 -> 192.168.1.49:22 (agentdeck-ssh) e prenota 192.168.1.49 per il MAC 14:d4:24:0a:8e:45",
+      "state": "open",
+      "doc": "",
+      "dettaglio": "",
+      "created": "2026-10-26 01:02"
     }
   ],
   "notes": [
@@ -140,6 +170,76 @@
       "text": "Avanzamento O10.T3 (26/10): installati i quattro strati (stile AgentDeck, /etc/claude-code/CLAUDE.md generato con le 10 invarianti, managed-settings con deny e niente bypass, hook PreToolUse guardia e SessionStart con gli avvisi di deck). Verificati con claude -p in ~/agentdeck: identità e regole, avvisi di inizio sessione, deny e guardia con marcatori innocui anche con Bash permesso, uso di deck status. 158 test. Manca la conferma dell'utente da una sessione aperta con Remote Control.",
       "docs": [],
       "created": "2026-10-26 00:24"
+    },
+    {
+      "id": "N34",
+      "task": "O10.T5",
+      "text": "Decisione esplicita dell'utente (26/10) per INV-5: accesso da fuori casa con Tailscale, rete privata cifrata con connessione in uscita e nessuna porta pubblica; il coordinamento passa dal servizio di Tailscale. Installato tailscale 1.104.2 (snapshot 43, 44-45), tailscaled attivo, tailscale up con --accept-dns=false e hostname agentdeck in attesa di autorizzazione dall'utente; DNS della Deck invariato.",
+      "docs": [],
+      "created": "2026-10-26 00:37"
+    },
+    {
+      "id": "N35",
+      "task": "O10.T5",
+      "text": "Stato (26/10): tailscale status sulla Deck dice Logged out, il link di autorizzazione è ancora valido e rimandato all'utente; si aspetta la richiesta R5 (autorizzazione, scadenza della chiave tolta, app sul Mac).",
+      "docs": [],
+      "created": "2026-10-26 00:38"
+    },
+    {
+      "id": "N36",
+      "task": "O10.T5",
+      "text": "Verifica (26/10): Deck nella tailnet dell'utente (100.83.1.34, agentdeck.tail752ba1.ts.net, online), DNS invariato, sessione tmux del login chiusa. Porte nuove: UDP 41641 su tutte le interfacce (WireGuard, solo traffico autenticato; il router non inoltra) e due porte del peerapi solo su tailscale0. Mancano: app Tailscale sul Mac (non presente in /Applications) e scadenza della chiave tolta (KeyExpiry 2027-04-23 ancora presente).",
+      "docs": [],
+      "created": "2026-10-26 00:39"
+    },
+    {
+      "id": "N37",
+      "task": "O10.T5",
+      "text": "Verifica dal Mac (26/10): Tailscale.app installata ma la VPN io.tailscale.ipn.macsys è in stato Connecting, nessuna interfaccia con indirizzo 100.x, la Deck non vede altri dispositivi; ssh verso 100.83.1.34 in timeout. Chiesto all'utente di completare il login nell'app e consentire l'estensione di rete di macOS. KeyExpiry della Deck ancora 2027-04-23.",
+      "docs": [],
+      "created": "2026-10-26 00:43"
+    },
+    {
+      "id": "N38",
+      "task": "O10.T5",
+      "text": "Diagnosi Mac (26/10 00:52): la sessione VPN di macOS è rimasta in NESMVPNSessionStateIdleIPC perché l'app ha chiesto l'IPC alle 00:40:04, prima dell'approvazione dell'estensione (00:40:24). Ogni nuovo tentativo riceve: cannot establish IPC because IPC is already in the process of being established. Chiudere e riaprire l'app non basta; serve chiudere l'estensione (root, pid 35169) con sudo, oppure riavviare il Mac. sudo chiede la password: lo fa l'utente.",
+      "docs": [],
+      "created": "2026-10-26 00:52"
+    },
+    {
+      "id": "N39",
+      "task": "O10.T5",
+      "text": "Alternativa chiesta dall'utente (26/10 00:58): aprire SSH della Deck verso internet, accesso solo con chiave. Fattibilità verificata: la linea di casa ha IPv4 pubblico (151.81.x, nessun CGNAT: secondo salto 151.7.220.33), router con UPnP, niente IPv6. Servirebbero port forwarding, porta non standard, limite ai tentativi e DDNS per l'IP dinamico; per INV-5 è una decisione esplicita dell'utente. La scheda di riavvio di nesessionmanager è stata chiusa senza eseguirla; la VPN del Mac resta Connecting.",
+      "docs": [],
+      "created": "2026-10-26 00:57"
+    },
+    {
+      "id": "N40",
+      "task": "O10.T5",
+      "text": "Decisione esplicita dell'utente (26/10, per INV-5): 'fai tutto tu, hai approvazione completa' sul piano presentato. SSH della Deck esposto su internet su scarlethome.ddns.net con porta esterna alta non standard inoltrata alla 22, solo chiave, sshguard contro i tentativi; mappatura sul router aperta dalla Deck via UPnP e rinnovata da un timer; Tailscale sulla Deck fermato e disabilitato (pacchetto lasciato, reversibile).",
+      "docs": [],
+      "created": "2026-10-26 00:59"
+    },
+    {
+      "id": "N41",
+      "task": "O10.T5",
+      "text": "UPnP non utilizzabile (26/10 01:05): il router ZTE F6746G annuncia l'IGD ma rifiuta ogni azione con errore 800 'do not execute action(all)' (anche GetExternalIPAddress). La mappatura non può farla la Deck: serve una regola fissa di port forwarding sul router (TCP 49222 esterna -> 192.168.1.49:22) e la prenotazione DHCP del MAC 14:d4:24:0a:8e:45, fatte dall'utente dal pannello del router. miniupnpc rimosso. Gate da correggere: mappatura con regola fissa sul router invece che gestita dalla Deck.",
+      "docs": [],
+      "created": "2026-10-26 01:02"
+    },
+    {
+      "id": "N42",
+      "task": "O10.T4",
+      "text": "Da O10.T5: SSH della Deck ora esposto su internet (porta esterna 49222) con sshguard. Le regole di Claude Code sulla Deck (deck/claude/CLAUDE.template.md) non lo dicono: valutare di aggiungere che sshguard non va fermato né la whitelist allargata, ed eventualmente la guardia su stop o disable di sshguard. Utile anche un avviso di deck status se sshguard non è attivo.",
+      "docs": [],
+      "created": "2026-10-26 01:06"
+    },
+    {
+      "id": "N43",
+      "task": "O10.T5",
+      "text": "R5 (Tailscale) superata dalla decisione N40: la strada è SSH esposto con port forwarding; tailscaled fermato e disabilitato sulla Deck, nessuna regola o porta rimasta. La Deck resta registrata nella tailnet dell'utente: si può togliere dalla console di Tailscale.",
+      "docs": [],
+      "created": "2026-10-26 01:06"
     }
   ],
   "active": {
@@ -152,9 +252,9 @@
     "hold_plan": ""
   },
   "previous": {
-    "task": "O10.T3",
-    "state": "done",
-    "note": "Prompt di sistema in quattro strati (stile, CLAUDE.md gestito, deny e guardia, hook con gli avvisi); provati con claude -p e da Remote Control dall'utente"
+    "task": "O10.T5",
+    "state": "blocked",
+    "note": "Deck e Mac pronti (sshguard, ssh agentdeck LAN o internet, Tailscale spento, docs); manca R6, regola sul router, quindi la prova da hotspot"
   },
   "cycle": {
     "n": 4,
@@ -164,7 +264,7 @@
   "counters": {
     "objective": 11,
     "cycle": 4,
-    "request": 4,
-    "note": 33
+    "request": 6,
+    "note": 43
   }
 }
