@@ -10,10 +10,10 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O10` Claude Code sulla Deck, usato davvero — 9 task: 4 completate, 0 in corso, 4 da fare, 1 bloccate
+- **Obiettivo attivo:** `O10` Claude Code sulla Deck, usato davvero — 9 task: 5 completate, 0 in corso, 3 da fare, 1 bloccate
 - **Task attiva:** —
-- **Ultima task gestita:** `O10.T6` — completata — deck mcp: open più 18 strumenti tipizzati, risorse, conferme in due passi; provato da claude -p sulla Deck e via ssh dal Mac; 172 test
-- **Ultimo aggiornamento:** 2026-10-26 01:23
+- **Ultima task gestita:** `O10.T7` — completata — deck term: programmi in tmux come schermate, segreti rifiutati, guardia; 20/20 dal vivo; profilo ssh-keygen scritto dall'agente
+- **Ultimo aggiornamento:** 2026-10-26 01:42
 
 ## Richieste attive
 
@@ -50,8 +50,10 @@ _Mancanze di progetto che l'agente non può risolvere da solo. L'utente le confe
   *gate previsto:* Server MCP stdio con la sola libreria standard che serve il protocollo di deck: uno strumento per ogni azione con parametri tipizzati, uno per aprire le schermate, risorse per le schermate, istruzioni scritte dal sistema; distruttive in due passi con anteprima e codice; INV-4 rispettata; test; registrato in Claude Code sulla Deck e provato da una sessione (claude -p) e dal Mac via ssh; documentazione. · *gate confermato:* ✔ deck mcp: open più 18 strumenti tipizzati, risorse, conferme in due passi; provato da claude -p sulla Deck e via ssh dal Mac; 172 test
   *rischio:* 20/100 — Nuova interfaccia sullo stesso motore di deck, con anteprime e conferme invariate; sul sistema aggiunge solo la registrazione del server in Claude Code. Rischio: un'azione distruttiva senza anteprima, escluso dai test.
   *annotazioni:* `N44`
-- [ ] `O10.T7` Adattatore dei programmi interattivi: deck term con schermate JSON e profili — *perimetro:* `deck/, docs/, stato di deck sulla Deck (~/.local/state/agentdeck, /var/lib/agentdeck)`
-  *gate previsto:* deck term avvia un programma in tmux e lo presenta come schermata JSON (session, terminal, question, parsed); azioni per rispondere, scegliere, premere tasti, aspettare, interrompere; segreti mai digitati dall'agente; profili per programma scritti dall'agente; riconoscimento provato su programmi veri della Deck; INV-4; test; documentazione.
+- [x] `O10.T7` Adattatore dei programmi interattivi: deck term con schermate JSON e profili — *perimetro:* `deck/, docs/, stato di deck sulla Deck (~/.local/state/agentdeck, /var/lib/agentdeck)`
+  *gate previsto:* deck term avvia un programma in tmux e lo presenta come schermata JSON (session, terminal, question, parsed); azioni per rispondere, scegliere, premere tasti, aspettare, interrompere; segreti mai digitati dall'agente; profili per programma scritti dall'agente; riconoscimento provato su programmi veri della Deck; INV-4; test; documentazione. · *gate confermato:* ✔ deck term: programmi in tmux come schermate, segreti rifiutati, guardia; 20/20 dal vivo; profilo ssh-keygen scritto dall'agente
+  *rischio:* 35/100 — L'adattatore esegue comandi come agent e digita risposte nei programmi: una risposta sbagliata può confermare un'azione e una shell potrebbe aggirare la guardia. Guardia dell'accesso applicata anche a deck term, segreti rifiutati, snap-pac per i pacchetti.
+  *annotazioni:* `N45`
 - [ ] `O10.T8` Obblighi del sistema e hook di autoprompting per Claude Code (A6.3) — *perimetro:* `deck/, docs/, /etc/claude-code sulla Deck`
   *gate previsto:* deck obligations elenca gli obblighi del sistema (solo avvisi); hook che indicano l'azione di deck al posto dei comandi grezzi, danno le verifiche dopo le azioni, creano l'obbligo del profilo dopo l'installazione di un pacchetto, portano a ogni turno avvisi e obblighi nuovi e registrano la sessione; provati da una sessione di Claude Code sulla Deck; test; documentazione.
 - [ ] `O10.T9` Skill di AgentDeck e prova d'insieme da una sessione sulla Deck — *perimetro:* `deck/claude/, docs/, ~/.claude/skills sulla Deck`
@@ -86,3 +88,4 @@ _Una riga per nota, sempre legata a una task. `wf.sh notes` per leggerle._
 - `N42` (`O10.T4`) Da O10.T5: SSH della Deck ora esposto su internet (porta esterna 49222) con sshguard. Le regole di Claude Code sulla Deck (deck/claude/CLAUDE.template.md) non lo dicono: valutare di aggiungere che sshguard non va fermato né la whitelist allargata, ed eventualmente la guardia su stop o disable di sshguard. Utile anche un avviso di deck status se sshguard non è attivo. — 2026-10-26 01:06
 - `N43` (`O10.T5`) R5 (Tailscale) superata dalla decisione N40: la strada è SSH esposto con port forwarding; tailscaled fermato e disabilitato sulla Deck, nessuna regola o porta rimasta. La Deck resta registrata nella tailnet dell'utente: si può togliere dalla console di Tailscale. — 2026-10-26 01:06
 - `N44` (`O10.T6`) Trovato installando (26/10): test_update.test_grub_install_matches_installer (da O6.T1) falliva sulla Deck perché legge install/install.sh del repository, che in /opt/agentdeck non c'è; deck/install.sh si fermava ai test sulla Deck e saltava le prove finali. Corretto con skipTest quando il file manca: sul Mac il confronto con l'installatore resta identico. — 2026-10-26 01:19
+- `N45` (`O10.T7`) Dalla prova con la sessione di Claude Code sulla Deck (26/10): l'agente ha scritto, provato e salvato da solo il profilo di ssh-keygen, senza digitare la passphrase. Ha segnalato che una domanda già risposta e ancora visibile faceva vincere la regola sbagliata. Corretto il motore: una regola di domanda vale solo se finisce sulla riga del cursore. Adeguato il mio test test_unknown_question_asks_for_a_profile (programma finto con un prompt vero sulla riga del cursore): stesso percorso verificato. — 2026-10-26 01:40

@@ -1060,3 +1060,51 @@
 {"at": "2026-10-26 01:23", "testo": "[-] bash: cd /Users/snj/linuxai-steamdeck && python3 -c \"import json; p=json.load(open('.claude/workflow/project.json'))"}
 {"at": "2026-10-26 01:23", "testo": "VERSIONI scelte dall'utente: governance"}
 {"at": "2026-10-26 01:23", "testo": "[-] Edit  CHANGELOG.md", "task": "-", "tipo": "file", "tool": "Edit", "file": "CHANGELOG.md"}
+{"at": "2026-10-26 01:23", "testo": "[-] bash: printf '0.4.4\\n' > VERSION && cat VERSION && git add -A && git commit -q -F - <<'EOF' Versione 0.4.4: deck mcp"}
+{"at": "2026-10-26 01:25", "testo": "[-] bash: ssh -o BatchMode=yes agentdeck 'T=\"tmux -L adptest -f /dev/null\"; $T new-session -d -s p1 -x 120 -y 30 \"python"}
+{"at": "2026-10-26 01:25", "testo": "[-] bash: S=/private/tmp/claude-502/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/scratchpad; cat > "}
+{"at": "2026-10-26 01:26", "testo": "[-] bash: ssh -o BatchMode=yes agentdeck 'cat /proc/sys/kernel/yama/ptrace_scope 2>/dev/null; tmux -L adptest -f /dev/nu"}
+{"at": "2026-10-26 01:27", "testo": "[-] Write  deck/agentdeck/access.py", "task": "-", "tipo": "file", "tool": "Write", "file": "deck/agentdeck/access.py"}
+{"at": "2026-10-26 01:27", "testo": "[-] bash: python3 - <<'EOF' from pathlib import Path p = Path(\"deck/claude/guard.py\"); t = p.read_text() start = t.index"}
+{"at": "2026-10-26 01:27", "testo": "[-] bash: cd /Users/snj/linuxai-steamdeck/deck && python3 -m unittest discover -s tests -q 2>&1 | tail -3 && echo '{\"too"}
+{"at": "2026-10-26 01:28", "testo": "TASK APERTA O10.T7 — Adattatore dei programmi interattivi: deck term con schermate JSON e profili | perimetro: deck/, docs/, stato di deck sulla Deck (~/.local/state/agentdeck, /var/lib/agentdeck) | gate: deck term avvia un programma in tmux e lo presenta come schermata JSON (session, terminal, question, parsed); azioni per rispondere, scegliere, premere tasti, aspettare, interrompere; segreti mai digitati dall'agente; profili per programma scritti dall'agente; riconoscimento provato su programmi veri della Deck; INV-4; test; documentazione. | rischio: 35"}
+{"at": "2026-10-26 01:29", "testo": "[O10.T7] Write  deck/agentdeck/term.py", "task": "O10.T7", "tipo": "file", "tool": "Write", "file": "deck/agentdeck/term.py"}
+{"at": "2026-10-26 01:29", "testo": "[O10.T7] Edit  deck/agentdeck/term.py", "task": "O10.T7", "tipo": "file", "tool": "Edit", "file": "deck/agentdeck/term.py"}
+{"at": "2026-10-26 01:30", "testo": "[O10.T7] Edit  deck/agentdeck/term.py", "task": "O10.T7", "tipo": "file", "tool": "Edit", "file": "deck/agentdeck/term.py"}
+{"at": "2026-10-26 01:30", "testo": "[O10.T7] Edit  deck/agentdeck/term.py", "task": "O10.T7", "tipo": "file", "tool": "Edit", "file": "deck/agentdeck/term.py"}
+{"at": "2026-10-26 01:30", "testo": "[O10.T7] bash: cd /Users/snj/linuxai-steamdeck && sed -n 1,60p deck/agentdeck/components/service.py && grep -n \"def \\|DeckErr"}
+{"at": "2026-10-26 01:31", "testo": "[O10.T7] Write  deck/agentdeck/components/term.py", "task": "O10.T7", "tipo": "file", "tool": "Write", "file": "deck/agentdeck/components/term.py"}
+{"at": "2026-10-26 01:31", "testo": "[O10.T7] bash: python3 - <<'EOF' from pathlib import Path p = Path(\"deck/agentdeck/components/term.py\"); t = p.read_text() t "}
+{"at": "2026-10-26 01:32", "testo": "[O10.T7] Write  deck/profiles/pacman.json", "task": "O10.T7", "tipo": "file", "tool": "Write", "file": "deck/profiles/pacman.json"}
+{"at": "2026-10-26 01:32", "testo": "[O10.T7] Edit  deck/agentdeck/term.py", "task": "O10.T7", "tipo": "file", "tool": "Edit", "file": "deck/agentdeck/term.py"}
+{"at": "2026-10-26 01:32", "testo": "[O10.T7] bash: python3 - <<'EOF' from pathlib import Path p = Path(\"deck/agentdeck/term.py\"); t = p.read_text() t = t.replace"}
+{"at": "2026-10-26 01:33", "testo": "[O10.T7] Write  deck/tests/test_term.py", "task": "O10.T7", "tipo": "file", "tool": "Write", "file": "deck/tests/test_term.py"}
+{"at": "2026-10-26 01:34", "testo": "[O10.T7] bash: python3 - <<'EOF' from pathlib import Path p = Path(\"deck/tests/test_term.py\"); t = p.read_text() rep = [ ('''"}
+{"at": "2026-10-26 01:35", "testo": "[O10.T7] Write  deck/tests/live_term_check.py", "task": "O10.T7", "tipo": "file", "tool": "Write", "file": "deck/tests/live_term_check.py"}
+{"at": "2026-10-26 01:36", "testo": "[O10.T7] FALLITO Bash: ssh -o BatchMode=yes agentdeck 'deck snapshot create \"description=prima di deck term (O10."}
+{"at": "2026-10-26 01:36", "testo": "FALLIMENTO [Bash] execution_error: snapshot 56\n== Test sul Mac\nRan 200 tests in 0.360s\nOK\n== Python sulla Deck\n== Copia in /opt/agentdeck\n== Comando deck\n="}
+{"at": "2026-10-26 01:36", "testo": "[O10.T7] bash: ssh -o BatchMode=yes agentdeck 'r=$(deck term start \"command=bash --norc --noprofile -i\"); echo \"$r\" | python3"}
+{"at": "2026-10-26 01:36", "testo": "[O10.T7] Edit  deck/agentdeck/term.py", "task": "O10.T7", "tipo": "file", "tool": "Edit", "file": "deck/agentdeck/term.py"}
+{"at": "2026-10-26 01:36", "testo": "[O10.T7] Edit  deck/tests/test_term.py", "task": "O10.T7", "tipo": "file", "tool": "Edit", "file": "deck/tests/test_term.py"}
+{"at": "2026-10-26 01:37", "testo": "[O10.T7] bash: python3 - <<'EOF' from pathlib import Path p = Path(\"deck/tests/test_term.py\"); t = p.read_text() old = '''   "}
+{"at": "2026-10-26 01:38", "testo": "TRAPPOLA registrata: deck term non vede che bash interattiva aspetta input (question null, state running) -> il kernel della Deck riporta in /proc/<pid>/wchan nomi con suffissi del compilatore (poll_schedule_timeout.constprop.0) e il confronto esatto con TTY_WAITS falliva -> confrontare il nome di wchan senza il suffisso (split sul punto)."}
+{"at": "2026-10-26 01:38", "testo": "ERRORE RISOLTO — execution_error: snapshot 56 == Test sul Mac Ran 200 tests in 0.360s OK == Python sulla Deck == Copia in /opt/agentdeck == Comando deck = — wchan con suffisso .constprop.0 normalizzato in term.py, test aggiunto; live_term_check 20/20", "tipo": "errore-risolto"}
+{"at": "2026-10-26 01:38", "testo": "[O10.T7] bash: ~/claude-rules/bin/wf.sh pitfall \"deck term non vede che bash interattiva aspetta input (question null, state "}
+{"at": "2026-10-26 01:39", "testo": "[O10.T7] bash: S=/private/tmp/claude-502/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/scratchpad; ssh -o"}
+{"at": "2026-10-26 01:39", "testo": "[O10.T7] bash: ssh -o BatchMode=yes agentdeck 'cat ~/.local/share/agentdeck/profiles/ssh-keygen.json; ls /tmp/agentdeck-demo-"}
+{"at": "2026-10-26 01:39", "testo": "[O10.T7] Edit  deck/agentdeck/term.py", "task": "O10.T7", "tipo": "file", "tool": "Edit", "file": "deck/agentdeck/term.py"}
+{"at": "2026-10-26 01:39", "testo": "[O10.T7] Edit  deck/tests/test_term.py", "task": "O10.T7", "tipo": "file", "tool": "Edit", "file": "deck/tests/test_term.py"}
+{"at": "2026-10-26 01:39", "testo": "[O10.T7] bash: python3 - <<'EOF' from pathlib import Path p = Path(\"deck/tests/test_term.py\"); t = p.read_text() old = '''   "}
+{"at": "2026-10-26 01:39", "testo": "[O10.T7] bash: python3 -m unittest discover -s tests 2>&1 | grep -B5 -A25 \"^FAIL:\" | head -50"}
+{"at": "2026-10-26 01:40", "testo": "ANNOTAZIONE N45 su O10.T7 — Dalla prova con la sessione di Claude Code sulla Deck (26/10): l'agente ha scritto, provato e salvato da solo il profilo di ssh-keygen, senza digitare la passphrase. Ha segnalato che una domanda già risposta e ancora visibile faceva vincere la regola sbagliata. Corretto il motore: una regola di domanda vale solo se finisce sulla riga del cursore. Adeguato il mio test test_unknown_question_asks_for_a_profile (programma finto con un prompt vero sulla riga del cursore): stesso percorso verificato."}
+{"at": "2026-10-26 01:40", "testo": "[O10.T7] bash: cd /Users/snj/linuxai-steamdeck && python3 - <<'EOF' from pathlib import Path p = Path(\"deck/tests/test_term.p"}
+{"at": "2026-10-26 01:40", "testo": "[O10.T7] Edit  deck/claude/CLAUDE.template.md", "task": "O10.T7", "tipo": "file", "tool": "Edit", "file": "deck/claude/CLAUDE.template.md"}
+{"at": "2026-10-26 01:41", "testo": "[O10.T7] bash: cd /Users/snj/linuxai-steamdeck && bash deck/install.sh 2>&1 | grep -E \"Ran|OK|FAIL|ERROR\"; bash deck/claude/i"}
+{"at": "2026-10-26 01:42", "testo": "[O10.T7] Write  docs/adattatore.md", "task": "O10.T7", "tipo": "file", "tool": "Write", "file": "docs/adattatore.md"}
+{"at": "2026-10-26 01:42", "testo": "[O10.T7] bash: python3 - <<'EOF' from pathlib import Path def edit(path, old, new):     p = Path(path); t = p.read_text(); as"}
+{"at": "2026-10-26 01:42", "testo": "[O10.T7] bash: python3 - <<'EOF' from pathlib import Path p = Path(\"docs/claude-code.md\"); t = p.read_text() old = \"modifiche"}
+{"at": "2026-10-26 01:42", "testo": "TASK CHIUSA O10.T7 — completata: deck term: programmi in tmux come schermate, segreti rifiutati, guardia; 20/20 dal vivo; profilo ssh-keygen scritto dall'agente"}
+{"at": "2026-10-26 01:42", "testo": "VERSIONE 0.4.5 (O10.T7)"}
+{"at": "2026-10-26 01:42", "testo": "VERSIONI scelte dall'utente: governance"}
+{"at": "2026-10-26 01:42", "testo": "[-] bash: cd /Users/snj/linuxai-steamdeck && ~/claude-rules/bin/wf.sh task-close --done \"deck term: programmi in tmux co"}
+{"at": "2026-10-26 01:42", "testo": "[-] Edit  CHANGELOG.md", "task": "-", "tipo": "file", "tool": "Edit", "file": "CHANGELOG.md"}

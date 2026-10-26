@@ -100,6 +100,11 @@
       "id": "P20",
       "testo": "Tailscale sul Mac resta in Connecting per sempre (log: cannot establish IPC because IPC is already in the process of being established) -> l'app ha chiesto l'IPC all'estensione di rete prima che l'utente la approvasse e la sessione VPN di macOS resta in IdleIPC; riaprire l'app e kill -9 dell'estensione non bastano -> approvare l'estensione prima di avviare la VPN, altrimenti riavviare il Mac.",
       "creata": "2026-10-26 01:06"
+    },
+    {
+      "id": "P21",
+      "testo": "deck term non vede che bash interattiva aspetta input (question null, state running) -> il kernel della Deck riporta in /proc/<pid>/wchan nomi con suffissi del compilatore (poll_schedule_timeout.constprop.0) e il confronto esatto con TTY_WAITS falliva -> confrontare il nome di wchan senza il suffisso (split sul punto).",
+      "creata": "2026-10-26 01:38"
     }
   ]
 }

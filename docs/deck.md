@@ -25,7 +25,7 @@ Claude Code usa `deck` come strumento nativo, con i parametri tipizzati, invece 
 | Cosa offre | Come |
 |---|---|
 | Strumento `open` | Apre qualunque schermata; `path` è uno degli indirizzi dei componenti |
-| Uno strumento per azione | `<componente>_<azione>`, per esempio `snapshot_create`, `service_restart`, `logs_query`; lo schema degli argomenti nasce dalla specifica dei parametri (`int` diventa `integer`, `enum` un elenco chiuso, `max_length` diventa `maxLength`) |
+| Uno strumento per azione | `<componente>_<azione>`, per esempio `snapshot_create`, `service_restart`, `term_start`; lo schema degli argomenti nasce dalla specifica dei parametri (`int` diventa `integer`, `enum` un elenco chiuso, `max_length` diventa `maxLength`) |
 | Annotazioni | `readOnlyHint` per le azioni `read`, `destructiveHint` per le `destructive` |
 | Risorse | Ogni schermata è anche una risorsa `deck:<indirizzo>`, per esempio `deck:/status` |
 | Istruzioni del server | Testo del sistema, consegnato all'avvio: dati e istruzioni separati, partire da `/status`, conferme in due passi |
@@ -69,6 +69,7 @@ Verifiche del 26/10/2026:
 | `/service` | [../deck/agentdeck/components/service.py](../deck/agentdeck/components/service.py) | Servizi di systemd: elenco, dettaglio, start, stop, restart, enable, disable (vedi sotto) |
 | `/logs` | [../deck/agentdeck/components/logs.py](../deck/agentdeck/components/logs.py) | Journal di systemd: righe per unità, periodo e gravità (vedi sotto) |
 | `/update` | [../deck/agentdeck/components/update.py](../deck/agentdeck/components/update.py) | Aggiornamenti del sistema: controllo, applicazione con snapshot e verifica, riavvio (vedi sotto) |
+| `/term` | [../deck/agentdeck/components/term.py](../deck/agentdeck/components/term.py) | Adattatore dei programmi interattivi: un programma in tmux come schermata, domande riconosciute, profili scritti dall'agente ([adattatore.md](adattatore.md)) |
 
 ### `/network`: rete
 
@@ -393,7 +394,12 @@ hanno ancora un'azione collegata.
 | [../deck/agentdeck/protocol.py](../deck/agentdeck/protocol.py) | Costruzione e validazione delle schermate; `SysText` e `sys_text()` per il canale istruzioni |
 | [../deck/agentdeck/confirm.py](../deck/agentdeck/confirm.py) | Codici di conferma: una azione, quei parametri, 5 minuti, una volta sola |
 | [../deck/agentdeck/mcp.py](../deck/agentdeck/mcp.py) | Server MCP: strumenti dalle azioni, risorse, JSON-RPC su stdio (`deck mcp`) |
+| [../deck/agentdeck/term.py](../deck/agentdeck/term.py) | Adattatore: tmux, stato del processo e del terminale, riconoscimento delle domande, profili, sessioni |
+| [../deck/agentdeck/access.py](../deck/agentdeck/access.py) | Regole che proteggono l'accesso (INV-1), usate dalla guardia di Claude Code e da `deck term` |
+| [../deck/profiles/](../deck/profiles/pacman.json) | Profili dell'adattatore forniti con `deck` |
 | [../deck/tests/test_mcp.py](../deck/tests/test_mcp.py) | Test del server MCP: strumenti e schemi, conferme in due passi, errori, risorse, flusso stdio, INV-4 |
+| [../deck/tests/test_term.py](../deck/tests/test_term.py) | Test dell'adattatore: riconoscimento, profili, sessioni con tmux finto, segreti, guardia dell'accesso, INV-4 |
+| [../deck/tests/live_term_check.py](../deck/tests/live_term_check.py) | Controllo dal vivo di `deck term` con programmi veri sulla Deck |
 | [../deck/agentdeck/components/](../deck/agentdeck/components/__init__.py) | Un modulo per componente; l'elenco dei componenti attivi è in `__init__.py` |
 | [../deck/agentdeck/system.py](../deck/agentdeck/system.py) | Letture dello stato della Deck da `/proc`, `/sys` e comandi; parser puri |
 | [../deck/agentdeck/wifi_switch.py](../deck/agentdeck/wifi_switch.py) | Cambio Wi-Fi con ritorno automatico, eseguito come root in un'unità transitoria |

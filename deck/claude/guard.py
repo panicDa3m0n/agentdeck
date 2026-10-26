@@ -9,34 +9,16 @@ Installato da deck/claude/install.sh. Documentazione: docs/claude-code.md
 from __future__ import annotations
 
 import json
-import re
 import sys
+from pathlib import Path
 
-ACCESS_UNITS = r"(?:sshd|systemd-networkd|iwd|systemd-resolved|dbus(?:-broker)?)(?:\.service|\.socket)?"
-RULES = [
-    ("systemctl stop, disable, mask or kill of an access service",
-     re.compile(rf"\bsystemctl\b[^;&|\n]*\b(?:stop|disable|mask|kill|try-restart|isolate)\b[^;&|\n]*\b{ACCESS_UNITS}\b")),
-    ("isolating a rescue or emergency target",
-     re.compile(r"\bsystemctl\b[^;&|\n]*\b(?:isolate|rescue|emergency)\b[^;&|\n]*\b(?:rescue|emergency)(?:\.target)?\b")),
-    ("killing sshd, iwd, networkd or resolved",
-     re.compile(r"\b(?:pkill|killall)\b[^;&|\n]*\b(?:sshd|iwd|systemd-networkd|systemd-resolved)\b")),
-    ("taking the Wi-Fi or network link down",
-     re.compile(r"\b(?:ip\s+link\s+set\s+\S+\s+down|ifconfig\s+\S+\s+down|rfkill\s+block|iwctl\b[^;&|\n]*\bdisconnect\b)")),
-    ("editing the SSH server configuration directly",
-     re.compile(r"(?:\bsed\s+-i\b|\btee\b|>{1,2})[^;&|\n]*/etc/ssh/sshd_config")),
-    ("guard test marker", re.compile(r"agentdeck-guard-canary")),
-]
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))  # /opt/agentdeck o deck/ del repository
+
+from agentdeck.access import RULES, check  # noqa: E402,F401  le regole stanno con deck: le usa anche deck term
+
 MESSAGE = ("AgentDeck guard: refused because this command could cut the agent's access to the Deck ({reason}, "
            "INV-1). Use deck instead: `deck service` and `deck network` preview the change and protect access. If "
            "the change is really needed, explain it to the owner and ask first.")
-
-
-def check(command: str):
-    """Il motivo del rifiuto, o None se il comando può passare."""
-    for reason, pattern in RULES:
-        if pattern.search(command):
-            return reason
-    return None
 
 
 def main() -> int:

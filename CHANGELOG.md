@@ -4,6 +4,29 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.4.5 — 2026-10-26
+
+Ciclo 04, task O10.T7: l'adattatore dei programmi interattivi, `deck term` ([docs/adattatore.md](docs/adattatore.md)).
+
+- **Un terminale che vede solo l'agente.** Un programma gira in tmux, su un server tutto suo, e torna come
+  schermata:
+  - `session`: stato `running`, `waiting_input`, `stalled` o `exited`;
+  - `terminal`: righe, righe nuove, cursore, eco;
+  - `question`: tipo, opzioni, predefinito, origine;
+  - `parsed`.
+- **Azioni:** `start`, `show`, `answer`, `choose`, `key`, `wait`, `interrupt`, `close` con conferma, e
+  `profile_save`, `profile_show`, `profile_test`. Da Claude Code sono gli strumenti `mcp__deck__term_*`.
+- **Riconoscimento:** il profilo del programma, poi regole generiche costruite su segnali del kernel e del
+  terminale (`wchan`, eco, modo canonico, schermo alternativo).
+- **Profili:**
+  - quello di pacman è fornito con `deck`;
+  - quello di `ssh-keygen` l'ha scritto, provato e salvato da sola una sessione di Claude Code sulla Deck;
+  - una regola di domanda vale solo se finisce sulla riga del cursore.
+- **Sicurezza:** l'agente non digita mai segreti. Comandi e risposte passano le regole dell'accesso, ora in
+  `agentdeck/access.py`, condivise con la guardia di Claude Code. Il testo del terminale resta nei dati.
+- `CLAUDE.md` della Deck indica l'adattatore per i programmi interattivi.
+- Controllo dal vivo con otto programmi veri: 20 prove su 20. 201 test.
+
 ## 0.4.4 — 2026-10-26
 
 Ciclo 04, task O10.T6: `deck` diventa uno strumento nativo di Claude Code con il server MCP `deck mcp`.
