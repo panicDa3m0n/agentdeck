@@ -16,8 +16,9 @@ I principi completi sono in [PRINCIPI.md](PRINCIPI.md).
 
 - Arch Linux installato sull'NVMe della Deck, con snapshot Btrfs avviabili da GRUB.
 - Accesso dell'agente via SSH: `ssh agentdeck` (vedi [docs/accesso.md](docs/accesso.md)).
-- `deck`, l'interfaccia di sistema per agenti, installata sulla Deck: `ssh agentdeck deck`
-  (vedi [docs/deck.md](docs/deck.md) e il protocollo in [docs/protocollo.md](docs/protocollo.md)).
+- `deck`, l'interfaccia di sistema per agenti, installata sulla Deck: `ssh agentdeck deck`, e come server MCP
+  per Claude Code con `deck mcp` (vedi [docs/deck.md](docs/deck.md) e il protocollo in
+  [docs/protocollo.md](docs/protocollo.md)).
 - Lo schermo della Deck mostra, come un terminale, ogni comando dell'agente, la sua risposta e l'esito di `deck`
   (vedi [docs/schermo.md](docs/schermo.md)).
 - Versione corrente nel file [VERSION](VERSION); storia delle versioni in [CHANGELOG.md](CHANGELOG.md).
@@ -37,7 +38,7 @@ L'indice completo è in [docs/README.md](docs/README.md).
 | [docs/installazione.md](docs/installazione.md) | Installazione di Arch a fasi e configurazione del sistema |
 | [docs/accesso.md](docs/accesso.md) | Come l'agente raggiunge la Deck, sicurezza e recupero |
 | [docs/protocollo.md](docs/protocollo.md) | Protocollo dell'interfaccia agentica: schermate, azioni, conferme, autoprompting |
-| [docs/deck.md](docs/deck.md) | Il motore `deck`: uso, codice, installazione, nuovi componenti |
+| [docs/deck.md](docs/deck.md) | Il motore `deck`: uso, server MCP, codice, installazione, nuovi componenti |
 | [docs/claude-code.md](docs/claude-code.md) | Claude Code sulla Deck: installazione verificata, percorsi, aggiornamenti |
 | [docs/sviluppo.md](docs/sviluppo.md) | Repository, versioni, pubblicazione su GitHub, governance |
 

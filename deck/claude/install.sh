@@ -8,6 +8,8 @@
 #   1. stile di output "AgentDeck"      -> ~/.claude/output-styles/agentdeck.md e outputStyle nelle impostazioni utente
 #   2. regole stabili (CLAUDE.md)       -> /etc/claude-code/CLAUDE.md, generato da modello e invarianti
 #   3. vincoli duri e hook              -> /etc/claude-code/managed-settings.json (deny, niente bypass, hook)
+#   4. strumenti: il server MCP deck    -> `deck mcp` registrato per l'utente agent (~/.claude.json), i suoi
+#                                          strumenti permessi nelle impostazioni gestite (O10.T6)
 # Poi riavvia il servizio agentdeck-claude, perché le sessioni nuove leggano la configurazione.
 # Documentazione: docs/claude-code.md
 set -euo pipefail
@@ -38,5 +40,8 @@ s["outputStyle"] = "AgentDeck"
 p.write_text(json.dumps(s, indent=2) + "\n")
 EOF
   rm -f /tmp/CLAUDE.md /tmp/managed-settings.json /tmp/agentdeck.md
+  /usr/local/bin/deck mcp </dev/null || { echo "deck mcp non parte: lancia prima deck/install.sh"; exit 1; }
+  ~/.local/bin/claude mcp remove --scope user deck >/dev/null 2>&1 || true
+  ~/.local/bin/claude mcp add --transport stdio --scope user deck -- /usr/local/bin/deck mcp >/dev/null
   sudo systemctl restart agentdeck-claude
-  echo "installato: /etc/claude-code/{CLAUDE.md,managed-settings.json}, ~/.claude/output-styles/agentdeck.md"'
+  echo "installato: /etc/claude-code/{CLAUDE.md,managed-settings.json}, ~/.claude/output-styles/agentdeck.md, server MCP deck"'

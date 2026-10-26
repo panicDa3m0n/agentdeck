@@ -46,8 +46,10 @@ Indice: [README.md](README.md).
 2. **Registrazione della risposta.** Lo stesso script fa passare stdout e stderr del comando da `tee`: una
    copia arriva invariata a chi ha lanciato il comando, l'altra va nel journal (`agentdeck-out`,
    `agentdeck-err`). Codice di uscita, output ed errori restano identici, anche per dati binari (verificato
-   a ogni installazione). Sono esclusi i trasferimenti di file (`scp`, `sftp`, `rsync`) e le sessioni con
-   terminale (`ssh -t`), dove `tee` cambierebbe il comportamento dei programmi. `logger` usa `--size 65536`:
+   a ogni installazione). Sono esclusi i trasferimenti di file (`scp`, `sftp`, `rsync`), le sessioni con
+   terminale (`ssh -t`), dove `tee` cambierebbe il comportamento dei programmi, e il server MCP
+   (`ssh agentdeck deck mcp`), il cui flusso JSON-RPC non serve a chi guarda: le sue chiamate arrivano
+   comunque sullo schermo come esiti di `deck` (punto 3). `logger` usa `--size 65536`:
    con il limite predefinito di 1 KB spezzerebbe le righe lunghe in frammenti. Questa traccia è separata dai
    log del sistema: `deck logs` la esclude, salvo `include_agent=true` ([deck.md](deck.md)).
 3. **Esiti di `deck`.** Ogni chiamata scrive nel journal, con identificatore `agentdeck`, una riga

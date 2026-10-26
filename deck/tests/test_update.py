@@ -103,7 +103,10 @@ class ParserTests(unittest.TestCase):
         self.assertEqual(system.parse_pacman_qu(""), [])
 
     def test_grub_install_matches_installer(self):
-        installer = (Path(__file__).resolve().parent.parent.parent / "install" / "install.sh").read_text()
+        path = Path(__file__).resolve().parent.parent.parent / "install" / "install.sh"
+        if not path.is_file():  # sulla Deck c'è solo la copia di deck/, non l'installatore del repository
+            self.skipTest("install/install.sh is only in the repository")
+        installer = path.read_text()
         for cmd in system.GRUB_INSTALL:
             self.assertIn(" ".join(cmd), installer)
 

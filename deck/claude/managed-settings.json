@@ -1,5 +1,8 @@
 {
   "permissions": {
+    "allow": [
+      "mcp__deck"
+    ],
     "deny": [
       "Bash(*systemctl stop sshd*)",
       "Bash(*systemctl disable sshd*)",

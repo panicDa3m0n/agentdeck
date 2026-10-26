@@ -4,6 +4,26 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.4.4 — 2026-10-26
+
+Ciclo 04, task O10.T6: `deck` diventa uno strumento nativo di Claude Code con il server MCP `deck mcp`.
+
+- **Strumenti:** `open` apre qualunque schermata; ogni azione è uno strumento `<componente>_<azione>`, con lo
+  schema degli argomenti ricavato dalla specifica dei parametri. Oggi sono 19: `open` e 18 azioni.
+- **Risorse:** ogni schermata è anche una risorsa `deck:<indirizzo>`.
+- **Stesso motore:** il risultato è la schermata di sempre; le azioni distruttive restano in due passi, con
+  anteprima e codice. Descrizioni e istruzioni del server sono solo testo del sistema (INV-4).
+- **Sulla Deck:** registrato per l'utente `agent` e permesso dalle impostazioni gestite. Una sessione di
+  `claude -p` ha aperto `/status` e chiesto l'anteprima di un rollback senza confermarla.
+- **Dal Mac:** `ssh agentdeck deck mcp`, provato con un client JSON-RPC. `.mcp.json` lo offre alle sessioni di
+  Claude Code in questo repository.
+- `ssh-log.sh` non copia nel journal il flusso JSON-RPC; le chiamate arrivano comunque sullo schermo della Deck.
+- Corretto `test_update`: il confronto con `install/install.sh` si salta sulla Deck, dove l'installatore non
+  c'è. Prima fermava `deck/install.sh` ai test sulla Deck.
+- Fra la 0.4.3 e questa versione, O10.T5 (accesso da fuori casa) è stata chiusa come bloccata in attesa della
+  regola sul router: sshguard, scelta automatica LAN o internet in `ssh agentdeck`, Tailscale spento.
+- 172 test.
+
 ## 0.4.3 — 2026-10-26
 
 Ciclo 04, task O10.T3: cosa sa Claude Code di AgentDeck. Il prompt di sistema per la gestione dell'OS è in

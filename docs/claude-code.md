@@ -136,6 +136,21 @@ Verifiche del 26/10/2026, con `claude -p` nella cartella `~/agentdeck`:
 Test: [../deck/tests/test_claude_config.py](../deck/tests/test_claude_config.py), con la guardia (15 comandi
 bloccati e 10 permessi), l'hook di inizio sessione e il `CLAUDE.md` generato.
 
+## Gli strumenti: `deck` come server MCP (O10.T6)
+
+Oltre ai quattro strati, la sessione ha `deck` come strumento nativo:
+- il server MCP `deck` è registrato per l'utente `agent` (`claude mcp add --scope user`, in `~/.claude.json`)
+  da [../deck/claude/install.sh](../deck/claude/install.sh), e avvia `/usr/local/bin/deck mcp`;
+- espone `mcp__deck__open` per qualunque schermata e uno strumento per ogni azione, ad esempio
+  `mcp__deck__snapshot_create` e `mcp__deck__service_restart`; dettagli in [deck.md](deck.md), "Server MCP";
+- le impostazioni gestite li permettono tutti (`permissions.allow: ["mcp__deck"]`), senza chiedere a una persona.
+  Le azioni distruttive restano protette da `deck` stesso: prima l'anteprima, poi il codice di conferma;
+- `CLAUDE.md` indica gli strumenti MCP come via principale e la riga di comando `deck` come alternativa.
+
+Claude Code carica gli strumenti MCP solo quando servono: la sessione li trova con la ricerca degli strumenti, e
+così si è comportata nella prova del 26/10/2026 (`open /status`, poi l'anteprima di `snapshot_rollback` senza
+conferma).
+
 ## Aggiornamenti
 
 L'installazione nativa si aggiorna da sola in background, e la nuova versione parte al riavvio successivo di

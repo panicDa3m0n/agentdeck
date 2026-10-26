@@ -32,8 +32,8 @@ documento (invariante INV-9). Quando si modifica il codice, si aggiorna il docum
 
 - [protocollo.md](protocollo.md): protocollo di `deck` (schermate JSON, azioni, navigazione, errori,
   conferme con anteprima, autoprompting, sicurezza del canale istruzioni).
-- [deck.md](deck.md): il motore di `deck`: uso, codice, installazione, come aggiungere un componente.
-  Codice: [../deck/](../deck/deck).
+- [deck.md](deck.md): il motore di `deck`: uso, server MCP (`deck mcp`), codice, installazione, come aggiungere
+  un componente. Codice: [../deck/](../deck/deck), [../deck/agentdeck/mcp.py](../deck/agentdeck/mcp.py).
 - [schermo.md](schermo.md): lo schermo della Deck mostra, come un terminale, ogni comando dell'agente, la sua risposta e
   l'esito di `deck`. Codice: [../deck/screen/](../deck/screen/agentdeck_screen.py).
 

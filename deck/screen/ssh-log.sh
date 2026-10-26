@@ -6,7 +6,8 @@
 # - Stdout e stderr passano da tee: una copia arriva invariata a chi ha lanciato il comando, l'altra va nel
 #   journal (agentdeck-out, agentdeck-err). Codice di uscita e dati restano identici.
 # - Esclusi: trasferimenti di file (scp, sftp, rsync) e sessioni con terminale, dove tee cambierebbe il
-#   comportamento dei programmi.
+#   comportamento dei programmi; il server MCP (deck mcp), il cui flusso JSON-RPC non è da leggere: ogni sua
+#   chiamata va comunque sullo schermo come quelle di deck.
 # - Se qui qualcosa fallisse, il comando parte comunque: niente "set -e", ogni passo ignora i propri errori.
 #
 # Installato in /usr/local/lib/agentdeck/ssh-log.sh da screen/install-screen.sh.
@@ -16,7 +17,7 @@ if [ -n "${BASH_EXECUTION_STRING-}" ] && [ -z "${AGENTDECK_LOGGED-}" ]; then
   export AGENTDECK_LOGGED=1
   logger --size 65536 -t agentdeck-cmd -- "$BASH_EXECUTION_STRING" 2>/dev/null || true
   case "$BASH_EXECUTION_STRING" in
-    /usr/lib/ssh/sftp-server*|scp\ *|rsync\ --server*|internal-sftp*) ;;
+    /usr/lib/ssh/sftp-server*|scp\ *|rsync\ --server*|internal-sftp*|deck\ mcp|/usr/local/bin/deck\ mcp) ;;
     *)
       if [ ! -t 1 ] && [ ! -t 2 ] && command -v tee >/dev/null 2>&1 && command -v logger >/dev/null 2>&1; then
         exec > >(tee >(logger --size 65536 -t agentdeck-out 2>/dev/null)) \

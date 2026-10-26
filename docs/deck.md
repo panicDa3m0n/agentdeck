@@ -15,6 +15,48 @@ ssh agentdeck 'deck --pretty'      # JSON indentato, per leggerlo a occhio
 Ogni chiamata restituisce una schermata JSON e il codice di uscita `1` solo se la schermata è un errore.
 Sulla Deck una chiamata dura circa 0,09 secondi (Python 3.14, misura del 25/10/2026).
 
+## Server MCP (O10.T6)
+
+`deck mcp` serve le stesse schermate come server MCP su stdio, in JSON-RPC 2.0 con un messaggio per riga. Così
+Claude Code usa `deck` come strumento nativo, con i parametri tipizzati, invece di comporre comandi Bash
+(proposta A6.2 di [architettura.md](architettura.md)). Codice: [../deck/agentdeck/mcp.py](../deck/agentdeck/mcp.py);
+`mcp` è una parola riservata della riga di comando, non un indirizzo.
+
+| Cosa offre | Come |
+|---|---|
+| Strumento `open` | Apre qualunque schermata; `path` è uno degli indirizzi dei componenti |
+| Uno strumento per azione | `<componente>_<azione>`, per esempio `snapshot_create`, `service_restart`, `logs_query`; lo schema degli argomenti nasce dalla specifica dei parametri (`int` diventa `integer`, `enum` un elenco chiuso, `max_length` diventa `maxLength`) |
+| Annotazioni | `readOnlyHint` per le azioni `read`, `destructiveHint` per le `destructive` |
+| Risorse | Ogni schermata è anche una risorsa `deck:<indirizzo>`, per esempio `deck:/status` |
+| Istruzioni del server | Testo del sistema, consegnato all'avvio: dati e istruzioni separati, partire da `/status`, conferme in due passi |
+
+- **Il risultato di ogni strumento è la schermata del motore**, prodotta da `cli.render` come per la riga di
+  comando. Anteprime, codici di conferma, errori e convalida restano identici.
+- **Le azioni distruttive restano in due passi.** Lo strumento ha un argomento `confirm` facoltativo: senza
+  quello non cambia nulla e restituisce l'anteprima con `confirm.token`; con lo stesso codice e gli stessi
+  argomenti esegue. Una schermata di errore arriva come risultato con `isError: true`.
+- **INV-4.** Nomi, titoli e descrizioni degli strumenti nascono solo dalle etichette `SysText` dei componenti e
+  da modelli scritti in `mcp.py`. Il testo esterno resta nei dati della schermata.
+- **Flusso pulito.** Durante il servizio, `print` finisce su stderr, così niente di estraneo si mescola al
+  JSON-RPC. Ogni chiamata va sullo schermo della Deck come quelle di `deck`. `ssh-log.sh` non copia il flusso
+  di `deck mcp` nel journal ([schermo.md](schermo.md)).
+- **Versioni del protocollo MCP accettate:** 2025-11-25, 2025-06-18, 2025-03-26, 2024-11-05. A un client che ne
+  chiede un'altra risponde con 2025-06-18.
+
+Dove è registrato:
+- **sulla Deck**, per l'utente `agent`: `claude mcp add --transport stdio --scope user deck --
+  /usr/local/bin/deck mcp`, eseguito da [../deck/claude/install.sh](../deck/claude/install.sh). Le
+  impostazioni gestite permettono tutti gli strumenti `mcp__deck` ([claude-code.md](claude-code.md));
+- **sul Mac**, per le sessioni in questo repository: [../.mcp.json](../.mcp.json) avvia `ssh agentdeck deck mcp`.
+  Claude Code chiede di approvarlo alla prima apertura.
+
+Verifiche del 26/10/2026:
+- dal Mac, con un client JSON-RPC via SSH: inizializzazione, 19 strumenti, `open /status`, `service_show`,
+  errore `NOT_FOUND` come risultato di errore, lettura di una risorsa, tutto in 1,7 secondi;
+- da una sessione di Claude Code sulla Deck (`claude -p`): server collegato, 19 strumenti; la sessione ha aperto
+  `/status` e chiesto l'anteprima di un rollback con `snapshot_rollback` senza confermarla, nessun permesso
+  negato.
+
 ## Componenti attivi
 
 | Indirizzo | Modulo | Contenuto |
@@ -350,6 +392,8 @@ hanno ancora un'azione collegata.
 | [../deck/agentdeck/engine.py](../deck/agentdeck/engine.py) | Motore: indirizzi, componenti, validazione dei parametri, conferme, schermate di errore |
 | [../deck/agentdeck/protocol.py](../deck/agentdeck/protocol.py) | Costruzione e validazione delle schermate; `SysText` e `sys_text()` per il canale istruzioni |
 | [../deck/agentdeck/confirm.py](../deck/agentdeck/confirm.py) | Codici di conferma: una azione, quei parametri, 5 minuti, una volta sola |
+| [../deck/agentdeck/mcp.py](../deck/agentdeck/mcp.py) | Server MCP: strumenti dalle azioni, risorse, JSON-RPC su stdio (`deck mcp`) |
+| [../deck/tests/test_mcp.py](../deck/tests/test_mcp.py) | Test del server MCP: strumenti e schemi, conferme in due passi, errori, risorse, flusso stdio, INV-4 |
 | [../deck/agentdeck/components/](../deck/agentdeck/components/__init__.py) | Un modulo per componente; l'elenco dei componenti attivi è in `__init__.py` |
 | [../deck/agentdeck/system.py](../deck/agentdeck/system.py) | Letture dello stato della Deck da `/proc`, `/sys` e comandi; parser puri |
 | [../deck/agentdeck/wifi_switch.py](../deck/agentdeck/wifi_switch.py) | Cambio Wi-Fi con ritorno automatico, eseguito come root in un'unità transitoria |
@@ -420,3 +464,5 @@ I codici di conferma in sospeso stanno in `~/.local/state/agentdeck/confirm.json
 3. Scrivere i test: almeno una chiamata per schermata e per azione, validate contro il protocollo e
    controllate per l'assenza di testo esterno nel canale istruzioni (come fa `DeckTests.call`).
 4. Documentarlo qui, nella tabella dei componenti, e in un documento suo se serve (INV-9).
+
+Le sue azioni diventano da sole strumenti del server MCP (`<componente>_<azione>`): non serve altro codice.

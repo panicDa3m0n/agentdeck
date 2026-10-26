@@ -1,6 +1,7 @@
 """Riga di comando di deck: legge la chiamata, produce una schermata JSON, imposta il codice di uscita.
 
 Uso: deck [indirizzo] [azione] [nome=valore ...] [--pretty]
+     deck mcp   (le stesse schermate come server MCP su stdio: agentdeck/mcp.py)
 Specifica: docs/protocollo.md (sezione 2). Documentazione: docs/deck.md.
 """
 from __future__ import annotations
@@ -80,6 +81,9 @@ def log_call(result: dict, argv: list) -> None:
 
 def main(argv: Optional[list] = None) -> int:
     argv = sys.argv[1:] if argv is None else argv
+    if argv == ["mcp"]:  # server MCP su stdio (docs/deck.md, "Server MCP"): mcp non è un indirizzo
+        from .mcp import serve
+        return serve()
     result, code = render(Deck(all_components()), argv)
     if "--pretty" in argv:
         print(json.dumps(result, ensure_ascii=False, indent=2))

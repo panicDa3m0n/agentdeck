@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "deck": {
+      "type": "stdio",
+      "command": "ssh",
+      "args": ["-o", "BatchMode=yes", "-o", "ConnectTimeout=10", "agentdeck", "deck", "mcp"]
+    }
+  }
+}

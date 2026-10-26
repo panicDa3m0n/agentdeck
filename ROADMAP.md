@@ -10,10 +10,10 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O10` Claude Code sulla Deck, usato davvero — 5 task: 3 completate, 0 in corso, 1 da fare, 1 bloccate
+- **Obiettivo attivo:** `O10` Claude Code sulla Deck, usato davvero — 9 task: 4 completate, 0 in corso, 4 da fare, 1 bloccate
 - **Task attiva:** —
-- **Ultima task gestita:** `O10.T5` — bloccata — Deck e Mac pronti (sshguard, ssh agentdeck LAN o internet, Tailscale spento, docs); manca R6, regola sul router, quindi la prova da hotspot
-- **Ultimo aggiornamento:** 2026-10-26 01:11
+- **Ultima task gestita:** `O10.T6` — completata — deck mcp: open più 18 strumenti tipizzati, risorse, conferme in due passi; provato da claude -p sulla Deck e via ssh dal Mac; 172 test
+- **Ultimo aggiornamento:** 2026-10-26 01:23
 
 ## Richieste attive
 
@@ -46,6 +46,16 @@ _Mancanze di progetto che l'agente non può risolvere da solo. L'utente le confe
   *gate previsto:* Snapshot prima; SSH della Deck raggiungibile da internet su scarlethome.ddns.net con porta esterna non standard, solo chiave (password e root disabilitati), sshguard attivo, mappatura con regola fissa di port forwarding sul router (UPnP del router rifiuta le azioni, N41); ssh agentdeck sceglie da solo LAN o internet, con riserva solo LAN; provato da fuori casa (hotspot): ssh, deck status e deck/install.sh da questa chat; INV-1 e INV-5 rispettati; documentazione. · *blocco:* ✖ Deck e Mac pronti (sshguard, ssh agentdeck LAN o internet, Tailscale spento, docs); manca R6, regola sul router, quindi la prova da hotspot
   *rischio:* 45/100 — Espone l'SSH della Deck su internet (INV-5, decisione dell'utente) e tocca router e canale dell'agente (INV-1): snapshot prima, sshd invariato e solo chiave, LAN mai bloccata da sshguard, verifica dopo ogni passo.
   *annotazioni:* `N34`, `N35`, `N36`, `N37`, `N38`, `N39`, `N40`, `N41`, `N43`
+- [x] `O10.T6` deck mcp: deck come strumento nativo di Claude Code (A6.2) — *perimetro:* `deck/, docs/, configurazione di Claude Code sulla Deck (~/.claude.json, /etc/claude-code), .mcp.json (server deck per le sessioni di Claude Code sul Mac, via ssh)`
+  *gate previsto:* Server MCP stdio con la sola libreria standard che serve il protocollo di deck: uno strumento per ogni azione con parametri tipizzati, uno per aprire le schermate, risorse per le schermate, istruzioni scritte dal sistema; distruttive in due passi con anteprima e codice; INV-4 rispettata; test; registrato in Claude Code sulla Deck e provato da una sessione (claude -p) e dal Mac via ssh; documentazione. · *gate confermato:* ✔ deck mcp: open più 18 strumenti tipizzati, risorse, conferme in due passi; provato da claude -p sulla Deck e via ssh dal Mac; 172 test
+  *rischio:* 20/100 — Nuova interfaccia sullo stesso motore di deck, con anteprime e conferme invariate; sul sistema aggiunge solo la registrazione del server in Claude Code. Rischio: un'azione distruttiva senza anteprima, escluso dai test.
+  *annotazioni:* `N44`
+- [ ] `O10.T7` Adattatore dei programmi interattivi: deck term con schermate JSON e profili — *perimetro:* `deck/, docs/, stato di deck sulla Deck (~/.local/state/agentdeck, /var/lib/agentdeck)`
+  *gate previsto:* deck term avvia un programma in tmux e lo presenta come schermata JSON (session, terminal, question, parsed); azioni per rispondere, scegliere, premere tasti, aspettare, interrompere; segreti mai digitati dall'agente; profili per programma scritti dall'agente; riconoscimento provato su programmi veri della Deck; INV-4; test; documentazione.
+- [ ] `O10.T8` Obblighi del sistema e hook di autoprompting per Claude Code (A6.3) — *perimetro:* `deck/, docs/, /etc/claude-code sulla Deck`
+  *gate previsto:* deck obligations elenca gli obblighi del sistema (solo avvisi); hook che indicano l'azione di deck al posto dei comandi grezzi, danno le verifiche dopo le azioni, creano l'obbligo del profilo dopo l'installazione di un pacchetto, portano a ogni turno avvisi e obblighi nuovi e registrano la sessione; provati da una sessione di Claude Code sulla Deck; test; documentazione.
+- [ ] `O10.T9` Skill di AgentDeck e prova d'insieme da una sessione sulla Deck — *perimetro:* `deck/claude/, docs/, ~/.claude/skills sulla Deck`
+  *gate previsto:* Skill di AgentDeck per Claude Code (installare un pacchetto, cambiare un servizio, usare un programma interattivo, gestire avvisi e obblighi, tornare indietro), installate dal repository; prova d'insieme da una sessione di Claude Code sulla Deck che usa strumenti MCP, adattatore e obblighi; documentazione completa.
 
 ### `O11` Aggiornamento reale della Deck con deck update (O9) — in corso
 
@@ -75,3 +85,4 @@ _Una riga per nota, sempre legata a una task. `wf.sh notes` per leggerle._
 - `N41` (`O10.T5`) UPnP non utilizzabile (26/10 01:05): il router ZTE F6746G annuncia l'IGD ma rifiuta ogni azione con errore 800 'do not execute action(all)' (anche GetExternalIPAddress). La mappatura non può farla la Deck: serve una regola fissa di port forwarding sul router (TCP 49222 esterna -> 192.168.1.49:22) e la prenotazione DHCP del MAC 14:d4:24:0a:8e:45, fatte dall'utente dal pannello del router. miniupnpc rimosso. Gate da correggere: mappatura con regola fissa sul router invece che gestita dalla Deck. — 2026-10-26 01:02
 - `N42` (`O10.T4`) Da O10.T5: SSH della Deck ora esposto su internet (porta esterna 49222) con sshguard. Le regole di Claude Code sulla Deck (deck/claude/CLAUDE.template.md) non lo dicono: valutare di aggiungere che sshguard non va fermato né la whitelist allargata, ed eventualmente la guardia su stop o disable di sshguard. Utile anche un avviso di deck status se sshguard non è attivo. — 2026-10-26 01:06
 - `N43` (`O10.T5`) R5 (Tailscale) superata dalla decisione N40: la strada è SSH esposto con port forwarding; tailscaled fermato e disabilitato sulla Deck, nessuna regola o porta rimasta. La Deck resta registrata nella tailnet dell'utente: si può togliere dalla console di Tailscale. — 2026-10-26 01:06
+- `N44` (`O10.T6`) Trovato installando (26/10): test_update.test_grub_install_matches_installer (da O6.T1) falliva sulla Deck perché legge install/install.sh del repository, che in /opt/agentdeck non c'è; deck/install.sh si fermava ai test sulla Deck e saltava le prove finali. Corretto con skipTest quando il file manca: sul Mac il confronto con l'installatore resta identico. — 2026-10-26 01:19

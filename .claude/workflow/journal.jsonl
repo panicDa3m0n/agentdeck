@@ -1003,3 +1003,60 @@
 {"at": "2026-10-26 01:11", "testo": "TASK CHIUSA O10.T5 — bloccata: Deck e Mac pronti (sshguard, ssh agentdeck LAN o internet, Tailscale spento, docs); manca R6, regola sul router, quindi la prova da hotspot"}
 {"at": "2026-10-26 01:11", "testo": "[-] bash: ~/claude-rules/bin/wf.sh risk 45 \"Espone l'SSH della Deck su internet (INV-5, decisione dell'utente) e tocca r"}
 {"at": "2026-10-26 01:11", "testo": "[-] bash: ~/claude-rules/bin/wf.sh versione --presenta 2>&1 | head -20; echo \"== tag\"; git tag --sort=-v:refname | head "}
+{"at": "2026-10-26 01:11", "testo": "[-] bash: git add -A && git commit -q -F - <<'EOF' O10.T5 bloccata: accesso da fuori casa con SSH su scarlethome.ddns.ne"}
+{"at": "2026-10-26 01:14", "testo": "[-] bash: cat deck/screen/ssh-log.sh && sed -n 1,60p deck/agentdeck/confirm.py && ssh -o BatchMode=yes agentdeck '~/.loc"}
+{"at": "2026-10-26 01:14", "testo": "TASK AGGIUNTA O10.T6 in O10 — deck mcp: deck come strumento nativo di Claude Code (A6.2)"}
+{"at": "2026-10-26 01:14", "testo": "TASK AGGIUNTA O10.T7 in O10 — Adattatore dei programmi interattivi: deck term con schermate JSON e profili"}
+{"at": "2026-10-26 01:14", "testo": "TASK AGGIUNTA O10.T8 in O10 — Obblighi del sistema e hook di autoprompting per Claude Code (A6.3)"}
+{"at": "2026-10-26 01:14", "testo": "TASK AGGIUNTA O10.T9 in O10 — Skill di AgentDeck e prova d'insieme da una sessione sulla Deck"}
+{"at": "2026-10-26 01:14", "testo": "[-] bash: W=~/claude-rules/bin/wf.sh $W task-add --obj O10 --title \"deck mcp: deck come strumento nativo di Claude Code "}
+{"at": "2026-10-26 01:14", "testo": "TASK APERTA O10.T6 — deck mcp: deck come strumento nativo di Claude Code (A6.2) | perimetro: deck/, docs/, configurazione di Claude Code sulla Deck (~/.claude.json, /etc/claude-code) | gate: Server MCP stdio con la sola libreria standard che serve il protocollo di deck: uno strumento per ogni azione con parametri tipizzati, uno per aprire le schermate, risorse per le schermate, istruzioni scritte dal sistema; distruttive in due passi con anteprima e codice; INV-4 rispettata; test; registrato in Claude Code sulla Deck e provato da una sessione (claude -p) e dal Mac via ssh; documentazione. | rischio: 20"}
+{"at": "2026-10-26 01:14", "testo": "[O10.T6] bash: ~/claude-rules/bin/wf.sh task-start --id O10.T6 --risk 20 --why \"Nuova interfaccia sullo stesso motore di deck"}
+{"at": "2026-10-26 01:15", "testo": "[O10.T6] bash: ssh -o BatchMode=yes agentdeck 'cd /opt/agentdeck && AGENTDECK_NO_LOG=1 python3 -c \" import json,time from age"}
+{"at": "2026-10-26 01:15", "testo": "[O10.T6] bash: sed -n 1,80p deck/tests/test_deck.py && grep -n \"^class\\|^    def test\" deck/tests/test_deck.py | head -50"}
+{"at": "2026-10-26 01:17", "testo": "[O10.T6] Write  deck/agentdeck/mcp.py", "task": "O10.T6", "tipo": "file", "tool": "Write", "file": "deck/agentdeck/mcp.py"}
+{"at": "2026-10-26 01:17", "testo": "[O10.T6] Edit  deck/agentdeck/mcp.py", "task": "O10.T6", "tipo": "file", "tool": "Edit", "file": "deck/agentdeck/mcp.py"}
+{"at": "2026-10-26 01:17", "testo": "[O10.T6] Edit  deck/agentdeck/mcp.py", "task": "O10.T6", "tipo": "file", "tool": "Edit", "file": "deck/agentdeck/mcp.py"}
+{"at": "2026-10-26 01:17", "testo": "[O10.T6] Edit  deck/agentdeck/cli.py", "task": "O10.T6", "tipo": "file", "tool": "Edit", "file": "deck/agentdeck/cli.py"}
+{"at": "2026-10-26 01:17", "testo": "[O10.T6] Edit  deck/agentdeck/cli.py", "task": "O10.T6", "tipo": "file", "tool": "Edit", "file": "deck/agentdeck/cli.py"}
+{"at": "2026-10-26 01:17", "testo": "[O10.T6] Edit  deck/agentdeck/components/protocol_info.py", "task": "O10.T6", "tipo": "file", "tool": "Edit", "file": "deck/agentdeck/components/protocol_info.py"}
+{"at": "2026-10-26 01:18", "testo": "[O10.T6] Write  deck/tests/test_mcp.py", "task": "O10.T6", "tipo": "file", "tool": "Write", "file": "deck/tests/test_mcp.py"}
+{"at": "2026-10-26 01:18", "testo": "[O10.T6] bash: cd /Users/snj/linuxai-steamdeck/deck && python3 -m unittest discover -s tests -q 2>&1 | tail -15"}
+{"at": "2026-10-26 01:18", "testo": "[O10.T6] Edit  deck/screen/ssh-log.sh", "task": "O10.T6", "tipo": "file", "tool": "Edit", "file": "deck/screen/ssh-log.sh"}
+{"at": "2026-10-26 01:18", "testo": "[O10.T6] Edit  deck/screen/ssh-log.sh", "task": "O10.T6", "tipo": "file", "tool": "Edit", "file": "deck/screen/ssh-log.sh"}
+{"at": "2026-10-26 01:18", "testo": "[O10.T6] bash: cd /Users/snj/linuxai-steamdeck && grep -n \"managed\\|allow\\|deny\\|def test\" deck/tests/test_claude_config.py |"}
+{"at": "2026-10-26 01:18", "testo": "[O10.T6] Edit  deck/claude/managed-settings.json", "task": "O10.T6", "tipo": "file", "tool": "Edit", "file": "deck/claude/managed-settings.json"}
+{"at": "2026-10-26 01:18", "testo": "[O10.T6] Edit  deck/claude/install.sh", "task": "O10.T6", "tipo": "file", "tool": "Edit", "file": "deck/claude/install.sh"}
+{"at": "2026-10-26 01:18", "testo": "[O10.T6] Edit  deck/claude/install.sh", "task": "O10.T6", "tipo": "file", "tool": "Edit", "file": "deck/claude/install.sh"}
+{"at": "2026-10-26 01:18", "testo": "[O10.T6] Edit  deck/claude/install.sh", "task": "O10.T6", "tipo": "file", "tool": "Edit", "file": "deck/claude/install.sh"}
+{"at": "2026-10-26 01:18", "testo": "[O10.T6] Edit  deck/claude/CLAUDE.template.md", "task": "O10.T6", "tipo": "file", "tool": "Edit", "file": "deck/claude/CLAUDE.template.md"}
+{"at": "2026-10-26 01:19", "testo": "[O10.T6] bash: ssh -o BatchMode=yes agentdeck 'deck snapshot create \"description=prima di deck mcp (O10.T6)\" | python3 -c \"im"}
+{"at": "2026-10-26 01:19", "testo": "[O10.T6] Edit  deck/tests/test_update.py", "task": "O10.T6", "tipo": "file", "tool": "Edit", "file": "deck/tests/test_update.py"}
+{"at": "2026-10-26 01:19", "testo": "ANNOTAZIONE N44 su O10.T6 — Trovato installando (26/10): test_update.test_grub_install_matches_installer (da O6.T1) falliva sulla Deck perché legge install/install.sh del repository, che in /opt/agentdeck non c'è; deck/install.sh si fermava ai test sulla Deck e saltava le prove finali. Corretto con skipTest quando il file manca: sul Mac il confronto con l'installatore resta identico."}
+{"at": "2026-10-26 01:19", "testo": "[O10.T6] bash: ~/claude-rules/bin/wf.sh note-add --task O10.T6 --text \"Trovato installando (26/10): test_update.test_grub_ins"}
+{"at": "2026-10-26 01:20", "testo": "[O10.T6] bash: S=/private/tmp/claude-502/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/scratchpad; cat > "}
+{"at": "2026-10-26 01:20", "testo": "[O10.T6] bash: bash deck/claude/install.sh 2>&1 | tail -4; ssh -o BatchMode=yes agentdeck '~/.local/bin/claude mcp list 2>&1 "}
+{"at": "2026-10-26 01:20", "testo": "[O10.T6] FALLITO Bash: S=/private/tmp/claude-502/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d655"}
+{"at": "2026-10-26 01:20", "testo": "FALLIMENTO [Bash] execution_error: RAW Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicit"}
+{"at": "2026-10-26 01:21", "testo": "[O10.T6] bash: S=/private/tmp/claude-502/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/scratchpad; cat > "}
+{"at": "2026-10-26 01:21", "testo": "ERRORE RISOLTO — execution_error: RAW Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicit — Errore nel mio parser dello stream (risultato di ToolSearch senza blocco di testo), non nella sessione: parser corretto e file riletto, la prova è riuscita", "tipo": "errore-risolto"}
+{"at": "2026-10-26 01:21", "testo": "[O10.T6] FALLITO Bash: ~/claude-rules/bin/wf.sh errore --risolto \"Errore nel mio parser dello stream (risultato d"}
+{"at": "2026-10-26 01:21", "testo": "FALLIMENTO [Bash] execution_error: [bgErrore]ERRORE DICHIARATO RISOLTO[/bgErrore]"}
+{"at": "2026-10-26 01:21", "testo": "[O10.T6] bash: ls -d ~/Library/Application\\ Support/Claude/claude-code/*/ 2>/dev/null | tail -3; find ~/Library/Application\\ "}
+{"at": "2026-10-26 01:21", "testo": "[O10.T6] bash: C=\"$HOME/Library/Application Support/Claude/claude-code/2.1.308/a93ded4b1b47/claude.app/Contents/MacOS/claude\""}
+{"at": "2026-10-26 01:22", "testo": "[O10.T6] Edit  docs/deck.md", "task": "O10.T6", "tipo": "file", "tool": "Edit", "file": "docs/deck.md"}
+{"at": "2026-10-26 01:22", "testo": "[O10.T6] Edit  docs/deck.md", "task": "O10.T6", "tipo": "file", "tool": "Edit", "file": "docs/deck.md"}
+{"at": "2026-10-26 01:22", "testo": "[O10.T6] Edit  docs/deck.md", "task": "O10.T6", "tipo": "file", "tool": "Edit", "file": "docs/deck.md"}
+{"at": "2026-10-26 01:22", "testo": "[O10.T6] Write  .mcp.json", "task": "O10.T6", "tipo": "file", "tool": "Write", "file": ".mcp.json"}
+{"at": "2026-10-26 01:22", "testo": "[O10.T6] Edit  docs/protocollo.md", "task": "O10.T6", "tipo": "file", "tool": "Edit", "file": "docs/protocollo.md"}
+{"at": "2026-10-26 01:22", "testo": "PERIMETRO ESTESO su O10.T6 (+.mcp.json (server deck per le sessioni di Claude Code sul Mac, via ssh))"}
+{"at": "2026-10-26 01:22", "testo": "[O10.T6] Edit  docs/schermo.md", "task": "O10.T6", "tipo": "file", "tool": "Edit", "file": "docs/schermo.md"}
+{"at": "2026-10-26 01:22", "testo": "[O10.T6] Edit  docs/claude-code.md", "task": "O10.T6", "tipo": "file", "tool": "Edit", "file": "docs/claude-code.md"}
+{"at": "2026-10-26 01:22", "testo": "[O10.T6] bash: python3 - <<'EOF' from pathlib import Path p = Path(\"docs/README.md\"); t = p.read_text() old = \"- [deck.md](de"}
+{"at": "2026-10-26 01:23", "testo": "[O10.T6] bash: python3 - <<'EOF' from pathlib import Path p = Path(\"README.md\"); t = p.read_text() old = \"- `deck`, l'interfa"}
+{"at": "2026-10-26 01:23", "testo": "TASK CHIUSA O10.T6 — completata: deck mcp: open più 18 strumenti tipizzati, risorse, conferme in due passi; provato da claude -p sulla Deck e via ssh dal Mac; 172 test"}
+{"at": "2026-10-26 01:23", "testo": "VERSIONE 0.4.4 (O10.T6)"}
+{"at": "2026-10-26 01:23", "testo": "[-] bash: ~/claude-rules/bin/wf.sh task-close --done \"deck mcp: open più 18 strumenti tipizzati, risorse, conferme in du"}
+{"at": "2026-10-26 01:23", "testo": "[-] bash: cd /Users/snj/linuxai-steamdeck && python3 -c \"import json; p=json.load(open('.claude/workflow/project.json'))"}
+{"at": "2026-10-26 01:23", "testo": "VERSIONI scelte dall'utente: governance"}
+{"at": "2026-10-26 01:23", "testo": "[-] Edit  CHANGELOG.md", "task": "-", "tipo": "file", "tool": "Edit", "file": "CHANGELOG.md"}

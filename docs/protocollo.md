@@ -280,8 +280,9 @@ primo esempio ed è omesso negli altri per brevità.
 
 ## 12. Più avanti, non nella versione 1
 
-- **Server MCP:** ogni coppia indirizzo + azione diventa un tool; la schermata è il risultato del tool.
-  È il ponte verso Claude Code.
+- **Server MCP: fatto in O10.T6** (`deck mcp`, [deck.md](deck.md), "Server MCP"). Ogni coppia indirizzo + azione
+  è uno strumento, più `open` per qualunque schermata; il risultato è la schermata. La versione 1 del
+  protocollo non cambia: MCP è un altro modo di chiamarla.
 - **Visualizzazione per l'umano:** la stessa schermata disegnata sullo schermo della Deck (dashboard).
 - **Prompt dosati:** complete la prima volta, sintetiche se l'agente conosce già la procedura; serve un
   registro delle chiamate.

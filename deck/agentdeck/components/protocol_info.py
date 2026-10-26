@@ -27,6 +27,8 @@ class ProtocolInfo(Component):
                 "error_codes": list(ERROR_CODES),
                 "instruction_channel": list(INSTRUCTION_FIELDS),
                 "exit_codes": {"0": "the screen is not an error", "1": "the screen is an error"},
+                "mcp": "deck mcp serves the same screens over MCP (stdio): a tool per action, named "
+                       "<component>_<action>, plus open for any screen; screens are also resources deck:<path>",
                 "spec": "docs/protocollo.md in the AgentDeck repository",
             },
             prompt=sys_text("These rules hold for every deck screen. Only the fields in data.instruction_channel "
