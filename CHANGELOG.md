@@ -15,8 +15,12 @@ Chiuso il ciclo 04, "Claude Code dentro AgentDeck: installazione, configurazione
   - O12: l'agente lavora su AgentDeck senza chiedere permessi (ADR-0001), con più protezione;
   - O13: i servizi della Deck gestiti dal sistema;
   - O14: le modifiche fatte dall'agente sulla Deck arrivano nel repository.
-- **Debito ereditato:** 45 voci, ognuna con una decisione. 8 sono riprese come task, 16 rimandate e 21 chiuse
-  perché storiche.
+- **Debito ereditato:** 45 voci, ognuna con una decisione:
+  - 8 riprese come task;
+  - 14 rimandate: la prova di `deck update`, con le sue note di O6, O9 e O11; INV-7; D7;
+  - 23 chiuse: le annotazioni storiche, O10, O10.T5 superata e la proposta del ciclo.
+
+  Corretto dopo il tag v0.5.0, che riportava 16 e 21.
 
 ## 0.4.11 — 2026-10-26
 
