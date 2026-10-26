@@ -4,6 +4,22 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.4.8 — 2026-10-26
+
+Ciclo 04, task O10.T10, ripresa di O10.T5: l'accesso alla Deck da fuori casa è verificato
+([docs/accesso.md](docs/accesso.md)).
+
+- La regola sul router (TCP 49222 verso 192.168.1.49:22) è attiva.
+- Dall'hotspot del telefono:
+  - `ssh agentdeck` ha scelto da solo `scarlethome.ddns.net:49222` ed è entrato in 3 secondi;
+  - la Deck vede l'indirizzo esterno vero, quindi sshguard può bloccare chi sbaglia;
+  - `deck status` risponde, e `deck/install.sh` completo dura 35 secondi.
+- Da casa il router rigira le connessioni via nome pubblico con il proprio IP ("hairpin"). `ssh agentdeck` in casa
+  usa la LAN.
+- Nuovo `install/remote-check.sh`, per ripetere la prova: porta il Mac sull'hotspot (la password la scrive
+  l'utente e non viene salvata), verifica, e lo riporta sul Wi-Fi di casa.
+- Osservato: dopo il riavvio del router la Deck è sul Wi-Fi a 2,4 GHz (`WIFI_BAND_2G`).
+
 ## 0.4.7 — 2026-10-26
 
 Ciclo 04, task O10.T9: le skill di AgentDeck per Claude Code e la prova d'insieme

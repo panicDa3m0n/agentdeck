@@ -1188,3 +1188,30 @@
 {"at": "2026-10-26 02:04", "testo": "VERSIONI scelte dall'utente: governance"}
 {"at": "2026-10-26 02:04", "testo": "[-] bash: ~/claude-rules/bin/wf.sh task-close --done \"6 skill di AgentDeck installate; prova d'insieme: tree installato "}
 {"at": "2026-10-26 02:04", "testo": "[-] Edit  CHANGELOG.md", "task": "-", "tipo": "file", "tool": "Edit", "file": "CHANGELOG.md"}
+{"at": "2026-10-26 02:05", "testo": "[-] bash: printf '0.4.7\\n' > VERSION && cat VERSION && git add -A && git commit -q -F - <<'EOF' Versione 0.4.7: skill di"}
+{"at": "2026-10-26 02:05", "testo": "[-] bash: cat >> /Users/snj/.claude/projects/-Users-snj-linuxai-steamdeck/memory/project-steamdeck-agentic-server.md <<'"}
+{"at": "2026-10-26 02:06", "testo": "[-] Write  ../../../private/tmp/claude-502/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/scratchpad/agentdeck-claude-report.html", "task": "-", "tipo": "file", "tool": "Write", "file": "../../../private/tmp/claude-502/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/scratchpad/agentdeck-claude-report.html"}
+{"at": "2026-10-26 09:06", "testo": "TASK AGGIUNTA O10.T10 in O10 — Ripresa di O10.T5: verifica dell'accesso da fuori casa con la regola sul router"}
+{"at": "2026-10-26 09:06", "testo": "TASK APERTA O10.T10 — Ripresa di O10.T5: verifica dell'accesso da fuori casa con la regola sul router | perimetro: configurazione SSH del Mac (~/.ssh/config), sola lettura sulla Deck, docs/ | gate: La porta TCP 49222 di scarlethome.ddns.net arriva a sshd della Deck; da fuori casa (hotspot) funzionano ssh agentdeck, deck status e deck/install.sh da questa chat; sshguard vede gli indirizzi esterni reali; INV-1 e INV-5 rispettati; documentazione aggiornata. | rischio: 15"}
+{"at": "2026-10-26 09:06", "testo": "[O10.T10] bash: W=~/claude-rules/bin/wf.sh; $W task-add --obj O10 --title \"Ripresa di O10.T5: verifica dell'accesso da fuori c"}
+{"at": "2026-10-26 09:06", "testo": "[O10.T10] bash: echo \"== dns: $(dig +short scarlethome.ddns.net A)\"; echo \"== ip pubblico visto dalla Deck: $(ssh -o BatchMode"}
+{"at": "2026-10-26 09:06", "testo": "[O10.T10] bash: ssh -o BatchMode=yes agentdeck 'journalctl -t sshd-session --since \"-5min\" --no-pager -o cat | grep -E \"Accept"}
+{"at": "2026-10-26 09:06", "testo": "ANNOTAZIONE N47 su O10.T10 — Verifica da casa (26/10): regola del router attiva. scarlethome.ddns.net = 151.81.1.126 = IP pubblico; la porta 49222 risponde SSH-2.0-OpenSSH_10.6; ssh agentdeck-wan entra (journal: Accepted publickey for agent from 151.81.1.126). Il router fa hairpin con SNAT: da casa le connessioni via nome pubblico arrivano con l'IP pubblico, non con quello LAN, quindi non sono coperte dalla whitelist di sshguard (una prova a vuoto con nc ha contato 2 punti). Manca la prova da una rete esterna (hotspot) per il gate."}
+{"at": "2026-10-26 09:06", "testo": "[O10.T10] bash: ~/claude-rules/bin/wf.sh note-add --task O10.T10 --text \"Verifica da casa (26/10): regola del router attiva. s"}
+{"at": "2026-10-26 09:09", "testo": "[O10.T10] bash: diff <(sed -n '8,200p' /Users/snj/.claude/projects/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e97"}
+{"at": "2026-10-26 09:09", "testo": "[O10.T10] bash: networksetup -listallhardwareports | awk '/Wi-Fi/{getline; print \"interfaccia:\", $2}'; ipconfig getsummary en0"}
+{"at": "2026-10-26 09:10", "testo": "PERIMETRO ESTESO su O10.T10 (+install/remote-check.sh (prova dell'accesso da una rete esterna))"}
+{"at": "2026-10-26 09:10", "testo": "[O10.T10] Write  install/remote-check.sh", "task": "O10.T10", "tipo": "file", "tool": "Write", "file": "install/remote-check.sh"}
+{"at": "2026-10-26 09:10", "testo": "[O10.T10] bash: python3 - <<'EOF' from pathlib import Path p = Path(\"install/remote-check.sh\"); t = p.read_text() t = t.replac"}
+{"at": "2026-10-26 09:14", "testo": "[O10.T10] bash: diff <(sed -n '8,200p' /Users/snj/.claude/projects/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e97"}
+{"at": "2026-10-26 09:14", "testo": "[O10.T10] bash: echo \"rete: $(ipconfig getsummary en0 | awk -F ' SSID : ' '/ SSID : /{print $2; exit}')\"; mac_ip=$(curl -s -m "}
+{"at": "2026-10-26 09:15", "testo": "[O10.T10] bash: time bash deck/install.sh 2>&1 | grep -E \"^==|^Ran|^OK|FAIL|ERROR|uscita\""}
+{"at": "2026-10-26 09:15", "testo": "[O10.T10] bash: ssh -o BatchMode=yes agentdeck 'ip -4 -o addr show wlan0 | awk \"{print \\\"IP:\\\", \\$4}\"; iw dev wlan0 link | gre"}
+{"at": "2026-10-26 09:15", "testo": "ANNOTAZIONE N48 su O10.T10 — Prova da fuori casa (26/10, Mac sull'hotspot Router Davide, IP pubblico 151.82.12.31): ssh agentdeck ha scelto da solo scarlethome.ddns.net:49222 ed è entrato in 3 s; la Deck vede l'indirizzo esterno vero (journal: Accepted publickey for agent from 151.82.12.31); deck status ok; deck/install.sh completo in 35 s, 229 test sul Mac e sulla Deck; sshguard nessun blocco. Osservazione: la Deck è passata al Wi-Fi 2,4 GHz (WIFI_BAND_2G, freq 2437, IP sempre 192.168.1.49), probabilmente per il riavvio del router dopo la regola; da riportare con deck network prefer_5ghz in casa."}
+{"at": "2026-10-26 09:15", "testo": "[O10.T10] bash: ~/claude-rules/bin/wf.sh note-add --task O10.T10 --text \"Prova da fuori casa (26/10, Mac sull'hotspot Router D"}
+{"at": "2026-10-26 09:15", "testo": "[O10.T10] Edit  docs/accesso.md", "task": "O10.T10", "tipo": "file", "tool": "Edit", "file": "docs/accesso.md"}
+{"at": "2026-10-26 09:16", "testo": "TASK CHIUSA O10.T10 — completata: Accesso da fuori casa verificato dall'hotspot: ssh agentdeck via scarlethome.ddns.net:49222, deck status, deck/install.sh; IP esterno vero"}
+{"at": "2026-10-26 09:16", "testo": "VERSIONE 0.4.8 (O10.T10)"}
+{"at": "2026-10-26 09:16", "testo": "VERSIONI scelte dall'utente: governance"}
+{"at": "2026-10-26 09:16", "testo": "[-] bash: python3 - <<'EOF' from pathlib import Path p = Path(\"docs/README.md\"); t = p.read_text() old = \"Codice: [../in"}
+{"at": "2026-10-26 09:16", "testo": "[-] Edit  CHANGELOG.md", "task": "-", "tipo": "file", "tool": "Edit", "file": "CHANGELOG.md"}

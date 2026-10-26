@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-25 23:48",
-  "updated": "2026-10-26 02:04",
+  "updated": "2026-10-26 09:16",
   "objectives": [
     {
       "id": "O10",
@@ -109,6 +109,17 @@
           "state": "done",
           "risk": 15,
           "risk_why": "Le skill sono procedure scritte caricate quando servono: non cambiano permessi né sistema. La prova d'insieme installa un pacchetto piccolo con gli snapshot di snap-pac e lo rimuove alla fine.",
+          "docs": []
+        },
+        {
+          "id": "O10.T10",
+          "title": "Ripresa di O10.T5: verifica dell'accesso da fuori casa con la regola sul router",
+          "scope": "configurazione SSH del Mac (~/.ssh/config), sola lettura sulla Deck, docs/, install/remote-check.sh (prova dell'accesso da una rete esterna)",
+          "gate_pre": "La porta TCP 49222 di scarlethome.ddns.net arriva a sshd della Deck; da fuori casa (hotspot) funzionano ssh agentdeck, deck status e deck/install.sh da questa chat; sshguard vede gli indirizzi esterni reali; INV-1 e INV-5 rispettati; documentazione aggiornata.",
+          "gate_post": "Accesso da fuori casa verificato dall'hotspot: ssh agentdeck via scarlethome.ddns.net:49222, deck status, deck/install.sh; IP esterno vero",
+          "state": "done",
+          "risk": 15,
+          "risk_why": "Solo verifica dell'accesso già configurato: sulla Deck non cambia nulla, al più la documentazione e la configurazione SSH del Mac.",
           "docs": []
         }
       ]
@@ -305,6 +316,20 @@
       "text": "Bisogno emerso dalla prova d'insieme di O10.T9 (26/10): in una sessione sulla Deck tre comandi Bash di sola lettura (pacman -Ql, tree --version, una catena con mktemp) sono stati fermati dai permessi di Claude Code; con Remote Control diventerebbero domande al proprietario. Serve una politica decisa prima (H31): permessi allow gestiti per le letture di sistema (pacman -Q*/-Si/-Ss, man, systemctl status, journalctl, ls, cat in /etc) oppure più azioni di sola lettura in deck. Da decidere con l'utente.",
       "docs": [],
       "created": "2026-10-26 02:03"
+    },
+    {
+      "id": "N47",
+      "task": "O10.T10",
+      "text": "Verifica da casa (26/10): regola del router attiva. scarlethome.ddns.net = 151.81.1.126 = IP pubblico; la porta 49222 risponde SSH-2.0-OpenSSH_10.6; ssh agentdeck-wan entra (journal: Accepted publickey for agent from 151.81.1.126). Il router fa hairpin con SNAT: da casa le connessioni via nome pubblico arrivano con l'IP pubblico, non con quello LAN, quindi non sono coperte dalla whitelist di sshguard (una prova a vuoto con nc ha contato 2 punti). Manca la prova da una rete esterna (hotspot) per il gate.",
+      "docs": [],
+      "created": "2026-10-26 09:06"
+    },
+    {
+      "id": "N48",
+      "task": "O10.T10",
+      "text": "Prova da fuori casa (26/10, Mac sull'hotspot Router Davide, IP pubblico 151.82.12.31): ssh agentdeck ha scelto da solo scarlethome.ddns.net:49222 ed è entrato in 3 s; la Deck vede l'indirizzo esterno vero (journal: Accepted publickey for agent from 151.82.12.31); deck status ok; deck/install.sh completo in 35 s, 229 test sul Mac e sulla Deck; sshguard nessun blocco. Osservazione: la Deck è passata al Wi-Fi 2,4 GHz (WIFI_BAND_2G, freq 2437, IP sempre 192.168.1.49), probabilmente per il riavvio del router dopo la regola; da riportare con deck network prefer_5ghz in casa.",
+      "docs": [],
+      "created": "2026-10-26 09:15"
     }
   ],
   "active": {
@@ -317,9 +342,9 @@
     "hold_plan": ""
   },
   "previous": {
-    "task": "O10.T9",
+    "task": "O10.T10",
     "state": "done",
-    "note": "6 skill di AgentDeck installate; prova d'insieme: tree installato da sola con skill, MCP, adattatore e obbligo chiuso; 229 test"
+    "note": "Accesso da fuori casa verificato dall'hotspot: ssh agentdeck via scarlethome.ddns.net:49222, deck status, deck/install.sh; IP esterno vero"
   },
   "cycle": {
     "n": 4,
@@ -330,6 +355,6 @@
     "objective": 11,
     "cycle": 4,
     "request": 6,
-    "note": 46
+    "note": 48
   }
 }

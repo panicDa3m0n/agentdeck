@@ -132,6 +132,24 @@ Un indirizzo finito nella lista nera si toglie fermando sshguard e cancellando l
 - resta il rischio di una futura falla in OpenSSH stesso, com'è successo nel 2024 con "regreSSHion". Lo riduce
   tenere Arch aggiornato (`deck update`, [deck.md](deck.md)).
 
+**Verifiche del 26/10/2026 (O10.T10):**
+- **da casa:** la porta pubblica risponde (`SSH-2.0-OpenSSH_10.6`) e `ssh agentdeck-wan` entra. Il router però
+  rigira la connessione con il proprio IP pubblico ("hairpin"), quindi la Deck la vede da 151.81.1.126 e non dalla
+  LAN: da casa `ssh agentdeck` usa la LAN, e così resta coperto dalla whitelist di sshguard;
+- **da fuori casa**, con il Mac sull'hotspot del telefono (IP pubblico 151.82.12.31):
+  - `ssh agentdeck` ha scelto da solo `scarlethome.ddns.net:49222` ed è entrato in 3 secondi;
+  - la Deck vede l'indirizzo esterno vero ("Accepted publickey for agent from 151.82.12.31"), quindi sshguard
+    può bloccare chi sbaglia;
+  - `deck status` risponde, e `deck/install.sh` completo, con 229 test sul Mac e sulla Deck, dura 35 secondi.
+
+Per ripetere la prova c'è [../install/remote-check.sh](../install/remote-check.sh). Va lanciato dal Mac in un
+terminale (`bash install/remote-check.sh`):
+- porta il Mac sull'hotspot, chiedendo nome e password senza mostrarla né salvarla;
+- fa le stesse verifiche;
+- riporta il Mac sul Wi-Fi di casa, anche se una prova fallisce.
+
+Se il Mac è già sull'hotspot bastano `ssh agentdeck 'deck status'` e `deck/install.sh`.
+
 **Tailscale, provato e scartato.** Si era scelta una rete privata con Tailscale: la Deck ci era entrata, ma sul
 Mac l'estensione di rete di macOS è rimasta bloccata in "Connecting". L'app aveva chiesto il collegamento
 all'estensione prima che venisse approvata, e né riaprire l'app né chiudere l'estensione l'hanno sbloccata.

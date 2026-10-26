@@ -10,10 +10,10 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O10` Claude Code sulla Deck, usato davvero — 9 task: 7 completate, 0 in corso, 1 da fare, 1 bloccate
+- **Obiettivo attivo:** `O10` Claude Code sulla Deck, usato davvero — 10 task: 8 completate, 0 in corso, 1 da fare, 1 bloccate
 - **Task attiva:** —
-- **Ultima task gestita:** `O10.T9` — completata — 6 skill di AgentDeck installate; prova d'insieme: tree installato da sola con skill, MCP, adattatore e obbligo chiuso; 229 test
-- **Ultimo aggiornamento:** 2026-10-26 02:04
+- **Ultima task gestita:** `O10.T10` — completata — Accesso da fuori casa verificato dall'hotspot: ssh agentdeck via scarlethome.ddns.net:49222, deck status, deck/install.sh; IP esterno vero
+- **Ultimo aggiornamento:** 2026-10-26 09:16
 
 ## Richieste attive
 
@@ -60,6 +60,10 @@ _Mancanze di progetto che l'agente non può risolvere da solo. L'utente le confe
 - [x] `O10.T9` Skill di AgentDeck e prova d'insieme da una sessione sulla Deck — *perimetro:* `deck/claude/, docs/, ~/.claude/skills sulla Deck, deck/tests/test_skills.py`
   *gate previsto:* Skill di AgentDeck per Claude Code (installare un pacchetto, cambiare un servizio, usare un programma interattivo, gestire avvisi e obblighi, tornare indietro), installate dal repository; prova d'insieme da una sessione di Claude Code sulla Deck che usa strumenti MCP, adattatore e obblighi; documentazione completa. · *gate confermato:* ✔ 6 skill di AgentDeck installate; prova d'insieme: tree installato da sola con skill, MCP, adattatore e obbligo chiuso; 229 test
   *rischio:* 15/100 — Le skill sono procedure scritte caricate quando servono: non cambiano permessi né sistema. La prova d'insieme installa un pacchetto piccolo con gli snapshot di snap-pac e lo rimuove alla fine.
+- [x] `O10.T10` Ripresa di O10.T5: verifica dell'accesso da fuori casa con la regola sul router — *perimetro:* `configurazione SSH del Mac (~/.ssh/config), sola lettura sulla Deck, docs/, install/remote-check.sh (prova dell'accesso da una rete esterna)`
+  *gate previsto:* La porta TCP 49222 di scarlethome.ddns.net arriva a sshd della Deck; da fuori casa (hotspot) funzionano ssh agentdeck, deck status e deck/install.sh da questa chat; sshguard vede gli indirizzi esterni reali; INV-1 e INV-5 rispettati; documentazione aggiornata. · *gate confermato:* ✔ Accesso da fuori casa verificato dall'hotspot: ssh agentdeck via scarlethome.ddns.net:49222, deck status, deck/install.sh; IP esterno vero
+  *rischio:* 15/100 — Solo verifica dell'accesso già configurato: sulla Deck non cambia nulla, al più la documentazione e la configurazione SSH del Mac.
+  *annotazioni:* `N47`, `N48`
 
 ### `O11` Aggiornamento reale della Deck con deck update (O9) — in corso
 
@@ -92,3 +96,5 @@ _Una riga per nota, sempre legata a una task. `wf.sh notes` per leggerle._
 - `N44` (`O10.T6`) Trovato installando (26/10): test_update.test_grub_install_matches_installer (da O6.T1) falliva sulla Deck perché legge install/install.sh del repository, che in /opt/agentdeck non c'è; deck/install.sh si fermava ai test sulla Deck e saltava le prove finali. Corretto con skipTest quando il file manca: sul Mac il confronto con l'installatore resta identico. — 2026-10-26 01:19
 - `N45` (`O10.T7`) Dalla prova con la sessione di Claude Code sulla Deck (26/10): l'agente ha scritto, provato e salvato da solo il profilo di ssh-keygen, senza digitare la passphrase. Ha segnalato che una domanda già risposta e ancora visibile faceva vincere la regola sbagliata. Corretto il motore: una regola di domanda vale solo se finisce sulla riga del cursore. Adeguato il mio test test_unknown_question_asks_for_a_profile (programma finto con un prompt vero sulla riga del cursore): stesso percorso verificato. — 2026-10-26 01:40
 - `N46` (`O10.T4`) Bisogno emerso dalla prova d'insieme di O10.T9 (26/10): in una sessione sulla Deck tre comandi Bash di sola lettura (pacman -Ql, tree --version, una catena con mktemp) sono stati fermati dai permessi di Claude Code; con Remote Control diventerebbero domande al proprietario. Serve una politica decisa prima (H31): permessi allow gestiti per le letture di sistema (pacman -Q*/-Si/-Ss, man, systemctl status, journalctl, ls, cat in /etc) oppure più azioni di sola lettura in deck. Da decidere con l'utente. — 2026-10-26 02:03
+- `N47` (`O10.T10`) Verifica da casa (26/10): regola del router attiva. scarlethome.ddns.net = 151.81.1.126 = IP pubblico; la porta 49222 risponde SSH-2.0-OpenSSH_10.6; ssh agentdeck-wan entra (journal: Accepted publickey for agent from 151.81.1.126). Il router fa hairpin con SNAT: da casa le connessioni via nome pubblico arrivano con l'IP pubblico, non con quello LAN, quindi non sono coperte dalla whitelist di sshguard (una prova a vuoto con nc ha contato 2 punti). Manca la prova da una rete esterna (hotspot) per il gate. — 2026-10-26 09:06
+- `N48` (`O10.T10`) Prova da fuori casa (26/10, Mac sull'hotspot Router Davide, IP pubblico 151.82.12.31): ssh agentdeck ha scelto da solo scarlethome.ddns.net:49222 ed è entrato in 3 s; la Deck vede l'indirizzo esterno vero (journal: Accepted publickey for agent from 151.82.12.31); deck status ok; deck/install.sh completo in 35 s, 229 test sul Mac e sulla Deck; sshguard nessun blocco. Osservazione: la Deck è passata al Wi-Fi 2,4 GHz (WIFI_BAND_2G, freq 2437, IP sempre 192.168.1.49), probabilmente per il riavvio del router dopo la regola; da riportare con deck network prefer_5ghz in casa. — 2026-10-26 09:15
