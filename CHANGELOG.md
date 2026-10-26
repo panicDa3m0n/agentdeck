@@ -4,6 +4,25 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.4.10 — 2026-10-26
+
+Ciclo 04, task O10.T4: l'uso reale e i bisogni emersi.
+
+- **La sessione reale**, la notte del 26/10, con Remote Control: l'agente sulla Deck ha preparato l'area dei servizi
+  ospitati e ha lasciato una consegna per il repository. Prima ha fatto lo snapshot 42. Dal Mac ho verificato:
+  - subvolume `@servizi` su `/srv/servizi`;
+  - unità modello con isolamento forte;
+  - comando per i servizi nuovi;
+  - nessuna porta nuova.
+- **Bisogni annotati** (N51-N54):
+  - l'agente sulla Deck non ha accesso al repository;
+  - per l'area dei servizi mancano il componente `deck`, gli snapshot dei dati e un firewall;
+  - la sessione ha usato solo Bash, perché gli strumenti nuovi sono arrivati dopo.
+- **Proposta del ciclo 05**, nata da questi bisogni:
+  - O12: i servizi gestiti dal sistema;
+  - O13: le modifiche della Deck nel repository;
+  - O14: meno domande al proprietario e più protezione.
+
 ## 0.4.9 — 2026-10-26
 
 Ciclo 04, task O10.T11: dopo il riavvio del router la Deck torna sul Wi-Fi a 5 GHz.

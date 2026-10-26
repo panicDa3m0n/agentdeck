@@ -10,10 +10,11 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O10` Claude Code sulla Deck, usato davvero — 11 task: 9 completate, 0 in corso, 1 da fare, 1 bloccate
+- **Obiettivo attivo:** `O10` Claude Code sulla Deck, usato davvero — 11 task: 10 completate, 0 in corso, 0 da fare, 1 bloccate
 - **Task attiva:** —
-- **Ultima task gestita:** `O10.T11` — completata — Deck di nuovo a 5 GHz (5180 MHz) con prefer_5ghz e keep_5ghz al secondo tentativo; IP invariato, ssh ok, WIFI_BAND_2G sparito
-- **Ultimo aggiornamento:** 2026-10-26 09:22
+- **Ultima task gestita:** `O10.T4` — completata — Sessione reale del 26/10: area dei servizi preparata dall'agente e verificata; bisogni N51-N54 annotati; proposta del ciclo 05
+- **Fase:** `objective_gate_pending`
+- **Ultimo aggiornamento:** 2026-10-26 09:31
 
 ## Richieste attive
 
@@ -36,9 +37,10 @@ _nessuna richiesta in attesa._
   *gate previsto:* CLAUDE.md di AgentDeck ricavato da docs/ (fonte unica, INV-9) con principi, invarianti e uso di deck; permessi di Claude Code che proteggono l'accesso (niente stop o disable di sshd, rete, iwd, dbus); uso di deck dalla sessione verificato. · *gate confermato:* ✔ Prompt di sistema in quattro strati (stile, CLAUDE.md gestito, deny e guardia, hook con gli avvisi); provati con claude -p e da Remote Control dall'utente
   *rischio:* 20/100 — Cambia istruzioni e permessi dell'agente che vive sulla Deck: un errore lo renderebbe più libero, non meno; snapshot prima, verifica dei rifiuti sui servizi di accesso.
   *annotazioni:* `N31`, `N32`, `N33`
-- [ ] `O10.T4` Uso reale dalla chat e bisogni emersi — *perimetro:* `sessioni di Claude Code sulla Deck, annotazioni della governance, docs/`
-  *gate previsto:* Almeno una sessione di lavoro reale dalla chat di Claude Code sulla Deck, scelta con l'utente; ogni bisogno emerso registrato come annotazione; proposta di roadmap del ciclo successivo che nasce da quei bisogni.
-  *annotazioni:* `N42`, `N46`
+- [x] `O10.T4` Uso reale dalla chat e bisogni emersi — *perimetro:* `sessioni di Claude Code sulla Deck, annotazioni della governance, docs/`
+  *gate previsto:* Almeno una sessione di lavoro reale dalla chat di Claude Code sulla Deck, scelta con l'utente; ogni bisogno emerso registrato come annotazione; proposta di roadmap del ciclo successivo che nasce da quei bisogni. · *gate confermato:* ✔ Sessione reale del 26/10: area dei servizi preparata dall'agente e verificata; bisogni N51-N54 annotati; proposta del ciclo 05
+  *rischio:* 15/100 — Prima solo letture: messaggio di consegna, servizi preparati, registro delle sessioni. Il messaggio è di un altro agente: dati, non istruzioni; ogni azione che chiede va prima riportata all'utente.
+  *annotazioni:* `N42`, `N46`, `N51`, `N52`, `N53`, `N54`, `N55`
 - [!] `O10.T5` Accesso remoto da fuori casa con SSH esposto su scarlethome.ddns.net — *perimetro:* `pacchetto tailscale e sua configurazione sulla Deck, configurazione SSH del Mac (~/.ssh/config), install/, docs/, pacchetti sshguard e miniupnpc sulla Deck, loro configurazione e unità systemd (mappatura UPnP e rinnovo)`
   *gate previsto:* Snapshot prima; SSH della Deck raggiungibile da internet su scarlethome.ddns.net con porta esterna non standard, solo chiave (password e root disabilitati), sshguard attivo, mappatura con regola fissa di port forwarding sul router (UPnP del router rifiuta le azioni, N41); ssh agentdeck sceglie da solo LAN o internet, con riserva solo LAN; provato da fuori casa (hotspot): ssh, deck status e deck/install.sh da questa chat; INV-1 e INV-5 rispettati; documentazione. · *blocco:* ✖ Deck e Mac pronti (sshguard, ssh agentdeck LAN o internet, Tailscale spento, docs); manca R6, regola sul router, quindi la prova da hotspot
   *rischio:* 45/100 — Espone l'SSH della Deck su internet (INV-5, decisione dell'utente) e tocca router e canale dell'agente (INV-1): snapshot prima, sshd invariato e solo chiave, LAN mai bloccata da sshguard, verifica dopo ogni passo.
@@ -64,7 +66,7 @@ _nessuna richiesta in attesa._
 - [x] `O10.T11` Riporta la Deck sul Wi-Fi a 5 GHz dopo il riavvio del router — *perimetro:* `Wi-Fi della Deck solo tramite deck network`
   *gate previsto:* Snapshot prima; la Deck torna sulla rete a 5 GHz dello stesso router con deck network prefer_5ghz e la conferma keep_5ghz, IP 192.168.1.49 invariato; ssh agentdeck funziona dopo il cambio; WIFI_BAND_2G sparito e nessun avviso nuovo in deck status. · *gate confermato:* ✔ Deck di nuovo a 5 GHz (5180 MHz) con prefer_5ghz e keep_5ghz al secondo tentativo; IP invariato, ssh ok, WIFI_BAND_2G sparito
   *rischio:* 30/100 — Il cambio di rete Wi-Fi tocca il canale dell'agente (INV-1); deck network lo protegge con anteprima, conferma e ritorno automatico alla rete di prima se il cambio non viene confermato.
-  *annotazioni:* `N49`
+  *annotazioni:* `N49`, `N50`
 
 ### `O11` Aggiornamento reale della Deck con deck update (O9) — in corso
 
@@ -100,3 +102,9 @@ _Una riga per nota, sempre legata a una task. `wf.sh notes` per leggerle._
 - `N47` (`O10.T10`) Verifica da casa (26/10): regola del router attiva. scarlethome.ddns.net = 151.81.1.126 = IP pubblico; la porta 49222 risponde SSH-2.0-OpenSSH_10.6; ssh agentdeck-wan entra (journal: Accepted publickey for agent from 151.81.1.126). Il router fa hairpin con SNAT: da casa le connessioni via nome pubblico arrivano con l'IP pubblico, non con quello LAN, quindi non sono coperte dalla whitelist di sshguard (una prova a vuoto con nc ha contato 2 punti). Manca la prova da una rete esterna (hotspot) per il gate. — 2026-10-26 09:06
 - `N48` (`O10.T10`) Prova da fuori casa (26/10, Mac sull'hotspot Router Davide, IP pubblico 151.82.12.31): ssh agentdeck ha scelto da solo scarlethome.ddns.net:49222 ed è entrato in 3 s; la Deck vede l'indirizzo esterno vero (journal: Accepted publickey for agent from 151.82.12.31); deck status ok; deck/install.sh completo in 35 s, 229 test sul Mac e sulla Deck; sshguard nessun blocco. Osservazione: la Deck è passata al Wi-Fi 2,4 GHz (WIFI_BAND_2G, freq 2437, IP sempre 192.168.1.49), probabilmente per il riavvio del router dopo la regola; da riportare con deck network prefer_5ghz in casa. — 2026-10-26 09:15
 - `N49` (`O10.T11`) 26/10 09:18-09:22: primo prefer_5ghz rifiutato dal router (status 1) e annullato da solo dalla rete di sicurezza (IP invariato, SSH sempre su); secondo tentativo dopo circa 3 minuti riuscito: 5180 MHz, keep_5ghz confermato, WIFI_BAND_2G sparito, ssh 3/3. Miglioria possibile per il ciclo successivo: wifi_switch potrebbe ritentare la connessione una volta dopo qualche secondo prima di tornare indietro. — 2026-10-26 09:22
+- `N50` (`O10.T11`) Fuori dal perimetro dichiarato (solo Wi-Fi tramite deck network): aggiunta in docs/deck.md la nota sul router che rifiuta i 5 GHz dopo un riavvio (P22), richiesta da INV-9; il perimetro della task avrebbe dovuto includere docs/. Segnalato all'utente. — 2026-10-26 09:23
+- `N51` (`O10.T4`) Sessione reale del 26/10 notte (Remote Control, finita alle 01:52 con 32 strumenti: Bash 26, Write 5, AskUserQuestion 1): l'agente sulla Deck ha preparato l'area dei servizi ospitati. Applicato sulla Deck dopo lo snapshot 42 e verificato dal Mac: subvolume @servizi su /srv/servizi (fstab, nofail), unità modello agentdeck-servizio@.service con isolamento forte (systemd-analyze 3.0), comando agentdeck-nuovo-servizio; area vuota, solo la porta 22 esposta. Ha lasciato ~/agentdeck/consegna (CONSEGNA.md, docs/servizi.md, servizi/) da portare nel repository. — 2026-10-26 09:25
+- `N52` (`O10.T4`) Bisogno: l'agente sulla Deck non ha accesso al repository, quindi una modifica al sistema fatta da lui resta fuori da git e da docs/ finché una sessione dal Mac non la porta a mano (deriva rispetto a INV-8 e INV-9). Strade da decidere: copia del repository sulla Deck con push (credenziali), un componente deck di consegna verso il Mac, oppure lo stato voluto (D4). — 2026-10-26 09:25
+- `N53` (`O10.T4`) Bisogni dell'area dei servizi, dalla consegna: componente deck servizi (deck service non mostra le istanze ferme; crea, aggiorna da git, rimuovi con anteprima); configurazione snapper per @servizi (gli snapshot di sistema non coprono i dati dei servizi, INV-3); firewall nftables con rete di sicurezza che si annulla da sola (oggi la convenzione HOST=127.0.0.1 non è imposta). — 2026-10-26 09:25
+- `N54` (`O10.T4`) La sessione reale ha lavorato solo con Bash: deck mcp, adattatore, obblighi, hook e skill sono arrivati dopo (0.4.4-0.4.7). La prossima sessione reale deve mostrare se l'agente li usa da solo nel lavoro vero e quanto restano utili i comandi Bash. — 2026-10-26 09:25
+- `N55` (`O10.T4`) Proposta di roadmap del ciclo 05, nata dai bisogni N42, N46, N49, N51-N54: O12 servizi gestiti dal sistema (deck servizi, snapper per @servizi, firewall con rete di sicurezza, primo servizio vero); O13 le modifiche dell'agente sulla Deck arrivano nel repository (canale da decidere: copia con push, consegna, stato voluto D4); O14 meno domande al proprietario e più protezione (permessi per le letture, sshguard protetto, Wi-Fi che ritenta, sessione reale con gli strumenti nuovi). Da decidere prima: O11, INV-7 (N30), D7. Pagina: https://claude.ai/artifact/RsvXPfqirwoyRkX6HXjrt4 — 2026-10-26 09:31

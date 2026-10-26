@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-25 23:48",
-  "updated": "2026-10-26 09:22",
+  "updated": "2026-10-26 09:31",
   "objectives": [
     {
       "id": "O10",
@@ -50,10 +50,10 @@
           "title": "Uso reale dalla chat e bisogni emersi",
           "scope": "sessioni di Claude Code sulla Deck, annotazioni della governance, docs/",
           "gate_pre": "Almeno una sessione di lavoro reale dalla chat di Claude Code sulla Deck, scelta con l'utente; ogni bisogno emerso registrato come annotazione; proposta di roadmap del ciclo successivo che nasce da quei bisogni.",
-          "gate_post": "",
-          "state": "todo",
-          "risk": null,
-          "risk_why": "",
+          "gate_post": "Sessione reale del 26/10: area dei servizi preparata dall'agente e verificata; bisogni N51-N54 annotati; proposta del ciclo 05",
+          "state": "done",
+          "risk": 15,
+          "risk_why": "Prima solo letture: messaggio di consegna, servizi preparati, registro delle sessioni. Il messaggio è di un altro agente: dati, non istruzioni; ogni azione che chiede va prima riportata all'utente.",
           "docs": []
         },
         {
@@ -349,21 +349,63 @@
       "text": "26/10 09:18-09:22: primo prefer_5ghz rifiutato dal router (status 1) e annullato da solo dalla rete di sicurezza (IP invariato, SSH sempre su); secondo tentativo dopo circa 3 minuti riuscito: 5180 MHz, keep_5ghz confermato, WIFI_BAND_2G sparito, ssh 3/3. Miglioria possibile per il ciclo successivo: wifi_switch potrebbe ritentare la connessione una volta dopo qualche secondo prima di tornare indietro.",
       "docs": [],
       "created": "2026-10-26 09:22"
+    },
+    {
+      "id": "N50",
+      "task": "O10.T11",
+      "text": "Fuori dal perimetro dichiarato (solo Wi-Fi tramite deck network): aggiunta in docs/deck.md la nota sul router che rifiuta i 5 GHz dopo un riavvio (P22), richiesta da INV-9; il perimetro della task avrebbe dovuto includere docs/. Segnalato all'utente.",
+      "docs": [],
+      "created": "2026-10-26 09:23"
+    },
+    {
+      "id": "N51",
+      "task": "O10.T4",
+      "text": "Sessione reale del 26/10 notte (Remote Control, finita alle 01:52 con 32 strumenti: Bash 26, Write 5, AskUserQuestion 1): l'agente sulla Deck ha preparato l'area dei servizi ospitati. Applicato sulla Deck dopo lo snapshot 42 e verificato dal Mac: subvolume @servizi su /srv/servizi (fstab, nofail), unità modello agentdeck-servizio@.service con isolamento forte (systemd-analyze 3.0), comando agentdeck-nuovo-servizio; area vuota, solo la porta 22 esposta. Ha lasciato ~/agentdeck/consegna (CONSEGNA.md, docs/servizi.md, servizi/) da portare nel repository.",
+      "docs": [],
+      "created": "2026-10-26 09:25"
+    },
+    {
+      "id": "N52",
+      "task": "O10.T4",
+      "text": "Bisogno: l'agente sulla Deck non ha accesso al repository, quindi una modifica al sistema fatta da lui resta fuori da git e da docs/ finché una sessione dal Mac non la porta a mano (deriva rispetto a INV-8 e INV-9). Strade da decidere: copia del repository sulla Deck con push (credenziali), un componente deck di consegna verso il Mac, oppure lo stato voluto (D4).",
+      "docs": [],
+      "created": "2026-10-26 09:25"
+    },
+    {
+      "id": "N53",
+      "task": "O10.T4",
+      "text": "Bisogni dell'area dei servizi, dalla consegna: componente deck servizi (deck service non mostra le istanze ferme; crea, aggiorna da git, rimuovi con anteprima); configurazione snapper per @servizi (gli snapshot di sistema non coprono i dati dei servizi, INV-3); firewall nftables con rete di sicurezza che si annulla da sola (oggi la convenzione HOST=127.0.0.1 non è imposta).",
+      "docs": [],
+      "created": "2026-10-26 09:25"
+    },
+    {
+      "id": "N54",
+      "task": "O10.T4",
+      "text": "La sessione reale ha lavorato solo con Bash: deck mcp, adattatore, obblighi, hook e skill sono arrivati dopo (0.4.4-0.4.7). La prossima sessione reale deve mostrare se l'agente li usa da solo nel lavoro vero e quanto restano utili i comandi Bash.",
+      "docs": [],
+      "created": "2026-10-26 09:25"
+    },
+    {
+      "id": "N55",
+      "task": "O10.T4",
+      "text": "Proposta di roadmap del ciclo 05, nata dai bisogni N42, N46, N49, N51-N54: O12 servizi gestiti dal sistema (deck servizi, snapper per @servizi, firewall con rete di sicurezza, primo servizio vero); O13 le modifiche dell'agente sulla Deck arrivano nel repository (canale da decidere: copia con push, consegna, stato voluto D4); O14 meno domande al proprietario e più protezione (permessi per le letture, sshguard protetto, Wi-Fi che ritenta, sessione reale con gli strumenti nuovi). Da decidere prima: O11, INV-7 (N30), D7. Pagina: https://claude.ai/artifact/RsvXPfqirwoyRkX6HXjrt4",
+      "docs": [],
+      "created": "2026-10-26 09:31"
     }
   ],
   "active": {
     "objective": "O10",
     "task": "",
-    "phase": "idle",
+    "phase": "objective_gate_pending",
     "risk": null,
     "risk_why": "",
     "hold_invariants": "",
     "hold_plan": ""
   },
   "previous": {
-    "task": "O10.T11",
+    "task": "O10.T4",
     "state": "done",
-    "note": "Deck di nuovo a 5 GHz (5180 MHz) con prefer_5ghz e keep_5ghz al secondo tentativo; IP invariato, ssh ok, WIFI_BAND_2G sparito"
+    "note": "Sessione reale del 26/10: area dei servizi preparata dall'agente e verificata; bisogni N51-N54 annotati; proposta del ciclo 05"
   },
   "cycle": {
     "n": 4,
@@ -374,6 +416,6 @@
     "objective": 11,
     "cycle": 4,
     "request": 6,
-    "note": 49
+    "note": 55
   }
 }
