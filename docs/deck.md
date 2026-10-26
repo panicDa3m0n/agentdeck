@@ -142,6 +142,12 @@ Dopo circa 20 secondi ci si ricollega con `ssh agentdeck` (se l'IP è cambiato:
 `dns-sd -G v4 agentdeck.local` dal Mac), si controlla `deck network` e si conferma con
 `deck network keep_5ghz`.
 
+Visto il 26/10/2026, dopo un riavvio del router (trappola P22):
+- per qualche minuto il router rifiuta l'associazione a 5 GHz, con iwd che riporta `connect-failed status 1`, e la
+  Deck torna da sola a 2,4 GHz con lo stesso IP. Si riprova dopo qualche minuto;
+- `keep_5ghz` diventa disponibile solo quando `data.wifi_switch.state` è `awaiting_confirmation`, qualche secondo
+  dopo che la Deck è sulla nuova rete.
+
 Il controllo dal vivo confronta ogni valore con `ip`, `iw`, `resolvectl` e `ss`:
 
 ```bash

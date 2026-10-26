@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-25 23:48",
-  "updated": "2026-10-26 09:16",
+  "updated": "2026-10-26 09:22",
   "objectives": [
     {
       "id": "O10",
@@ -121,6 +121,17 @@
           "risk": 15,
           "risk_why": "Solo verifica dell'accesso già configurato: sulla Deck non cambia nulla, al più la documentazione e la configurazione SSH del Mac.",
           "docs": []
+        },
+        {
+          "id": "O10.T11",
+          "title": "Riporta la Deck sul Wi-Fi a 5 GHz dopo il riavvio del router",
+          "scope": "Wi-Fi della Deck solo tramite deck network",
+          "gate_pre": "Snapshot prima; la Deck torna sulla rete a 5 GHz dello stesso router con deck network prefer_5ghz e la conferma keep_5ghz, IP 192.168.1.49 invariato; ssh agentdeck funziona dopo il cambio; WIFI_BAND_2G sparito e nessun avviso nuovo in deck status.",
+          "gate_post": "Deck di nuovo a 5 GHz (5180 MHz) con prefer_5ghz e keep_5ghz al secondo tentativo; IP invariato, ssh ok, WIFI_BAND_2G sparito",
+          "state": "done",
+          "risk": 30,
+          "risk_why": "Il cambio di rete Wi-Fi tocca il canale dell'agente (INV-1); deck network lo protegge con anteprima, conferma e ritorno automatico alla rete di prima se il cambio non viene confermato.",
+          "docs": []
         }
       ]
     },
@@ -170,10 +181,11 @@
       "id": "R6",
       "objective": "O10",
       "title": "Router ZTE: l'utente crea il port forwarding TCP 49222 -> 192.168.1.49:22 (agentdeck-ssh) e prenota 192.168.1.49 per il MAC 14:d4:24:0a:8e:45",
-      "state": "open",
+      "state": "resolved",
       "doc": "",
       "dettaglio": "",
-      "created": "2026-10-26 01:02"
+      "created": "2026-10-26 01:02",
+      "resolved": "2026-10-26 09:16"
     }
   ],
   "notes": [
@@ -330,6 +342,13 @@
       "text": "Prova da fuori casa (26/10, Mac sull'hotspot Router Davide, IP pubblico 151.82.12.31): ssh agentdeck ha scelto da solo scarlethome.ddns.net:49222 ed è entrato in 3 s; la Deck vede l'indirizzo esterno vero (journal: Accepted publickey for agent from 151.82.12.31); deck status ok; deck/install.sh completo in 35 s, 229 test sul Mac e sulla Deck; sshguard nessun blocco. Osservazione: la Deck è passata al Wi-Fi 2,4 GHz (WIFI_BAND_2G, freq 2437, IP sempre 192.168.1.49), probabilmente per il riavvio del router dopo la regola; da riportare con deck network prefer_5ghz in casa.",
       "docs": [],
       "created": "2026-10-26 09:15"
+    },
+    {
+      "id": "N49",
+      "task": "O10.T11",
+      "text": "26/10 09:18-09:22: primo prefer_5ghz rifiutato dal router (status 1) e annullato da solo dalla rete di sicurezza (IP invariato, SSH sempre su); secondo tentativo dopo circa 3 minuti riuscito: 5180 MHz, keep_5ghz confermato, WIFI_BAND_2G sparito, ssh 3/3. Miglioria possibile per il ciclo successivo: wifi_switch potrebbe ritentare la connessione una volta dopo qualche secondo prima di tornare indietro.",
+      "docs": [],
+      "created": "2026-10-26 09:22"
     }
   ],
   "active": {
@@ -342,9 +361,9 @@
     "hold_plan": ""
   },
   "previous": {
-    "task": "O10.T10",
+    "task": "O10.T11",
     "state": "done",
-    "note": "Accesso da fuori casa verificato dall'hotspot: ssh agentdeck via scarlethome.ddns.net:49222, deck status, deck/install.sh; IP esterno vero"
+    "note": "Deck di nuovo a 5 GHz (5180 MHz) con prefer_5ghz e keep_5ghz al secondo tentativo; IP invariato, ssh ok, WIFI_BAND_2G sparito"
   },
   "cycle": {
     "n": 4,
@@ -355,6 +374,6 @@
     "objective": 11,
     "cycle": 4,
     "request": 6,
-    "note": 48
+    "note": 49
   }
 }

@@ -4,6 +4,18 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.4.9 — 2026-10-26
+
+Ciclo 04, task O10.T11: dopo il riavvio del router la Deck torna sul Wi-Fi a 5 GHz.
+
+- Snapshot 80, poi `deck network prefer_5ghz` con conferma.
+- Il primo tentativo l'ha rifiutato il router, con iwd che riporta `connect-failed status 1`. La rete di sicurezza ha
+  riportato la Deck a 2,4 GHz da sola, con lo stesso IP e SSH sempre attivo.
+- Il secondo tentativo, qualche minuto dopo, è riuscito: 5180 MHz, `keep_5ghz` confermato, `WIFI_BAND_2G`
+  sparito, `ssh agentdeck` funzionante.
+- Trappola P22 e nota in `docs/deck.md`: dopo un riavvio del router si riprova dopo qualche minuto, e si conferma
+  solo quando il cambio è `awaiting_confirmation`.
+
 ## 0.4.8 — 2026-10-26
 
 Ciclo 04, task O10.T10, ripresa di O10.T5: l'accesso alla Deck da fuori casa è verificato

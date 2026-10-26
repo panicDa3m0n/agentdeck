@@ -1215,3 +1215,26 @@
 {"at": "2026-10-26 09:16", "testo": "VERSIONI scelte dall'utente: governance"}
 {"at": "2026-10-26 09:16", "testo": "[-] bash: python3 - <<'EOF' from pathlib import Path p = Path(\"docs/README.md\"); t = p.read_text() old = \"Codice: [../in"}
 {"at": "2026-10-26 09:16", "testo": "[-] Edit  CHANGELOG.md", "task": "-", "tipo": "file", "tool": "Edit", "file": "CHANGELOG.md"}
+{"at": "2026-10-26 09:16", "testo": "[-] bash: printf '0.4.8\\n' > VERSION && cat VERSION && git add -A && git commit -q -F - <<'EOF' Versione 0.4.8: accesso "}
+{"at": "2026-10-26 09:16", "testo": "RICHIESTA R6 risolta"}
+{"at": "2026-10-26 09:18", "testo": "[-] bash: echo \"rete del Mac: $(ipconfig getsummary en0 | awk -F ' SSID : ' '/ SSID : /{print $2; exit}')\"; echo \"ssh ag"}
+{"at": "2026-10-26 09:18", "testo": "TASK AGGIUNTA O10.T11 in O10 — Riporta la Deck sul Wi-Fi a 5 GHz dopo il riavvio del router"}
+{"at": "2026-10-26 09:18", "testo": "TASK APERTA O10.T11 — Riporta la Deck sul Wi-Fi a 5 GHz dopo il riavvio del router | perimetro: Wi-Fi della Deck solo tramite deck network | gate: Snapshot prima; la Deck torna sulla rete a 5 GHz dello stesso router con deck network prefer_5ghz e la conferma keep_5ghz, IP 192.168.1.49 invariato; ssh agentdeck funziona dopo il cambio; WIFI_BAND_2G sparito e nessun avviso nuovo in deck status. | rischio: 30"}
+{"at": "2026-10-26 09:18", "testo": "[O10.T11] bash: W=~/claude-rules/bin/wf.sh; $W task-add --obj O10 --title \"Riporta la Deck sul Wi-Fi a 5 GHz dopo il riavvio d"}
+{"at": "2026-10-26 09:19", "testo": "[O10.T11] bash: ssh -o BatchMode=yes agentdeck 'deck snapshot create \"description=prima del ritorno a 5 GHz (O10.T11)\" | pytho"}
+{"at": "2026-10-26 09:20", "testo": "[O10.T11] bash: ssh -o BatchMode=yes -o ConnectTimeout=10 -o ServerAliveInterval=3 -o ServerAliveCountMax=2 agentdeck 'deck ne"}
+{"at": "2026-10-26 09:20", "testo": "[O10.T11] bash: ssh -o BatchMode=yes agentdeck 'journalctl -u agentdeck-wifi-switch --since -5min --no-pager -o cat | tail -25"}
+{"at": "2026-10-26 09:20", "testo": "[O10.T11] bash: ssh -o BatchMode=yes agentdeck 'iwctl station wlan0 scan; sleep 4; iwctl station wlan0 get-networks 2>&1 | sed"}
+{"at": "2026-10-26 09:21", "testo": "[O10.T11] bash: ssh -o BatchMode=yes agentdeck 'sudo iw dev wlan0 scan 2>&1 | awk \"/^BSS/{bss=\\$2} /freq:/{f=\\$2} /signal:/{s="}
+{"at": "2026-10-26 09:21", "testo": "[O10.T11] bash: tok=$(ssh -o BatchMode=yes agentdeck 'deck network scan >/dev/null; deck network prefer_5ghz' | python3 -c \"im"}
+{"at": "2026-10-26 09:21", "testo": "[O10.T11] bash: ssh -o BatchMode=yes agentdeck 'deck network | python3 -c \"import json,sys; s=json.load(sys.stdin); print([(a["}
+{"at": "2026-10-26 09:22", "testo": "[O10.T11] bash: ssh -o BatchMode=yes agentdeck 'deck network keep_5ghz | python3 -c \"import json,sys; s=json.load(sys.stdin); "}
+{"at": "2026-10-26 09:22", "testo": "TRAPPOLA registrata: deck network prefer_5ghz subito dopo un riavvio del router fallisce (iwd: connect-failed status 1, wifi-switch: reverted no_connection) e la Deck torna da sola a 2,4 GHz -> il router di casa rifiuta per qualche minuto l'associazione a 5 GHz dopo essersi riavviato (canale 36, non DFS) -> aspettare qualche minuto e riprovare; dopo la conferma aspettare che deck network dica awaiting_confirmation prima di keep_5ghz."}
+{"at": "2026-10-26 09:22", "testo": "ANNOTAZIONE N49 su O10.T11 — 26/10 09:18-09:22: primo prefer_5ghz rifiutato dal router (status 1) e annullato da solo dalla rete di sicurezza (IP invariato, SSH sempre su); secondo tentativo dopo circa 3 minuti riuscito: 5180 MHz, keep_5ghz confermato, WIFI_BAND_2G sparito, ssh 3/3. Miglioria possibile per il ciclo successivo: wifi_switch potrebbe ritentare la connessione una volta dopo qualche secondo prima di tornare indietro."}
+{"at": "2026-10-26 09:22", "testo": "[O10.T11] bash: W=~/claude-rules/bin/wf.sh; $W pitfall \"deck network prefer_5ghz subito dopo un riavvio del router fallisce (i"}
+{"at": "2026-10-26 09:22", "testo": "[O10.T11] Edit  docs/deck.md", "task": "O10.T11", "tipo": "file", "tool": "Edit", "file": "docs/deck.md"}
+{"at": "2026-10-26 09:22", "testo": "TASK CHIUSA O10.T11 — completata: Deck di nuovo a 5 GHz (5180 MHz) con prefer_5ghz e keep_5ghz al secondo tentativo; IP invariato, ssh ok, WIFI_BAND_2G sparito"}
+{"at": "2026-10-26 09:22", "testo": "VERSIONE 0.4.9 (O10.T11)"}
+{"at": "2026-10-26 09:22", "testo": "VERSIONI scelte dall'utente: governance"}
+{"at": "2026-10-26 09:22", "testo": "[-] bash: ~/claude-rules/bin/wf.sh task-close --done \"Deck di nuovo a 5 GHz (5180 MHz) con prefer_5ghz e keep_5ghz al se"}
+{"at": "2026-10-26 09:22", "testo": "[-] Edit  CHANGELOG.md", "task": "-", "tipo": "file", "tool": "Edit", "file": "CHANGELOG.md"}

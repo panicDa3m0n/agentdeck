@@ -10,23 +10,20 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O10` Claude Code sulla Deck, usato davvero — 10 task: 8 completate, 0 in corso, 1 da fare, 1 bloccate
+- **Obiettivo attivo:** `O10` Claude Code sulla Deck, usato davvero — 11 task: 9 completate, 0 in corso, 1 da fare, 1 bloccate
 - **Task attiva:** —
-- **Ultima task gestita:** `O10.T10` — completata — Accesso da fuori casa verificato dall'hotspot: ssh agentdeck via scarlethome.ddns.net:49222, deck status, deck/install.sh; IP esterno vero
-- **Ultimo aggiornamento:** 2026-10-26 09:16
+- **Ultima task gestita:** `O10.T11` — completata — Deck di nuovo a 5 GHz (5180 MHz) con prefer_5ghz e keep_5ghz al secondo tentativo; IP invariato, ssh ok, WIFI_BAND_2G sparito
+- **Ultimo aggiornamento:** 2026-10-26 09:22
 
 ## Richieste attive
 
-_Mancanze di progetto che l'agente non può risolvere da solo. L'utente le conferma in chat, poi vengono chiuse con `req-resolve`._
-
-- `R6` (`O10`) Router ZTE: l'utente crea il port forwarding TCP 49222 -> 192.168.1.49:22 (agentdeck-ssh) e prenota 192.168.1.49 per il MAC 14:d4:24:0a:8e:45
+_nessuna richiesta in attesa._
 
 ## Obiettivi
 
 ### `O10` Claude Code sulla Deck, usato davvero — in corso
 
 **Gate obiettivo:** Claude Code gira sulla Deck per l'utente agent, autenticato con l'abbonamento e seguibile con Remote Control; conosce AgentDeck da un CLAUDE.md ricavato da docs/ e usa deck; una sessione di lavoro reale dalla chat produce i bisogni per il ciclo successivo; snapshot prima di ogni modifica e ssh agentdeck sempre funzionante (INV-1).
-**Richieste vincolanti:** `R6` Router ZTE: l'utente crea il port forwarding TCP 49222 -> 192.168.1.49:22 (agentdeck-ssh) e prenota 192.168.1.49 per il MAC 14:d4:24:0a:8e:45
 
 - [x] `O10.T1` Installazione di Claude Code sulla Deck — *perimetro:* `pacchetti e file dell'utente agent sulla Deck, install/, deck/, docs/`
   *gate previsto:* Snapshot prima; binario nativo di Claude Code installato per l'utente agent con firma GPG del manifest e checksum verificate; claude --version e claude doctor funzionano su Arch (la prima richiesta vera passa a O10.T2, dopo il login: decisione dell'utente); nessun servizio esposto in rete; installazione ripetibile da script del repository; documentazione aggiornata. · *gate confermato:* ✔ Claude Code 2.1.310 sulla Deck per agent: firma GPG del manifest e checksum verificate, --version e doctor ok, nessuna porta nuova; install/claude-code.sh
@@ -64,6 +61,10 @@ _Mancanze di progetto che l'agente non può risolvere da solo. L'utente le confe
   *gate previsto:* La porta TCP 49222 di scarlethome.ddns.net arriva a sshd della Deck; da fuori casa (hotspot) funzionano ssh agentdeck, deck status e deck/install.sh da questa chat; sshguard vede gli indirizzi esterni reali; INV-1 e INV-5 rispettati; documentazione aggiornata. · *gate confermato:* ✔ Accesso da fuori casa verificato dall'hotspot: ssh agentdeck via scarlethome.ddns.net:49222, deck status, deck/install.sh; IP esterno vero
   *rischio:* 15/100 — Solo verifica dell'accesso già configurato: sulla Deck non cambia nulla, al più la documentazione e la configurazione SSH del Mac.
   *annotazioni:* `N47`, `N48`
+- [x] `O10.T11` Riporta la Deck sul Wi-Fi a 5 GHz dopo il riavvio del router — *perimetro:* `Wi-Fi della Deck solo tramite deck network`
+  *gate previsto:* Snapshot prima; la Deck torna sulla rete a 5 GHz dello stesso router con deck network prefer_5ghz e la conferma keep_5ghz, IP 192.168.1.49 invariato; ssh agentdeck funziona dopo il cambio; WIFI_BAND_2G sparito e nessun avviso nuovo in deck status. · *gate confermato:* ✔ Deck di nuovo a 5 GHz (5180 MHz) con prefer_5ghz e keep_5ghz al secondo tentativo; IP invariato, ssh ok, WIFI_BAND_2G sparito
+  *rischio:* 30/100 — Il cambio di rete Wi-Fi tocca il canale dell'agente (INV-1); deck network lo protegge con anteprima, conferma e ritorno automatico alla rete di prima se il cambio non viene confermato.
+  *annotazioni:* `N49`
 
 ### `O11` Aggiornamento reale della Deck con deck update (O9) — in corso
 
@@ -98,3 +99,4 @@ _Una riga per nota, sempre legata a una task. `wf.sh notes` per leggerle._
 - `N46` (`O10.T4`) Bisogno emerso dalla prova d'insieme di O10.T9 (26/10): in una sessione sulla Deck tre comandi Bash di sola lettura (pacman -Ql, tree --version, una catena con mktemp) sono stati fermati dai permessi di Claude Code; con Remote Control diventerebbero domande al proprietario. Serve una politica decisa prima (H31): permessi allow gestiti per le letture di sistema (pacman -Q*/-Si/-Ss, man, systemctl status, journalctl, ls, cat in /etc) oppure più azioni di sola lettura in deck. Da decidere con l'utente. — 2026-10-26 02:03
 - `N47` (`O10.T10`) Verifica da casa (26/10): regola del router attiva. scarlethome.ddns.net = 151.81.1.126 = IP pubblico; la porta 49222 risponde SSH-2.0-OpenSSH_10.6; ssh agentdeck-wan entra (journal: Accepted publickey for agent from 151.81.1.126). Il router fa hairpin con SNAT: da casa le connessioni via nome pubblico arrivano con l'IP pubblico, non con quello LAN, quindi non sono coperte dalla whitelist di sshguard (una prova a vuoto con nc ha contato 2 punti). Manca la prova da una rete esterna (hotspot) per il gate. — 2026-10-26 09:06
 - `N48` (`O10.T10`) Prova da fuori casa (26/10, Mac sull'hotspot Router Davide, IP pubblico 151.82.12.31): ssh agentdeck ha scelto da solo scarlethome.ddns.net:49222 ed è entrato in 3 s; la Deck vede l'indirizzo esterno vero (journal: Accepted publickey for agent from 151.82.12.31); deck status ok; deck/install.sh completo in 35 s, 229 test sul Mac e sulla Deck; sshguard nessun blocco. Osservazione: la Deck è passata al Wi-Fi 2,4 GHz (WIFI_BAND_2G, freq 2437, IP sempre 192.168.1.49), probabilmente per il riavvio del router dopo la regola; da riportare con deck network prefer_5ghz in casa. — 2026-10-26 09:15
+- `N49` (`O10.T11`) 26/10 09:18-09:22: primo prefer_5ghz rifiutato dal router (status 1) e annullato da solo dalla rete di sicurezza (IP invariato, SSH sempre su); secondo tentativo dopo circa 3 minuti riuscito: 5180 MHz, keep_5ghz confermato, WIFI_BAND_2G sparito, ssh 3/3. Miglioria possibile per il ciclo successivo: wifi_switch potrebbe ritentare la connessione una volta dopo qualche secondo prima di tornare indietro. — 2026-10-26 09:22
