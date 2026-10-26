@@ -9,7 +9,7 @@ AgentDeck: una Steam Deck LCD (APU AMD, 16 GB RAM, NVMe 2 TB) trasformata in ser
 
 **Come si verifica che funziona:** La Deck si riavvia da sola dal disco interno e torna raggiungibile con ssh agentdeck (utente agent, solo chiave); systemctl is-system-running risponde running senza unità fallite; è attivo il kernel principale; snapper elenca gli snapshot e GRUB li rende avviabili. Gli script hanno controlli in sola lettura: install.sh check e verify, prepare-stick.sh con DRY_RUN=1. Non esistono ancora test automatici: ogni componente nuovo si verifica usandolo davvero come agente sulla Deck e controllando che la risposta sia JSON valido e coerente con lo stato reale.
 
-**Versioni:** Il numero è MAJOR.MINOR.PATCH: il terzo sale a ogni task completata, qualunque sia il suo obiettivo; il secondo a ogni ciclo chiuso; il primo solo col sì dell'utente, su proposta dell'agente. Versione attuale: 0.4.11; il numero sta in VERSION. Ogni versione si pubblica appena chiusa.
+**Versioni:** Il numero è MAJOR.MINOR.PATCH: il terzo sale a ogni task completata, qualunque sia il suo obiettivo; il secondo a ogni ciclo chiuso; il primo solo col sì dell'utente, su proposta dell'agente. Versione attuale: 0.5.0; il numero sta in VERSION. Ogni versione si pubblica appena chiusa.
 
 ## Dettagli
 
@@ -72,10 +72,29 @@ AgentDeck: una Steam Deck LCD (APU AMD, 16 GB RAM, NVMe 2 TB) trasformata in ser
     • O8.T7: Sintesi e revisione: Claude Code come harness, il sistema guida l'agente, adattatore dei prompt, obblighi come avvisi, si parte da Claude Code sulla Deck
   - `O9` Aggiornamento reale della Deck con deck update — deck update pronto; manca ancora la prova con un aggiornamento vero di Arch, rinviata al ciclo 04
 
-### `04` Claude Code dentro AgentDeck: installazione, configurazione e uso reale — **in corso**
+### `04` Claude Code dentro AgentDeck: installazione, configurazione e uso reale — concluso il 2026-10-26 11:35
+
+- Roadmap archiviata: [04-claude-code-dentro-agentdeck-installazio.md](.claude/workflow/roadmaps/04-claude-code-dentro-agentdeck-installazio.md)
+- Aperto il 2026-10-25 23:48 · concluso il 2026-10-26 11:35
+- **Risultato:** 2 obiettivi, 11 task completate, 2 rimaste bloccate
+  - `O10` Claude Code sulla Deck, usato davvero — Approvato dall'utente il 26/10. Claude Code sulla Deck usato davvero: abbonamento, Remote Control, deck mcp, adattatore, obblighi, hook, skill; accesso da fuori casa verificato in O10.T10, che supera O10.T5 rimasta bloccata; sessione reale con l'area dei servizi portata nel repository.
+    • O10.T1: Claude Code 2.1.310 sulla Deck per agent: firma GPG del manifest e checksum verificate, --version e doctor ok, nessuna porta nuova; install/claude-code.sh
+    • O10.T2: Login Max, token solo sulla Deck; claude -p ok; servizio con Remote Control in tmux, riconnesso dopo riavvio; sessione vista dall'utente
+    • O10.T3: Prompt di sistema in quattro strati (stile, CLAUDE.md gestito, deny e guardia, hook con gli avvisi); provati con claude -p e da Remote Control dall'utente
+    • O10.T4: Sessione reale del 26/10: area dei servizi preparata dall'agente e verificata; bisogni N51-N54 annotati; proposta del ciclo 05
+    • O10.T6: deck mcp: open più 18 strumenti tipizzati, risorse, conferme in due passi; provato da claude -p sulla Deck e via ssh dal Mac; 172 test
+    • O10.T7: deck term: programmi in tmux come schermate, segreti rifiutati, guardia; 20/20 dal vivo; profilo ssh-keygen scritto dall'agente
+    • O10.T8: deck obligations e hook: obbligo dall'hook di pacman, campo obligations, politica, verifiche, novità del turno, registro; provati dal vivo
+    • O10.T9: 6 skill di AgentDeck installate; prova d'insieme: tree installato da sola con skill, MCP, adattatore e obbligo chiuso; 229 test
+    • O10.T10: Accesso da fuori casa verificato dall'hotspot: ssh agentdeck via scarlethome.ddns.net:49222, deck status, deck/install.sh; IP esterno vero
+    • O10.T11: Deck di nuovo a 5 GHz (5180 MHz) con prefer_5ghz e keep_5ghz al secondo tentativo; IP invariato, ssh ok, WIFI_BAND_2G sparito
+    • O10.T12: Area dei servizi nel repository (servizi/, docs/servizi.md), identica all'installato per checksum; collegata da indice, deck.md, installazione
+  - `O11` Aggiornamento reale della Deck con deck update (O9) — Rimandato su decisione dell'utente (26/10): la prova di deck update si fa solo quando l'utente la chiederà; resta nel debito, da tralasciare fino ad allora.
+
+### `05` Il sistema è dell'agente: permessi, servizi e repository — **in corso**
 
 - Roadmap: [ROADMAP.md](ROADMAP.md)
-- Aperto il 2026-10-25 23:48 · ultimo aggiornamento 2026-10-26 09:38
+- Aperto il 2026-10-26 11:36 · ultimo aggiornamento 2026-10-26 11:38
 
 ## Debito ereditato
 

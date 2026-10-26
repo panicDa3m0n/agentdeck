@@ -4,6 +4,20 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.5.0 — 2026-10-26
+
+Chiuso il ciclo 04, "Claude Code dentro AgentDeck: installazione, configurazione e uso reale". Aperto il ciclo 05,
+"Il sistema è dell'agente: permessi, servizi e repository".
+
+- **Ciclo 04:** 2 obiettivi, 11 task completate, 2 bloccate. O10 è stato chiuso con il sì dell'utente: la sua O10.T5
+  è superata da O10.T10. O11, la prova di `deck update`, è rimandato finché l'utente non la chiede.
+- **Ciclo 05:**
+  - O12: l'agente lavora su AgentDeck senza chiedere permessi (ADR-0001), con più protezione;
+  - O13: i servizi della Deck gestiti dal sistema;
+  - O14: le modifiche fatte dall'agente sulla Deck arrivano nel repository.
+- **Debito ereditato:** 45 voci, ognuna con una decisione. 8 sono riprese come task, 16 rimandate e 21 chiuse
+  perché storiche.
+
 ## 0.4.11 — 2026-10-26
 
 Ciclo 04, task O10.T12: l'area dei servizi preparata dall'agente sulla Deck entra nel repository

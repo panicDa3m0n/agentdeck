@@ -2,7 +2,7 @@
   "version": 1,
   "name": "linuxai-steamdeck",
   "created": "2026-10-25 15:45",
-  "updated": "2026-10-26 09:38",
+  "updated": "2026-10-26 17:47",
   "phase": "active",
   "description": "AgentDeck: una Steam Deck LCD (APU AMD, 16 GB RAM, NVMe 2 TB) trasformata in server domestico a basso consumo con Arch Linux, progettato agent-first: il sistema è gestito interamente da un agente AI (oggi Claude, via SSH dal Mac) e l’umano è al massimo spettatore. Serve a ospitare servizi, applicazioni personali e domestiche, progetti di sviluppo e uso agentico completo. Ogni componente del sistema, prendendo spunto dalle funzioni di macOS, viene riprogettato per l’uso agentico con due tecnologie: interattività (ogni risposta è una schermata in JSON strutturato con dati, azioni, navigazione, errori e conferme come anteprima delle conseguenze) e autoprompting (il sistema fornisce all’agente le istruzioni giuste per il contesto in cui si trova). L’agente che sviluppa è anche l’agente che usa il sistema, così i bisogni emergono dall’uso reale. Obiettivo finale: agente interno basato su API cloud, idealmente sessioni Claude Code integrate nativamente con il sistema. Progetto personale di Davide. Nel repository: principi (PRINCIPI.md), chiavetta live con Wi-Fi e SSH automatici (live/), installazione di Arch a fasi (install/).",
   "verification": "La Deck si riavvia da sola dal disco interno e torna raggiungibile con ssh agentdeck (utente agent, solo chiave); systemctl is-system-running risponde running senza unità fallite; è attivo il kernel principale; snapper elenca gli snapshot e GRUB li rende avviabili. Gli script hanno controlli in sola lettura: install.sh check e verify, prepare-stick.sh con DRY_RUN=1. Non esistono ancora test automatici: ogni componente nuovo si verifica usandolo davvero come agente sulla Deck e controllando che la risposta sia JSON valido e coerente con lo stato reale.",
@@ -105,10 +105,41 @@
       "n": 4,
       "title": "Claude Code dentro AgentDeck: installazione, configurazione e uso reale",
       "slug": "claude-code-dentro-agentdeck-installazio",
-      "state": "active",
+      "state": "closed",
       "opened": "2026-10-25 23:48",
-      "updated": "2026-10-26 09:38",
-      "file": ".claude/workflow/roadmaps/04-claude-code-dentro-agentdeck-installazio.md"
+      "updated": "2026-10-26 11:35",
+      "file": ".claude/workflow/roadmaps/04-claude-code-dentro-agentdeck-installazio.md",
+      "closed": "2026-10-26 11:35",
+      "summary": {
+        "objectives": 2,
+        "done": 11,
+        "blocked": 2,
+        "objective_lines": [
+          "`O10` Claude Code sulla Deck, usato davvero — Approvato dall'utente il 26/10. Claude Code sulla Deck usato davvero: abbonamento, Remote Control, deck mcp, adattatore, obblighi, hook, skill; accesso da fuori casa verificato in O10.T10, che supera O10.T5 rimasta bloccata; sessione reale con l'area dei servizi portata nel repository.",
+          "    • O10.T1: Claude Code 2.1.310 sulla Deck per agent: firma GPG del manifest e checksum verificate, --version e doctor ok, nessuna porta nuova; install/claude-code.sh",
+          "    • O10.T2: Login Max, token solo sulla Deck; claude -p ok; servizio con Remote Control in tmux, riconnesso dopo riavvio; sessione vista dall'utente",
+          "    • O10.T3: Prompt di sistema in quattro strati (stile, CLAUDE.md gestito, deny e guardia, hook con gli avvisi); provati con claude -p e da Remote Control dall'utente",
+          "    • O10.T4: Sessione reale del 26/10: area dei servizi preparata dall'agente e verificata; bisogni N51-N54 annotati; proposta del ciclo 05",
+          "    • O10.T6: deck mcp: open più 18 strumenti tipizzati, risorse, conferme in due passi; provato da claude -p sulla Deck e via ssh dal Mac; 172 test",
+          "    • O10.T7: deck term: programmi in tmux come schermate, segreti rifiutati, guardia; 20/20 dal vivo; profilo ssh-keygen scritto dall'agente",
+          "    • O10.T8: deck obligations e hook: obbligo dall'hook di pacman, campo obligations, politica, verifiche, novità del turno, registro; provati dal vivo",
+          "    • O10.T9: 6 skill di AgentDeck installate; prova d'insieme: tree installato da sola con skill, MCP, adattatore e obbligo chiuso; 229 test",
+          "    • O10.T10: Accesso da fuori casa verificato dall'hotspot: ssh agentdeck via scarlethome.ddns.net:49222, deck status, deck/install.sh; IP esterno vero",
+          "    • O10.T11: Deck di nuovo a 5 GHz (5180 MHz) con prefer_5ghz e keep_5ghz al secondo tentativo; IP invariato, ssh ok, WIFI_BAND_2G sparito",
+          "    • O10.T12: Area dei servizi nel repository (servizi/, docs/servizi.md), identica all'installato per checksum; collegata da indice, deck.md, installazione",
+          "`O11` Aggiornamento reale della Deck con deck update (O9) — Rimandato su decisione dell'utente (26/10): la prova di deck update si fa solo quando l'utente la chiederà; resta nel debito, da tralasciare fino ad allora."
+        ],
+        "adr": []
+      }
+    },
+    {
+      "n": 5,
+      "title": "Il sistema è dell'agente: permessi, servizi e repository",
+      "slug": "il-sistema-dell-agente-permessi-servizi-",
+      "state": "active",
+      "opened": "2026-10-26 11:36",
+      "updated": "2026-10-26 11:38",
+      "file": ".claude/workflow/roadmaps/05-il-sistema-dell-agente-permessi-servizi-.md"
     }
   ],
   "debt": [
@@ -206,9 +237,10 @@
       "kind": "task",
       "ref": "O6.T1",
       "cycle": 2,
-      "state": "taken",
+      "state": "deferred",
       "text": "Componente update: anteprima, applicazione e verifica degli aggiornamenti — deck update pronto, provato solo in lettura: manca la prova con un aggiornamento vero di Arch (oggi nessuno). Si riprende al primo aggiornamento",
-      "resolved": "2026-10-25 20:43"
+      "resolved": "2026-10-26 17:45",
+      "why": "la prova di deck update si fa solo quando l'utente la chieder, sapendo che  uscito un aggiornamento"
     },
     {
       "kind": "task",
@@ -232,9 +264,10 @@
       "kind": "obiettivo",
       "ref": "O6",
       "cycle": 2,
-      "state": "taken",
+      "state": "deferred",
       "text": "Aggiornamenti sicuri: deck update — deck update pronto e installato; manca la prova con un aggiornamento vero di Arch, da fare al primo disponibile (decisione dell'utente)",
-      "resolved": "2026-10-25 20:43"
+      "resolved": "2026-10-26 17:45",
+      "why": "la prova di deck update si fa solo quando l'utente la chieder, sapendo che  uscito un aggiornamento"
     },
     {
       "kind": "obiettivo",
@@ -294,9 +327,10 @@
       "kind": "annotazione",
       "ref": "N16",
       "cycle": 2,
-      "state": "taken",
+      "state": "deferred",
       "text": "[O6.T1] Decisione dell'utente (25/10, 20:00): impostazione di deck update approvata; la prova del gate si fa solo con un aggiornamento vero di Arch (oggi la Deck è già aggiornata: core fermo al 24/10, nessun pacchetto installato con versione nuova). La task resta aperta finché non arriva il primo aggiornamento.",
-      "resolved": "2026-10-25 20:43"
+      "resolved": "2026-10-26 17:45",
+      "why": "la prova di deck update si fa solo quando l'utente la chieder, sapendo che  uscito un aggiornamento"
     },
     {
       "kind": "annotazione",
@@ -311,17 +345,19 @@
       "kind": "annotazione",
       "ref": "N18",
       "cycle": 2,
-      "state": "taken",
+      "state": "deferred",
       "text": "[O6.T1] Avanzamento O6.T1 (25/10, 20:06): deck update implementato e installato sulla Deck (check, apply, verify, reboot), 149 test. Dal vivo: check reale in 1,4 s senza toccare il database di sistema, 0 aggiornamenti; apply non disponibile con il motivo; verify ok (5 servizi di accesso attivi, sshd -t ok, DNS ok, nessun .pacnew). Manca la prova del gate con il primo aggiornamento vero di Arch.",
-      "resolved": "2026-10-25 20:43"
+      "resolved": "2026-10-26 17:45",
+      "why": "la prova di deck update si fa solo quando l'utente la chieder, sapendo che  uscito un aggiornamento"
     },
     {
       "kind": "annotazione",
       "ref": "N19",
       "cycle": 2,
-      "state": "taken",
+      "state": "deferred",
       "text": "[O6.T1] Effetto del blocco di O6 (25/10): finché O6.T1 non riprende, la Deck non viene aggiornata da nessuno, aggiornamenti di sicurezza compresi. deck update check e l'avviso UPDATES_UNCHECKED (dopo 24 h) dicono quando arrivano: al primo aggiornamento disponibile riaprire O6.T1 (task-start), fare la prova del gate e non lasciare indietro a lungo openssh, openssl, linux.",
-      "resolved": "2026-10-25 20:43"
+      "resolved": "2026-10-26 17:45",
+      "why": "la prova di deck update si fa solo quando l'utente la chieder, sapendo che  uscito un aggiornamento"
     },
     {
       "kind": "annotazione",
@@ -336,17 +372,19 @@
       "kind": "task",
       "ref": "O9.T1",
       "cycle": 3,
-      "state": "taken",
+      "state": "deferred",
       "text": "Prova di deck update con un aggiornamento vero (ripresa di O6.T1, con N16, N18, N19) — Nessun aggiornamento vero di Arch disponibile durante il ciclo 03; si riprende al primo aggiornamento, nel ciclo 04",
-      "resolved": "2026-10-25 23:48"
+      "resolved": "2026-10-26 17:45",
+      "why": "la prova di deck update si fa solo quando l'utente la chieder, sapendo che  uscito un aggiornamento"
     },
     {
       "kind": "obiettivo",
       "ref": "O9",
       "cycle": 3,
-      "state": "taken",
+      "state": "deferred",
       "text": "Aggiornamento reale della Deck con deck update — deck update pronto; manca ancora la prova con un aggiornamento vero di Arch, rinviata al ciclo 04",
-      "resolved": "2026-10-25 23:48"
+      "resolved": "2026-10-26 17:45",
+      "why": "la prova di deck update si fa solo quando l'utente la chieder, sapendo che  uscito un aggiornamento"
     },
     {
       "kind": "annotazione",
@@ -361,17 +399,19 @@
       "kind": "annotazione",
       "ref": "N22",
       "cycle": 3,
-      "state": "taken",
+      "state": "deferred",
       "text": "[O8.T7] Decisione dell'utente (25/10, D1): niente API di Claude, l'harness è Claude Code. Sessioni interattive: Claude Code sulla Deck con il plugin di AgentDeck (hook, deck mcp, skill), seguite con Remote Control. Agente autonomo: Claude Code senza interfaccia (claude -p, --resume), non Agent SDK con chiave API; fork open source escluso. Da verificare: condizioni d'uso dell'abbonamento per sessioni automatiche; testo di INV-7 (modelli via API cloud) da allineare con il sì dell'utente.",
-      "resolved": "2026-10-25 23:48"
+      "resolved": "2026-10-26 17:45",
+      "why": "harness realizzato nel ciclo 04; resta da decidere D7 (sessioni automatiche) con l'utente"
     },
     {
       "kind": "annotazione",
       "ref": "N23",
       "cycle": 3,
-      "state": "taken",
+      "state": "deferred",
       "text": "[O8.T7] Verifica dei termini (25/10, fonti primarie): Consumer Terms vietano reverse engineering e accesso automatizzato salvo chiave API o permesso esplicito; il login dell'abbonamento è per l'uso ordinario di Claude Code; il binario non va modificato. Sessioni interattive e Remote Control in regola; sessioni avviate da eventi con claude -p sull'abbonamento da chiarire prima di A5.5/A6.5 (decisione D7).",
-      "resolved": "2026-10-25 23:48"
+      "resolved": "2026-10-26 17:45",
+      "why": "harness realizzato nel ciclo 04; resta da decidere D7 (sessioni automatiche) con l'utente"
     },
     {
       "kind": "annotazione",
@@ -395,21 +435,329 @@
       "kind": "annotazione",
       "ref": "N26",
       "cycle": 3,
-      "state": "taken",
+      "state": "deferred",
       "text": "[O9.T1] Effetto del blocco di O9 (25/10): resta valido N19, la Deck non viene aggiornata finché la prova non si fa; deck update check e l'avviso UPDATES_UNCHECKED dicono quando arriva un aggiornamento. La prova passa al ciclo 04 come debito.",
-      "resolved": "2026-10-25 23:48"
+      "resolved": "2026-10-26 17:45",
+      "why": "la prova di deck update si fa solo quando l'utente la chieder, sapendo che  uscito un aggiornamento"
+    },
+    {
+      "kind": "task",
+      "ref": "O10.T5",
+      "cycle": 4,
+      "state": "dropped",
+      "text": "Accesso remoto da fuori casa con SSH esposto su scarlethome.ddns.net — Deck e Mac pronti (sshguard, ssh agentdeck LAN o internet, Tailscale spento, docs); manca R6, regola sul router, quindi la prova da hotspot",
+      "why": "superata da O10.T10: accesso da fuori casa verificato dall'hotspot",
+      "resolved": "2026-10-26 12:08"
+    },
+    {
+      "kind": "task",
+      "ref": "O11.T1",
+      "cycle": 4,
+      "state": "deferred",
+      "text": "Prova di deck update con un aggiornamento vero (O9.T1, N26; da O6.T1, O6, N16, N18, N19) — Rimandata dall'utente (N57): si fa solo quando la chiederà, sapendo che è uscito un aggiornamento",
+      "why": "la prova di deck update si fa solo quando l'utente la chieder, sapendo che  uscito un aggiornamento",
+      "resolved": "2026-10-26 17:17"
+    },
+    {
+      "kind": "obiettivo",
+      "ref": "O10",
+      "cycle": 4,
+      "state": "dropped",
+      "text": "Claude Code sulla Deck, usato davvero — Approvato dall'utente il 26/10. Claude Code sulla Deck usato davvero: abbonamento, Remote Control, deck mcp, adattatore, obblighi, hook, skill; accesso da fuori casa verificato in O10.T10, che supera O10.T5 rimasta bloccata; sessione reale con l'area dei servizi portata nel repository.",
+      "why": "obiettivo chiuso con il s dell'utente; bloccato solo per O10.T5, superata",
+      "resolved": "2026-10-26 12:08"
+    },
+    {
+      "kind": "obiettivo",
+      "ref": "O11",
+      "cycle": 4,
+      "state": "deferred",
+      "text": "Aggiornamento reale della Deck con deck update (O9) — Rimandato su decisione dell'utente (26/10): la prova di deck update si fa solo quando l'utente la chiederà; resta nel debito, da tralasciare fino ad allora.",
+      "why": "la prova di deck update si fa solo quando l'utente la chieder, sapendo che  uscito un aggiornamento",
+      "resolved": "2026-10-26 17:17"
+    },
+    {
+      "kind": "annotazione",
+      "ref": "N27",
+      "cycle": 4,
+      "state": "dropped",
+      "text": "[O10.T2] Da O10.T1 (25/10): le sessioni SSH non interattive di agent non leggono ~/.bashrc, quindi claude non è nel PATH dei comandi lanciati via ssh (PATH di sshd: /usr/local/sbin:/usr/local/bin:/usr/bin). Per il servizio di Claude Code impostare PATH nell'unità systemd; per i comandi via ssh usare ~/.local/bin/claude o decidere un collegamento di sistema (fuori dal perimetro di O10.T1).",
+      "why": "storica del ciclo 04: lavoro concluso e documentato",
+      "resolved": "2026-10-26 12:08"
+    },
+    {
+      "kind": "annotazione",
+      "ref": "N28",
+      "cycle": 4,
+      "state": "taken",
+      "text": "[O10.T2] Effetto del rinvio del login (26/10, decisione dell'utente): senza login con l'abbonamento (R4) non si fanno richiesta di prova, Remote Control né il servizio persistente; restano pronti tmux 3.8 (snapshot 36-38) e la cartella di lavoro ~/agentdeck. O10.T3 si può preparare (CLAUDE.md, permessi) ma la verifica dalla sessione richiede il login; O10.T4 richiede il login. tmux va aggiunto all'elenco pacchetti di install/install.sh. Per il login usare una scheda del Terminale (P18).",
+      "resolved": "2026-10-26 12:08"
+    },
+    {
+      "kind": "annotazione",
+      "ref": "N29",
+      "cycle": 4,
+      "state": "dropped",
+      "text": "[O10.T2] Login (26/10): claude auth login gira in tmux sulla Deck (sessione login) e il campo del codice riceve i tasti (prova con un codice falso: Invalid code). Il primo invio dell'utente con read e tmux send-keys ha consegnato una riga vuota, quindi nessun esito. Comando corretto che rifiuta la riga vuota e conta i caratteri; va lanciato dall'app Terminale del Mac, non dalla chat. Il codice non passa da righe di comando né registri.",
+      "why": "storica del ciclo 04: lavoro concluso e documentato",
+      "resolved": "2026-10-26 12:08"
+    },
+    {
+      "kind": "annotazione",
+      "ref": "N30",
+      "cycle": 4,
+      "state": "deferred",
+      "text": "[O10.T2] Proposta di nuovo testo per INV-7 (26/10), da decidere al gate di O10: Stack imposto: Arch Linux sulla Deck; gli agenti lavorano con Claude Code e l'abbonamento Claude dell'utente, cioè con modelli nel cloud di Anthropic: nessun modello eseguito in locale e nessuna chiave API. La governance non ha un comando per modificare un'invariante, solo invariant-add.",
+      "why": "nuovo testo di INV-7 da decidere con l'utente",
+      "resolved": "2026-10-26 17:17"
+    },
+    {
+      "kind": "annotazione",
+      "ref": "N31",
+      "cycle": 4,
+      "state": "dropped",
+      "text": "[O10.T3] Richiesta dell'utente (26/10): verificare come gestire il prompt di sistema di Claude Code per usarlo correttamente negli scopi di gestione dell'OS. Si studia dentro O10.T3: CLAUDE.md a più livelli, opzioni del prompt di sistema, stili di output, hook, agenti, e cosa vale per le sessioni di Remote Control.",
+      "why": "storica del ciclo 04: lavoro concluso e documentato",
+      "resolved": "2026-10-26 12:08"
+    },
+    {
+      "kind": "annotazione",
+      "ref": "N32",
+      "cycle": 4,
+      "state": "dropped",
+      "text": "[O10.T3] Fatto emerso (26/10, aiuto di Claude Code 2.1.310 sulla Deck): il comando principale accetta --system-prompt, --append-system-prompt (anche da file), --agent, --agents, --settings, --setting-sources; claude remote-control (server mode) fra questi accetta solo --permission-mode. Le sessioni aperte da Remote Control vanno configurate con ciò che si legge dalla cartella di lavoro e dalla macchina (CLAUDE.md, impostazioni, hook, agenti), da verificare sulla documentazione.",
+      "why": "storica del ciclo 04: lavoro concluso e documentato",
+      "resolved": "2026-10-26 12:08"
+    },
+    {
+      "kind": "annotazione",
+      "ref": "N33",
+      "cycle": 4,
+      "state": "dropped",
+      "text": "[O10.T3] Avanzamento O10.T3 (26/10): installati i quattro strati (stile AgentDeck, /etc/claude-code/CLAUDE.md generato con le 10 invarianti, managed-settings con deny e niente bypass, hook PreToolUse guardia e SessionStart con gli avvisi di deck). Verificati con claude -p in ~/agentdeck: identità e regole, avvisi di inizio sessione, deny e guardia con marcatori innocui anche con Bash permesso, uso di deck status. 158 test. Manca la conferma dell'utente da una sessione aperta con Remote Control.",
+      "why": "storica del ciclo 04: lavoro concluso e documentato",
+      "resolved": "2026-10-26 12:08"
+    },
+    {
+      "kind": "annotazione",
+      "ref": "N34",
+      "cycle": 4,
+      "state": "dropped",
+      "text": "[O10.T5] Decisione esplicita dell'utente (26/10) per INV-5: accesso da fuori casa con Tailscale, rete privata cifrata con connessione in uscita e nessuna porta pubblica; il coordinamento passa dal servizio di Tailscale. Installato tailscale 1.104.2 (snapshot 43, 44-45), tailscaled attivo, tailscale up con --accept-dns=false e hostname agentdeck in attesa di autorizzazione dall'utente; DNS della Deck invariato.",
+      "why": "storica del ciclo 04: lavoro concluso e documentato",
+      "resolved": "2026-10-26 12:08"
+    },
+    {
+      "kind": "annotazione",
+      "ref": "N35",
+      "cycle": 4,
+      "state": "dropped",
+      "text": "[O10.T5] Stato (26/10): tailscale status sulla Deck dice Logged out, il link di autorizzazione è ancora valido e rimandato all'utente; si aspetta la richiesta R5 (autorizzazione, scadenza della chiave tolta, app sul Mac).",
+      "why": "storica del ciclo 04: lavoro concluso e documentato",
+      "resolved": "2026-10-26 12:08"
+    },
+    {
+      "kind": "annotazione",
+      "ref": "N36",
+      "cycle": 4,
+      "state": "dropped",
+      "text": "[O10.T5] Verifica (26/10): Deck nella tailnet dell'utente (100.83.1.34, agentdeck.tail752ba1.ts.net, online), DNS invariato, sessione tmux del login chiusa. Porte nuove: UDP 41641 su tutte le interfacce (WireGuard, solo traffico autenticato; il router non inoltra) e due porte del peerapi solo su tailscale0. Mancano: app Tailscale sul Mac (non presente in /Applications) e scadenza della chiave tolta (KeyExpiry 2027-04-23 ancora presente).",
+      "why": "storica del ciclo 04: lavoro concluso e documentato",
+      "resolved": "2026-10-26 12:08"
+    },
+    {
+      "kind": "annotazione",
+      "ref": "N37",
+      "cycle": 4,
+      "state": "dropped",
+      "text": "[O10.T5] Verifica dal Mac (26/10): Tailscale.app installata ma la VPN io.tailscale.ipn.macsys è in stato Connecting, nessuna interfaccia con indirizzo 100.x, la Deck non vede altri dispositivi; ssh verso 100.83.1.34 in timeout. Chiesto all'utente di completare il login nell'app e consentire l'estensione di rete di macOS. KeyExpiry della Deck ancora 2027-04-23.",
+      "why": "storica del ciclo 04: lavoro concluso e documentato",
+      "resolved": "2026-10-26 12:08"
+    },
+    {
+      "kind": "annotazione",
+      "ref": "N38",
+      "cycle": 4,
+      "state": "dropped",
+      "text": "[O10.T5] Diagnosi Mac (26/10 00:52): la sessione VPN di macOS è rimasta in NESMVPNSessionStateIdleIPC perché l'app ha chiesto l'IPC alle 00:40:04, prima dell'approvazione dell'estensione (00:40:24). Ogni nuovo tentativo riceve: cannot establish IPC because IPC is already in the process of being established. Chiudere e riaprire l'app non basta; serve chiudere l'estensione (root, pid 35169) con sudo, oppure riavviare il Mac. sudo chiede la password: lo fa l'utente.",
+      "why": "storica del ciclo 04: lavoro concluso e documentato",
+      "resolved": "2026-10-26 12:08"
+    },
+    {
+      "kind": "annotazione",
+      "ref": "N39",
+      "cycle": 4,
+      "state": "dropped",
+      "text": "[O10.T5] Alternativa chiesta dall'utente (26/10 00:58): aprire SSH della Deck verso internet, accesso solo con chiave. Fattibilità verificata: la linea di casa ha IPv4 pubblico (151.81.x, nessun CGNAT: secondo salto 151.7.220.33), router con UPnP, niente IPv6. Servirebbero port forwarding, porta non standard, limite ai tentativi e DDNS per l'IP dinamico; per INV-5 è una decisione esplicita dell'utente. La scheda di riavvio di nesessionmanager è stata chiusa senza eseguirla; la VPN del Mac resta Connecting.",
+      "why": "storica del ciclo 04: lavoro concluso e documentato",
+      "resolved": "2026-10-26 12:08"
+    },
+    {
+      "kind": "annotazione",
+      "ref": "N40",
+      "cycle": 4,
+      "state": "dropped",
+      "text": "[O10.T5] Decisione esplicita dell'utente (26/10, per INV-5): 'fai tutto tu, hai approvazione completa' sul piano presentato. SSH della Deck esposto su internet su scarlethome.ddns.net con porta esterna alta non standard inoltrata alla 22, solo chiave, sshguard contro i tentativi; mappatura sul router aperta dalla Deck via UPnP e rinnovata da un timer; Tailscale sulla Deck fermato e disabilitato (pacchetto lasciato, reversibile).",
+      "why": "storica del ciclo 04: lavoro concluso e documentato",
+      "resolved": "2026-10-26 12:08"
+    },
+    {
+      "kind": "annotazione",
+      "ref": "N41",
+      "cycle": 4,
+      "state": "dropped",
+      "text": "[O10.T5] UPnP non utilizzabile (26/10 01:05): il router ZTE F6746G annuncia l'IGD ma rifiuta ogni azione con errore 800 'do not execute action(all)' (anche GetExternalIPAddress). La mappatura non può farla la Deck: serve una regola fissa di port forwarding sul router (TCP 49222 esterna -> 192.168.1.49:22) e la prenotazione DHCP del MAC 14:d4:24:0a:8e:45, fatte dall'utente dal pannello del router. miniupnpc rimosso. Gate da correggere: mappatura con regola fissa sul router invece che gestita dalla Deck.",
+      "why": "storica del ciclo 04: lavoro concluso e documentato",
+      "resolved": "2026-10-26 12:08"
+    },
+    {
+      "kind": "annotazione",
+      "ref": "N42",
+      "cycle": 4,
+      "state": "taken",
+      "text": "[O10.T4] Da O10.T5: SSH della Deck ora esposto su internet (porta esterna 49222) con sshguard. Le regole di Claude Code sulla Deck (deck/claude/CLAUDE.template.md) non lo dicono: valutare di aggiungere che sshguard non va fermato né la whitelist allargata, ed eventualmente la guardia su stop o disable di sshguard. Utile anche un avviso di deck status se sshguard non è attivo.",
+      "resolved": "2026-10-26 12:08"
+    },
+    {
+      "kind": "annotazione",
+      "ref": "N43",
+      "cycle": 4,
+      "state": "dropped",
+      "text": "[O10.T5] R5 (Tailscale) superata dalla decisione N40: la strada è SSH esposto con port forwarding; tailscaled fermato e disabilitato sulla Deck, nessuna regola o porta rimasta. La Deck resta registrata nella tailnet dell'utente: si può togliere dalla console di Tailscale.",
+      "why": "storica del ciclo 04: lavoro concluso e documentato",
+      "resolved": "2026-10-26 12:08"
+    },
+    {
+      "kind": "annotazione",
+      "ref": "N44",
+      "cycle": 4,
+      "state": "dropped",
+      "text": "[O10.T6] Trovato installando (26/10): test_update.test_grub_install_matches_installer (da O6.T1) falliva sulla Deck perché legge install/install.sh del repository, che in /opt/agentdeck non c'è; deck/install.sh si fermava ai test sulla Deck e saltava le prove finali. Corretto con skipTest quando il file manca: sul Mac il confronto con l'installatore resta identico.",
+      "why": "storica del ciclo 04: lavoro concluso e documentato",
+      "resolved": "2026-10-26 12:08"
+    },
+    {
+      "kind": "annotazione",
+      "ref": "N45",
+      "cycle": 4,
+      "state": "dropped",
+      "text": "[O10.T7] Dalla prova con la sessione di Claude Code sulla Deck (26/10): l'agente ha scritto, provato e salvato da solo il profilo di ssh-keygen, senza digitare la passphrase. Ha segnalato che una domanda già risposta e ancora visibile faceva vincere la regola sbagliata. Corretto il motore: una regola di domanda vale solo se finisce sulla riga del cursore. Adeguato il mio test test_unknown_question_asks_for_a_profile (programma finto con un prompt vero sulla riga del cursore): stesso percorso verificato.",
+      "why": "storica del ciclo 04: lavoro concluso e documentato",
+      "resolved": "2026-10-26 12:08"
+    },
+    {
+      "kind": "annotazione",
+      "ref": "N46",
+      "cycle": 4,
+      "state": "taken",
+      "text": "[O10.T4] Bisogno emerso dalla prova d'insieme di O10.T9 (26/10): in una sessione sulla Deck tre comandi Bash di sola lettura (pacman -Ql, tree --version, una catena con mktemp) sono stati fermati dai permessi di Claude Code; con Remote Control diventerebbero domande al proprietario. Serve una politica decisa prima (H31): permessi allow gestiti per le letture di sistema (pacman -Q*/-Si/-Ss, man, systemctl status, journalctl, ls, cat in /etc) oppure più azioni di sola lettura in deck. Da decidere con l'utente.",
+      "resolved": "2026-10-26 12:08"
+    },
+    {
+      "kind": "annotazione",
+      "ref": "N47",
+      "cycle": 4,
+      "state": "dropped",
+      "text": "[O10.T10] Verifica da casa (26/10): regola del router attiva. scarlethome.ddns.net = 151.81.1.126 = IP pubblico; la porta 49222 risponde SSH-2.0-OpenSSH_10.6; ssh agentdeck-wan entra (journal: Accepted publickey for agent from 151.81.1.126). Il router fa hairpin con SNAT: da casa le connessioni via nome pubblico arrivano con l'IP pubblico, non con quello LAN, quindi non sono coperte dalla whitelist di sshguard (una prova a vuoto con nc ha contato 2 punti). Manca la prova da una rete esterna (hotspot) per il gate.",
+      "why": "storica del ciclo 04: lavoro concluso e documentato",
+      "resolved": "2026-10-26 12:08"
+    },
+    {
+      "kind": "annotazione",
+      "ref": "N48",
+      "cycle": 4,
+      "state": "dropped",
+      "text": "[O10.T10] Prova da fuori casa (26/10, Mac sull'hotspot Router Davide, IP pubblico 151.82.12.31): ssh agentdeck ha scelto da solo scarlethome.ddns.net:49222 ed è entrato in 3 s; la Deck vede l'indirizzo esterno vero (journal: Accepted publickey for agent from 151.82.12.31); deck status ok; deck/install.sh completo in 35 s, 229 test sul Mac e sulla Deck; sshguard nessun blocco. Osservazione: la Deck è passata al Wi-Fi 2,4 GHz (WIFI_BAND_2G, freq 2437, IP sempre 192.168.1.49), probabilmente per il riavvio del router dopo la regola; da riportare con deck network prefer_5ghz in casa.",
+      "why": "storica del ciclo 04: lavoro concluso e documentato",
+      "resolved": "2026-10-26 12:08"
+    },
+    {
+      "kind": "annotazione",
+      "ref": "N49",
+      "cycle": 4,
+      "state": "taken",
+      "text": "[O10.T11] 26/10 09:18-09:22: primo prefer_5ghz rifiutato dal router (status 1) e annullato da solo dalla rete di sicurezza (IP invariato, SSH sempre su); secondo tentativo dopo circa 3 minuti riuscito: 5180 MHz, keep_5ghz confermato, WIFI_BAND_2G sparito, ssh 3/3. Miglioria possibile per il ciclo successivo: wifi_switch potrebbe ritentare la connessione una volta dopo qualche secondo prima di tornare indietro.",
+      "resolved": "2026-10-26 12:08"
+    },
+    {
+      "kind": "annotazione",
+      "ref": "N50",
+      "cycle": 4,
+      "state": "dropped",
+      "text": "[O10.T11] Fuori dal perimetro dichiarato (solo Wi-Fi tramite deck network): aggiunta in docs/deck.md la nota sul router che rifiuta i 5 GHz dopo un riavvio (P22), richiesta da INV-9; il perimetro della task avrebbe dovuto includere docs/. Segnalato all'utente.",
+      "why": "storica del ciclo 04: lavoro concluso e documentato",
+      "resolved": "2026-10-26 12:08"
+    },
+    {
+      "kind": "annotazione",
+      "ref": "N51",
+      "cycle": 4,
+      "state": "dropped",
+      "text": "[O10.T4] Sessione reale del 26/10 notte (Remote Control, finita alle 01:52 con 32 strumenti: Bash 26, Write 5, AskUserQuestion 1): l'agente sulla Deck ha preparato l'area dei servizi ospitati. Applicato sulla Deck dopo lo snapshot 42 e verificato dal Mac: subvolume @servizi su /srv/servizi (fstab, nofail), unità modello agentdeck-servizio@.service con isolamento forte (systemd-analyze 3.0), comando agentdeck-nuovo-servizio; area vuota, solo la porta 22 esposta. Ha lasciato ~/agentdeck/consegna (CONSEGNA.md, docs/servizi.md, servizi/) da portare nel repository.",
+      "why": "storica del ciclo 04: lavoro concluso e documentato",
+      "resolved": "2026-10-26 12:08"
+    },
+    {
+      "kind": "annotazione",
+      "ref": "N52",
+      "cycle": 4,
+      "state": "taken",
+      "text": "[O10.T4] Bisogno: l'agente sulla Deck non ha accesso al repository, quindi una modifica al sistema fatta da lui resta fuori da git e da docs/ finché una sessione dal Mac non la porta a mano (deriva rispetto a INV-8 e INV-9). Strade da decidere: copia del repository sulla Deck con push (credenziali), un componente deck di consegna verso il Mac, oppure lo stato voluto (D4).",
+      "resolved": "2026-10-26 12:08"
+    },
+    {
+      "kind": "annotazione",
+      "ref": "N53",
+      "cycle": 4,
+      "state": "taken",
+      "text": "[O10.T4] Bisogni dell'area dei servizi, dalla consegna: componente deck servizi (deck service non mostra le istanze ferme; crea, aggiorna da git, rimuovi con anteprima); configurazione snapper per @servizi (gli snapshot di sistema non coprono i dati dei servizi, INV-3); firewall nftables con rete di sicurezza che si annulla da sola (oggi la convenzione HOST=127.0.0.1 non è imposta).",
+      "resolved": "2026-10-26 12:08"
+    },
+    {
+      "kind": "annotazione",
+      "ref": "N54",
+      "cycle": 4,
+      "state": "taken",
+      "text": "[O10.T4] La sessione reale ha lavorato solo con Bash: deck mcp, adattatore, obblighi, hook e skill sono arrivati dopo (0.4.4-0.4.7). La prossima sessione reale deve mostrare se l'agente li usa da solo nel lavoro vero e quanto restano utili i comandi Bash.",
+      "resolved": "2026-10-26 12:08"
+    },
+    {
+      "kind": "annotazione",
+      "ref": "N55",
+      "cycle": 4,
+      "state": "dropped",
+      "text": "[O10.T4] Proposta di roadmap del ciclo 05, nata dai bisogni N42, N46, N49, N51-N54: O12 servizi gestiti dal sistema (deck servizi, snapper per @servizi, firewall con rete di sicurezza, primo servizio vero); O13 le modifiche dell'agente sulla Deck arrivano nel repository (canale da decidere: copia con push, consegna, stato voluto D4); O14 meno domande al proprietario e più protezione (permessi per le letture, sshguard protetto, Wi-Fi che ritenta, sessione reale con gli strumenti nuovi). Da decidere prima: O11, INV-7 (N30), D7. Pagina: https://claude.ai/artifact/RsvXPfqirwoyRkX6HXjrt4",
+      "why": "realizzata:  la roadmap del ciclo 05",
+      "resolved": "2026-10-26 12:08"
+    },
+    {
+      "kind": "annotazione",
+      "ref": "N56",
+      "cycle": 4,
+      "state": "taken",
+      "text": "[O10.T12] Le regole che l'agente legge sulla Deck (deck/claude/CLAUDE.template.md) non citano l'area dei servizi: le sessioni future la scoprono solo da /srv/servizi. Da aggiungere insieme a deck servizi (O12 della proposta del ciclo 05), fuori dal perimetro di questa task.",
+      "resolved": "2026-10-26 12:08"
+    },
+    {
+      "kind": "annotazione",
+      "ref": "N57",
+      "cycle": 4,
+      "state": "deferred",
+      "text": "[O11.T1] Decisione dell'utente (26/10): la prova di deck update con un aggiornamento vero non va riproposta né portata avanti finché l'utente non la chiede, quando saprà che è uscito un aggiornamento. Da tralasciare in proposte, riepiloghi e piani fino a richiesta manuale.",
+      "why": "la prova di deck update si fa solo quando l'utente la chieder, sapendo che  uscito un aggiornamento",
+      "resolved": "2026-10-26 17:17"
     }
   ],
   "counters": {
-    "objective": 9,
-    "cycle": 4,
-    "request": 3,
-    "note": 26
+    "objective": 11,
+    "cycle": 5,
+    "request": 6,
+    "note": 57
   },
   "versionamento": {
     "modalita": "governance",
-    "scelto": "2026-10-26 09:32",
-    "attuale": "0.4.11",
+    "scelto": "2026-10-26 17:47",
+    "attuale": "0.5.0",
     "dove": "VERSION",
     "pubblica": true
   }

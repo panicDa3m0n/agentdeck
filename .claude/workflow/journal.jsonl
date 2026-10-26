@@ -1293,3 +1293,29 @@
 {"at": "2026-10-26 09:39", "testo": "[-] Edit  ../../../private/tmp/claude-502/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/scratchpad/agentdeck-ciclo05.html", "task": "-", "tipo": "file", "tool": "Edit", "file": "../../../private/tmp/claude-502/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/scratchpad/agentdeck-ciclo05.html"}
 {"at": "2026-10-26 09:39", "testo": "[-] Edit  ../../../private/tmp/claude-502/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/scratchpad/agentdeck-ciclo05.html", "task": "-", "tipo": "file", "tool": "Edit", "file": "../../../private/tmp/claude-502/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/scratchpad/agentdeck-ciclo05.html"}
 {"at": "2026-10-26 09:39", "testo": "[-] Edit  PRINCIPI.md", "task": "-", "tipo": "file", "tool": "Edit", "file": "PRINCIPI.md"}
+{"at": "2026-10-26 09:39", "testo": "[-] bash: git add -A && git commit -q -F - <<'EOF' Obiettivo O10 chiuso (bloccato per O10.T5, superata da O10.T10), appr"}
+{"at": "2026-10-26 11:35", "testo": "TASK APERTA O11.T1 — Prova di deck update con un aggiornamento vero (O9.T1, N26; da O6.T1, O6, N16, N18, N19) | perimetro: deck/, componente update, pacchetti sulla Deck | gate: deck update elenca l'aggiornamento con versioni e segnala kernel e GRUB; apply con conferma crea gli snapshot, aggiorna, verifica servizi e accesso; riavvio e verify se richiesti; ssh agentdeck funziona dopo. | rischio: 0"}
+{"at": "2026-10-26 11:35", "testo": "TASK CHIUSA O11.T1 — bloccata: Rimandata dall'utente (N57): si fa solo quando la chiederà, sapendo che è uscito un aggiornamento"}
+{"at": "2026-10-26 11:35", "testo": "GATE OBIETTIVO APERTO O11"}
+{"at": "2026-10-26 11:35", "testo": "[-] bash: W=~/claude-rules/bin/wf.sh; $W task-start --id O11.T1 --risk 0 --why \"Aperta solo per chiuderla come rimandata"}
+{"at": "2026-10-26 11:35", "testo": "OBIETTIVO CHIUSO O11 (bloccato) — Rimandato su decisione dell'utente (26/10): la prova di deck update si fa solo quando l'utente la chiederà; resta nel debito, da tralasciare fino ad allora."}
+{"at": "2026-10-26 11:35", "testo": "VERSIONE 0.5.0 (ciclo 04 chiuso)"}
+{"at": "2026-10-26 11:36", "testo": "CICLO 05 APERTO — Il sistema è dell'agente: permessi, servizi e repository"}
+{"at": "2026-10-26 11:37", "testo": "OBIETTIVO AGGIUNTO O12 — L'agente lavora su AgentDeck senza chiedere permessi (ADR-0001), con più protezione"}
+{"at": "2026-10-26 11:37", "testo": "TASK AGGIUNTA O12.T1 in O12 — Politica dei permessi ADR-0001 nelle impostazioni gestite e nelle regole dell'agente (N46)"}
+{"at": "2026-10-26 11:37", "testo": "TASK AGGIUNTA O12.T2 in O12 — sshguard protetto come l'accesso: regole, guardia e avviso di deck status (N42)"}
+{"at": "2026-10-26 11:37", "testo": "TASK AGGIUNTA O12.T3 in O12 — Il cambio di Wi-Fi ritenta prima di tornare indietro (N49)"}
+{"at": "2026-10-26 11:37", "testo": "TASK AGGIUNTA O12.T4 in O12 — Pacchetti dell'installazione allineati alla Deck: tmux e sshguard in install/install.sh (N28)"}
+{"at": "2026-10-26 11:37", "testo": "TASK AGGIUNTA O12.T5 in O12 — Sessione reale con Remote Control: permessi e strumenti nuovi (N54)"}
+{"at": "2026-10-26 11:38", "testo": "OBIETTIVO AGGIUNTO O13 — I servizi della Deck gestiti dal sistema (N53)"}
+{"at": "2026-10-26 11:38", "testo": "TASK AGGIUNTA O13.T1 in O13 — deck servizi: elenco, crea, aggiorna da git, rimuovi con anteprima; area dei servizi nelle regole dell'agente (N53, N56)"}
+{"at": "2026-10-26 11:38", "testo": "TASK AGGIUNTA O13.T2 in O13 — Snapshot dei dati dei servizi: configurazione snapper per @servizi (N53)"}
+{"at": "2026-10-26 11:38", "testo": "TASK AGGIUNTA O13.T3 in O13 — Firewall nftables con rete di sicurezza che si annulla da sola (N53)"}
+{"at": "2026-10-26 11:38", "testo": "TASK AGGIUNTA O13.T4 in O13 — Il primo servizio vero, scelto dall'utente"}
+{"at": "2026-10-26 11:38", "testo": "OBIETTIVO AGGIUNTO O14 — Quello che l'agente fa sulla Deck arriva nel repository (N52)"}
+{"at": "2026-10-26 11:38", "testo": "TASK AGGIUNTA O14.T1 in O14 — Il canale fra l'agente sulla Deck e il repository, deciso con l'utente (N52)"}
+{"at": "2026-10-26 11:38", "testo": "TASK AGGIUNTA O14.T2 in O14 — Il canale realizzato e provato con una modifica vera dell'agente sulla Deck"}
+{"at": "2026-10-26 17:46", "testo": "ROADMAP CONFERMATA — ciclo 05"}
+{"at": "2026-10-26 17:47", "testo": "VERSIONI scelte dall'utente: governance"}
+{"at": "2026-10-26 17:47", "testo": "[-] bash: ~/claude-rules/bin/wf.sh versione --scegli governance --da \"0.5.0\" --dove \"VERSION\" --pubblica | sed -n 2p | c"}
+{"at": "2026-10-26 17:47", "testo": "[-] Edit  CHANGELOG.md", "task": "-", "tipo": "file", "tool": "Edit", "file": "CHANGELOG.md"}
