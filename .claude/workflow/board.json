@@ -3,14 +3,16 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-25 23:48",
-  "updated": "2026-10-26 09:32",
+  "updated": "2026-10-26 09:38",
   "objectives": [
     {
       "id": "O10",
       "title": "Claude Code sulla Deck, usato davvero",
       "gate": "Claude Code gira sulla Deck per l'utente agent, autenticato con l'abbonamento e seguibile con Remote Control; conosce AgentDeck da un CLAUDE.md ricavato da docs/ e usa deck; una sessione di lavoro reale dalla chat produce i bisogni per il ciclo successivo; snapshot prima di ogni modifica e ssh agentdeck sempre funzionante (INV-1).",
-      "state": "open",
-      "docs": [],
+      "state": "blocked",
+      "docs": [
+        "ADR-0001"
+      ],
       "tasks": [
         {
           "id": "O10.T1",
@@ -144,7 +146,9 @@
           "risk_why": "Solo file portati nel repository e confronto in sola lettura con la Deck: sul sistema non cambia nulla.",
           "docs": []
         }
-      ]
+      ],
+      "closed_at": "2026-10-26 09:38",
+      "closed_note": "Approvato dall'utente il 26/10. Claude Code sulla Deck usato davvero: abbonamento, Remote Control, deck mcp, adattatore, obblighi, hook, skill; accesso da fuori casa verificato in O10.T10, che supera O10.T5 rimasta bloccata; sessione reale con l'area dei servizi portata nel repository."
     },
     {
       "id": "O11",
@@ -409,16 +413,24 @@
       "text": "Le regole che l'agente legge sulla Deck (deck/claude/CLAUDE.template.md) non citano l'area dei servizi: le sessioni future la scoprono solo da /srv/servizi. Da aggiungere insieme a deck servizi (O12 della proposta del ciclo 05), fuori dal perimetro di questa task.",
       "docs": [],
       "created": "2026-10-26 09:32"
+    },
+    {
+      "id": "N57",
+      "task": "O11.T1",
+      "text": "Decisione dell'utente (26/10): la prova di deck update con un aggiornamento vero non va riproposta né portata avanti finché l'utente non la chiede, quando saprà che è uscito un aggiornamento. Da tralasciare in proposte, riepiloghi e piani fino a richiesta manuale.",
+      "docs": [],
+      "created": "2026-10-26 09:37"
     }
   ],
   "active": {
-    "objective": "O10",
+    "objective": "",
     "task": "",
-    "phase": "objective_gate_pending",
+    "phase": "idle",
     "risk": null,
     "risk_why": "",
     "hold_invariants": "",
-    "hold_plan": ""
+    "hold_plan": "",
+    "gate_done": ""
   },
   "previous": {
     "task": "O10.T12",
@@ -434,6 +446,6 @@
     "objective": 11,
     "cycle": 4,
     "request": 6,
-    "note": 56
+    "note": 57
   }
 }

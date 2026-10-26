@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "items": [
+    {
+      "id": "ADR-0001",
+      "titolo": "Permessi dell'agente: nessun permesso per gli interventi su AgentDeck, solo per i dati e i servizi dell'utente",
+      "tipo": "decisione",
+      "stato": "accettato",
+      "creato": "2026-10-26 09:37",
+      "deciso": "2026-10-26 09:39",
+      "testo": "# Permessi dell'agente: nessun permesso per gli interventi su AgentDeck, solo per i dati e i servizi dell'utente\n\n## Contesto\n<perché la questione si è posta: cosa stava facendo il lavoro, cosa ha fatto emergere il conflitto>\n\n## Alternative valutate\n<cosa si è considerato prima, e perché non bastava>\n\n## Decisione\n<cosa si è deciso e perché questa e non le altre>\n\n## Conseguenze\n<cosa cambia, cosa va rifatto o riverificato, quali invarianti si muovono>\n\n## In parole semplici\n<due righe senza gergo: cosa cambia in pratica>",
+      "task": "",
+      "obiettivo": "O10",
+      "invarianti": "—",
+      "motivo": "Decisione dell'utente (26/10): AgentDeck è il sistema di proprietà e uso completo dell'agente; l'agente non chiede permessi per nessun intervento dentro AgentDeck; i permessi riguardano solo i dati dell'utente o il singolo servizio dell'utente. Restano i vincoli che proteggono l'accesso (INV-1) e le anteprime di deck; si realizza nel ciclo 05 (O14)."
+    }
+  ]
+}

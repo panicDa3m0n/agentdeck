@@ -89,6 +89,8 @@ Perché salire di livello solo quando serve:
 | 2026-10-25 | I prompt interattivi dei programmi restano; un adattatore li traduce in JSON per l'agente, con profili per programma creati dall'agente stesso | Autoprompting nativo, una moltitudine di programmi gestiti senza lavoro su misura |
 | 2026-10-25 | Obblighi del sistema all'agente: per ora solo avvisi | La forza degli obblighi si decide con l'uso |
 | 2026-10-25 | Lo sviluppo riparte inserendo Claude Code nel sistema | L'uso reale della chat e la configurazione dicono cosa serve |
+| 2026-10-26 | SSH della Deck raggiungibile da internet su `scarlethome.ddns.net:49222`, solo con chiave, con sshguard (INV-5) | Sviluppare e gestire la Deck da fuori casa; Tailscale scartato per un blocco sul Mac ([docs/accesso.md](docs/accesso.md)) |
+| 2026-10-26 | **Permessi dell'agente (ADR-0001):** AgentDeck è il sistema di proprietà e uso completo dell'agente, che non chiede permessi per nessun intervento dentro AgentDeck; i permessi riguardano solo i dati dell'utente o il singolo servizio dell'utente | L'umano non gestisce il sistema; con Remote Control ogni permesso sarebbe una domanda al telefono. Restano i vincoli che proteggono l'accesso (INV-1) e le anteprime di `deck`; si realizza nel ciclo 05 |
 
 ## Direzioni da confermare quando ci arriviamo
 

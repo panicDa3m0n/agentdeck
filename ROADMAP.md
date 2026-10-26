@@ -10,11 +10,10 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O10` Claude Code sulla Deck, usato davvero — 12 task: 11 completate, 0 in corso, 0 da fare, 1 bloccate
+- **Obiettivo attivo:** —
 - **Task attiva:** —
 - **Ultima task gestita:** `O10.T12` — completata — Area dei servizi nel repository (servizi/, docs/servizi.md), identica all'installato per checksum; collegata da indice, deck.md, installazione
-- **Fase:** `objective_gate_pending`
-- **Ultimo aggiornamento:** 2026-10-26 09:32
+- **Ultimo aggiornamento:** 2026-10-26 09:38
 
 ## Richieste attive
 
@@ -22,9 +21,11 @@ _nessuna richiesta in attesa._
 
 ## Obiettivi
 
-### `O10` Claude Code sulla Deck, usato davvero — in corso
+### `O10` Claude Code sulla Deck, usato davvero — BLOCCATO
 
 **Gate obiettivo:** Claude Code gira sulla Deck per l'utente agent, autenticato con l'abbonamento e seguibile con Remote Control; conosce AgentDeck da un CLAUDE.md ricavato da docs/ e usa deck; una sessione di lavoro reale dalla chat produce i bisogni per il ciclo successivo; snapshot prima di ogni modifica e ssh agentdeck sempre funzionante (INV-1).
+**Blocco:** 2026-10-26 09:38 — Approvato dall'utente il 26/10. Claude Code sulla Deck usato davvero: abbonamento, Remote Control, deck mcp, adattatore, obblighi, hook, skill; accesso da fuori casa verificato in O10.T10, che supera O10.T5 rimasta bloccata; sessione reale con l'area dei servizi portata nel repository.
+**Documenti:** `ADR-0001`
 
 - [x] `O10.T1` Installazione di Claude Code sulla Deck — *perimetro:* `pacchetti e file dell'utente agent sulla Deck, install/, deck/, docs/`
   *gate previsto:* Snapshot prima; binario nativo di Claude Code installato per l'utente agent con firma GPG del manifest e checksum verificate; claude --version e claude doctor funzionano su Arch (la prima richiesta vera passa a O10.T2, dopo il login: decisione dell'utente); nessun servizio esposto in rete; installazione ripetibile da script del repository; documentazione aggiornata. · *gate confermato:* ✔ Claude Code 2.1.310 sulla Deck per agent: firma GPG del manifest e checksum verificate, --version e doctor ok, nessuna porta nuova; install/claude-code.sh
@@ -78,6 +79,7 @@ _nessuna richiesta in attesa._
 
 - [ ] `O11.T1` Prova di deck update con un aggiornamento vero (O9.T1, N26; da O6.T1, O6, N16, N18, N19) — *perimetro:* `deck/, componente update, pacchetti sulla Deck`
   *gate previsto:* deck update elenca l'aggiornamento con versioni e segnala kernel e GRUB; apply con conferma crea gli snapshot, aggiorna, verifica servizi e accesso; riavvio e verify se richiesti; ssh agentdeck funziona dopo.
+  *annotazioni:* `N57`
 
 ## Annotazioni
 
@@ -113,3 +115,4 @@ _Una riga per nota, sempre legata a una task. `wf.sh notes` per leggerle._
 - `N54` (`O10.T4`) La sessione reale ha lavorato solo con Bash: deck mcp, adattatore, obblighi, hook e skill sono arrivati dopo (0.4.4-0.4.7). La prossima sessione reale deve mostrare se l'agente li usa da solo nel lavoro vero e quanto restano utili i comandi Bash. — 2026-10-26 09:25
 - `N55` (`O10.T4`) Proposta di roadmap del ciclo 05, nata dai bisogni N42, N46, N49, N51-N54: O12 servizi gestiti dal sistema (deck servizi, snapper per @servizi, firewall con rete di sicurezza, primo servizio vero); O13 le modifiche dell'agente sulla Deck arrivano nel repository (canale da decidere: copia con push, consegna, stato voluto D4); O14 meno domande al proprietario e più protezione (permessi per le letture, sshguard protetto, Wi-Fi che ritenta, sessione reale con gli strumenti nuovi). Da decidere prima: O11, INV-7 (N30), D7. Pagina: https://claude.ai/artifact/RsvXPfqirwoyRkX6HXjrt4 — 2026-10-26 09:31
 - `N56` (`O10.T12`) Le regole che l'agente legge sulla Deck (deck/claude/CLAUDE.template.md) non citano l'area dei servizi: le sessioni future la scoprono solo da /srv/servizi. Da aggiungere insieme a deck servizi (O12 della proposta del ciclo 05), fuori dal perimetro di questa task. — 2026-10-26 09:32
+- `N57` (`O11.T1`) Decisione dell'utente (26/10): la prova di deck update con un aggiornamento vero non va riproposta né portata avanti finché l'utente non la chiede, quando saprà che è uscito un aggiornamento. Da tralasciare in proposte, riepiloghi e piani fino a richiesta manuale. — 2026-10-26 09:37
