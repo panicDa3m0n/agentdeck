@@ -4,6 +4,20 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.5.1 — 2026-10-26
+
+Ciclo 05, task O14.T1: il canale fra l'agente sulla Deck e GitHub, deciso dall'utente (ADR-0002).
+
+- Niente più ponte dal Mac: la Deck ha una sua credenziale GitHub per l'account personale `panicDa3m0n`, e l'agente
+  crea repository e pubblica da sé.
+- La credenziale si ottiene con il login di `gh`, che l'utente approva con un codice. Sta solo sulla Deck (INV-6);
+  l'agente la usa ma non la legge né la copia (ADR-0001).
+- Repository privati salvo una decisione dell'utente. Mai l'account SNJ.
+- O12.T1, la politica dei permessi, è stata chiusa come bloccata: è pronta e provata sul Mac, e la si installa quando
+  finisce la sessione di lavoro aperta sulla Deck.
+- Il progetto frugale, nato sulla Deck, è pubblicato su `panicDa3m0n/frugale`, privato. Il primo push è passato
+  ancora dal Mac.
+
 ## 0.5.0 — 2026-10-26
 
 Chiuso il ciclo 04, "Claude Code dentro AgentDeck: installazione, configurazione e uso reale". Aperto il ciclo 05,

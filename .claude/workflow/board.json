@@ -3,22 +3,24 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-26 11:36",
-  "updated": "2026-10-26 17:57",
+  "updated": "2026-10-26 18:25",
   "objectives": [
     {
       "id": "O12",
       "title": "L'agente lavora su AgentDeck senza chiedere permessi (ADR-0001), con più protezione",
       "gate": "In una sessione reale con Remote Control l'agente interviene sul sistema senza richieste di permesso e chiede solo per i dati e i singoli servizi dell'utente; i vincoli che proteggono l'accesso (INV-1) e le anteprime di deck restano; sshguard protetto come l'accesso; snapshot prima di ogni modifica rischiosa (INV-3).",
       "state": "open",
-      "docs": [],
+      "docs": [
+        "ADR-0002"
+      ],
       "tasks": [
         {
           "id": "O12.T1",
           "title": "Politica dei permessi ADR-0001 nelle impostazioni gestite e nelle regole dell'agente (N46)",
           "scope": "deck/claude/, deck/tests/, docs/, /etc/claude-code sulla Deck, deck/agentdeck/ownership.py e il prompt della guardia in deck/agentdeck/components/term.py",
           "gate_pre": "Impostazioni gestite che permettono tutto il lavoro di sistema senza richieste e chiedono solo per i dati dell'utente e i singoli servizi dell'utente; deny e guardia dell'accesso invariati; le frasi che fanno chiedere al proprietario modifiche di sistema tolte da CLAUDE.md, guardia e skill; provato con claude -p sulla Deck senza permessi aggiuntivi: comandi di sistema senza richieste, dati dell'utente con richiesta; test; documentazione.",
-          "gate_post": "",
-          "state": "doing",
+          "gate_post": "Politica pronta e provata sul Mac (241 test); manca l'installazione: riavvia agentdeck-claude e chiuderebbe la sessione su frugale",
+          "state": "blocked",
           "risk": 30,
           "risk_why": "Cambia cosa l'agente fa senza chiedere: un errore toccherebbe un servizio o una credenziale dell'utente senza permesso o fermerebbe lavoro legittimo. Deny e guardia dell'accesso invariati; l'installazione riavvia agentdeck-claude, quindi si fa a sessione finita.",
           "docs": []
@@ -134,10 +136,10 @@
           "title": "Il canale fra l'agente sulla Deck e il repository, deciso con l'utente (N52)",
           "scope": "docs/, decisioni",
           "gate_pre": "Strade confrontate con l'utente (copia del repository sulla Deck con push e credenziale solo sulla Deck, consegna verso il Mac, stato voluto D4); decisione registrata come ADR.",
-          "gate_post": "",
-          "state": "todo",
-          "risk": null,
-          "risk_why": "",
+          "gate_post": "Canale deciso dall'utente (ADR-0002): la Deck pubblica da sé su GitHub come panicDa3m0n, login gh approvato dall'utente, repository privati",
+          "state": "done",
+          "risk": 5,
+          "risk_why": "Solo la registrazione della decisione dell'utente sul canale: nessuna modifica al sistema.",
           "docs": []
         },
         {
@@ -162,21 +164,35 @@
       "text": "Precisazione dell'utente (26/10) su ADR-0001, cosa sono i dati dell'utente: i suoi servizi in /srv/servizi/<nome> (codice, configurazione, dati, segreti, avvio, arresto, abilitazione delle unità agentdeck-servizio@<nome>) e le sue credenziali (login di Claude, chiavi SSH). Sui progetti che l'utente chiede all'agente, come /home/agent/frugale, l'agente lavora libero. Vincolo di questo momento: una sessione di Remote Control sta lavorando a frugale; l'installazione sulla Deck riavvia agentdeck-claude e la chiuderebbe, quindi si installa solo quando l'utente dice che la sessione è finita.",
       "docs": [],
       "created": "2026-10-26 17:56"
+    },
+    {
+      "id": "N59",
+      "task": "O12.T1",
+      "text": "Stato (26/10 18:00): politica pronta e provata sul Mac (agentdeck/ownership.py, guardia con permissionDecision ask, allow di tutto il lavoro di sistema nelle impostazioni gestite, testi senza richieste al proprietario per il sistema, 241 test). Non installata: sulla Deck è attiva la sessione di Remote Control su frugale (ultima attività 17:57) e deck/claude/install.sh riavvia agentdeck-claude. Restano installazione e prova con claude -p senza permessi aggiuntivi.",
+      "docs": [],
+      "created": "2026-10-26 17:59"
+    },
+    {
+      "id": "N60",
+      "task": "O14.T1",
+      "text": "Caso reale (26/10, su richiesta dell'utente, fuori dal perimetro di O12.T1): pubblicato il progetto frugale nato sulla Deck, come chiede la sua decisione 0009. Repository privato panicDa3m0n/frugale; clone sul Mac in /Users/snj/frugale con remote deck (agentdeck:/home/agent/frugale) e origin HTTPS con credential helper locale di panicDa3m0n (come P1); push di main (de60013, bbe2177). Il ponte è manuale: per ogni aggiornamento serve git pull deck main e git push origin main dal Mac. È il bisogno N52 anche per i progetti dell'utente, non solo per AgentDeck.",
+      "docs": [],
+      "created": "2026-10-26 18:20"
     }
   ],
   "active": {
-    "objective": "O12",
-    "task": "O12.T1",
-    "phase": "in_progress",
-    "risk": 30,
-    "risk_why": "Cambia cosa l'agente fa senza chiedere: un errore toccherebbe un servizio o una credenziale dell'utente senza permesso o fermerebbe lavoro legittimo. Deny e guardia dell'accesso invariati; l'installazione riavvia agentdeck-claude, quindi si fa a sessione finita.",
+    "objective": "O14",
+    "task": "",
+    "phase": "idle",
+    "risk": null,
+    "risk_why": "",
     "hold_invariants": "",
     "hold_plan": ""
   },
   "previous": {
-    "task": "",
-    "state": "",
-    "note": ""
+    "task": "O14.T1",
+    "state": "done",
+    "note": "Canale deciso dall'utente (ADR-0002): la Deck pubblica da sé su GitHub come panicDa3m0n, login gh approvato dall'utente, repository privati"
   },
   "cycle": {
     "n": 5,
@@ -187,6 +203,6 @@
     "objective": 14,
     "cycle": 5,
     "request": 6,
-    "note": 58
+    "note": 60
   }
 }

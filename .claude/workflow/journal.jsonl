@@ -1342,3 +1342,23 @@
 {"at": "2026-10-26 17:58", "testo": "[O12.T1] bash: cd /Users/snj/linuxai-steamdeck && grep -n \"permessi\\|allow\\|mcp__deck\\\"\\]\" docs/claude-code.md | head -12; gr"}
 {"at": "2026-10-26 17:59", "testo": "[O12.T1] bash: python3 - <<'EOF' from pathlib import Path def edit(path, old, new):     p = Path(path); t = p.read_text(); as"}
 {"at": "2026-10-26 17:59", "testo": "[O12.T1] bash: python3 - <<'EOF' from pathlib import Path p = Path(\"docs/deck.md\"); t = p.read_text() old = \"| [../deck/tests"}
+{"at": "2026-10-26 17:59", "testo": "ANNOTAZIONE N59 su O12.T1 — Stato (26/10 18:00): politica pronta e provata sul Mac (agentdeck/ownership.py, guardia con permissionDecision ask, allow di tutto il lavoro di sistema nelle impostazioni gestite, testi senza richieste al proprietario per il sistema, 241 test). Non installata: sulla Deck è attiva la sessione di Remote Control su frugale (ultima attività 17:57) e deck/claude/install.sh riavvia agentdeck-claude. Restano installazione e prova con claude -p senza permessi aggiuntivi."}
+{"at": "2026-10-26 17:59", "testo": "[O12.T1] bash: git add -A && git commit -q -F - <<'EOF' O12.T1 in corso: politica dei permessi ADR-0001 pronta nel repository"}
+{"at": "2026-10-26 18:18", "testo": "[O12.T1] bash: ssh -o BatchMode=yes agentdeck 'cd /home/agent/frugale && echo \"ramo: $(git branch --show-current), commit: $("}
+{"at": "2026-10-26 18:18", "testo": "[O12.T1] bash: ssh -o BatchMode=yes agentdeck 'cd /home/agent/frugale && echo \"== chiavi vere: $(git ls-files -z | xargs -0 g"}
+{"at": "2026-10-26 18:19", "testo": "[O12.T1] bash: git config --local --get-regexp 'credential' ; gh auth status 2>&1 | grep -E \"Logged in|Active account\" ; GH_T"}
+{"at": "2026-10-26 18:19", "testo": "[O12.T1] bash: cd /Users/snj/frugale && ls -la | head -20; echo \"== git\"; git status -sb 2>&1 | head -5; git remote -v 2>&1; "}
+{"at": "2026-10-26 18:20", "testo": "[O12.T1] bash: R=/Users/snj/frugale; git -C $R remote add origin https://github.com/panicDa3m0n/frugale.git && git -C $R conf"}
+{"at": "2026-10-26 18:20", "testo": "ANNOTAZIONE N60 su O14.T1 — Caso reale (26/10, su richiesta dell'utente, fuori dal perimetro di O12.T1): pubblicato il progetto frugale nato sulla Deck, come chiede la sua decisione 0009. Repository privato panicDa3m0n/frugale; clone sul Mac in /Users/snj/frugale con remote deck (agentdeck:/home/agent/frugale) e origin HTTPS con credential helper locale di panicDa3m0n (come P1); push di main (de60013, bbe2177). Il ponte è manuale: per ogni aggiornamento serve git pull deck main e git push origin main dal Mac. È il bisogno N52 anche per i progetti dell'utente, non solo per AgentDeck."}
+{"at": "2026-10-26 18:20", "testo": "[O12.T1] bash: ~/claude-rules/bin/wf.sh note-add --task O14.T1 --text \"Caso reale (26/10, su richiesta dell'utente, fuori dal"}
+{"at": "2026-10-26 18:21", "testo": "[O12.T1] bash: sed -n '40,44p' /Users/snj/.claude/projects/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/"}
+{"at": "2026-10-26 18:25", "testo": "TASK CHIUSA O12.T1 — bloccata: Politica pronta e provata sul Mac (241 test); manca l'installazione: riavvia agentdeck-claude e chiuderebbe la sessione su frugale"}
+{"at": "2026-10-26 18:25", "testo": "ADR-0002 proposto: La Deck pubblica da sé su GitHub con l'account personale panicDa3m0n (invarianti: —)"}
+{"at": "2026-10-26 18:25", "testo": "[-] bash: ~/claude-rules/bin/wf.sh task-close --blocked \"Politica pronta e provata sul Mac (241 test); manca l'installaz"}
+{"at": "2026-10-26 18:25", "testo": "ADR ADR-0002 ora accettato"}
+{"at": "2026-10-26 18:25", "testo": "TASK APERTA O14.T1 — Il canale fra l'agente sulla Deck e il repository, deciso con l'utente (N52) | perimetro: docs/, decisioni | gate: Strade confrontate con l'utente (copia del repository sulla Deck con push e credenziale solo sulla Deck, consegna verso il Mac, stato voluto D4); decisione registrata come ADR. | rischio: 5"}
+{"at": "2026-10-26 18:25", "testo": "TASK CHIUSA O14.T1 — completata: Canale deciso dall'utente (ADR-0002): la Deck pubblica da sé su GitHub come panicDa3m0n, login gh approvato dall'utente, repository privati"}
+{"at": "2026-10-26 18:25", "testo": "VERSIONE 0.5.1 (O14.T1)"}
+{"at": "2026-10-26 18:25", "testo": "[-] bash: ~/claude-rules/bin/wf.sh adr --adr ADR-0002 --stato accettato \"Decisione dell'utente (26/10): niente più ponte"}
+{"at": "2026-10-26 18:26", "testo": "[-] Edit  CHANGELOG.md", "task": "-", "tipo": "file", "tool": "Edit", "file": "CHANGELOG.md"}
+{"at": "2026-10-26 18:26", "testo": "VERSIONI scelte dall'utente: governance"}

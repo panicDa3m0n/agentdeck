@@ -10,11 +10,10 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O12` L'agente lavora su AgentDeck senza chiedere permessi (ADR-0001), con più protezione — 5 task: 0 completate, 1 in corso, 4 da fare, 0 bloccate
-- **Task attiva:** `O12.T1` Politica dei permessi ADR-0001 nelle impostazioni gestite e nelle regole dell'agente (N46) — in corso · rischio 30/100
-- **Ultima task gestita:** —
-- **Fase:** `in_progress`
-- **Ultimo aggiornamento:** 2026-10-26 17:57
+- **Obiettivo attivo:** `O14` Quello che l'agente fa sulla Deck arriva nel repository (N52) — 2 task: 1 completate, 0 in corso, 1 da fare, 0 bloccate
+- **Task attiva:** —
+- **Ultima task gestita:** `O14.T1` — completata — Canale deciso dall'utente (ADR-0002): la Deck pubblica da sé su GitHub come panicDa3m0n, login gh approvato dall'utente, repository privati
+- **Ultimo aggiornamento:** 2026-10-26 18:25
 
 ## Richieste attive
 
@@ -25,11 +24,12 @@ _nessuna richiesta in attesa._
 ### `O12` L'agente lavora su AgentDeck senza chiedere permessi (ADR-0001), con più protezione — in corso
 
 **Gate obiettivo:** In una sessione reale con Remote Control l'agente interviene sul sistema senza richieste di permesso e chiede solo per i dati e i singoli servizi dell'utente; i vincoli che proteggono l'accesso (INV-1) e le anteprime di deck restano; sshguard protetto come l'accesso; snapshot prima di ogni modifica rischiosa (INV-3).
+**Documenti:** `ADR-0002`
 
-- [~] `O12.T1` Politica dei permessi ADR-0001 nelle impostazioni gestite e nelle regole dell'agente (N46) — *perimetro:* `deck/claude/, deck/tests/, docs/, /etc/claude-code sulla Deck, deck/agentdeck/ownership.py e il prompt della guardia in deck/agentdeck/components/term.py`
-  *gate previsto:* Impostazioni gestite che permettono tutto il lavoro di sistema senza richieste e chiedono solo per i dati dell'utente e i singoli servizi dell'utente; deny e guardia dell'accesso invariati; le frasi che fanno chiedere al proprietario modifiche di sistema tolte da CLAUDE.md, guardia e skill; provato con claude -p sulla Deck senza permessi aggiuntivi: comandi di sistema senza richieste, dati dell'utente con richiesta; test; documentazione.
+- [!] `O12.T1` Politica dei permessi ADR-0001 nelle impostazioni gestite e nelle regole dell'agente (N46) — *perimetro:* `deck/claude/, deck/tests/, docs/, /etc/claude-code sulla Deck, deck/agentdeck/ownership.py e il prompt della guardia in deck/agentdeck/components/term.py`
+  *gate previsto:* Impostazioni gestite che permettono tutto il lavoro di sistema senza richieste e chiedono solo per i dati dell'utente e i singoli servizi dell'utente; deny e guardia dell'accesso invariati; le frasi che fanno chiedere al proprietario modifiche di sistema tolte da CLAUDE.md, guardia e skill; provato con claude -p sulla Deck senza permessi aggiuntivi: comandi di sistema senza richieste, dati dell'utente con richiesta; test; documentazione. · *blocco:* ✖ Politica pronta e provata sul Mac (241 test); manca l'installazione: riavvia agentdeck-claude e chiuderebbe la sessione su frugale
   *rischio:* 30/100 — Cambia cosa l'agente fa senza chiedere: un errore toccherebbe un servizio o una credenziale dell'utente senza permesso o fermerebbe lavoro legittimo. Deny e guardia dell'accesso invariati; l'installazione riavvia agentdeck-claude, quindi si fa a sessione finita.
-  *annotazioni:* `N58`
+  *annotazioni:* `N58`, `N59`
 - [ ] `O12.T2` sshguard protetto come l'accesso: regole, guardia e avviso di deck status (N42) — *perimetro:* `deck/, docs/, /etc/claude-code sulla Deck`
   *gate previsto:* Le regole dell'agente dicono che sshguard non si ferma e la sua whitelist non si allarga; guardia e deny rifiutano stop, disable e mask di sshguard; deck status avvisa se sshguard non è attivo; test; documentazione.
 - [ ] `O12.T3` Il cambio di Wi-Fi ritenta prima di tornare indietro (N49) — *perimetro:* `deck/, docs/`
@@ -56,8 +56,10 @@ _nessuna richiesta in attesa._
 
 **Gate obiettivo:** Una modifica di sistema fatta dall'agente sulla Deck finisce in git e in docs/ senza che una sessione dal Mac la copi a mano; nessuna credenziale nel repository (INV-6); versione pubblicata (INV-8).
 
-- [ ] `O14.T1` Il canale fra l'agente sulla Deck e il repository, deciso con l'utente (N52) — *perimetro:* `docs/, decisioni`
-  *gate previsto:* Strade confrontate con l'utente (copia del repository sulla Deck con push e credenziale solo sulla Deck, consegna verso il Mac, stato voluto D4); decisione registrata come ADR.
+- [x] `O14.T1` Il canale fra l'agente sulla Deck e il repository, deciso con l'utente (N52) — *perimetro:* `docs/, decisioni`
+  *gate previsto:* Strade confrontate con l'utente (copia del repository sulla Deck con push e credenziale solo sulla Deck, consegna verso il Mac, stato voluto D4); decisione registrata come ADR. · *gate confermato:* ✔ Canale deciso dall'utente (ADR-0002): la Deck pubblica da sé su GitHub come panicDa3m0n, login gh approvato dall'utente, repository privati
+  *rischio:* 5/100 — Solo la registrazione della decisione dell'utente sul canale: nessuna modifica al sistema.
+  *annotazioni:* `N60`
 - [ ] `O14.T2` Il canale realizzato e provato con una modifica vera dell'agente sulla Deck — *perimetro:* `deck/, docs/, configurazione sulla Deck`
   *gate previsto:* Una modifica vera fatta da una sessione sulla Deck arriva nel repository secondo il canale deciso, con documentazione e versione pubblicata; nessuna credenziale in git (INV-6).
 
@@ -66,3 +68,5 @@ _nessuna richiesta in attesa._
 _Una riga per nota, sempre legata a una task. `wf.sh notes` per leggerle._
 
 - `N58` (`O12.T1`) Precisazione dell'utente (26/10) su ADR-0001, cosa sono i dati dell'utente: i suoi servizi in /srv/servizi/<nome> (codice, configurazione, dati, segreti, avvio, arresto, abilitazione delle unità agentdeck-servizio@<nome>) e le sue credenziali (login di Claude, chiavi SSH). Sui progetti che l'utente chiede all'agente, come /home/agent/frugale, l'agente lavora libero. Vincolo di questo momento: una sessione di Remote Control sta lavorando a frugale; l'installazione sulla Deck riavvia agentdeck-claude e la chiuderebbe, quindi si installa solo quando l'utente dice che la sessione è finita. — 2026-10-26 17:56
+- `N59` (`O12.T1`) Stato (26/10 18:00): politica pronta e provata sul Mac (agentdeck/ownership.py, guardia con permissionDecision ask, allow di tutto il lavoro di sistema nelle impostazioni gestite, testi senza richieste al proprietario per il sistema, 241 test). Non installata: sulla Deck è attiva la sessione di Remote Control su frugale (ultima attività 17:57) e deck/claude/install.sh riavvia agentdeck-claude. Restano installazione e prova con claude -p senza permessi aggiuntivi. — 2026-10-26 17:59
+- `N60` (`O14.T1`) Caso reale (26/10, su richiesta dell'utente, fuori dal perimetro di O12.T1): pubblicato il progetto frugale nato sulla Deck, come chiede la sua decisione 0009. Repository privato panicDa3m0n/frugale; clone sul Mac in /Users/snj/frugale con remote deck (agentdeck:/home/agent/frugale) e origin HTTPS con credential helper locale di panicDa3m0n (come P1); push di main (de60013, bbe2177). Il ponte è manuale: per ogni aggiornamento serve git pull deck main e git push origin main dal Mac. È il bisogno N52 anche per i progetti dell'utente, non solo per AgentDeck. — 2026-10-26 18:20

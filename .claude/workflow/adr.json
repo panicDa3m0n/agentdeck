@@ -13,6 +13,19 @@
       "obiettivo": "O10",
       "invarianti": "—",
       "motivo": "Decisione dell'utente (26/10): AgentDeck è il sistema di proprietà e uso completo dell'agente; l'agente non chiede permessi per nessun intervento dentro AgentDeck; i permessi riguardano solo i dati dell'utente o il singolo servizio dell'utente. Restano i vincoli che proteggono l'accesso (INV-1) e le anteprime di deck; si realizza nel ciclo 05 (O14)."
+    },
+    {
+      "id": "ADR-0002",
+      "titolo": "La Deck pubblica da sé su GitHub con l'account personale panicDa3m0n",
+      "tipo": "decisione",
+      "stato": "accettato",
+      "creato": "2026-10-26 18:25",
+      "deciso": "2026-10-26 18:25",
+      "testo": "# La Deck pubblica da sé su GitHub con l'account personale panicDa3m0n\n\n## Contesto\n<perché la questione si è posta: cosa stava facendo il lavoro, cosa ha fatto emergere il conflitto>\n\n## Alternative valutate\n<cosa si è considerato prima, e perché non bastava>\n\n## Decisione\n<cosa si è deciso e perché questa e non le altre>\n\n## Conseguenze\n<cosa cambia, cosa va rifatto o riverificato, quali invarianti si muovono>\n\n## In parole semplici\n<due righe senza gergo: cosa cambia in pratica>",
+      "task": "",
+      "obiettivo": "O12",
+      "invarianti": "—",
+      "motivo": "Decisione dell'utente (26/10): niente più ponte dal Mac; la Deck ha una sua credenziale GitHub per l'account personale panicDa3m0n, ottenuta con il login di gh approvato dall'utente con un codice, e l'agente crea repository e pubblica da sé; repository privati salvo decisione dell'utente; credenziale solo sulla Deck (INV-6), usata dall'agente ma mai letta né copiata (ADR-0001); mai l'account SNJ."
     }
   ]
 }
