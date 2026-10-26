@@ -404,6 +404,7 @@ hanno ancora un'azione collegata.
 | [../deck/tests/test_term.py](../deck/tests/test_term.py) | Test dell'adattatore: riconoscimento, profili, sessioni con tmux finto, segreti, guardia dell'accesso, INV-4 |
 | [../deck/tests/test_obligations.py](../deck/tests/test_obligations.py) | Test degli obblighi: database di pacman finto, nascita, chiusura da sé, done e dismiss, campo in ogni schermata, archivio manomesso |
 | [../deck/tests/test_claude_hooks.py](../deck/tests/test_claude_hooks.py) | Test degli hook di autoprompting: politica, novità del turno, verifiche dopo le azioni, registro delle sessioni |
+| [../deck/tests/test_skills.py](../deck/tests/test_skills.py) | Test delle skill di Claude Code: intestazione, nomi, file di supporto, strumenti MCP citati che esistono ([claude-code.md](claude-code.md)) |
 | [../deck/tests/live_term_check.py](../deck/tests/live_term_check.py) | Controllo dal vivo di `deck term` con programmi veri sulla Deck |
 | [../deck/agentdeck/components/](../deck/agentdeck/components/__init__.py) | Un modulo per componente; l'elenco dei componenti attivi è in `__init__.py` |
 | [../deck/agentdeck/system.py](../deck/agentdeck/system.py) | Letture dello stato della Deck da `/proc`, `/sys` e comandi; parser puri |
@@ -418,7 +419,7 @@ hanno ancora un'azione collegata.
 | [../deck/tests/test_logs.py](../deck/tests/test_logs.py) | Test di `/logs`: righe reali del journal, traccia dell'agente esclusa, filtri, righe malevole, collegamento da `/service` |
 | [../deck/tests/live_logs_check.py](../deck/tests/live_logs_check.py) | Controllo dal vivo di `deck logs` contro `journalctl -o json`, con una riga malevola |
 | [../deck/tests/test_update.py](../deck/tests/test_update.py) | Test di `/update`: `pacman -Qu`, riavvio e GRUB, anteprima, snapshot, verifica, rollback indicato, testo esterno |
-| [../deck/claude/](../deck/claude/install.sh) | Configurazione di Claude Code per AgentDeck: stile, CLAUDE.md, impostazioni gestite, guardia, inizio sessione ([claude-code.md](claude-code.md)) |
+| [../deck/claude/](../deck/claude/install.sh) | Configurazione di Claude Code per AgentDeck: stile, CLAUDE.md, impostazioni gestite, hook (guardia e politica, inizio sessione, turno, dopo le azioni, fine sessione), skill ([claude-code.md](claude-code.md)) |
 | [../deck/tests/test_claude_config.py](../deck/tests/test_claude_config.py) | Test della guardia, dell'hook di inizio sessione e del CLAUDE.md generato |
 | [../deck/tests/live_status_check.py](../deck/tests/live_status_check.py) | Controllo dal vivo sulla Deck: ogni valore di `deck status` contro una lettura indipendente |
 | [../deck/install.sh](../deck/install.sh) | Installazione e aggiornamento sulla Deck, schermo compreso |

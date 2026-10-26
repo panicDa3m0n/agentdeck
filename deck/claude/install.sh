@@ -10,6 +10,8 @@
 #   3. vincoli duri e hook              -> /etc/claude-code/managed-settings.json (deny, niente bypass, hook)
 #   4. strumenti: il server MCP deck    -> `deck mcp` registrato per l'utente agent (~/.claude.json), i suoi
 #                                          strumenti permessi nelle impostazioni gestite (O10.T6)
+#   5. procedure: le skill di AgentDeck -> ~/.claude/skills/agentdeck-*, da deck/claude/skills (O10.T9); le altre
+#                                          skill dell'utente non vengono toccate
 # Poi riavvia il servizio agentdeck-claude, perché le sessioni nuove leggano la configurazione.
 # Documentazione: docs/claude-code.md
 set -euo pipefail
@@ -23,8 +25,9 @@ python3 "$here/build_claude_md.py" "$repo" > "$work/CLAUDE.md"
 python3 -m json.tool "$here/managed-settings.json" > /dev/null
 cp "$here/managed-settings.json" "$here/output-styles/agentdeck.md" "$work/"
 
-ssh agentdeck 'deck snapshot create "description=prima della configurazione di Claude Code (O10.T3)" >/dev/null && echo snapshot ok'
+ssh agentdeck 'deck snapshot create "description=prima della configurazione di Claude Code (deck/claude/install.sh)" >/dev/null && echo snapshot ok'
 scp -q "$work/CLAUDE.md" "$work/managed-settings.json" "$work/agentdeck.md" agentdeck:/tmp/
+ssh agentdeck 'rm -rf /tmp/agentdeck-skills' && scp -q -r "$here/skills" agentdeck:/tmp/agentdeck-skills
 ssh agentdeck 'set -e
   test -x /opt/agentdeck/claude/guard.py -o -f /opt/agentdeck/claude/guard.py || { echo "manca /opt/agentdeck/claude: lancia prima deck/install.sh"; exit 1; }
   sudo install -d -m 0755 /etc/claude-code
@@ -40,8 +43,14 @@ s["outputStyle"] = "AgentDeck"
 p.write_text(json.dumps(s, indent=2) + "\n")
 EOF
   rm -f /tmp/CLAUDE.md /tmp/managed-settings.json /tmp/agentdeck.md
+  install -d ~/.claude/skills
+  for d in ~/.claude/skills/agentdeck-*/; do
+    if [ -d "$d" ] && [ ! -d "/tmp/agentdeck-skills/$(basename "$d")" ]; then rm -rf "$d"; fi
+  done
+  for d in /tmp/agentdeck-skills/*/; do n=$(basename "$d"); rm -rf ~/.claude/skills/"$n"; cp -r "$d" ~/.claude/skills/"$n"; done
+  rm -rf /tmp/agentdeck-skills
   /usr/local/bin/deck mcp </dev/null || { echo "deck mcp non parte: lancia prima deck/install.sh"; exit 1; }
   ~/.local/bin/claude mcp remove --scope user deck >/dev/null 2>&1 || true
   ~/.local/bin/claude mcp add --transport stdio --scope user deck -- /usr/local/bin/deck mcp >/dev/null
   sudo systemctl restart agentdeck-claude
-  echo "installato: /etc/claude-code/{CLAUDE.md,managed-settings.json}, ~/.claude/output-styles/agentdeck.md, server MCP deck"'
+  echo "installato: /etc/claude-code/{CLAUDE.md,managed-settings.json}, ~/.claude/output-styles/agentdeck.md, server MCP deck, skill: $(ls -d ~/.claude/skills/agentdeck-* | wc -l)"'

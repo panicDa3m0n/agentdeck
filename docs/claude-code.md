@@ -4,6 +4,23 @@ Claude Code è l'harness degli agenti di AgentDeck (decisione D1, [architettura.
 6, 7.4 bis e 7.5): non modificato, perché la licenza non lo permette, e integrato con le estensioni previste da
 Anthropic. Questo documento descrive come è installato sulla Deck e come si verifica.
 
+## In una pagina: AgentDeck per Claude Code
+
+Ciò che un fork avrebbe dato, ottenuto con le estensioni (proposta A6.1). Ogni pezzo ha la sua sezione qui sotto.
+
+| Pezzo | Cosa dà all'agente | Dove |
+|---|---|---|
+| Stile di output e `CLAUDE.md` gestito | Chi è, com'è la macchina, come si lavora, le 10 invarianti | `~/.claude/output-styles/`, `/etc/claude-code/CLAUDE.md` |
+| Impostazioni gestite e guardia | Ciò che non si può fare: togliere l'accesso, saltare i permessi | `/etc/claude-code/managed-settings.json` |
+| `deck mcp` | `deck` come strumento nativo: 34 strumenti tipizzati, anteprime e conferme | `~/.claude.json` dell'utente `agent` |
+| Adattatore (`deck term`) | I programmi interattivi come dati, profili scritti dall'agente | [adattatore.md](adattatore.md) |
+| Obblighi (`deck obligations`) | I doveri che il sistema dà all'agente | [obblighi.md](obblighi.md) |
+| Hook di autoprompting | Il sistema parla nei momenti giusti: inizio, turno, prima e dopo un comando, fine | Impostazioni gestite, `/opt/agentdeck/claude/` |
+| Skill | Le procedure: pacchetti, servizi, programmi interattivi, avvisi e obblighi, ritorno indietro, aggiornamenti | `~/.claude/skills/agentdeck-*` |
+| Remote Control | Il proprietario segue e guida da claude.ai o dal telefono | Servizio `agentdeck-claude` |
+
+Si installa dal Mac con `deck/install.sh` e poi `bash deck/claude/install.sh`.
+
 ## Installazione
 
 Script: [../install/claude-code.sh](../install/claude-code.sh). Si lancia sulla Deck come utente `agent`, mai
@@ -191,6 +208,40 @@ Verifiche del 26/10/2026, da sessioni di Claude Code sulla Deck:
   nel briefing.
 
 Test: [../deck/tests/test_claude_hooks.py](../deck/tests/test_claude_hooks.py).
+
+## Le skill di AgentDeck (O10.T9)
+
+Le procedure del sistema, scritte per l'agente e caricate da Claude Code solo quando servono: la sessione vede nome
+e descrizione e apre il testo quando il compito lo richiede. Stanno in [../deck/claude/skills/](../deck/claude/skills/)
+e [../deck/claude/install.sh](../deck/claude/install.sh) le copia in `~/.claude/skills/` dell'utente `agent`; le
+altre skill, come `synced` di claude.ai, non vengono toccate.
+
+| Skill | Quando |
+|---|---|
+| [agentdeck-install-package](../deck/claude/skills/agentdeck-install-package/SKILL.md) | Installare un pacchetto: stato, pacman con l'adattatore, obbligo dei profili, verifica, rapporto |
+| [agentdeck-change-service](../deck/claude/skills/agentdeck-change-service/SKILL.md) | Cambiare un servizio: servizi protetti, snapshot, drop-in, riavvio con conferma, stato e log |
+| [agentdeck-interactive-program](../deck/claude/skills/agentdeck-interactive-program/SKILL.md) | Usare un programma interattivo con `deck term`; con [profiles.md](../deck/claude/skills/agentdeck-interactive-program/profiles.md), come si scrive un profilo |
+| [agentdeck-alerts-and-obligations](../deck/claude/skills/agentdeck-alerts-and-obligations/SKILL.md) | Gestire avvisi e obblighi, e riferirli al proprietario |
+| [agentdeck-rollback](../deck/claude/skills/agentdeck-rollback/SKILL.md) | Tornare indietro: dal file al rollback di uno snapshot, con riavvio e verifica |
+| [agentdeck-update-system](../deck/claude/skills/agentdeck-update-system/SKILL.md) | Aggiornare Arch con `deck update`, mai con `pacman -Syu` |
+
+- Sono in inglese come gli altri testi per l'agente, e citano gli strumenti MCP per nome. I fatti sul sistema non
+  li ripetono: li lasciano alle schermate di `deck`, che si descrivono da sole.
+- Test: [../deck/tests/test_skills.py](../deck/tests/test_skills.py). Controlla l'intestazione, i nomi, i file di
+  supporto, e che ogni strumento `mcp__deck__…` citato esista davvero fra quelli di `deck mcp`.
+
+**Prova d'insieme del 26/10/2026.** Richiesta a una sessione sulla Deck, senza indicazioni sul come: "Installa il
+programma tree sulla Deck e dimmi se funziona". La sessione:
+1. ha caricato da sola la skill `agentdeck-install-package`;
+2. ha letto `/status`, poi installato con l'adattatore (`term_start` con `sudo pacman -S tree`, risposta `y`,
+   chiusura con conferma);
+3. ha ricevuto l'obbligo `PROFILE_NEEDED` aperto dall'hook di pacman, ha verificato con `deck term` che `tree` non
+   fa domande e l'ha chiuso con una nota;
+4. ha ricontrollato `/status` e riferito in italiano: versione, prova, la coppia di snapshot 68 e 69, l'obbligo, lo
+   stato.
+
+Poi `tree` è stato rimosso. È emerso un bisogno: i comandi Bash di sola lettura chiedono un permesso, che con Remote
+Control diventa una domanda al proprietario. Annotato per O10.T4 (N46).
 
 ## Aggiornamenti
 

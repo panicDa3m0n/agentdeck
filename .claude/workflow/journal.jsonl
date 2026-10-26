@@ -1156,3 +1156,35 @@
 {"at": "2026-10-26 01:58", "testo": "VERSIONI scelte dall'utente: governance"}
 {"at": "2026-10-26 01:58", "testo": "[-] bash: ~/claude-rules/bin/wf.sh task-close --done \"deck obligations e hook: obbligo dall'hook di pacman, campo obliga"}
 {"at": "2026-10-26 01:58", "testo": "[-] Edit  CHANGELOG.md", "task": "-", "tipo": "file", "tool": "Edit", "file": "CHANGELOG.md"}
+{"at": "2026-10-26 01:58", "testo": "[-] bash: printf '0.4.6\\n' > VERSION && cat VERSION && git add -A && git commit -q -F - <<'EOF' Versione 0.4.6: obblighi"}
+{"at": "2026-10-26 01:59", "testo": "TASK APERTA O10.T9 — Skill di AgentDeck e prova d'insieme da una sessione sulla Deck | perimetro: deck/claude/, docs/, ~/.claude/skills sulla Deck | gate: Skill di AgentDeck per Claude Code (installare un pacchetto, cambiare un servizio, usare un programma interattivo, gestire avvisi e obblighi, tornare indietro), installate dal repository; prova d'insieme da una sessione di Claude Code sulla Deck che usa strumenti MCP, adattatore e obblighi; documentazione completa. | rischio: 15"}
+{"at": "2026-10-26 01:59", "testo": "[O10.T9] FALLITO Bash: ~/claude-rules/bin/wf.sh task-start --id O10.T9 --risk 15 --why \"Le skill sono procedure s"}
+{"at": "2026-10-26 01:59", "testo": "FALLIMENTO [Bash] execution_error: task O10.T9 aperta (obiettivo O10, rischio 15/100).\ngate previsto: Skill di AgentDeck per Claude Code (installare un pac"}
+{"at": "2026-10-26 01:59", "testo": "ERRORE RISOLTO — execution_error: task O10.T9 aperta (obiettivo O10, rischio 15/100). gate previsto: Skill di AgentDeck per Claude Code (installare un pac — pacman -Q tree esce con 1 perché tree non è installato: era il controllo voluto, nessun guasto", "tipo": "errore-risolto"}
+{"at": "2026-10-26 02:00", "testo": "[O10.T9] Write  deck/claude/skills/agentdeck-install-package/SKILL.md", "task": "O10.T9", "tipo": "file", "tool": "Write", "file": "deck/claude/skills/agentdeck-install-package/SKILL.md"}
+{"at": "2026-10-26 02:00", "testo": "[O10.T9] Write  deck/claude/skills/agentdeck-change-service/SKILL.md", "task": "O10.T9", "tipo": "file", "tool": "Write", "file": "deck/claude/skills/agentdeck-change-service/SKILL.md"}
+{"at": "2026-10-26 02:00", "testo": "[O10.T9] Write  deck/claude/skills/agentdeck-interactive-program/SKILL.md", "task": "O10.T9", "tipo": "file", "tool": "Write", "file": "deck/claude/skills/agentdeck-interactive-program/SKILL.md"}
+{"at": "2026-10-26 02:00", "testo": "[O10.T9] Write  deck/claude/skills/agentdeck-interactive-program/profiles.md", "task": "O10.T9", "tipo": "file", "tool": "Write", "file": "deck/claude/skills/agentdeck-interactive-program/profiles.md"}
+{"at": "2026-10-26 02:00", "testo": "[O10.T9] Write  deck/claude/skills/agentdeck-alerts-and-obligations/SKILL.md", "task": "O10.T9", "tipo": "file", "tool": "Write", "file": "deck/claude/skills/agentdeck-alerts-and-obligations/SKILL.md"}
+{"at": "2026-10-26 02:00", "testo": "[O10.T9] Write  deck/claude/skills/agentdeck-rollback/SKILL.md", "task": "O10.T9", "tipo": "file", "tool": "Write", "file": "deck/claude/skills/agentdeck-rollback/SKILL.md"}
+{"at": "2026-10-26 02:00", "testo": "[O10.T9] Write  deck/claude/skills/agentdeck-update-system/SKILL.md", "task": "O10.T9", "tipo": "file", "tool": "Write", "file": "deck/claude/skills/agentdeck-update-system/SKILL.md"}
+{"at": "2026-10-26 02:00", "testo": "[O10.T9] bash: grep -n \"label=sys_text\\|def _verify\\|verify\\b\" deck/agentdeck/components/update.py | head -20; grep -n \"refus"}
+{"at": "2026-10-26 02:01", "testo": "[O10.T9] bash: sed -n 253,330p deck/agentdeck/components/update.py | grep -n \"snapshot\\|access\\|failed\\|ssh\" | head -12; grep"}
+{"at": "2026-10-26 02:01", "testo": "[O10.T9] Edit  deck/claude/skills/agentdeck-update-system/SKILL.md", "task": "O10.T9", "tipo": "file", "tool": "Edit", "file": "deck/claude/skills/agentdeck-update-system/SKILL.md"}
+{"at": "2026-10-26 02:01", "testo": "[O10.T9] Write  deck/tests/test_skills.py", "task": "O10.T9", "tipo": "file", "tool": "Write", "file": "deck/tests/test_skills.py"}
+{"at": "2026-10-26 02:01", "testo": "[O10.T9] bash: cd /Users/snj/linuxai-steamdeck/deck && python3 -m unittest tests.test_skills -v 2>&1 | tail -12"}
+{"at": "2026-10-26 02:01", "testo": "PERIMETRO ESTESO su O10.T9 (+deck/tests/test_skills.py)"}
+{"at": "2026-10-26 02:01", "testo": "[O10.T9] bash: cd /Users/snj/linuxai-steamdeck && python3 - <<'EOF' from pathlib import Path p = Path(\"deck/claude/install.sh"}
+{"at": "2026-10-26 02:02", "testo": "[O10.T9] bash: python3 - <<'EOF' from pathlib import Path p = Path(\"deck/claude/install.sh\"); t = p.read_text() old = '''  fo"}
+{"at": "2026-10-26 02:03", "testo": "[O10.T9] bash: S=/private/tmp/claude-502/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/scratchpad; ssh -o"}
+{"at": "2026-10-26 02:03", "testo": "ANNOTAZIONE N46 su O10.T4 — Bisogno emerso dalla prova d'insieme di O10.T9 (26/10): in una sessione sulla Deck tre comandi Bash di sola lettura (pacman -Ql, tree --version, una catena con mktemp) sono stati fermati dai permessi di Claude Code; con Remote Control diventerebbero domande al proprietario. Serve una politica decisa prima (H31): permessi allow gestiti per le letture di sistema (pacman -Q*/-Si/-Ss, man, systemctl status, journalctl, ls, cat in /etc) oppure più azioni di sola lettura in deck. Da decidere con l'utente."}
+{"at": "2026-10-26 02:03", "testo": "[O10.T9] bash: ~/claude-rules/bin/wf.sh note-add --task O10.T4 --text \"Bisogno emerso dalla prova d'insieme di O10.T9 (26/10)"}
+{"at": "2026-10-26 02:03", "testo": "[O10.T9] Edit  docs/claude-code.md", "task": "O10.T9", "tipo": "file", "tool": "Edit", "file": "docs/claude-code.md"}
+{"at": "2026-10-26 02:03", "testo": "[O10.T9] bash: python3 - <<'EOF' from pathlib import Path def edit(path, old, new):     p = Path(path); t = p.read_text(); as"}
+{"at": "2026-10-26 02:04", "testo": "[O10.T9] Edit  docs/claude-code.md", "task": "O10.T9", "tipo": "file", "tool": "Edit", "file": "docs/claude-code.md"}
+{"at": "2026-10-26 02:04", "testo": "[O10.T9] bash: cd /Users/snj/linuxai-steamdeck && bash deck/install.sh 2>&1 | grep -E \"Ran|OK|FAIL|ERROR\"; bash deck/claude/i"}
+{"at": "2026-10-26 02:04", "testo": "TASK CHIUSA O10.T9 — completata: 6 skill di AgentDeck installate; prova d'insieme: tree installato da sola con skill, MCP, adattatore e obbligo chiuso; 229 test"}
+{"at": "2026-10-26 02:04", "testo": "VERSIONE 0.4.7 (O10.T9)"}
+{"at": "2026-10-26 02:04", "testo": "VERSIONI scelte dall'utente: governance"}
+{"at": "2026-10-26 02:04", "testo": "[-] bash: ~/claude-rules/bin/wf.sh task-close --done \"6 skill di AgentDeck installate; prova d'insieme: tree installato "}
+{"at": "2026-10-26 02:04", "testo": "[-] Edit  CHANGELOG.md", "task": "-", "tipo": "file", "tool": "Edit", "file": "CHANGELOG.md"}

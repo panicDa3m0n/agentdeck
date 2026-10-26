@@ -4,6 +4,29 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.4.7 — 2026-10-26
+
+Ciclo 04, task O10.T9: le skill di AgentDeck per Claude Code e la prova d'insieme
+([docs/claude-code.md](docs/claude-code.md)).
+
+- **Sei skill**, le procedure del sistema:
+  - installare un pacchetto, cambiare un servizio;
+  - usare un programma interattivo, con la guida ai profili;
+  - gestire avvisi e obblighi;
+  - tornare indietro, aggiornare il sistema.
+
+  Le copia `deck/claude/install.sh` in `~/.claude/skills/agentdeck-*` sulla Deck, senza toccare le altre skill.
+- **Test:** ogni strumento MCP citato dalle skill esiste davvero fra quelli di `deck mcp`.
+- **Prova d'insieme:** a "Installa il programma tree sulla Deck e dimmi se funziona", una sessione sulla Deck:
+  - ha caricato da sola la skill di installazione;
+  - ha installato con l'adattatore e chiuso con una nota l'obbligo aperto dall'hook di pacman;
+  - ha verificato e riferito.
+
+  Poi `tree` è stato rimosso.
+- `claude-code.md` ha la pagina d'insieme di AgentDeck per Claude Code.
+- Annotato per O10.T4 (N46) il bisogno emerso: una politica di permessi per i comandi Bash di sola lettura.
+- 229 test.
+
 ## 0.4.6 — 2026-10-26
 
 Ciclo 04, task O10.T8: gli obblighi del sistema e gli hook di autoprompting per Claude Code

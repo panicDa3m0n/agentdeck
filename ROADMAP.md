@@ -10,10 +10,10 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O10` Claude Code sulla Deck, usato davvero — 9 task: 6 completate, 0 in corso, 2 da fare, 1 bloccate
+- **Obiettivo attivo:** `O10` Claude Code sulla Deck, usato davvero — 9 task: 7 completate, 0 in corso, 1 da fare, 1 bloccate
 - **Task attiva:** —
-- **Ultima task gestita:** `O10.T8` — completata — deck obligations e hook: obbligo dall'hook di pacman, campo obligations, politica, verifiche, novità del turno, registro; provati dal vivo
-- **Ultimo aggiornamento:** 2026-10-26 01:58
+- **Ultima task gestita:** `O10.T9` — completata — 6 skill di AgentDeck installate; prova d'insieme: tree installato da sola con skill, MCP, adattatore e obbligo chiuso; 229 test
+- **Ultimo aggiornamento:** 2026-10-26 02:04
 
 ## Richieste attive
 
@@ -41,7 +41,7 @@ _Mancanze di progetto che l'agente non può risolvere da solo. L'utente le confe
   *annotazioni:* `N31`, `N32`, `N33`
 - [ ] `O10.T4` Uso reale dalla chat e bisogni emersi — *perimetro:* `sessioni di Claude Code sulla Deck, annotazioni della governance, docs/`
   *gate previsto:* Almeno una sessione di lavoro reale dalla chat di Claude Code sulla Deck, scelta con l'utente; ogni bisogno emerso registrato come annotazione; proposta di roadmap del ciclo successivo che nasce da quei bisogni.
-  *annotazioni:* `N42`
+  *annotazioni:* `N42`, `N46`
 - [!] `O10.T5` Accesso remoto da fuori casa con SSH esposto su scarlethome.ddns.net — *perimetro:* `pacchetto tailscale e sua configurazione sulla Deck, configurazione SSH del Mac (~/.ssh/config), install/, docs/, pacchetti sshguard e miniupnpc sulla Deck, loro configurazione e unità systemd (mappatura UPnP e rinnovo)`
   *gate previsto:* Snapshot prima; SSH della Deck raggiungibile da internet su scarlethome.ddns.net con porta esterna non standard, solo chiave (password e root disabilitati), sshguard attivo, mappatura con regola fissa di port forwarding sul router (UPnP del router rifiuta le azioni, N41); ssh agentdeck sceglie da solo LAN o internet, con riserva solo LAN; provato da fuori casa (hotspot): ssh, deck status e deck/install.sh da questa chat; INV-1 e INV-5 rispettati; documentazione. · *blocco:* ✖ Deck e Mac pronti (sshguard, ssh agentdeck LAN o internet, Tailscale spento, docs); manca R6, regola sul router, quindi la prova da hotspot
   *rischio:* 45/100 — Espone l'SSH della Deck su internet (INV-5, decisione dell'utente) e tocca router e canale dell'agente (INV-1): snapshot prima, sshd invariato e solo chiave, LAN mai bloccata da sshguard, verifica dopo ogni passo.
@@ -57,8 +57,9 @@ _Mancanze di progetto che l'agente non può risolvere da solo. L'utente le confe
 - [x] `O10.T8` Obblighi del sistema e hook di autoprompting per Claude Code (A6.3) — *perimetro:* `deck/, docs/, /etc/claude-code sulla Deck, /etc/pacman.d/hooks/ sulla Deck (hook di pacman che crea gli obblighi dopo le installazioni)`
   *gate previsto:* deck obligations elenca gli obblighi del sistema (solo avvisi); hook che indicano l'azione di deck al posto dei comandi grezzi, danno le verifiche dopo le azioni, creano l'obbligo del profilo dopo l'installazione di un pacchetto, portano a ogni turno avvisi e obblighi nuovi e registrano la sessione; provati da una sessione di Claude Code sulla Deck; test; documentazione. · *gate confermato:* ✔ deck obligations e hook: obbligo dall'hook di pacman, campo obligations, politica, verifiche, novità del turno, registro; provati dal vivo
   *rischio:* 30/100 — Gli hook entrano in ogni sessione: un difetto porta rumore o lentezza, non blocchi (solo la guardia esce con 2). L'hook di pacman gira in ogni transazione: esce sempre con 0. Il protocollo guadagna un campo facoltativo.
-- [ ] `O10.T9` Skill di AgentDeck e prova d'insieme da una sessione sulla Deck — *perimetro:* `deck/claude/, docs/, ~/.claude/skills sulla Deck`
-  *gate previsto:* Skill di AgentDeck per Claude Code (installare un pacchetto, cambiare un servizio, usare un programma interattivo, gestire avvisi e obblighi, tornare indietro), installate dal repository; prova d'insieme da una sessione di Claude Code sulla Deck che usa strumenti MCP, adattatore e obblighi; documentazione completa.
+- [x] `O10.T9` Skill di AgentDeck e prova d'insieme da una sessione sulla Deck — *perimetro:* `deck/claude/, docs/, ~/.claude/skills sulla Deck, deck/tests/test_skills.py`
+  *gate previsto:* Skill di AgentDeck per Claude Code (installare un pacchetto, cambiare un servizio, usare un programma interattivo, gestire avvisi e obblighi, tornare indietro), installate dal repository; prova d'insieme da una sessione di Claude Code sulla Deck che usa strumenti MCP, adattatore e obblighi; documentazione completa. · *gate confermato:* ✔ 6 skill di AgentDeck installate; prova d'insieme: tree installato da sola con skill, MCP, adattatore e obbligo chiuso; 229 test
+  *rischio:* 15/100 — Le skill sono procedure scritte caricate quando servono: non cambiano permessi né sistema. La prova d'insieme installa un pacchetto piccolo con gli snapshot di snap-pac e lo rimuove alla fine.
 
 ### `O11` Aggiornamento reale della Deck con deck update (O9) — in corso
 
@@ -90,3 +91,4 @@ _Una riga per nota, sempre legata a una task. `wf.sh notes` per leggerle._
 - `N43` (`O10.T5`) R5 (Tailscale) superata dalla decisione N40: la strada è SSH esposto con port forwarding; tailscaled fermato e disabilitato sulla Deck, nessuna regola o porta rimasta. La Deck resta registrata nella tailnet dell'utente: si può togliere dalla console di Tailscale. — 2026-10-26 01:06
 - `N44` (`O10.T6`) Trovato installando (26/10): test_update.test_grub_install_matches_installer (da O6.T1) falliva sulla Deck perché legge install/install.sh del repository, che in /opt/agentdeck non c'è; deck/install.sh si fermava ai test sulla Deck e saltava le prove finali. Corretto con skipTest quando il file manca: sul Mac il confronto con l'installatore resta identico. — 2026-10-26 01:19
 - `N45` (`O10.T7`) Dalla prova con la sessione di Claude Code sulla Deck (26/10): l'agente ha scritto, provato e salvato da solo il profilo di ssh-keygen, senza digitare la passphrase. Ha segnalato che una domanda già risposta e ancora visibile faceva vincere la regola sbagliata. Corretto il motore: una regola di domanda vale solo se finisce sulla riga del cursore. Adeguato il mio test test_unknown_question_asks_for_a_profile (programma finto con un prompt vero sulla riga del cursore): stesso percorso verificato. — 2026-10-26 01:40
+- `N46` (`O10.T4`) Bisogno emerso dalla prova d'insieme di O10.T9 (26/10): in una sessione sulla Deck tre comandi Bash di sola lettura (pacman -Ql, tree --version, una catena con mktemp) sono stati fermati dai permessi di Claude Code; con Remote Control diventerebbero domande al proprietario. Serve una politica decisa prima (H31): permessi allow gestiti per le letture di sistema (pacman -Q*/-Si/-Ss, man, systemctl status, journalctl, ls, cat in /etc) oppure più azioni di sola lettura in deck. Da decidere con l'utente. — 2026-10-26 02:03

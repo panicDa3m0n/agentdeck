@@ -44,7 +44,7 @@ documento (invariante INV-9). Quando si modifica il codice, si aggiorna il docum
 ## Agenti
 
 - [claude-code.md](claude-code.md): Claude Code sulla Deck, l'harness degli agenti: installazione verificata,
-  percorsi, prompt di sistema in strati, strumenti MCP, hook di autoprompting, aggiornamenti. Codice: [../install/claude-code.sh](../install/claude-code.sh).
+  percorsi, prompt di sistema in strati, strumenti MCP, hook di autoprompting, skill, aggiornamenti. Codice: [../install/claude-code.sh](../install/claude-code.sh).
 
 ## Uso quotidiano
 

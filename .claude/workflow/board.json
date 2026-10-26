@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-25 23:48",
-  "updated": "2026-10-26 01:58",
+  "updated": "2026-10-26 02:04",
   "objectives": [
     {
       "id": "O10",
@@ -103,12 +103,12 @@
         {
           "id": "O10.T9",
           "title": "Skill di AgentDeck e prova d'insieme da una sessione sulla Deck",
-          "scope": "deck/claude/, docs/, ~/.claude/skills sulla Deck",
+          "scope": "deck/claude/, docs/, ~/.claude/skills sulla Deck, deck/tests/test_skills.py",
           "gate_pre": "Skill di AgentDeck per Claude Code (installare un pacchetto, cambiare un servizio, usare un programma interattivo, gestire avvisi e obblighi, tornare indietro), installate dal repository; prova d'insieme da una sessione di Claude Code sulla Deck che usa strumenti MCP, adattatore e obblighi; documentazione completa.",
-          "gate_post": "",
-          "state": "todo",
-          "risk": null,
-          "risk_why": "",
+          "gate_post": "6 skill di AgentDeck installate; prova d'insieme: tree installato da sola con skill, MCP, adattatore e obbligo chiuso; 229 test",
+          "state": "done",
+          "risk": 15,
+          "risk_why": "Le skill sono procedure scritte caricate quando servono: non cambiano permessi né sistema. La prova d'insieme installa un pacchetto piccolo con gli snapshot di snap-pac e lo rimuove alla fine.",
           "docs": []
         }
       ]
@@ -298,6 +298,13 @@
       "text": "Dalla prova con la sessione di Claude Code sulla Deck (26/10): l'agente ha scritto, provato e salvato da solo il profilo di ssh-keygen, senza digitare la passphrase. Ha segnalato che una domanda già risposta e ancora visibile faceva vincere la regola sbagliata. Corretto il motore: una regola di domanda vale solo se finisce sulla riga del cursore. Adeguato il mio test test_unknown_question_asks_for_a_profile (programma finto con un prompt vero sulla riga del cursore): stesso percorso verificato.",
       "docs": [],
       "created": "2026-10-26 01:40"
+    },
+    {
+      "id": "N46",
+      "task": "O10.T4",
+      "text": "Bisogno emerso dalla prova d'insieme di O10.T9 (26/10): in una sessione sulla Deck tre comandi Bash di sola lettura (pacman -Ql, tree --version, una catena con mktemp) sono stati fermati dai permessi di Claude Code; con Remote Control diventerebbero domande al proprietario. Serve una politica decisa prima (H31): permessi allow gestiti per le letture di sistema (pacman -Q*/-Si/-Ss, man, systemctl status, journalctl, ls, cat in /etc) oppure più azioni di sola lettura in deck. Da decidere con l'utente.",
+      "docs": [],
+      "created": "2026-10-26 02:03"
     }
   ],
   "active": {
@@ -310,9 +317,9 @@
     "hold_plan": ""
   },
   "previous": {
-    "task": "O10.T8",
+    "task": "O10.T9",
     "state": "done",
-    "note": "deck obligations e hook: obbligo dall'hook di pacman, campo obligations, politica, verifiche, novità del turno, registro; provati dal vivo"
+    "note": "6 skill di AgentDeck installate; prova d'insieme: tree installato da sola con skill, MCP, adattatore e obbligo chiuso; 229 test"
   },
   "cycle": {
     "n": 4,
@@ -323,6 +330,6 @@
     "objective": 11,
     "cycle": 4,
     "request": 6,
-    "note": 45
+    "note": 46
   }
 }
