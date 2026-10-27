@@ -7,7 +7,8 @@ delle sessioni. Documentazione: docs/adattatore.md.
 
 Segnali usati, verificati sulla Deck il 26/10/2026:
 - il processo in primo piano che legge dal terminale dorme in wait_woken (/proc/<pid>/wchan); /proc/<pid>/syscall
-  non è leggibile (Yama ptrace_scope=1);
+  non è leggibile (Yama ptrace_scope=1). Nei programmi con più thread (Go, come gh) il thread principale aspetta
+  gli altri (futex_do_wait) e la lettura dal terminale sta in un altro thread (/proc/<pid>/task/*/wchan);
 - terminale canonico senza eco (icanon -echo) vuol dire una password; senza modo canonico è un programma a tutto
   schermo, che di solito usa anche lo schermo alternativo.
 Tutto il testo del terminale è testo esterno: finisce solo nei dati della schermata (INV-4).
@@ -34,6 +35,8 @@ QUIET_S = 0.5
 POLL_S = 0.1
 TTY_WAITS = {"wait_woken", "n_tty_read", "do_select", "do_sys_poll", "poll_schedule_timeout", "core_sys_select",
              "ep_poll", "do_epoll_wait"}
+TTY_READS = {"wait_woken", "n_tty_read"}  # le attese che contano anche se non sono del thread principale
+PROC = Path("/proc")
 TMUX_CONF = ("set -g remain-on-exit on\nset -g remain-on-exit-format ''\nset -g history-limit 5000\n"
              "set -g status off\nset -g escape-time 0\n")
 ID = re.compile(r"[0-9a-f]{4}")
@@ -110,16 +113,41 @@ class Tmux:
         self._run("kill-session", "-t", name, check=False)
 
 
-def proc_info(pid: int) -> dict:
+def wait_name(wchan: Optional[str]) -> str:
+    """Il nome di wchan senza i suffissi che il kernel aggiunge (.constprop.0, .isra.0), P21."""
+    return (wchan or "").split(".")[0]
+
+
+def proc_info(pid: int, proc: Path = PROC) -> dict:
     """Processo in primo piano sul terminale della sessione: nome e su cosa dorme (Linux, /proc)."""
     try:
-        stat = Path(f"/proc/{pid}/stat").read_text()
+        stat = (proc / str(pid) / "stat").read_text()
         tpgid = int(stat[stat.rindex(")") + 2:].split()[5])
         fg = tpgid if tpgid > 0 else pid
-        return {"pid": fg, "name": Path(f"/proc/{fg}/comm").read_text().strip(),
-                "wchan": Path(f"/proc/{fg}/wchan").read_text().strip() or None}
+        name = (proc / str(fg) / "comm").read_text().strip()
+        wchan = (proc / str(fg) / "wchan").read_text().strip() or None
     except (OSError, ValueError, IndexError):
         return {"pid": None, "name": None, "wchan": None}
+    if wait_name(wchan) not in TTY_WAITS:
+        wchan = _thread_reading(proc / str(fg) / "task") or wchan
+    return {"pid": fg, "name": name, "wchan": wchan}
+
+
+def _thread_reading(tasks: Path) -> Optional[str]:
+    """Un altro thread che legge dal terminale. Le attese in poll ed epoll degli altri thread non contano: un programma
+    Go ne ha sempre uno lì per la rete, anche mentre lavora."""
+    try:
+        threads = sorted(tasks.iterdir())
+    except OSError:
+        return None
+    for thread in threads:
+        try:
+            wchan = (thread / "wchan").read_text().strip()
+        except OSError:
+            continue  # il thread è appena finito
+        if wait_name(wchan) in TTY_READS:
+            return wchan
+    return None
 
 
 def tty_flags(tty: str) -> tuple:
@@ -422,7 +450,7 @@ class Sessions:
         fg = {"pid": None, "name": None, "wchan": None} if dead else self.proc(_int(info.get("pane_pid")))
         echo, icanon = (None, None) if dead else self.flags(info.get("pane_tty") or "")
         alternate = info.get("alternate_on") == "1"
-        tty_wait = (fg.get("wchan") or "").split(".")[0] in TTY_WAITS  # il kernel aggiunge .constprop.0, .isra.0
+        tty_wait = wait_name(fg.get("wchan")) in TTY_WAITS
         profile, profile_origin = load_profile(state.get("program"))
         quiet = idle >= QUIET_S
         question = None if dead else recognize(lines, cursor, echo=echo, icanon=icanon, alternate=alternate,

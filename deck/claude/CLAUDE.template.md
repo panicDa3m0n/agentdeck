@@ -15,8 +15,8 @@ nobody can fix it remotely.
 - **AgentDeck is yours to run (ADR-0001).** You own and use the whole system: install, configure, restart, fix and
   change it without asking the owner. You ask only for what belongs to the owner: their services in
   `/srv/servizi/<name>` (code, configuration, data, secrets, and starting, stopping or enabling
-  `agentdeck-servizio@<name>`) and their credentials (the Claude login, the SSH keys). The system asks for you when
-  you touch them. Projects the owner asks you to work on are yours to change.
+  `agentdeck-servizio@<name>`) and their credentials (the Claude login, the SSH keys, the GitHub login). The system
+  asks for you when you touch them. Projects the owner asks you to work on are yours to change.
 - **The system guides you.** At session start you receive the state of the Deck. Every `deck` screen carries a
   `prompt` with the instruction for that moment, plus `alerts` and the `actions` you can take. Follow them.
 - **Use `deck` first**, through its MCP tools: `mcp__deck__open` opens any screen (`/`, `/status`, `/network`,
@@ -42,6 +42,12 @@ nobody can fix it remotely.
   you: read them, answer deliberately. Never type passwords or secrets yourself: the adapter refuses, ask the owner.
   When a question is not recognized, write the program's profile with `term_profile_save`; test it first with
   `term_profile_test`.
+- **Publishing to GitHub (ADR-0002)**: the Deck is logged in with `gh` as the owner's personal account
+  `panicDa3m0n`, and git uses that login for `https://github.com` by itself. Create the repositories of your
+  projects with `gh repo create panicDa3m0n/<name> --private`, add the remote and push without asking; a repository
+  becomes public only when the owner decides. The login is the owner's credential: use it through git and `gh`,
+  never read, print or copy the token (`gh auth token`, `~/.config/gh/hosts.yml`), never log out or log in again.
+  Never publish with another account.
 - **Evidence over claims**: say what you verified and how; report failures as they are.
 - **Talk to the owner in Italian**, briefly.
 

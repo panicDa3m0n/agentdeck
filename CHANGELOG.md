@@ -4,6 +4,24 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.5.2 — 2026-10-27
+
+Ciclo 05, task O14.T2: il canale verso GitHub realizzato e provato dall'agente sulla Deck (ADR-0002).
+
+- Sulla Deck: `github-cli` 2.102.1 (snapshot 92 prima) e login di `gh` come `panicDa3m0n`, approvato dall'utente con
+  il codice monouso; git usa quel login per `https://github.com` da sé.
+- La prova: l'agente della Deck ha aggiunto il remote di frugale, ha scritto la decisione 0012 ("pubblicazione
+  diretta dalla Deck") e ha pubblicato da sé 58 commit fino a `8fa5cbd`. Nessuna credenziale nella storia pubblicata.
+- Il login di GitHub è una credenziale dell'utente: leggerlo o cambiarlo (`hosts.yml`, `gh auth token`, login e
+  logout) fa chiedere il permesso; `git push` e `gh repo create` restano liberi (`deck/agentdeck/ownership.py`).
+- Regola per l'agente in `CLAUDE.md`: come pubblicare, repository privati salvo decisione dell'utente, mai un altro
+  account.
+- Adattatore: i programmi Go come `gh` ora risultano in attesa di risposta, perché si legge l'attesa di ogni thread
+  (trappola P23). Il limite dei menu a frecce è fra i limiti noti (N61).
+- Documentazione: "GitHub dalla Deck" in `docs/sviluppo.md`, permessi in `docs/claude-code.md`, `docs/adattatore.md`.
+- Sulla Deck queste modifiche al codice di `deck` e a `CLAUDE.md` arrivano con il prossimo aggiornamento, a
+  sessione di lavoro finita.
+
 ## 0.5.1 — 2026-10-26
 
 Ciclo 05, task O14.T1: il canale fra l'agente sulla Deck e GitHub, deciso dall'utente (ADR-0002).

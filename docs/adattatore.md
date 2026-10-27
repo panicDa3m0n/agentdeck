@@ -82,6 +82,10 @@ La schermata `/term` elenca le sessioni aperte, al più 8, e i profili, e mette 
     programmi con readline, letto da `/proc/<pid>/wchan`. Il kernel aggiunge suffissi come `.constprop.0`, che
     si tolgono prima del confronto (trappola P21). `/proc/<pid>/syscall` non è leggibile (Yama
     `ptrace_scope=1`);
+  - nei programmi con più thread (Go, come `gh`) il thread principale aspetta gli altri in `futex_do_wait` e la
+    lettura dal terminale sta in un altro thread: se il thread principale non aspetta il terminale, conta un
+    thread qualsiasi in `wait_woken` o `n_tty_read` (`/proc/<pid>/task/*/wchan`). Le attese in poll ed epoll degli
+    altri thread non contano, perché un programma Go ne ha sempre una per la rete (trappola P23);
   - il terminale canonico senza eco (`icanon -echo`) vuol dire una password;
   - un programma a tutto schermo spegne il modo canonico e di solito usa lo schermo alternativo;
   - un editor di riga come readline spegne eco e modo canonico senza schermo alternativo: resta un prompt di riga.
@@ -170,6 +174,9 @@ sistema, con `deck term profile_save`; li prova prima con `profile_test`.
 
 - Un programma che aspetta la rete può dormire in `wait_woken` come uno che legge dal terminale. Se è fermo e
   il suo ultimo prompt non si riconosce, risulta `waiting_input` con domanda `unknown`.
+- Nei menu a frecce (per esempio quelli di `gh auth login`) le opzioni scritte sotto la riga del cursore non
+  entrano in `question.options`, perché una domanda deve finire sulla riga del cursore. Le righe restano in
+  `terminal.lines` e si sceglie con `key` (frecce e Invio). Segnalato dall'agente della Deck il 26/10/2026.
 - Le applicazioni a tutto schermo (editor, `htop`, menu di `dialog`) arrivano come righe dello schermo con domanda
   `unknown`: si guidano con `key`. Un profilo può riconoscerne le schermate.
 - Fra le opzioni di `sudo` e degli altri involucri, solo quelle note con argomento vengono saltate per trovare

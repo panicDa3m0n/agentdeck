@@ -1362,3 +1362,49 @@
 {"at": "2026-10-26 18:25", "testo": "[-] bash: ~/claude-rules/bin/wf.sh adr --adr ADR-0002 --stato accettato \"Decisione dell'utente (26/10): niente più ponte"}
 {"at": "2026-10-26 18:26", "testo": "[-] Edit  CHANGELOG.md", "task": "-", "tipo": "file", "tool": "Edit", "file": "CHANGELOG.md"}
 {"at": "2026-10-26 18:26", "testo": "VERSIONI scelte dall'utente: governance"}
+{"at": "2026-10-26 18:26", "testo": "[-] bash: ~/claude-rules/bin/wf.sh versione --scegli governance --da \"0.5.1\" --dove \"VERSION\" --pubblica | sed -n 2p | c"}
+{"at": "2026-10-26 18:26", "testo": "TASK APERTA O14.T2 — Il canale realizzato e provato con una modifica vera dell'agente sulla Deck | perimetro: deck/, docs/, configurazione sulla Deck | gate: Una modifica vera fatta da una sessione sulla Deck arriva nel repository secondo il canale deciso, con documentazione e versione pubblicata; nessuna credenziale in git (INV-6). | rischio: 25"}
+{"at": "2026-10-26 18:26", "testo": "TASK CORRETTA O14.T2 — scope: «deck/, docs/, configurazione sulla Deck» -> «pacchetto github-cli e configurazione di gh e git dell'utente agent sulla Deck, remote di /home/agent/frugale sulla Deck, deck/, docs/»"}
+{"at": "2026-10-26 18:26", "testo": "[O14.T2] bash: ~/claude-rules/bin/wf.sh task-start --id O14.T2 --risk 25 --why \"Pacchetto nuovo e credenziale dell'account pe"}
+{"at": "2026-10-26 18:26", "testo": "[O14.T2] bash: ssh -o BatchMode=yes agentdeck 'deck snapshot create \"description=prima di github-cli e del login GitHub (O14."}
+{"at": "2026-10-26 18:27", "testo": "[O14.T2] bash: ssh -o BatchMode=yes agentdeck 'deck term start \"command=gh auth login --hostname github.com --git-protocol ht"}
+{"at": "2026-10-26 18:27", "testo": "[O14.T2] bash: ssh -o BatchMode=yes agentdeck 'pid=$(pgrep -x gh | head -1); echo \"gh pid $pid, thread principale: $(cat /pro"}
+{"at": "2026-10-26 18:28", "testo": "[O14.T2] bash: ssh -o BatchMode=yes agentdeck 'deck term answer id=2b6e text=Y' | python3 -c \" import json,sys; s=json.load(s"}
+{"at": "2026-10-26 18:28", "testo": "[O14.T2] bash: ssh -o BatchMode=yes agentdeck 'deck term key id=2b6e key=Enter' | python3 -c \" import json,sys; s=json.load(s"}
+{"at": "2026-10-26 18:49", "testo": "[O14.T2] bash: sed -n '40,45p' /Users/snj/.claude/projects/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/"}
+{"at": "2026-10-26 18:49", "testo": "[O14.T2] bash: ssh -o BatchMode=yes agentdeck 'tok=$(deck term close id=2b6e | python3 -c \"import json,sys; print(json.load(s"}
+{"at": "2026-10-26 18:50", "testo": "[O14.T2] bash: python3 - <<'EOF' from pathlib import Path def edit(path, old, new):     p = Path(path); t = p.read_text(); as"}
+{"at": "2026-10-26 18:51", "testo": "[O14.T2] bash: python3 -m unittest tests.test_ownership 2>&1 | grep -B3 -A12 \"FAIL:\""}
+{"at": "2026-10-26 18:52", "testo": "[O14.T2] Edit  deck/agentdeck/ownership.py", "task": "O14.T2", "tipo": "file", "tool": "Edit", "file": "deck/agentdeck/ownership.py"}
+{"at": "2026-10-26 18:52", "testo": "[O14.T2] bash: python3 -m unittest tests.test_ownership -q 2>&1 | tail -2"}
+{"at": "2026-10-26 18:52", "testo": "[O14.T2] bash: grep -n \"TTY_WAITS\\|POLL_WAITS\\|def proc_info\\|wchan\\|tty_wait\" agentdeck/term.py | head -40; grep -n \"proc_in"}
+{"at": "2026-10-26 18:52", "testo": "[O14.T2] bash: sed -n 1,30p tests/test_term.py; echo ----; sed -n 100,175p tests/test_term.py; grep -n \"^class \\|^def \" tests"}
+{"at": "2026-10-26 18:52", "testo": "[O14.T2] bash: python3 - <<'EOF' from pathlib import Path def edit(path, old, new):     p = Path(path); t = p.read_text(); as"}
+{"at": "2026-10-26 18:53", "testo": "[O14.T2] bash: cd /Users/snj/linuxai-steamdeck && grep -rn \"proc_info\\|split(\\\".\\\")\\[0\\]\" deck --include=*.py | grep -v tests"}
+{"at": "2026-10-26 18:53", "testo": "[O14.T2] bash: python3 - <<'EOF' from pathlib import Path def edit(path, old, new):     p = Path(path); t = p.read_text(); as"}
+{"at": "2026-10-26 18:53", "testo": "TRAPPOLA registrata: deck term non vede che gh (Go) aspetta input -> nei programmi Go il thread principale dorme in futex_do_wait e la lettura del terminale sta in un altro thread (wait_woken) -> proc_info legge anche /proc/<pid>/task/*/wchan e conta solo wait_woken o n_tty_read, mai epoll (rete di Go)"}
+{"at": "2026-10-26 18:53", "testo": "[O14.T2] bash: ~/claude-rules/bin/wf.sh pitfall 'deck term non vede che gh (Go) aspetta input -> nei programmi Go il thread p"}
+{"at": "2026-10-26 18:53", "testo": "ANNOTAZIONE N61 su O14.T2 — Adattatore: nei menu a frecce (gh auth login) le opzioni sotto la riga del cursore non entrano in question.options; servirebbe una regola o un profilo per i menu a frecce (segnalato dall'agente della Deck il 26/10, scritto in docs/adattatore.md, Limiti noti)"}
+{"at": "2026-10-26 18:53", "testo": "[O14.T2] bash: ~/claude-rules/bin/wf.sh note-add --text \"Adattatore: nei menu a frecce (gh auth login) le opzioni sotto la ri"}
+{"at": "2026-10-26 18:53", "testo": "[O14.T2] bash: grep -rln \"ADR-0002\" docs .claude 2>/dev/null; ls docs/adr 2>/dev/null; f=$(grep -rl \"ADR-0002\" docs .claude 2"}
+{"at": "2026-10-26 18:53", "testo": "[O14.T2] bash: python3 - <<'EOF' from pathlib import Path def edit(path, old, new):     p = Path(path); t = p.read_text(); as"}
+{"at": "2026-10-26 18:53", "testo": "[O14.T2] bash: python3 claude/build_claude_md.py | grep -n -A6 \"Publishing to GitHub\""}
+{"at": "2026-10-26 18:53", "testo": "[O14.T2] bash: cd /Users/snj/linuxai-steamdeck && cat docs/README.md | head -60; echo ----; grep -n \"^#\\|credenzial\\|SSH keys"}
+{"at": "2026-10-26 18:54", "testo": "[O14.T2] bash: grep -o 'gh auth login --hostname github.com[^\\\\\"]*' /Users/snj/.claude/projects/-Users-snj-linuxai-steamdeck/"}
+{"at": "2026-10-26 18:54", "testo": "[O14.T2] bash: python3 - <<'EOF' from pathlib import Path def edit(path, old, new):     p = Path(path); t = p.read_text(); as"}
+{"at": "2026-10-26 18:54", "testo": "[O14.T2] bash: ssh -o BatchMode=yes agentdeck 'cd /home/agent/frugale && git remote -v; git log --oneline -5; git status -sb "}
+{"at": "2026-10-26 18:56", "testo": "[O14.T2] bash: cd /Users/snj/frugale/frugale && echo \"status:\"; git status --porcelain --ignored | head; echo \"rami:\"; git br"}
+{"at": "2026-10-26 18:56", "testo": "[O14.T2] bash: mv /Users/snj/frugale/frugale ~/.Trash/frugale-copia-doppia-$(date +%Y%m%d-%H%M) && ls -d ~/.Trash/frugale-cop"}
+{"at": "2026-10-26 18:57", "testo": "ANNOTAZIONE N62 su O14.T2 — Stato O14.T2 (26/10 18:56): nel repository pronti ownership con il login GitHub come credenziale, correzione Go dell'adattatore (P23), regola GitHub in CLAUDE.template.md, docs; risposta all'agente della Deck data all'utente. Manca la prova del gate: il push di frugale dalla Deck (origin ancora assente, 3 commit non pubblicati). Copia doppia /Users/snj/frugale/frugale spostata nel Cestino su richiesta dell'utente."}
+{"at": "2026-10-26 18:57", "testo": "[O14.T2] bash: ~/claude-rules/bin/wf.sh note-add --text \"Stato O14.T2 (26/10 18:56): nel repository pronti ownership con il l"}
+{"at": "2026-10-27 18:05", "testo": "[O14.T2] bash: ssh -o BatchMode=yes agentdeck 'systemctl status agentdeck-claude --no-pager -n 0 | head -8; echo ---; tmux ls"}
+{"at": "2026-10-27 18:06", "testo": "[O14.T2] bash: ssh -o BatchMode=yes agentdeck 'ps -o pid,etime,stat,rss,args --forest -u agent | grep -v \"ps -o\\|grep\" | cut "}
+{"at": "2026-10-27 18:06", "testo": "[O14.T2] bash: sed -n 100,120p /Users/snj/.claude/projects/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/"}
+{"at": "2026-10-27 18:06", "testo": "[O14.T2] bash: ssh -o BatchMode=yes agentdeck '~/.local/bin/claude remote-control --help 2>&1 | sed -n \"/DESCRIPTION/,\\$p\" | "}
+{"at": "2026-10-27 18:06", "testo": "[O14.T2] bash: cd /Users/snj/frugale && git fetch -q origin && echo \"origin/main: $(git rev-parse --short origin/main)\"; git "}
+{"at": "2026-10-27 18:07", "testo": "[O14.T2] bash: cd /Users/snj/frugale && f=$(git ls-tree -r --name-only origin/main | grep -E '0009' | head -3); echo \"$f\"; fo"}
+{"at": "2026-10-27 18:07", "testo": "[O14.T2] bash: ssh -o BatchMode=yes agentdeck 'cd /home/agent/frugale && git reflog show --date=iso origin/main | head -5'; c"}
+{"at": "2026-10-27 18:07", "testo": "[O14.T2] bash: python3 - <<'EOF' from pathlib import Path p = Path(\"CHANGELOG.md\"); t = p.read_text() old = \"## 0.5.1 — 2026-"}
+{"at": "2026-10-27 18:07", "testo": "TASK CHIUSA O14.T2 — completata: frugale pubblicato dalla Deck (gh panicDa3m0n): 58 commit fino a 8fa5cbd, push nel reflog della Deck, 0 credenziali; docs e regola"}
+{"at": "2026-10-27 18:07", "testo": "VERSIONE 0.5.2 (O14.T2)"}
+{"at": "2026-10-27 18:07", "testo": "[-] bash: ~/claude-rules/bin/wf.sh task-close --done \"frugale pubblicato dalla Deck (gh panicDa3m0n): 58 commit fino a 8"}

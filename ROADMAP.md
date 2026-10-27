@@ -10,10 +10,11 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O14` Quello che l'agente fa sulla Deck arriva nel repository (N52) — 2 task: 1 completate, 0 in corso, 1 da fare, 0 bloccate
+- **Obiettivo attivo:** `O14` Quello che l'agente fa sulla Deck arriva nel repository (N52) — 2 task: 2 completate, 0 in corso, 0 da fare, 0 bloccate
 - **Task attiva:** —
-- **Ultima task gestita:** `O14.T1` — completata — Canale deciso dall'utente (ADR-0002): la Deck pubblica da sé su GitHub come panicDa3m0n, login gh approvato dall'utente, repository privati
-- **Ultimo aggiornamento:** 2026-10-26 18:25
+- **Ultima task gestita:** `O14.T2` — completata — frugale pubblicato dalla Deck (gh panicDa3m0n): 58 commit fino a 8fa5cbd, push nel reflog della Deck, 0 credenziali; docs e regola
+- **Fase:** `objective_gate_pending`
+- **Ultimo aggiornamento:** 2026-10-27 18:07
 
 ## Richieste attive
 
@@ -60,8 +61,10 @@ _nessuna richiesta in attesa._
   *gate previsto:* Strade confrontate con l'utente (copia del repository sulla Deck con push e credenziale solo sulla Deck, consegna verso il Mac, stato voluto D4); decisione registrata come ADR. · *gate confermato:* ✔ Canale deciso dall'utente (ADR-0002): la Deck pubblica da sé su GitHub come panicDa3m0n, login gh approvato dall'utente, repository privati
   *rischio:* 5/100 — Solo la registrazione della decisione dell'utente sul canale: nessuna modifica al sistema.
   *annotazioni:* `N60`
-- [ ] `O14.T2` Il canale realizzato e provato con una modifica vera dell'agente sulla Deck — *perimetro:* `deck/, docs/, configurazione sulla Deck`
-  *gate previsto:* Una modifica vera fatta da una sessione sulla Deck arriva nel repository secondo il canale deciso, con documentazione e versione pubblicata; nessuna credenziale in git (INV-6).
+- [x] `O14.T2` Il canale realizzato e provato con una modifica vera dell'agente sulla Deck — *perimetro:* `pacchetto github-cli e configurazione di gh e git dell'utente agent sulla Deck, remote di /home/agent/frugale sulla Deck, deck/, docs/`
+  *gate previsto:* Una modifica vera fatta da una sessione sulla Deck arriva nel repository secondo il canale deciso, con documentazione e versione pubblicata; nessuna credenziale in git (INV-6). · *gate confermato:* ✔ frugale pubblicato dalla Deck (gh panicDa3m0n): 58 commit fino a 8fa5cbd, push nel reflog della Deck, 0 credenziali; docs e regola
+  *rischio:* 25/100 — Pacchetto nuovo e credenziale dell'account personale sulla Deck esposta via SSH (solo chiave): il token apre i repository personali. Snapshot prima, nessun riavvio di agentdeck-claude, nessun file di lavoro di frugale toccato.
+  *annotazioni:* `N61`, `N62`
 
 ## Annotazioni
 
@@ -70,3 +73,5 @@ _Una riga per nota, sempre legata a una task. `wf.sh notes` per leggerle._
 - `N58` (`O12.T1`) Precisazione dell'utente (26/10) su ADR-0001, cosa sono i dati dell'utente: i suoi servizi in /srv/servizi/<nome> (codice, configurazione, dati, segreti, avvio, arresto, abilitazione delle unità agentdeck-servizio@<nome>) e le sue credenziali (login di Claude, chiavi SSH). Sui progetti che l'utente chiede all'agente, come /home/agent/frugale, l'agente lavora libero. Vincolo di questo momento: una sessione di Remote Control sta lavorando a frugale; l'installazione sulla Deck riavvia agentdeck-claude e la chiuderebbe, quindi si installa solo quando l'utente dice che la sessione è finita. — 2026-10-26 17:56
 - `N59` (`O12.T1`) Stato (26/10 18:00): politica pronta e provata sul Mac (agentdeck/ownership.py, guardia con permissionDecision ask, allow di tutto il lavoro di sistema nelle impostazioni gestite, testi senza richieste al proprietario per il sistema, 241 test). Non installata: sulla Deck è attiva la sessione di Remote Control su frugale (ultima attività 17:57) e deck/claude/install.sh riavvia agentdeck-claude. Restano installazione e prova con claude -p senza permessi aggiuntivi. — 2026-10-26 17:59
 - `N60` (`O14.T1`) Caso reale (26/10, su richiesta dell'utente, fuori dal perimetro di O12.T1): pubblicato il progetto frugale nato sulla Deck, come chiede la sua decisione 0009. Repository privato panicDa3m0n/frugale; clone sul Mac in /Users/snj/frugale con remote deck (agentdeck:/home/agent/frugale) e origin HTTPS con credential helper locale di panicDa3m0n (come P1); push di main (de60013, bbe2177). Il ponte è manuale: per ogni aggiornamento serve git pull deck main e git push origin main dal Mac. È il bisogno N52 anche per i progetti dell'utente, non solo per AgentDeck. — 2026-10-26 18:20
+- `N61` (`O14.T2`) Adattatore: nei menu a frecce (gh auth login) le opzioni sotto la riga del cursore non entrano in question.options; servirebbe una regola o un profilo per i menu a frecce (segnalato dall'agente della Deck il 26/10, scritto in docs/adattatore.md, Limiti noti) — 2026-10-26 18:53
+- `N62` (`O14.T2`) Stato O14.T2 (26/10 18:56): nel repository pronti ownership con il login GitHub come credenziale, correzione Go dell'adattatore (P23), regola GitHub in CLAUDE.template.md, docs; risposta all'agente della Deck data all'utente. Manca la prova del gate: il push di frugale dalla Deck (origin ancora assente, 3 commit non pubblicati). Copia doppia /Users/snj/frugale/frugale spostata nel Cestino su richiesta dell'utente. — 2026-10-26 18:57

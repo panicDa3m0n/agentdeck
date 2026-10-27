@@ -250,7 +250,9 @@ Control diventa una domanda al proprietario. Annotato per O10.T4 (N46).
 chiede permessi per nessun intervento dentro AgentDeck. I permessi riguardano solo:
 - **i servizi dell'utente**, in `/srv/servizi/<nome>`: codice, configurazione, dati e segreti, e l'avvio, l'arresto, il
   riavvio e l'abilitazione delle unità `agentdeck-servizio@<nome>`;
-- **le credenziali dell'utente**: il login di Claude (`~/.claude/.credentials.json`) e le chiavi SSH (`~/.ssh/`).
+- **le credenziali dell'utente**: il login di Claude (`~/.claude/.credentials.json`), le chiavi SSH (`~/.ssh/`) e il
+  login di GitHub (`~/.config/gh/`, `gh auth token`, `gh auth login` e `logout`). L'agente pubblica con quest'ultimo
+  attraverso git e `gh` senza chiedere, ma non lo legge (ADR-0002, [sviluppo.md](sviluppo.md#github-dalla-deck-adr-0002-o14t2)).
 
 I progetti che l'utente chiede all'agente, come `/home/agent/frugale`, non sono in questo elenco: lì l'agente lavora
 libero. Leggere non è intervenire: elenchi, letture, stato e log di un servizio restano liberi, tranne il contenuto

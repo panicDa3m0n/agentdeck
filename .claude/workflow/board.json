@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-26 11:36",
-  "updated": "2026-10-26 18:25",
+  "updated": "2026-10-27 18:07",
   "objectives": [
     {
       "id": "O12",
@@ -145,12 +145,12 @@
         {
           "id": "O14.T2",
           "title": "Il canale realizzato e provato con una modifica vera dell'agente sulla Deck",
-          "scope": "deck/, docs/, configurazione sulla Deck",
+          "scope": "pacchetto github-cli e configurazione di gh e git dell'utente agent sulla Deck, remote di /home/agent/frugale sulla Deck, deck/, docs/",
           "gate_pre": "Una modifica vera fatta da una sessione sulla Deck arriva nel repository secondo il canale deciso, con documentazione e versione pubblicata; nessuna credenziale in git (INV-6).",
-          "gate_post": "",
-          "state": "todo",
-          "risk": null,
-          "risk_why": "",
+          "gate_post": "frugale pubblicato dalla Deck (gh panicDa3m0n): 58 commit fino a 8fa5cbd, push nel reflog della Deck, 0 credenziali; docs e regola",
+          "state": "done",
+          "risk": 25,
+          "risk_why": "Pacchetto nuovo e credenziale dell'account personale sulla Deck esposta via SSH (solo chiave): il token apre i repository personali. Snapshot prima, nessun riavvio di agentdeck-claude, nessun file di lavoro di frugale toccato.",
           "docs": []
         }
       ]
@@ -178,21 +178,35 @@
       "text": "Caso reale (26/10, su richiesta dell'utente, fuori dal perimetro di O12.T1): pubblicato il progetto frugale nato sulla Deck, come chiede la sua decisione 0009. Repository privato panicDa3m0n/frugale; clone sul Mac in /Users/snj/frugale con remote deck (agentdeck:/home/agent/frugale) e origin HTTPS con credential helper locale di panicDa3m0n (come P1); push di main (de60013, bbe2177). Il ponte è manuale: per ogni aggiornamento serve git pull deck main e git push origin main dal Mac. È il bisogno N52 anche per i progetti dell'utente, non solo per AgentDeck.",
       "docs": [],
       "created": "2026-10-26 18:20"
+    },
+    {
+      "id": "N61",
+      "task": "O14.T2",
+      "text": "Adattatore: nei menu a frecce (gh auth login) le opzioni sotto la riga del cursore non entrano in question.options; servirebbe una regola o un profilo per i menu a frecce (segnalato dall'agente della Deck il 26/10, scritto in docs/adattatore.md, Limiti noti)",
+      "docs": [],
+      "created": "2026-10-26 18:53"
+    },
+    {
+      "id": "N62",
+      "task": "O14.T2",
+      "text": "Stato O14.T2 (26/10 18:56): nel repository pronti ownership con il login GitHub come credenziale, correzione Go dell'adattatore (P23), regola GitHub in CLAUDE.template.md, docs; risposta all'agente della Deck data all'utente. Manca la prova del gate: il push di frugale dalla Deck (origin ancora assente, 3 commit non pubblicati). Copia doppia /Users/snj/frugale/frugale spostata nel Cestino su richiesta dell'utente.",
+      "docs": [],
+      "created": "2026-10-26 18:57"
     }
   ],
   "active": {
     "objective": "O14",
     "task": "",
-    "phase": "idle",
+    "phase": "objective_gate_pending",
     "risk": null,
     "risk_why": "",
     "hold_invariants": "",
     "hold_plan": ""
   },
   "previous": {
-    "task": "O14.T1",
+    "task": "O14.T2",
     "state": "done",
-    "note": "Canale deciso dall'utente (ADR-0002): la Deck pubblica da sé su GitHub come panicDa3m0n, login gh approvato dall'utente, repository privati"
+    "note": "frugale pubblicato dalla Deck (gh panicDa3m0n): 58 commit fino a 8fa5cbd, push nel reflog della Deck, 0 credenziali; docs e regola"
   },
   "cycle": {
     "n": 5,
@@ -203,6 +217,6 @@
     "objective": 14,
     "cycle": 5,
     "request": 6,
-    "note": 60
+    "note": 62
   }
 }

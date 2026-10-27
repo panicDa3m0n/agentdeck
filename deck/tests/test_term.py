@@ -243,6 +243,40 @@ class RecognizeTests(unittest.TestCase):
             self.assertEqual(term.program_of(command), program, command)
 
 
+class ProcInfoTests(unittest.TestCase):
+    """/proc finto con i valori visti sulla Deck il 26/10/2026 per gh auth login (Go, più thread)."""
+    def make_proc(self, threads, *, main):
+        root = Path(tempfile.mkdtemp())
+        shell, prog = root / "100", root / "200"
+        for d in (shell, prog):
+            d.mkdir()
+        (shell / "stat").write_text("100 (bash) S 1 100 100 34816 200 4194560")
+        (prog / "comm").write_text("gh\n")
+        (prog / "wchan").write_text(main)
+        for tid, wchan in threads.items():
+            (prog / "task" / tid).mkdir(parents=True)
+            (prog / "task" / tid / "wchan").write_text(wchan)
+        return root
+
+    def test_go_program_reading_in_another_thread(self):
+        proc = self.make_proc({"200": "futex_do_wait", "201": "do_epoll_wait", "202": "wait_woken"},
+                              main="futex_do_wait")
+        info = term.proc_info(100, proc)
+        self.assertEqual((info["pid"], info["name"], info["wchan"]), (200, "gh", "wait_woken"))
+
+    def test_network_poll_of_other_threads_does_not_count(self):
+        proc = self.make_proc({"200": "futex_do_wait", "201": "do_epoll_wait", "202": "futex_do_wait"},
+                              main="futex_do_wait")
+        self.assertNotIn(term.wait_name(term.proc_info(100, proc)["wchan"]), term.TTY_WAITS)
+
+    def test_main_thread_wait_wins(self):
+        proc = self.make_proc({"200": "poll_schedule_timeout.constprop.0"}, main="poll_schedule_timeout.constprop.0")
+        self.assertEqual(term.proc_info(100, proc)["wchan"], "poll_schedule_timeout.constprop.0")
+
+    def test_missing_process(self):
+        self.assertEqual(term.proc_info(999, Path(tempfile.mkdtemp())), {"pid": None, "name": None, "wchan": None})
+
+
 class ProfileTests(unittest.TestCase):
     def test_builtin_profiles_are_valid(self):
         for path in term.profile_dirs()[1].glob("*.json"):

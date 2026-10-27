@@ -54,4 +54,5 @@ documento (invariante INV-9). Quando si modifica il codice, si aggiorna il docum
 - [accesso.md](accesso.md): accesso SSH dell'agente in casa e da fuori casa (scarlethome.ddns.net, sshguard),
   indirizzo della Deck, sicurezza, snapshot e recupero. Codice: [../install/remote-access.sh](../install/remote-access.sh),
   prova da fuori casa [../install/remote-check.sh](../install/remote-check.sh).
-- [sviluppo.md](sviluppo.md): repository git, identità, remote GitHub, versioni, governance.
+- [sviluppo.md](sviluppo.md): repository git, identità, remote GitHub, pubblicazione dalla Deck con `gh` (ADR-0002),
+  versioni, governance.

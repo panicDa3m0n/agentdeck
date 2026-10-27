@@ -4,7 +4,8 @@ Decisione dell'utente del 26/10/2026. AgentDeck è il sistema di proprietà e us
 riguardano solo:
 - i servizi dell'utente, in /srv/servizi/<nome>: codice, configurazione, dati e segreti, e le unità
   agentdeck-servizio@<nome> (avvio, arresto, riavvio, abilitazione);
-- le credenziali dell'utente: il login di Claude e le chiavi SSH.
+- le credenziali dell'utente: il login di Claude, le chiavi SSH e il login di GitHub (gh, ADR-0002), che l'agente usa
+  per pubblicare ma non legge né copia.
 I progetti che l'utente chiede all'agente (per esempio /home/agent/frugale) non sono in questo elenco: lì l'agente
 lavora libero. Leggere non è intervenire: elenchi, letture e stato restano liberi, tranne il contenuto delle credenziali.
 
@@ -21,7 +22,9 @@ from typing import Optional
 SERVICE_NAME = r"[a-z][a-z0-9-]{0,27}"
 SERVICE_DIR = re.compile(rf"/srv/servizi/({SERVICE_NAME})(?![a-z0-9-])")
 SERVICE_UNIT = re.compile(rf"\bagentdeck-servizio@({SERVICE_NAME})(?![a-z0-9-])")
-CREDENTIALS = re.compile(r"(?:/home/agent|~|\$HOME)/(?:\.claude/\.credentials\.json|\.ssh/)|^\.ssh/|\.claude/\.credentials\.json")
+CREDENTIALS = re.compile(r"(?:/home/agent|~|\$HOME)/(?:\.claude/\.credentials\.json|\.ssh/|\.config/gh/)|^\.ssh/|"
+                         r"\.claude/\.credentials\.json|\.config/gh/hosts\.yml")
+TOKEN_COMMANDS = re.compile(r"\bgh\s+auth\s+(?:token|status\b[^;&|\n]*--show-token|refresh|logout)|\bgh\s+auth\s+login\b")
 UNIT_VERBS = re.compile(r"\b(?:start|stop|restart|try-restart|reload|reload-or-restart|enable|disable|mask|unmask|kill|edit|"
                         r"revert|set-property)\b")
 READ_ONLY = {"ls", "cat", "head", "tail", "less", "more", "stat", "file", "wc", "grep", "rg", "find", "du", "diff", "cmp",
@@ -67,8 +70,10 @@ def _service(text: str) -> Optional[str]:
 def command_reason(command: str) -> Optional[str]:
     """Perché un comando Bash interviene su qualcosa dell'utente, o None se è lavoro di sistema libero."""
     for segment in _segments(command):
+        if TOKEN_COMMANDS.search(segment):
+            return "it reads or changes the owner's credentials (GitHub login)"
         if CREDENTIALS.search(segment) and (not _reads_only(segment) or _program(segment) in SECRET_READERS):
-            return "it touches the owner's credentials (Claude login or SSH keys)"
+            return "it touches the owner's credentials (Claude login, SSH keys or GitHub login)"
         name = _service(segment)
         if name is None:
             continue
@@ -85,7 +90,7 @@ def command_reason(command: str) -> Optional[str]:
 
 def path_reason(path: str) -> Optional[str]:
     if CREDENTIALS.search(path):
-        return "it writes the owner's credentials (Claude login or SSH keys)"
+        return "it writes the owner's credentials (Claude login, SSH keys or GitHub login)"
     name = _service(path)
     return f"it changes files of the owner's service {name}" if name else None
 

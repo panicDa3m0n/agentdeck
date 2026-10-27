@@ -25,6 +25,7 @@ SYSTEM_WORK = [
     "systemctl status agentdeck-servizio@blog", "journalctl -u agentdeck-servizio@blog -n 20",
     "deck service show name=agentdeck-servizio@blog", "cd /home/agent/frugale && git commit -am wip",
     "rm -rf /home/agent/frugale/tmp", "ls ~/.ssh", "sudo bash /tmp/agentdeck-servizi/install-servizi.sh",
+    "cd /home/agent/frugale && git push -u origin main", "gh repo create panicDa3m0n/nuovo --private", "gh auth status",
 ]
 OWNER_SERVICES = [
     "sudo systemctl restart agentdeck-servizio@blog", "sudo systemctl stop agentdeck-servizio@blog.service",
@@ -36,6 +37,7 @@ OWNER_SERVICES = [
 CREDENTIALS = [
     "cat ~/.claude/.credentials.json", "cp /home/agent/.ssh/authorized_keys /tmp/k",
     "echo ssh-ed25519 AAAA >> ~/.ssh/authorized_keys", "rm /home/agent/.claude/.credentials.json",
+    "cat ~/.config/gh/hosts.yml", "gh auth token", "gh auth status --show-token", "gh auth logout",
 ]
 
 

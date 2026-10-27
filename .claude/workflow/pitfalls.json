@@ -110,6 +110,11 @@
       "id": "P22",
       "testo": "deck network prefer_5ghz subito dopo un riavvio del router fallisce (iwd: connect-failed status 1, wifi-switch: reverted no_connection) e la Deck torna da sola a 2,4 GHz -> il router di casa rifiuta per qualche minuto l'associazione a 5 GHz dopo essersi riavviato (canale 36, non DFS) -> aspettare qualche minuto e riprovare; dopo la conferma aspettare che deck network dica awaiting_confirmation prima di keep_5ghz.",
       "creata": "2026-10-26 09:22"
+    },
+    {
+      "id": "P23",
+      "testo": "deck term non vede che gh (Go) aspetta input -> nei programmi Go il thread principale dorme in futex_do_wait e la lettura del terminale sta in un altro thread (wait_woken) -> proc_info legge anche /proc/<pid>/task/*/wchan e conta solo wait_woken o n_tty_read, mai epoll (rete di Go)",
+      "creata": "2026-10-26 18:53"
     }
   ]
 }

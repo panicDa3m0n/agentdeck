@@ -28,6 +28,38 @@ git config --local --add credential.https://github.com.helper \
 Così `git push` pubblica sempre come `panicDa3m0n`, qualunque sia l'account attivo in `gh`. Non va rimosso
 (trappola P1 della governance).
 
+## GitHub dalla Deck (ADR-0002, O14.T2)
+
+**La decisione dell'utente, 26/10/2026.** I progetti su cui l'agente lavora sulla Deck, come `/home/agent/frugale`,
+si pubblicano dalla Deck stessa, senza passare dal Mac. La Deck ha un suo login GitHub con l'account personale
+`panicDa3m0n`, mai quello SNJ. I repository sono privati finché l'utente non decide altro.
+
+**Com'è stato fatto, il 26/10/2026:**
+1. snapshot 92 "prima di github-cli e del login GitHub", poi `sudo pacman -S --needed --noconfirm github-cli`
+   (2.102.1);
+2. dalla sessione del Mac, attraverso l'adattatore (`deck term`, sessione `2b6e`):
+   `gh auth login --hostname github.com --git-protocol https --web --skip-ssh-key`, rispondendo sì a "usare il
+   login anche per git";
+3. l'utente ha inserito il codice monouso su <https://github.com/login/device>: né il codice né il token passano
+   dalla chat.
+
+**Cosa c'è sulla Deck, per l'utente `agent`:**
+- `~/.config/gh/hosts.yml`, permessi 600: il login di `gh` per `github.com` (`gh auth status`: account
+  `panicDa3m0n`, protocollo git `https`);
+- nella configurazione globale di git `credential.https://github.com.helper` = `!/usr/bin/gh auth git-credential`:
+  `git push` verso `https://github.com/...` usa quel login da sé.
+
+**Come lavora l'agente:** crea il repository con `gh repo create panicDa3m0n/<nome> --private`, aggiunge il
+remote `https://github.com/panicDa3m0n/<nome>.git` e pubblica senza chiedere. Il login è una credenziale
+dell'utente (ADR-0001): l'agente lo usa attraverso git e `gh` ma non lo legge né lo copia. Leggere
+`~/.config/gh/hosts.yml`, `gh auth token`, `gh auth status --show-token`, `gh auth login`, `gh auth refresh` e
+`gh auth logout` fanno chiedere il permesso all'utente
+([../deck/agentdeck/ownership.py](../deck/agentdeck/ownership.py)); la regola per l'agente sta in
+[../deck/claude/CLAUDE.template.md](../deck/claude/CLAUDE.template.md).
+
+**Per togliere l'accesso:** `gh auth logout` sulla Deck, oppure si revoca l'applicazione "GitHub CLI" dalle
+impostazioni dell'account `panicDa3m0n` su GitHub (Applications, Authorized OAuth Apps).
+
 ## Versioni
 
 - Schema **MAJOR.MINOR.PATCH** gestito dalla governance: il terzo numero sale a ogni task completata, il
