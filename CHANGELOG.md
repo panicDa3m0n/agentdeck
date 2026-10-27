@@ -4,6 +4,24 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.5.4 — 2026-10-27
+
+Ciclo 05, task O15.T2: la schermata `deck claude`, base dell'interfaccia delle sessioni.
+
+- **Elenco:** le sessioni vive, dal registro di Claude Code (`~/.claude/sessions`), verificate sul processo con
+  l'istante di avvio, così un PID riusato non diventa mai una sessione. Per ognuna: titolo, stato (`busy`, `idle`,
+  `starting`), cartella, link per l'app, memoria, e se è la sessione da cui arriva la chiamata.
+- **`open name=<nome>`:** apre una sessione nuova con Remote Control in `~/agentdeck/sessioni/<nome>`, perché
+  Remote Control accetta un solo server per cartella. Al più 8 sessioni.
+- **`close id=<id>`:** anteprima e conferma, poi SIGINT, che chiude in modo pulito anche dentro il server con più
+  sessioni; SIGTERM solo come ripiego. Mai la sessione stessa.
+- **MCP:** strumenti `claude_open` e `claude_close`. 14 test nuovi, 259 in tutto, verdi sul Mac e sulla Deck.
+- **Prova sulla Deck:** aperta e chiusa la sessione `prova-o15t2`; le due sessioni al lavoro restano attive con gli
+  stessi PID.
+- **Documentazione:** `docs/interfacce.md` (come funziona e cosa si è verificato), `docs/deck.md`,
+  `docs/claude-code.md`; `/claude` nell'elenco delle schermate di `CLAUDE.md`, che arriva sulla Deck con
+  l'installazione di O12.
+
 ## 0.5.3 — 2026-10-27
 
 Obiettivo O14 chiuso con il sì dell'utente. Nuovo obiettivo O15, "Interfacce effimere sullo schermo della Deck",

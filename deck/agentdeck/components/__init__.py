@@ -1,4 +1,5 @@
 """Componenti di deck, uno per modulo. Contratto: docs/deck.md, "Aggiungere un componente"."""
+from .claude import Claude
 from .home import Home
 from .logs import Logs
 from .network import Network
@@ -13,4 +14,5 @@ from .update import Update
 
 def all_components() -> list:
     """I componenti attivi. Un componente nuovo si aggiunge qui."""
-    return [Home(), Logs(), Network(), Obligations(), ProtocolInfo(), Service(), Snapshot(), Status(), Term(), Update()]
+    return [Claude(), Home(), Logs(), Network(), Obligations(), ProtocolInfo(), Service(), Snapshot(), Status(),
+            Term(), Update()]

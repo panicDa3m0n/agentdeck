@@ -10,10 +10,10 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O15` Interfacce effimere sullo schermo della Deck: lo stile e la prima interfaccia, le sessioni Claude — 3 task: 1 completate, 0 in corso, 2 da fare, 0 bloccate
+- **Obiettivo attivo:** `O15` Interfacce effimere sullo schermo della Deck: lo stile e la prima interfaccia, le sessioni Claude — 3 task: 2 completate, 0 in corso, 1 da fare, 0 bloccate
 - **Task attiva:** —
-- **Ultima task gestita:** `O15.T1` — completata — Stile (7 regole) e grafica cage+Chromium decisi con l'utente: ADR-0003 accettato, docs/interfacce.md nell'indice, link verificati
-- **Ultimo aggiornamento:** 2026-10-27 22:47
+- **Ultima task gestita:** `O15.T2` — completata — deck claude elenca, apre (Remote Control in ~/agentdeck/sessioni) e chiude con conferma; MCP; 259 test; prova sulla Deck, sessioni al lavoro intatte
+- **Ultimo aggiornamento:** 2026-10-27 22:58
 
 ## Richieste attive
 
@@ -76,8 +76,9 @@ _nessuna richiesta in attesa._
   *gate previsto:* Regole dello stile e tecnologia grafica (compositore e motore di pagina) confrontate e decise con l'utente, registrate come ADR-0003 e in docs/interfacce.md con l'indice. · *gate confermato:* ✔ Stile (7 regole) e grafica cage+Chromium decisi con l'utente: ADR-0003 accettato, docs/interfacce.md nell'indice, link verificati
   *rischio:* 15/100 — Solo documenti e una decisione; la decisione porta componenti grafici nuovi in T3 (INV-10), quindi va registrata come scelta esplicita dell'utente
   *documenti:* `ADR-0003`
-- [ ] `O15.T2` La schermata deck claude: elencare, aprire e chiudere le sessioni Claude della Deck — *perimetro:* `deck/, docs/`
-  *gate previsto:* deck claude elenca le sessioni con titolo e stato, ne apre una nuova che compare nell'app Claude e ne chiude una con anteprima e conferma, anche come strumenti MCP; test verdi; provato sulla Deck con una sessione di prova senza toccare quelle al lavoro.
+- [x] `O15.T2` La schermata deck claude: elencare, aprire e chiudere le sessioni Claude della Deck — *perimetro:* `deck/, docs/`
+  *gate previsto:* deck claude elenca le sessioni con titolo e stato, ne apre una nuova che compare nell'app Claude e ne chiude una con anteprima e conferma, anche come strumenti MCP; test verdi; provato sulla Deck con una sessione di prova senza toccare quelle al lavoro. · *gate confermato:* ✔ deck claude elenca, apre (Remote Control in ~/agentdeck/sessioni) e chiude con conferma; MCP; 259 test; prova sulla Deck, sessioni al lavoro intatte
+  *rischio:* 35/100 — Componente nuovo e testato, ma agisce su processi vivi di Claude sulla Deck: chiudere quello sbagliato interrompe il lavoro; close solo su id dall'elenco con conferma, prove solo su sessioni di prova
 - [ ] `O15.T3` Lo schermo grafico calmo con l'interfaccia effimera delle sessioni, al posto del terminale — *perimetro:* `deck/, docs/, pacchetti grafici e servizio dello schermo sulla Deck`
   *gate previsto:* Sulla Deck lo schermo grafico sostituisce il terminale: di base calmo, l'interfaccia delle sessioni compare con un tocco o un pulsante e sparisce dopo la scelta o il tempo; aprire e chiudere una sessione di prova funziona dal tocco; snapshot prima; ssh agentdeck intatto (INV-1); docs e versione pubblicata.
 

@@ -84,6 +84,39 @@ grandi, e poi sparisce. La prima serve a vedere, aprire e chiudere le sessioni C
 
 ## La prima interfaccia: le sessioni Claude
 
-- **O15.T2:** la schermata `deck claude`, con l'elenco delle sessioni (titolo e stato), l'apertura di una
-  sessione nuova, che compare nell'app Claude, e la chiusura con anteprima e conferma. La usano anche gli agenti.
-- **O15.T3:** lo schermo grafico calmo, con l'interfaccia delle sessioni al posto del terminale.
+### La schermata `deck claude` (O15.T2)
+
+È la base dell'interfaccia: la usano l'agente (strumenti MCP `claude_open` e `claude_close`, oppure
+`mcp__deck__open` con `path=/claude`), il Mac (`ssh agentdeck deck claude`) e, in O15.T3, lo schermo.
+Codice: [../deck/agentdeck/claude_sessions.py](../deck/agentdeck/claude_sessions.py) e
+[../deck/agentdeck/components/claude.py](../deck/agentdeck/components/claude.py); test:
+[../deck/tests/test_claude_sessions.py](../deck/tests/test_claude_sessions.py).
+
+| Azione | Effetto | Cosa fa |
+|---|---|---|
+| (schermata) | read | `data.sessions`: per ogni sessione viva `id`, `title`, `state` (`busy` al lavoro, `idle` in attesa, `starting` appena aperta), `started`, `folder`, `app_url` (il link per l'app Claude), `pid`, `memory_mb`, `opened_by_deck`, `this_session` |
+| `open name=<nome>` | safe | Apre una sessione nuova con Remote Control nella cartella `~/agentdeck/sessioni/<nome>`; compare nell'app Claude con quel nome. Al più 8 sessioni aperte da `deck` |
+| `close id=<id>` | destructive | Anteprima con la sessione e il codice di conferma; poi SIGINT al processo, e SIGTERM se dopo 10 secondi gira ancora. Mai la sessione da cui arriva la chiamata |
+
+**Come funziona**, verificato sulla Deck il 27/10/2026 con Claude Code 2.1.310:
+- **Elenco.** Claude Code scrive una scheda per ogni sessione in `~/.claude/sessions/<pid>.json`: titolo, stato,
+  cartella, id per l'app (`bridgeSessionId`) e istante di avvio del processo (`procStart`). `deck` tiene solo le
+  schede il cui processo è vivo e ha lo stesso istante di avvio (campo 22 di `/proc/<pid>/stat`): un PID riusato da
+  un altro processo non diventa mai una sessione da chiudere. I file `.key` accanto alle schede non si leggono.
+- **Apertura.** Remote Control accetta un solo server per cartella ("This folder is already served by a terminal
+  `claude remote-control`"), e `~/agentdeck` ha già quello del servizio `agentdeck-claude`. Per questo ogni
+  sessione nuova ha una sottocartella sua e un server che tiene una sola sessione ed esce quando lei finisce
+  (`claude remote-control --name <nome> --spawn session`, nella sessione tmux `rc-<nome>`). La fiducia nella
+  cartella viene da `~/agentdeck`. Se il server non parte, `data.output` riporta le sue ultime righe.
+  Riaprire con un nome già usato ha riportato lo stesso id nell'app (`session_…`).
+- **Chiusura.** SIGINT chiude la sessione in modo pulito, anche dentro il server con più sessioni di
+  `~/agentdeck`, che resta pronto; SIGTERM la chiude come errore ("Session failed"), ed è solo il ripiego. La
+  trascrizione e i file restano; la cartella di una sessione aperta da `deck` resta, con quello che la sessione ci ha
+  scritto.
+
+Prova sulla Deck del 27/10/2026: aperta e chiusa la sessione `prova-o15t2` con `deck claude`, mentre le due sessioni
+al lavoro restavano attive con gli stessi PID.
+
+### Lo schermo (O15.T3)
+
+Lo schermo grafico calmo, con l'interfaccia delle sessioni al posto del terminale.

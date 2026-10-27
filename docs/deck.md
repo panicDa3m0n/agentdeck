@@ -70,6 +70,7 @@ Verifiche del 26/10/2026:
 | `/logs` | [../deck/agentdeck/components/logs.py](../deck/agentdeck/components/logs.py) | Journal di systemd: righe per unità, periodo e gravità (vedi sotto) |
 | `/update` | [../deck/agentdeck/components/update.py](../deck/agentdeck/components/update.py) | Aggiornamenti del sistema: controllo, applicazione con snapshot e verifica, riavvio (vedi sotto) |
 | `/obligations` | [../deck/agentdeck/components/obligations.py](../deck/agentdeck/components/obligations.py) | Obblighi del sistema verso l'agente: aperti, chiusi, done e dismiss; nascono dall'hook di pacman ([obblighi.md](obblighi.md)) |
+| `/claude` | [../deck/agentdeck/components/claude.py](../deck/agentdeck/components/claude.py) | Sessioni Claude della Deck: elenco con titolo, stato e link per l'app, apertura di una sessione nuova, chiusura con conferma ([interfacce.md](interfacce.md)) |
 | `/term` | [../deck/agentdeck/components/term.py](../deck/agentdeck/components/term.py) | Adattatore dei programmi interattivi: un programma in tmux come schermata, domande riconosciute, profili scritti dall'agente ([adattatore.md](adattatore.md)) |
 
 ### `/network`: rete
@@ -407,6 +408,7 @@ hanno ancora un'azione collegata.
 | [../deck/agentdeck/term.py](../deck/agentdeck/term.py) | Adattatore: tmux, stato del processo e del terminale, riconoscimento delle domande, profili, sessioni |
 | [../deck/agentdeck/obligations.py](../deck/agentdeck/obligations.py) | Obblighi: modelli dei messaggi, archivio, nascita dopo un'installazione, chiusura da sé, campo `obligations` di ogni schermata |
 | [../deck/system/](../deck/system/95-agentdeck-obligations.hook) | Hook di pacman che apre gli obblighi dopo le installazioni, con il suo script |
+| [../deck/agentdeck/claude_sessions.py](../deck/agentdeck/claude_sessions.py) | Sessioni Claude: registro di Claude Code verificato sui processi, apertura con Remote Control, chiusura con SIGINT |
 | [../deck/agentdeck/ownership.py](../deck/agentdeck/ownership.py) | Ciò che è dell'utente (ADR-0001): servizi e credenziali, per cui l'agente chiede il permesso |
 | [../deck/agentdeck/access.py](../deck/agentdeck/access.py) | Regole che proteggono l'accesso (INV-1), usate dalla guardia di Claude Code e da `deck term` |
 | [../deck/profiles/](../deck/profiles/pacman.json) | Profili dell'adattatore forniti con `deck` |

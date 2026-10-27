@@ -116,6 +116,9 @@ Verifiche del 26/10/2026:
 - lavora solo in uscita, in HTTPS verso Anthropic;
 - le sessioni si aprono dall'app Claude, nella scheda Code, o da claude.ai/code. Possono girare fino a 32
   sessioni nella cartella `~/agentdeck`;
+- le sessioni si vedono, si aprono e si chiudono anche dalla Deck con `deck claude` (O15.T2): una sessione aperta da
+  lì ha una sottocartella sua in `~/agentdeck/sessioni/`, perché Remote Control accetta un solo server per
+  cartella ([interfacce.md](interfacce.md));
 - con Remote Control attivo la trascrizione delle sessioni è conservata sui server di Anthropic, mentre
   l'esecuzione resta sulla Deck;
 - le richieste di permesso di Claude Code arrivano sul dispositivo collegato e restano aperte finché non si
