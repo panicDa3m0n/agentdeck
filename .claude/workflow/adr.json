@@ -26,6 +26,19 @@
       "obiettivo": "O12",
       "invarianti": "—",
       "motivo": "Decisione dell'utente (26/10): niente più ponte dal Mac; la Deck ha una sua credenziale GitHub per l'account personale panicDa3m0n, ottenuta con il login di gh approvato dall'utente con un codice, e l'agente crea repository e pubblica da sé; repository privati salvo decisione dell'utente; credenziale solo sulla Deck (INV-6), usata dall'agente ma mai letta né copiata (ADR-0001); mai l'account SNJ."
+    },
+    {
+      "id": "ADR-0003",
+      "titolo": "Interfacce effimere sullo schermo della Deck: cage + Chromium in kiosk, pagine locali generate da deck, sette regole di stile",
+      "tipo": "decisione",
+      "stato": "accettato",
+      "creato": "2026-10-27 22:46",
+      "deciso": "2026-10-27 22:47",
+      "testo": "# Interfacce effimere sullo schermo della Deck: cage + Chromium in kiosk, pagine locali generate da deck, sette regole di stile\n\n## Contesto\n<perché la questione si è posta: cosa stava facendo il lavoro, cosa ha fatto emergere il conflitto>\n\n## Alternative valutate\n<cosa si è considerato prima, e perché non bastava>\n\n## Decisione\n<cosa si è deciso e perché questa e non le altre>\n\n## Conseguenze\n<cosa cambia, cosa va rifatto o riverificato, quali invarianti si muovono>\n\n## In parole semplici\n<due righe senza gergo: cosa cambia in pratica>",
+      "task": "O15.T1",
+      "obiettivo": "O15",
+      "invarianti": "INV-2, INV-4, INV-5, INV-10",
+      "motivo": "Decisione dell'utente (27/10): interfacce effimere solo sullo schermo della Deck al posto del terminale, grafiche con cage + Chromium in kiosk e pagine locali generate da deck su 127.0.0.1; sette regole di stile approvate così come sono; testo completo in docs/interfacce.md"
     }
   ]
 }

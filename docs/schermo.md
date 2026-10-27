@@ -6,6 +6,9 @@ all'agente per mostrare cosa fa), quindi i testi sono in italiano. Al posto di q
 il login di Linux, che non serviva a nessuno.
 Indice: [README.md](README.md).
 
+> **Sarà sostituito** dallo schermo grafico con le interfacce effimere (ADR-0003, O15.T3):
+> [interfacce.md](interfacce.md). La registrazione dei comandi nel registro resta.
+
 ## Cosa si vede
 
 ```

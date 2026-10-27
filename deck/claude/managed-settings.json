@@ -12,6 +12,7 @@
       "WebFetch",
       "WebSearch",
       "Task",
+      "SendMessage",
       "mcp__deck"
     ],
     "deny": [

@@ -10,10 +10,10 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** —
+- **Obiettivo attivo:** `O15` Interfacce effimere sullo schermo della Deck: lo stile e la prima interfaccia, le sessioni Claude — 3 task: 1 completate, 0 in corso, 2 da fare, 0 bloccate
 - **Task attiva:** —
-- **Ultima task gestita:** `O14.T2` — completata — frugale pubblicato dalla Deck (gh panicDa3m0n): 58 commit fino a 8fa5cbd, push nel reflog della Deck, 0 credenziali; docs e regola
-- **Ultimo aggiornamento:** 2026-10-27 21:36
+- **Ultima task gestita:** `O15.T1` — completata — Stile (7 regole) e grafica cage+Chromium decisi con l'utente: ADR-0003 accettato, docs/interfacce.md nell'indice, link verificati
+- **Ultimo aggiornamento:** 2026-10-27 22:47
 
 ## Richieste attive
 
@@ -66,6 +66,20 @@ _nessuna richiesta in attesa._
   *gate previsto:* Una modifica vera fatta da una sessione sulla Deck arriva nel repository secondo il canale deciso, con documentazione e versione pubblicata; nessuna credenziale in git (INV-6). · *gate confermato:* ✔ frugale pubblicato dalla Deck (gh panicDa3m0n): 58 commit fino a 8fa5cbd, push nel reflog della Deck, 0 credenziali; docs e regola
   *rischio:* 25/100 — Pacchetto nuovo e credenziale dell'account personale sulla Deck esposta via SSH (solo chiave): il token apre i repository personali. Snapshot prima, nessun riavvio di agentdeck-claude, nessun file di lavoro di frugale toccato.
   *annotazioni:* `N61`, `N62`
+
+### `O15` Interfacce effimere sullo schermo della Deck: lo stile e la prima interfaccia, le sessioni Claude — in corso
+
+**Gate obiettivo:** Lo schermo della Deck, al posto del terminale, resta calmo e mostra un'interfaccia grafica effimera solo quando serve; con il tocco o i pulsanti si vedono, si aprono e si chiudono le sessioni Claude; stile deciso come ADR e documentato; versione pubblicata.
+**Documenti:** `ADR-0003`
+
+- [x] `O15.T1` Lo stile delle interfacce effimere e la tecnologia grafica dello schermo, decisi con l'utente — *perimetro:* `docs/, PRINCIPI.md`
+  *gate previsto:* Regole dello stile e tecnologia grafica (compositore e motore di pagina) confrontate e decise con l'utente, registrate come ADR-0003 e in docs/interfacce.md con l'indice. · *gate confermato:* ✔ Stile (7 regole) e grafica cage+Chromium decisi con l'utente: ADR-0003 accettato, docs/interfacce.md nell'indice, link verificati
+  *rischio:* 15/100 — Solo documenti e una decisione; la decisione porta componenti grafici nuovi in T3 (INV-10), quindi va registrata come scelta esplicita dell'utente
+  *documenti:* `ADR-0003`
+- [ ] `O15.T2` La schermata deck claude: elencare, aprire e chiudere le sessioni Claude della Deck — *perimetro:* `deck/, docs/`
+  *gate previsto:* deck claude elenca le sessioni con titolo e stato, ne apre una nuova che compare nell'app Claude e ne chiude una con anteprima e conferma, anche come strumenti MCP; test verdi; provato sulla Deck con una sessione di prova senza toccare quelle al lavoro.
+- [ ] `O15.T3` Lo schermo grafico calmo con l'interfaccia effimera delle sessioni, al posto del terminale — *perimetro:* `deck/, docs/, pacchetti grafici e servizio dello schermo sulla Deck`
+  *gate previsto:* Sulla Deck lo schermo grafico sostituisce il terminale: di base calmo, l'interfaccia delle sessioni compare con un tocco o un pulsante e sparisce dopo la scelta o il tempo; aprire e chiudere una sessione di prova funziona dal tocco; snapshot prima; ssh agentdeck intatto (INV-1); docs e versione pubblicata.
 
 ## Annotazioni
 

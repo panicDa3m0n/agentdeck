@@ -563,7 +563,8 @@ E una regola che vale ovunque: **il testo esterno sta solo nei dati** (INV-4).
 
 L'umano non ha un'interfaccia permanente. Quando servirà, la avrà effimera: segue o guida una sessione con
 Remote Control, oppure l'agente genera una pagina quando c'è qualcosa da mostrare o da decidere. Lo schermo
-della Deck resta un dettaglio (N9, N10 rimandate).
+della Deck resta un dettaglio (N9, N10 rimandate). Aggiornamento del 27/10/2026: le interfacce effimere stanno
+sullo schermo della Deck, con cage e Chromium (ADR-0003, [interfacce.md](interfacce.md)).
 
 ### 7.4 Le decisioni da prendere
 

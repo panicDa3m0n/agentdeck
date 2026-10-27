@@ -260,7 +260,7 @@ delle credenziali. La decisione è anche in [../PRINCIPI.md](../PRINCIPI.md).
 
 | Pezzo | Cosa fa |
 |---|---|
-| `permissions.allow` nelle impostazioni gestite | Permette Bash, le modifiche di file, letture e ricerche, il web, i subagenti e gli strumenti `mcp__deck`: nessuna domanda per il lavoro di sistema |
+| `permissions.allow` nelle impostazioni gestite | Permette Bash, le modifiche di file, letture e ricerche, il web, i subagenti, i messaggi alle altre sessioni (`SendMessage`: sulla Deck nessuno può confermare un clic) e gli strumenti `mcp__deck`: nessuna domanda per il lavoro di sistema |
 | [../deck/agentdeck/ownership.py](../deck/agentdeck/ownership.py) | Riconosce ciò che è dell'utente: percorsi dei servizi, unità `agentdeck-servizio@`, credenziali; distingue le letture dagli interventi |
 | [../deck/claude/guard.py](../deck/claude/guard.py), hook `PreToolUse` su Bash, modifiche di file e strumenti di `deck` | Quando un intervento tocca qualcosa dell'utente risponde `permissionDecision: "ask"`, e Claude Code chiede all'utente, con Remote Control sul telefono |
 | `CLAUDE.md`, guardia, skill, prompt di `deck term` | Niente più "chiedi al proprietario" per modifiche di sistema; si chiede solo per servizi, credenziali e segreti |

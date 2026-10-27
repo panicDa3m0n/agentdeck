@@ -38,6 +38,8 @@ documento (invariante INV-9). Quando si modifica il codice, si aggiorna il docum
   schermata JSON, domande riconosciute, profili scritti dall'agente. Codice: [../deck/agentdeck/term.py](../deck/agentdeck/term.py).
 - [obblighi.md](obblighi.md): gli obblighi che il sistema dà all'agente (`deck obligations`), dall'hook di pacman
   al campo `obligations` di ogni schermata. Codice: [../deck/agentdeck/obligations.py](../deck/agentdeck/obligations.py).
+- [interfacce.md](interfacce.md): le interfacce effimere sullo schermo della Deck: le sette regole dello stile,
+  la tecnologia grafica (cage + Chromium in kiosk, pagine locali di `deck`) e la decisione ADR-0003.
 - [schermo.md](schermo.md): lo schermo della Deck mostra, come un terminale, ogni comando dell'agente, la sua risposta e
   l'esito di `deck`. Codice: [../deck/screen/](../deck/screen/agentdeck_screen.py).
 

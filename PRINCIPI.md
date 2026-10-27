@@ -91,9 +91,9 @@ Perché salire di livello solo quando serve:
 | 2026-10-25 | Lo sviluppo riparte inserendo Claude Code nel sistema | L'uso reale della chat e la configurazione dicono cosa serve |
 | 2026-10-26 | SSH della Deck raggiungibile da internet su `scarlethome.ddns.net:49222`, solo con chiave, con sshguard (INV-5) | Sviluppare e gestire la Deck da fuori casa; Tailscale scartato per un blocco sul Mac ([docs/accesso.md](docs/accesso.md)) |
 | 2026-10-26 | **Permessi dell'agente (ADR-0001):** AgentDeck è il sistema di proprietà e uso completo dell'agente, che non chiede permessi per nessun intervento dentro AgentDeck; i permessi riguardano solo i dati dell'utente o il singolo servizio dell'utente | L'umano non gestisce il sistema; con Remote Control ogni permesso sarebbe una domanda al telefono. Restano i vincoli che proteggono l'accesso (INV-1) e le anteprime di `deck`; si realizza nel ciclo 05 |
+| 2026-10-27 | **Interfacce effimere sullo schermo della Deck (ADR-0003):** al posto del terminale, schermo calmo e interfacce che compaiono solo quando servono, con la minima interazione umana; cage + Chromium in kiosk con pagine locali generate da `deck`, sette regole di stile | Una pagina copre sia le schermate di `deck` sia le interfacce che l'agente crea al volo ([docs/interfacce.md](docs/interfacce.md)) |
 
 ## Direzioni da confermare quando ci arriviamo
 
-- Compositor grafico: Sway (leggero, comandabile via IPC), con interfacce nostre dentro, per esempio
-  dashboard web a schermo intero. Meno prioritario dal 25/10: l'umano avrà interfacce effimere.
+- Compositor grafico: deciso il 27/10, cage con Chromium in kiosk (ADR-0003, [docs/interfacce.md](docs/interfacce.md)).
 - Collegamento di rete via cavo USB-C con il Mac, mettendo la Deck in modalità periferica.

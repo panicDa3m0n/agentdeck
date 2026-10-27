@@ -1443,3 +1443,28 @@
 {"at": "2026-10-27 19:47", "testo": "[-] bash: ~/claude-rules/bin/wf.sh note-add --task O13.T1 --text \"Servizio domus (27/10, su richiesta dell'utente dalla "}
 {"at": "2026-10-27 21:35", "testo": "[-] bash: f=/Users/snj/.claude/projects/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/tool-results/h"}
 {"at": "2026-10-27 21:36", "testo": "OBIETTIVO CHIUSO O14 (completo) — approvato dall'utente: la Deck pubblica da sé su GitHub (ADR-0002), provato con frugale (58 commit), v0.5.2"}
+{"at": "2026-10-27 21:36", "testo": "[-] bash: git add ROADMAP.md PROGETTO.md .claude/workflow && git commit -q -m \"Obiettivo O14 chiuso: la Deck pubblica da"}
+{"at": "2026-10-27 21:37", "testo": "[-] bash: f=/Users/snj/.claude/projects/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/tool-results/h"}
+{"at": "2026-10-27 21:38", "testo": "[-] bash: ssh -o BatchMode=yes agentdeck 'grep -E \"^N: Name|^H: Handlers|^B: EV\" /proc/bus/input/devices | paste - - - |"}
+{"at": "2026-10-27 22:00", "testo": "[-] bash: ~/claude-rules/bin/wf.sh help 2>&1 | grep -E -A3 \"obj-add|task-add|obj-move|reorder|--before|--dopo|--prima\" |"}
+{"at": "2026-10-27 22:00", "testo": "OBIETTIVO AGGIUNTO O15 — Interfacce effimere sullo schermo della Deck: lo stile e la prima interfaccia, le sessioni Claude"}
+{"at": "2026-10-27 22:00", "testo": "[-] bash: W=~/claude-rules/bin/wf.sh; $W obj-add --title \"Interfacce effimere sullo schermo della Deck: lo stile e la pr"}
+{"at": "2026-10-27 22:00", "testo": "TASK AGGIUNTA O15.T1 in O15 — Lo stile delle interfacce effimere e la tecnologia grafica dello schermo, decisi con l'utente"}
+{"at": "2026-10-27 22:00", "testo": "TASK AGGIUNTA O15.T2 in O15 — La schermata deck claude: elencare, aprire e chiudere le sessioni Claude della Deck"}
+{"at": "2026-10-27 22:00", "testo": "TASK AGGIUNTA O15.T3 in O15 — Lo schermo grafico calmo con l'interfaccia effimera delle sessioni, al posto del terminale"}
+{"at": "2026-10-27 22:00", "testo": "[-] bash: W=/Users/snj/claude-rules/bin/wf.sh $W task-add --obj O15 --title \"Lo stile delle interfacce effimere e la tec"}
+{"at": "2026-10-27 22:01", "testo": "TASK APERTA O15.T1 — Lo stile delle interfacce effimere e la tecnologia grafica dello schermo, decisi con l'utente | perimetro: docs/, PRINCIPI.md | gate: Regole dello stile e tecnologia grafica (compositore e motore di pagina) confrontate e decise con l'utente, registrate come ADR-0003 e in docs/interfacce.md con l'indice. | rischio: 15"}
+{"at": "2026-10-27 22:01", "testo": "[O15.T1] bash: ~/claude-rules/bin/wf.sh task-start --id \"O15.T1\" --risk 15 --why \"Solo documenti e una decisione; la decision"}
+{"at": "2026-10-27 22:01", "testo": "[O15.T1] bash: ssh -o BatchMode=yes agentdeck 'pacman -Q mesa vulkan-radeon libinput 2>&1; for set in \"cage\" \"weston\" \"labwc\""}
+{"at": "2026-10-27 22:02", "testo": "[O15.T1] bash: ssh -o BatchMode=yes agentdeck 'pacman -Ss \"wpe|^cog\" 2>/dev/null | grep -E \"^extra|^core\" ; echo ---; pacman "}
+{"at": "2026-10-27 22:45", "testo": "[O15.T1] bash: grep -o 'wf.sh adr[^|]\\{0,300\\}' /Users/snj/linuxai-steamdeck/.claude/workflow/journal.jsonl | head -6; sed -n"}
+{"at": "2026-10-27 22:46", "testo": "ADR-0003 proposto: Interfacce effimere sullo schermo della Deck: cage + Chromium in kiosk, pagine locali generate da deck, sette regole di stile (invarianti: INV-2, INV-4, INV-5, INV-10)"}
+{"at": "2026-10-27 22:46", "testo": "[O15.T1] bash: ls .claude/workflow/ | head -30; ls .claude/workflow/adr* 2>/dev/null; grep -rn \"ADR-0003\" --include=*.md . 2>"}
+{"at": "2026-10-27 22:47", "testo": "[O15.T1] Write  docs/interfacce.md", "task": "O15.T1", "tipo": "file", "tool": "Write", "file": "docs/interfacce.md"}
+{"at": "2026-10-27 22:47", "testo": "[O15.T1] bash: python3 - <<'EOF' from pathlib import Path def edit(path, old, new):     p = Path(path); t = p.read_text(); as"}
+{"at": "2026-10-27 22:47", "testo": "ADR ADR-0003 ora accettato"}
+{"at": "2026-10-27 22:47", "testo": "[O15.T1] bash: ~/claude-rules/bin/wf.sh adr --adr ADR-0003 --stato accettato \"Decisione dell'utente (27/10): interfacce effim"}
+{"at": "2026-10-27 22:47", "testo": "[O15.T1] bash: python3 -c \" import json; a=[x for x in json.load(open('.claude/workflow/adr.json'))['items'] if x['id']=='ADR"}
+{"at": "2026-10-27 22:47", "testo": "TASK CHIUSA O15.T1 — completata: Stile (7 regole) e grafica cage+Chromium decisi con l'utente: ADR-0003 accettato, docs/interfacce.md nell'indice, link verificati"}
+{"at": "2026-10-27 22:47", "testo": "VERSIONE 0.5.2 (O15.T1)"}
+{"at": "2026-10-27 22:47", "testo": "VERSIONI scelte dall'utente: governance"}

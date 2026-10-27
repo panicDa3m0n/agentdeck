@@ -4,6 +4,21 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.5.3 — 2026-10-27
+
+Obiettivo O14 chiuso con il sì dell'utente. Nuovo obiettivo O15, "Interfacce effimere sullo schermo della Deck",
+messo davanti a O12 per decisione dell'utente. Task O15.T1: lo stile e la tecnologia grafica.
+
+- **ADR-0003:** lo schermo della Deck smette di mostrare i comandi dell'agente. Resta calmo e mostra interfacce
+  effimere, con la minima interazione umana, solo quando servono. Sono grafiche: cage + Chromium in kiosk, con
+  pagine locali generate da `deck` su 127.0.0.1. Le sette regole dello stile e il confronto delle opzioni, con i
+  pesi misurati sulla Deck, sono in `docs/interfacce.md`.
+- Aggiornati l'indice, `docs/schermo.md` (sarà sostituito in O15.T3), `docs/architettura.md` e `PRINCIPI.md`.
+- **Fuori dalla task, su richiesta dell'utente:**
+  - `SendMessage` fra gli strumenti permessi (`deck/claude/managed-settings.json`, `docs/claude-code.md`), già
+    applicato sulla Deck, perché l'agente non aspetti un clic che nessuno può dare (N63);
+  - il token Baxi del servizio domus copiato nei segreti della Deck e il motore Domus sul Mac fermato (N64).
+
 ## 0.5.2 — 2026-10-27
 
 Ciclo 05, task O14.T2: il canale verso GitHub realizzato e provato dall'agente sulla Deck (ADR-0002).
