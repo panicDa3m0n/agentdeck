@@ -10,11 +10,10 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O14` Quello che l'agente fa sulla Deck arriva nel repository (N52) — 2 task: 2 completate, 0 in corso, 0 da fare, 0 bloccate
+- **Obiettivo attivo:** —
 - **Task attiva:** —
 - **Ultima task gestita:** `O14.T2` — completata — frugale pubblicato dalla Deck (gh panicDa3m0n): 58 commit fino a 8fa5cbd, push nel reflog della Deck, 0 credenziali; docs e regola
-- **Fase:** `objective_gate_pending`
-- **Ultimo aggiornamento:** 2026-10-27 18:07
+- **Ultimo aggiornamento:** 2026-10-27 21:36
 
 ## Richieste attive
 
@@ -30,7 +29,7 @@ _nessuna richiesta in attesa._
 - [!] `O12.T1` Politica dei permessi ADR-0001 nelle impostazioni gestite e nelle regole dell'agente (N46) — *perimetro:* `deck/claude/, deck/tests/, docs/, /etc/claude-code sulla Deck, deck/agentdeck/ownership.py e il prompt della guardia in deck/agentdeck/components/term.py`
   *gate previsto:* Impostazioni gestite che permettono tutto il lavoro di sistema senza richieste e chiedono solo per i dati dell'utente e i singoli servizi dell'utente; deny e guardia dell'accesso invariati; le frasi che fanno chiedere al proprietario modifiche di sistema tolte da CLAUDE.md, guardia e skill; provato con claude -p sulla Deck senza permessi aggiuntivi: comandi di sistema senza richieste, dati dell'utente con richiesta; test; documentazione. · *blocco:* ✖ Politica pronta e provata sul Mac (241 test); manca l'installazione: riavvia agentdeck-claude e chiuderebbe la sessione su frugale
   *rischio:* 30/100 — Cambia cosa l'agente fa senza chiedere: un errore toccherebbe un servizio o una credenziale dell'utente senza permesso o fermerebbe lavoro legittimo. Deny e guardia dell'accesso invariati; l'installazione riavvia agentdeck-claude, quindi si fa a sessione finita.
-  *annotazioni:* `N58`, `N59`
+  *annotazioni:* `N58`, `N59`, `N63`
 - [ ] `O12.T2` sshguard protetto come l'accesso: regole, guardia e avviso di deck status (N42) — *perimetro:* `deck/, docs/, /etc/claude-code sulla Deck`
   *gate previsto:* Le regole dell'agente dicono che sshguard non si ferma e la sua whitelist non si allarga; guardia e deny rifiutano stop, disable e mask di sshguard; deck status avvisa se sshguard non è attivo; test; documentazione.
 - [ ] `O12.T3` Il cambio di Wi-Fi ritenta prima di tornare indietro (N49) — *perimetro:* `deck/, docs/`
@@ -46,6 +45,7 @@ _nessuna richiesta in attesa._
 
 - [ ] `O13.T1` deck servizi: elenco, crea, aggiorna da git, rimuovi con anteprima; area dei servizi nelle regole dell'agente (N53, N56) — *perimetro:* `deck/, servizi/, docs/`
   *gate previsto:* deck servizi elenca le cartelle di /srv/servizi con lo stato dell'unità, anche ferma; crea, aggiorna da git e rimuove un servizio con anteprima e conferma; le azioni su un servizio dell'utente seguono ADR-0001; CLAUDE.md cita l'area dei servizi; INV-4; test; documentazione.
+  *annotazioni:* `N64`
 - [ ] `O13.T2` Snapshot dei dati dei servizi: configurazione snapper per @servizi (N53) — *perimetro:* `deck/, servizi/, docs/, configurazione snapper sulla Deck`
   *gate previsto:* Configurazione snapper servizi per @servizi; deck servizi fa uno snapshot dei dati prima di aggiornare o rimuovere un servizio; ritorno a uno snapshot dei dati provato su un servizio di prova; documentazione.
 - [ ] `O13.T3` Firewall nftables con rete di sicurezza che si annulla da sola (N53) — *perimetro:* `deck/, servizi/, docs/, nftables sulla Deck`
@@ -53,9 +53,10 @@ _nessuna richiesta in attesa._
 - [ ] `O13.T4` Il primo servizio vero, scelto dall'utente — *perimetro:* `/srv/servizi sulla Deck, docs/`
   *gate previsto:* Un servizio scelto dall'utente installato e avviato con deck servizi nell'area dei servizi, seguito dall'agente; aggiornamento e ritorno indietro provati; documentazione del servizio nel suo LEGGIMI.md.
 
-### `O14` Quello che l'agente fa sulla Deck arriva nel repository (N52) — in corso
+### `O14` Quello che l'agente fa sulla Deck arriva nel repository (N52) — chiuso
 
 **Gate obiettivo:** Una modifica di sistema fatta dall'agente sulla Deck finisce in git e in docs/ senza che una sessione dal Mac la copi a mano; nessuna credenziale nel repository (INV-6); versione pubblicata (INV-8).
+**Chiuso:** 2026-10-27 21:36 — approvato dall'utente: la Deck pubblica da sé su GitHub (ADR-0002), provato con frugale (58 commit), v0.5.2
 
 - [x] `O14.T1` Il canale fra l'agente sulla Deck e il repository, deciso con l'utente (N52) — *perimetro:* `docs/, decisioni`
   *gate previsto:* Strade confrontate con l'utente (copia del repository sulla Deck con push e credenziale solo sulla Deck, consegna verso il Mac, stato voluto D4); decisione registrata come ADR. · *gate confermato:* ✔ Canale deciso dall'utente (ADR-0002): la Deck pubblica da sé su GitHub come panicDa3m0n, login gh approvato dall'utente, repository privati
@@ -75,3 +76,5 @@ _Una riga per nota, sempre legata a una task. `wf.sh notes` per leggerle._
 - `N60` (`O14.T1`) Caso reale (26/10, su richiesta dell'utente, fuori dal perimetro di O12.T1): pubblicato il progetto frugale nato sulla Deck, come chiede la sua decisione 0009. Repository privato panicDa3m0n/frugale; clone sul Mac in /Users/snj/frugale con remote deck (agentdeck:/home/agent/frugale) e origin HTTPS con credential helper locale di panicDa3m0n (come P1); push di main (de60013, bbe2177). Il ponte è manuale: per ogni aggiornamento serve git pull deck main e git push origin main dal Mac. È il bisogno N52 anche per i progetti dell'utente, non solo per AgentDeck. — 2026-10-26 18:20
 - `N61` (`O14.T2`) Adattatore: nei menu a frecce (gh auth login) le opzioni sotto la riga del cursore non entrano in question.options; servirebbe una regola o un profilo per i menu a frecce (segnalato dall'agente della Deck il 26/10, scritto in docs/adattatore.md, Limiti noti) — 2026-10-26 18:53
 - `N62` (`O14.T2`) Stato O14.T2 (26/10 18:56): nel repository pronti ownership con il login GitHub come credenziale, correzione Go dell'adattatore (P23), regola GitHub in CLAUDE.template.md, docs; risposta all'agente della Deck data all'utente. Manca la prova del gate: il push di frugale dalla Deck (origin ancora assente, 3 commit non pubblicati). Copia doppia /Users/snj/frugale/frugale spostata nel Cestino su richiesta dell'utente. — 2026-10-26 18:57
+- `N63` (`O12.T1`) Sulla Deck (27/10): SendMessage aggiunto a permissions.allow di /etc/claude-code/managed-settings.json (copia .bak-sendmessage), su richiesta dell'utente: l'agente non deve aspettare un clic per scrivere a un'altra chat. Sulla Deck è installato ancora solo mcp__deck: tutta la politica ADR-0001 resta da installare; stessa voce nel repository e in docs/claude-code.md. Copiato anche il token Baxi nei segreti di domus (600, srv-domus), su richiesta dell'utente. — 2026-10-27 18:44
+- `N64` (`O13.T1`) Servizio domus (27/10, su richiesta dell'utente dalla sessione della Deck): token Baxi copiato in /srv/servizi/domus/dati/secrets (600, srv-domus), /state funziona sulla Deck; motore Domus sul Mac (PID 35282, *:8777, avviato a mano, non da launchd) fermato con SIGINT, porta 8777 chiusa; resta sul Mac un'istanza di prova su 127.0.0.1:8778 (PID 46342), non toccata. — 2026-10-27 19:47
