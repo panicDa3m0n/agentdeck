@@ -8,13 +8,17 @@ Fatti verificati sulla Deck il 27/10/2026, con Claude Code 2.1.310:
   sessione nuova parte quindi in una sottocartella sua, ~/agentdeck/sessioni/<nome>, con un server che tiene una
   sola sessione ed esce quando lei finisce (--spawn session). La fiducia nella cartella viene da ~/agentdeck;
 - SIGINT al processo della sessione la chiude in modo pulito, anche dentro il server con più sessioni, che resta
-  pronto; SIGTERM la chiude come errore, e serve solo se SIGINT non basta.
+  pronto; SIGTERM la chiude come errore, e serve solo se SIGINT non basta;
+- una sessione appena aperta cambia processo: la prima nasce senza bridgeSessionId e dopo una trentina di secondi
+  il server la sostituisce con un processo nuovo, registrato nell'app, con un altro sessionId. Per questo open aspetta
+  la registrazione, e l'id delle sessioni aperte da deck viene dalla loro cartella, che non cambia (trappola P24).
 Un processo si riconosce dal PID e dal suo istante di avvio: un PID riusato da un altro processo non è la sessione.
 Titoli e messaggi dei programmi sono testo esterno: stanno solo nei dati (INV-4).
 Schermata: components/claude.py. Documentazione: docs/interfacce.md, docs/claude-code.md.
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import re
@@ -117,15 +121,16 @@ class Sessions:
                 continue  # scheda rimasta di un processo finito, o PID riusato
             folder = str(d.get("cwd") or "")
             bridge = d.get("bridgeSessionId")
+            opened = folder.startswith(str(self.opened) + "/")
             public = {
-                "id": short,
+                "id": hashlib.sha1(folder.encode()).hexdigest()[:8] if opened else short,
                 "title": str(d.get("name") or "")[:200],
                 "state": d.get("status") if d.get("status") in STATES else
                 ("starting" if d.get("status") is None else "unknown"),
                 "state_since": _iso(d.get("statusUpdatedAt")),
                 "started": _iso(d.get("startedAt")),
                 "folder": folder,
-                "opened_by_deck": folder.startswith(str(self.opened) + "/"),
+                "opened_by_deck": opened,
                 "app_url": f"https://claude.ai/code/{bridge}" if isinstance(bridge, str) and BRIDGE.fullmatch(bridge)
                 else None,
                 "pid": pid,
@@ -169,12 +174,14 @@ class Sessions:
                             command])
         if started.returncode != 0:
             raise SessionError("FAILED", {"output": (started.stderr or started.stdout).strip()[-2000:]})
-        deadline = self.clock() + OPEN_WAIT_S
+        deadline, seen = self.clock() + OPEN_WAIT_S, None
         while self.clock() < deadline:
-            for s in self.list():
-                if s["folder"] == str(folder):
-                    return s
+            seen = next((s for s in self.list() if s["folder"] == str(folder)), None)
+            if seen and seen["app_url"]:  # registrata nell'app: è il processo che resta
+                return seen
             self.sleep(1)
+        if seen:
+            return seen  # viva ma non ancora registrata: il link arriverà nell'elenco
         pane = self.run(["tmux", "capture-pane", "-p", "-t", f"={tmux_name}"]).stdout
         self.run(["tmux", "kill-session", "-t", f"={tmux_name}"])
         lines = [line.rstrip() for line in pane.splitlines() if line.strip()]

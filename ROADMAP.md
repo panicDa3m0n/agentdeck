@@ -10,10 +10,11 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O15` Interfacce effimere sullo schermo della Deck: lo stile e la prima interfaccia, le sessioni Claude — 3 task: 2 completate, 0 in corso, 1 da fare, 0 bloccate
-- **Task attiva:** —
+- **Obiettivo attivo:** `O15` Interfacce effimere sullo schermo della Deck: lo stile e la prima interfaccia, le sessioni Claude — 3 task: 2 completate, 1 in corso, 0 da fare, 0 bloccate
+- **Task attiva:** `O15.T3` Lo schermo grafico calmo con l'interfaccia effimera delle sessioni, al posto del terminale — in corso · rischio 55/100
 - **Ultima task gestita:** `O15.T2` — completata — deck claude elenca, apre (Remote Control in ~/agentdeck/sessioni) e chiude con conferma; MCP; 259 test; prova sulla Deck, sessioni al lavoro intatte
-- **Ultimo aggiornamento:** 2026-10-27 22:58
+- **Fase:** `in_progress`
+- **Ultimo aggiornamento:** 2026-10-27 23:12
 
 ## Richieste attive
 
@@ -38,6 +39,7 @@ _nessuna richiesta in attesa._
   *gate previsto:* install/install.sh installa anche tmux e sshguard, come oggi la Deck; sintassi verificata; documentazione di installazione aggiornata.
 - [ ] `O12.T5` Sessione reale con Remote Control: permessi e strumenti nuovi (N54) — *perimetro:* `sessioni di Claude Code sulla Deck, annotazioni, docs/`
   *gate previsto:* Una sessione reale scelta con l'utente, seguita con Remote Control: nessuna richiesta di permesso per il lavoro di sistema; uso di deck mcp, adattatore, obblighi e skill osservato nel registro delle sessioni; bisogni emersi annotati.
+  *annotazioni:* `N65`
 
 ### `O13` I servizi della Deck gestiti dal sistema (N53) — in corso
 
@@ -79,8 +81,9 @@ _nessuna richiesta in attesa._
 - [x] `O15.T2` La schermata deck claude: elencare, aprire e chiudere le sessioni Claude della Deck — *perimetro:* `deck/, docs/`
   *gate previsto:* deck claude elenca le sessioni con titolo e stato, ne apre una nuova che compare nell'app Claude e ne chiude una con anteprima e conferma, anche come strumenti MCP; test verdi; provato sulla Deck con una sessione di prova senza toccare quelle al lavoro. · *gate confermato:* ✔ deck claude elenca, apre (Remote Control in ~/agentdeck/sessioni) e chiude con conferma; MCP; 259 test; prova sulla Deck, sessioni al lavoro intatte
   *rischio:* 35/100 — Componente nuovo e testato, ma agisce su processi vivi di Claude sulla Deck: chiudere quello sbagliato interrompe il lavoro; close solo su id dall'elenco con conferma, prove solo su sessioni di prova
-- [ ] `O15.T3` Lo schermo grafico calmo con l'interfaccia effimera delle sessioni, al posto del terminale — *perimetro:* `deck/, docs/, pacchetti grafici e servizio dello schermo sulla Deck`
+- [~] `O15.T3` Lo schermo grafico calmo con l'interfaccia effimera delle sessioni, al posto del terminale — *perimetro:* `deck/, docs/, pacchetti grafici e servizio dello schermo sulla Deck`
   *gate previsto:* Sulla Deck lo schermo grafico sostituisce il terminale: di base calmo, l'interfaccia delle sessioni compare con un tocco o un pulsante e sparisce dopo la scelta o il tempo; aprire e chiudere una sessione di prova funziona dal tocco; snapshot prima; ssh agentdeck intatto (INV-1); docs e versione pubblicata.
+  *rischio:* 55/100 — 112 pacchetti nuovi, utente nuovo, servizio grafico su tty1 e server locale che esegue azioni; snapshot prima, server solo su 127.0.0.1 con codice, ripiego al terminale, ssh verificato a ogni passo
 
 ## Annotazioni
 
@@ -93,3 +96,4 @@ _Una riga per nota, sempre legata a una task. `wf.sh notes` per leggerle._
 - `N62` (`O14.T2`) Stato O14.T2 (26/10 18:56): nel repository pronti ownership con il login GitHub come credenziale, correzione Go dell'adattatore (P23), regola GitHub in CLAUDE.template.md, docs; risposta all'agente della Deck data all'utente. Manca la prova del gate: il push di frugale dalla Deck (origin ancora assente, 3 commit non pubblicati). Copia doppia /Users/snj/frugale/frugale spostata nel Cestino su richiesta dell'utente. — 2026-10-26 18:57
 - `N63` (`O12.T1`) Sulla Deck (27/10): SendMessage aggiunto a permissions.allow di /etc/claude-code/managed-settings.json (copia .bak-sendmessage), su richiesta dell'utente: l'agente non deve aspettare un clic per scrivere a un'altra chat. Sulla Deck è installato ancora solo mcp__deck: tutta la politica ADR-0001 resta da installare; stessa voce nel repository e in docs/claude-code.md. Copiato anche il token Baxi nei segreti di domus (600, srv-domus), su richiesta dell'utente. — 2026-10-27 18:44
 - `N64` (`O13.T1`) Servizio domus (27/10, su richiesta dell'utente dalla sessione della Deck): token Baxi copiato in /srv/servizi/domus/dati/secrets (600, srv-domus), /state funziona sulla Deck; motore Domus sul Mac (PID 35282, *:8777, avviato a mano, non da launchd) fermato con SIGINT, porta 8777 chiusa; resta sul Mac un'istanza di prova su 127.0.0.1:8778 (PID 46342), non toccata. — 2026-10-27 19:47
+- `N65` (`O12.T5`) Obblighi troppo larghi: l'installazione di cage + chromium (O15.T3) ha aperto 47 PROFILE_NEEDED, uno per ogni pacchetto con programmi, librerie trascinate comprese (avahi, gtk, spirv...); chiusi tutti con dismiss e motivo. L'hook dovrebbe considerare solo i pacchetti installati esplicitamente (pacman -Qe) o i programmi davvero interattivi. — 2026-10-27 23:12

@@ -1,0 +1,33 @@
+# AgentDeck: lo schermo grafico della Deck, con le interfacce effimere (ADR-0003). cage mostra a schermo intero
+# Chromium in kiosk, come utente deckui senza privilegi, su tty1 al posto del terminale dell'agente.
+# Se non riesce a partire più volte di fila, torna il terminale (agentdeck-screen). Documentazione: docs/interfacce.md
+[Unit]
+Description=AgentDeck: schermo grafico con le interfacce effimere (cage + Chromium, tty1)
+After=agentdeck-ui-server.service systemd-user-sessions.service systemd-logind.service
+Requires=agentdeck-ui-server.service
+PartOf=agentdeck-ui-server.service
+Conflicts=getty@tty1.service agentdeck-screen.service
+OnFailure=agentdeck-screen.service
+StartLimitIntervalSec=120
+StartLimitBurst=5
+
+[Service]
+Type=simple
+User=deckui
+PAMName=agentdeck-ui
+TTYPath=/dev/tty1
+TTYReset=yes
+TTYVHangup=yes
+TTYVTDisallocate=yes
+StandardInput=tty-fail
+StandardOutput=journal
+StandardError=journal
+UtmpIdentifier=tty1
+UtmpMode=user
+Environment=XDG_SESSION_TYPE=wayland
+ExecStart=/usr/bin/cage -d -- /opt/agentdeck/ui/kiosk.sh
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=graphical.target

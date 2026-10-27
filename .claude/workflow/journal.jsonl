@@ -1507,3 +1507,46 @@
 {"at": "2026-10-27 22:58", "testo": "TASK CHIUSA O15.T2 — completata: deck claude elenca, apre (Remote Control in ~/agentdeck/sessioni) e chiude con conferma; MCP; 259 test; prova sulla Deck, sessioni al lavoro intatte"}
 {"at": "2026-10-27 22:58", "testo": "VERSIONE 0.5.4 (O15.T2)"}
 {"at": "2026-10-27 22:58", "testo": "[-] bash: ~/claude-rules/bin/wf.sh task-close --done \"deck claude elenca, apre (Remote Control in ~/agentdeck/sessioni) "}
+{"at": "2026-10-27 22:58", "testo": "[-] bash: python3 - <<'EOF' from pathlib import Path p = Path(\"CHANGELOG.md\"); t = p.read_text() old = \"## 0.5.3 — 2026-"}
+{"at": "2026-10-27 22:59", "testo": "TASK APERTA O15.T3 — Lo schermo grafico calmo con l'interfaccia effimera delle sessioni, al posto del terminale | perimetro: deck/, docs/, pacchetti grafici e servizio dello schermo sulla Deck | gate: Sulla Deck lo schermo grafico sostituisce il terminale: di base calmo, l'interfaccia delle sessioni compare con un tocco o un pulsante e sparisce dopo la scelta o il tempo; aprire e chiudere una sessione di prova funziona dal tocco; snapshot prima; ssh agentdeck intatto (INV-1); docs e versione pubblicata. | rischio: 55"}
+{"at": "2026-10-27 22:59", "testo": "[O15.T3] bash: ~/claude-rules/bin/wf.sh task-start --id \"O15.T3\" --risk 55 --why \"112 pacchetti nuovi, utente nuovo, servizio"}
+{"at": "2026-10-27 22:59", "testo": "[O15.T3] bash: ssh -o BatchMode=yes agentdeck 'pacman -Sp --needed --print-format \"%n\" cage chromium wlr-randr grim 2>&1 | gr"}
+{"at": "2026-10-27 23:01", "testo": "[O15.T3] bash: ssh -o BatchMode=yes agentdeck 'cat /sys/class/graphics/fbcon/rotate 2>/dev/null; cat /sys/class/graphics/fbco"}
+{"at": "2026-10-27 23:02", "testo": "[O15.T3] Write  deck/agentdeck/ui.py", "task": "O15.T3", "tipo": "file", "tool": "Write", "file": "deck/agentdeck/ui.py"}
+{"at": "2026-10-27 23:02", "testo": "[O15.T3] Edit  deck/agentdeck/cli.py", "task": "O15.T3", "tipo": "file", "tool": "Edit", "file": "deck/agentdeck/cli.py"}
+{"at": "2026-10-27 23:03", "testo": "[O15.T3] Write  deck/ui/index.html", "task": "O15.T3", "tipo": "file", "tool": "Write", "file": "deck/ui/index.html"}
+{"at": "2026-10-27 23:03", "testo": "[O15.T3] Edit  deck/ui/index.html", "task": "O15.T3", "tipo": "file", "tool": "Edit", "file": "deck/ui/index.html"}
+{"at": "2026-10-27 23:03", "testo": "[O15.T3] Write  deck/ui/agentdeck-ui-server.service", "task": "O15.T3", "tipo": "file", "tool": "Write", "file": "deck/ui/agentdeck-ui-server.service"}
+{"at": "2026-10-27 23:03", "testo": "[O15.T3] Write  deck/ui/agentdeck-ui.service", "task": "O15.T3", "tipo": "file", "tool": "Write", "file": "deck/ui/agentdeck-ui.service"}
+{"at": "2026-10-27 23:03", "testo": "[O15.T3] Write  deck/ui/pam-agentdeck-ui", "task": "O15.T3", "tipo": "file", "tool": "Write", "file": "deck/ui/pam-agentdeck-ui"}
+{"at": "2026-10-27 23:03", "testo": "[O15.T3] Write  deck/ui/kiosk.sh", "task": "O15.T3", "tipo": "file", "tool": "Write", "file": "deck/ui/kiosk.sh"}
+{"at": "2026-10-27 23:04", "testo": "[O15.T3] Write  deck/ui/install-ui.sh", "task": "O15.T3", "tipo": "file", "tool": "Write", "file": "deck/ui/install-ui.sh"}
+{"at": "2026-10-27 23:04", "testo": "[O15.T3] bash: chmod 755 ui/kiosk.sh ui/install-ui.sh && python3 - <<'EOF' from pathlib import Path def edit(path, old, new):"}
+{"at": "2026-10-27 23:04", "testo": "[O15.T3] Edit  deck/agentdeck/ui.py", "task": "O15.T3", "tipo": "file", "tool": "Edit", "file": "deck/agentdeck/ui.py"}
+{"at": "2026-10-27 23:04", "testo": "[O15.T3] Write  deck/tests/test_ui.py", "task": "O15.T3", "tipo": "file", "tool": "Write", "file": "deck/tests/test_ui.py"}
+{"at": "2026-10-27 23:04", "testo": "[O15.T3] bash: python3 -m unittest tests.test_ui 2>&1 | tail -15 && python3 -m unittest discover -s tests -q 2>&1 | tail -2"}
+{"at": "2026-10-27 23:05", "testo": "[O15.T3] bash: python3 - <<'EOF' from pathlib import Path p = Path(\"tests/test_ui.py\"); t = p.read_text() old = 'sys.path.ins"}
+{"at": "2026-10-27 23:05", "testo": "[O15.T3] bash: mkdir -p /private/tmp/claude-502/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/scratchpad "}
+{"at": "2026-10-27 23:05", "testo": "[O15.T3] bash: python3 /private/tmp/claude-502/-Users-snj-linuxai-steamdeck/7d3925ee-e63d-4435-b93f-140e970d6556/scratchpad/p"}
+{"at": "2026-10-27 23:06", "testo": "[O15.T3] Edit  deck/ui/index.html", "task": "O15.T3", "tipo": "file", "tool": "Edit", "file": "deck/ui/index.html"}
+{"at": "2026-10-27 23:06", "testo": "[O15.T3] bash: pkill -f \"[p]review_ui.py\"; echo fermato"}
+{"at": "2026-10-27 23:06", "testo": "[O15.T3] bash: cd /Users/snj/linuxai-steamdeck && deck/install.sh 2>&1 | grep -vE '^\\{\"deck\"' | tail -30"}
+{"at": "2026-10-27 23:07", "testo": "[O15.T3] bash: sed -i '' 's/--comment \"AgentDeck: browser dello schermo\"/--comment \"AgentDeck, browser dello schermo\"/' deck/"}
+{"at": "2026-10-27 23:07", "testo": "[O15.T3] bash: ssh -o BatchMode=yes agentdeck 'systemctl is-active agentdeck-ui-server agentdeck-ui agentdeck-screen; systemc"}
+{"at": "2026-10-27 23:07", "testo": "[O15.T3] bash: ssh -o BatchMode=yes agentdeck 'ps -o pid,user,rss,args -u deckui | cut -c1-140 | head -8; ls /run/user/964/ 2"}
+{"at": "2026-10-27 23:08", "testo": "[O15.T3] FALLITO Bash: cd /Users/snj/linuxai-steamdeck/deck && python3 - <<'EOF'\nfrom pathlib import Path\ndef edi"}
+{"at": "2026-10-27 23:08", "testo": "FALLIMENTO [Bash] execution_error: ok\n\nOK\n== Schermo grafico con le interfacce effimere (docs/interfacce.md)\nwarning: cage-0.3.1-1 is up to date -- skippin"}
+{"at": "2026-10-27 23:08", "testo": "ERRORE RISOLTO — execution_error: ok OK == Schermo grafico con le interfacce effimere (docs/interfacce.md) warning: cage-0.3.1-1 is up to date -- skippin — Uscita 1 di grep -c senza corrispondenze: zero avvisi pam_warn, cioè il risultato atteso; servizi attivi", "tipo": "errore-risolto"}
+{"at": "2026-10-27 23:08", "testo": "[O15.T3] bash: ~/claude-rules/bin/wf.sh errore --risolto \"Uscita 1 di grep -c senza corrispondenze: zero avvisi pam_warn, cio"}
+{"at": "2026-10-27 23:09", "testo": "[O15.T3] bash: ssh -o BatchMode=yes agentdeck 'T=$(cat /run/agentdeck-ui.token); U=http://127.0.0.1:8790; H=\"X-Deck-Token: $T"}
+{"at": "2026-10-27 23:09", "testo": "[O15.T3] bash: ssh -o BatchMode=yes agentdeck 'python3 -c \"import json; d=json.load(open(\\\"/home/agent/.claude/sessions/38499"}
+{"at": "2026-10-27 23:09", "testo": "[O15.T3] bash: ssh -o BatchMode=yes agentdeck 'p=$(deck claude close id=8be01b9f); tok=$(echo \"$p\" | python3 -c \"import json,"}
+{"at": "2026-10-27 23:10", "testo": "[O15.T3] bash: cd /Users/snj/linuxai-steamdeck/deck && python3 - <<'EOF' from pathlib import Path def edit(path, old, new):  "}
+{"at": "2026-10-27 23:10", "testo": "TRAPPOLA registrata: deck claude close risponde NOT_FOUND su una sessione appena aperta -> claude remote-control --spawn session crea prima una sessione senza bridgeSessionId e dopo circa 30 s la sostituisce con un processo nuovo registrato nell'app, con altro sessionId -> open aspetta bridgeSessionId e l'id delle sessioni aperte da deck viene dalla cartella"}
+{"at": "2026-10-27 23:11", "testo": "[O15.T3] bash: ~/claude-rules/bin/wf.sh pitfall \"deck claude close risponde NOT_FOUND su una sessione appena aperta -> claude"}
+{"at": "2026-10-27 23:11", "testo": "[O15.T3] bash: ssh -o BatchMode=yes agentdeck 'rmdir ~/agentdeck/sessioni/sessione-prova && echo \"cartella rimossa\"; ls -A ~/"}
+{"at": "2026-10-27 23:11", "testo": "[O15.T3] bash: ssh -o BatchMode=yes agentdeck 'deck obligations | python3 -c \" import json,sys,datetime d=json.load(sys.stdin"}
+{"at": "2026-10-27 23:11", "testo": "[O15.T3] bash: ssh -o BatchMode=yes agentdeck 'ids=$(deck obligations | python3 -c \" import json,sys for x in json.load(sys.s"}
+{"at": "2026-10-27 23:12", "testo": "ANNOTAZIONE N65 su O12.T5 — Obblighi troppo larghi: l'installazione di cage + chromium (O15.T3) ha aperto 47 PROFILE_NEEDED, uno per ogni pacchetto con programmi, librerie trascinate comprese (avahi, gtk, spirv...); chiusi tutti con dismiss e motivo. L'hook dovrebbe considerare solo i pacchetti installati esplicitamente (pacman -Qe) o i programmi davvero interattivi."}
+{"at": "2026-10-27 23:12", "testo": "[O15.T3] bash: ~/claude-rules/bin/wf.sh note-add --task O12.T5 --text \"Obblighi troppo larghi: l'installazione di cage + chro"}
+{"at": "2026-10-27 23:12", "testo": "[O15.T3] bash: python3 - <<'EOF' from pathlib import Path def edit(path, old, new):     p = Path(path); t = p.read_text(); as"}

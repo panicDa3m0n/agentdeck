@@ -1,0 +1,19 @@
+# AgentDeck: server della pagina dello schermo, `deck ui`, solo su 127.0.0.1:8790 (INV-5).
+# Gira come agent, perché le azioni dello schermo sono azioni di deck. A ogni avvio scrive un codice nuovo in
+# /run/agentdeck-ui.token, che systemd prepara leggibile solo da agent e dal browser (gruppo deckui).
+# Documentazione: docs/interfacce.md
+[Unit]
+Description=AgentDeck: server della pagina dello schermo (127.0.0.1:8790)
+After=network.target
+
+[Service]
+Type=simple
+User=agent
+ExecStartPre=+/usr/bin/install -m 0640 -o agent -g deckui /dev/null /run/agentdeck-ui.token
+ExecStart=/usr/bin/python3 /opt/agentdeck/deck ui
+Environment=PYTHONUNBUFFERED=1
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target

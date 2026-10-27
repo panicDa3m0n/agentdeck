@@ -88,6 +88,9 @@ def main(argv: Optional[list] = None) -> int:
     if argv == ["mcp"]:  # server MCP su stdio (docs/deck.md, "Server MCP"): mcp non è un indirizzo
         from .mcp import serve
         return serve()
+    if argv == ["ui"]:  # server della pagina dello schermo (docs/interfacce.md): ui non è un indirizzo
+        from .ui import serve as serve_ui
+        return serve_ui()
     result, code = render(Deck(all_components()), argv)
     if "--pretty" in argv:
         print(json.dumps(result, ensure_ascii=False, indent=2))

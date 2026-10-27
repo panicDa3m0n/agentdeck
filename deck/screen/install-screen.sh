@@ -61,6 +61,12 @@ if ! cmp -s "$SRC/agentdeck-screen.service" "$UNIT"; then
   systemctl daemon-reload
 fi
 systemctl mask --now getty@tty1.service >/dev/null 2>&1
-systemctl enable agentdeck-screen.service >/dev/null 2>&1
-systemctl restart agentdeck-screen.service
-systemctl is-active agentdeck-screen.service
+if systemctl is-enabled --quiet agentdeck-ui.service 2>/dev/null; then
+  # Lo schermo grafico (docs/interfacce.md) ha preso il posto del terminale: questo resta il suo ripiego, spento
+  systemctl disable agentdeck-screen.service >/dev/null 2>&1 || true
+  echo "ripiego dello schermo grafico"
+else
+  systemctl enable agentdeck-screen.service >/dev/null 2>&1
+  systemctl restart agentdeck-screen.service
+  systemctl is-active agentdeck-screen.service
+fi

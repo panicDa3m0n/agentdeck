@@ -119,4 +119,65 @@ al lavoro restavano attive con gli stessi PID.
 
 ### Lo schermo (O15.T3)
 
-Lo schermo grafico calmo, con l'interfaccia delle sessioni al posto del terminale.
+Installato il 27/10/2026 al posto del terminale dell'agente.
+
+**Cosa vede chi ha la Deck in mano:**
+- **Calmo:** schermo nero con una riga di stato in basso, per esempio
+  `agentdeck · 192.168.1.49 · 2 sessioni, 1 al lavoro · 23:08`, aggiornata ogni 30 secondi. Dopo 2 minuti senza
+  tocchi la luce scende all'8%; il primo tocco la rialza.
+- **Sessioni:** un tocco qualsiasi, oppure A, Y o Menu del gamepad, apre l'interfaccia. In alto c'è "Apri una
+  sessione nuova", già selezionato; sotto, una scheda per sessione con titolo, stato colorato (al lavoro, in attesa,
+  in avvio) e ora di inizio, e il pulsante "Chiudi". La sessione da cui arriverebbe la chiamata è "In uso" e non si
+  chiude.
+- **Aprire:** il nome lo sceglie il sistema (`sessione-<ora><minuti>`), niente da scrivere. Dopo qualche secondo
+  compare "Sessione … aperta. La trovi nell'app Claude."
+- **Chiudere:** la prima pressione su "Chiudi" chiede l'anteprima a `deck` e trasforma il pulsante in "Conferma",
+  con un avviso se la sessione è al lavoro; la seconda pressione, entro 10 secondi, chiude.
+- **Sparire:** dopo una scelta compare un messaggio per 4 secondi, poi lo schermo torna calmo; senza tocchi per
+  60 secondi l'interfaccia sparisce da sola (il conto alla rovescia è in basso). B o "Indietro" la chiudono subito.
+- **Comandi:** tocco; gamepad con la disposizione standard (A conferma, B indietro, croce per spostare la
+  selezione); tastiera con frecce, Invio ed Esc.
+
+**Come è fatto:**
+
+| Pezzo | Cosa fa |
+|---|---|
+| [../deck/ui/index.html](../deck/ui/index.html) | La pagina: vista calma, sessioni, messaggi; tocco, tasti e gamepad; tempi. Il testo che arriva da `deck` entra solo come testo (`textContent`) |
+| [../deck/agentdeck/ui.py](../deck/agentdeck/ui.py) | `deck ui`: serve la pagina e l'API su 127.0.0.1:8790. Le azioni passano per `deck` con anteprima e conferma, e vanno nel registro come le altre chiamate (identificatore `agentdeck`). Allo schermo arriva solo `/claude` |
+| [../deck/ui/agentdeck-ui-server.service](../deck/ui/agentdeck-ui-server.service) | Servizio del server, utente `agent`. A ogni avvio un codice nuovo in `/run/agentdeck-ui.token` (640, `agent:deckui`) |
+| [../deck/ui/agentdeck-ui.service](../deck/ui/agentdeck-ui.service) | Servizio dello schermo su `tty1`, utente `deckui` senza privilegi: `cage` con Chromium in kiosk. Se il server riparte, riparte anche lui con il codice nuovo |
+| [../deck/ui/pam-agentdeck-ui](../deck/ui/pam-agentdeck-ui) | `/etc/pam.d/agentdeck-ui`: la sessione di logind che dà a cage il seat, lo schermo e i comandi |
+| [../deck/ui/kiosk.sh](../deck/ui/kiosk.sh) | Dentro cage: ruota l'uscita `eDP-1` (trasformazione `270`, modificabile con `AGENTDECK_UI_TRANSFORM`) e avvia Chromium con il codice nell'ancora dell'indirizzo |
+| [../deck/ui/install-ui.sh](../deck/ui/install-ui.sh) | Installazione ripetibile, lanciata da `deck/install.sh`: snapshot, pacchetti (`cage`, `chromium`, `wlr-randr`, `grim`), utente, PAM, servizi |
+
+**Sicurezza:**
+- il server ascolta solo su 127.0.0.1 e accetta solo l'host locale; l'API vuole il codice, che hanno solo `agent`
+  e `deckui`: un servizio dell'utente sulla Deck non può aprire o chiudere sessioni;
+- Chromium gira come `deckui`, che non ha `sudo` né password; la pagina non carica nulla da fuori (politica di
+  sicurezza `default-src 'none'`);
+- SSH, rete e registrazione dei comandi non cambiano (INV-1).
+
+**Ripiego:** il terminale dell'agente ([schermo.md](schermo.md)) resta installato ma spento. Se lo schermo grafico
+fallisce 5 volte in 2 minuti, systemd riaccende il terminale (`OnFailure`). Per tornarci a mano:
+`sudo systemctl disable --now agentdeck-ui agentdeck-ui-server && sudo systemctl enable --now agentdeck-screen`.
+
+**Guardare lo schermo senza esserci:** dentro cage, come `deckui`:
+
+```bash
+ssh agentdeck 'sudo -u deckui env XDG_RUNTIME_DIR=/run/user/$(id -u deckui) WAYLAND_DISPLAY=wayland-0 grim /tmp/schermo.png'
+```
+
+**Verifiche del 27/10/2026:**
+- servizi attivi, sessione di logind `deckui` su `seat0`/`tty1`, server solo su 127.0.0.1:8790;
+- screenshot con `grim`: pagina in orizzontale, vista calma con la riga di stato;
+- API dal vivo: senza codice risponde 401; aperta la sessione `sessione-prova` (registrata nell'app in 5
+  secondi), anteprima e chiusura con SIGINT dopo 20 secondi; luce all'8% e di nuovo piena;
+- le due sessioni al lavoro restano attive con gli stessi PID;
+- l'installazione ha aperto 47 obblighi `PROFILE_NEEDED` per i pacchetti nuovi e le loro dipendenze: chiusi con il
+  motivo, perché nessuno di quei programmi si usa in modo interattivo (annotazione N65).
+
+**Da sapere:**
+- Chromium proponeva di tradurre la pagina dall'italiano: la pagina dichiara `translate="no"` e Chromium parte con
+  `--lang=it`.
+- Una sessione appena aperta cambia processo quando si registra nell'app (trappola P24): per questo `open` aspetta
+  la registrazione e le sessioni aperte da `deck` hanno un id preso dalla loro cartella.

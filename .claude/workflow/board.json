@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-26 11:36",
-  "updated": "2026-10-27 22:58",
+  "updated": "2026-10-27 23:12",
   "objectives": [
     {
       "id": "O12",
@@ -196,9 +196,9 @@
           "scope": "deck/, docs/, pacchetti grafici e servizio dello schermo sulla Deck",
           "gate_pre": "Sulla Deck lo schermo grafico sostituisce il terminale: di base calmo, l'interfaccia delle sessioni compare con un tocco o un pulsante e sparisce dopo la scelta o il tempo; aprire e chiudere una sessione di prova funziona dal tocco; snapshot prima; ssh agentdeck intatto (INV-1); docs e versione pubblicata.",
           "gate_post": "",
-          "state": "todo",
-          "risk": null,
-          "risk_why": "",
+          "state": "doing",
+          "risk": 55,
+          "risk_why": "112 pacchetti nuovi, utente nuovo, servizio grafico su tty1 e server locale che esegue azioni; snapshot prima, server solo su 127.0.0.1 con codice, ripiego al terminale, ssh verificato a ogni passo",
           "docs": []
         }
       ]
@@ -254,14 +254,21 @@
       "text": "Servizio domus (27/10, su richiesta dell'utente dalla sessione della Deck): token Baxi copiato in /srv/servizi/domus/dati/secrets (600, srv-domus), /state funziona sulla Deck; motore Domus sul Mac (PID 35282, *:8777, avviato a mano, non da launchd) fermato con SIGINT, porta 8777 chiusa; resta sul Mac un'istanza di prova su 127.0.0.1:8778 (PID 46342), non toccata.",
       "docs": [],
       "created": "2026-10-27 19:47"
+    },
+    {
+      "id": "N65",
+      "task": "O12.T5",
+      "text": "Obblighi troppo larghi: l'installazione di cage + chromium (O15.T3) ha aperto 47 PROFILE_NEEDED, uno per ogni pacchetto con programmi, librerie trascinate comprese (avahi, gtk, spirv...); chiusi tutti con dismiss e motivo. L'hook dovrebbe considerare solo i pacchetti installati esplicitamente (pacman -Qe) o i programmi davvero interattivi.",
+      "docs": [],
+      "created": "2026-10-27 23:12"
     }
   ],
   "active": {
     "objective": "O15",
-    "task": "",
-    "phase": "idle",
-    "risk": null,
-    "risk_why": "",
+    "task": "O15.T3",
+    "phase": "in_progress",
+    "risk": 55,
+    "risk_why": "112 pacchetti nuovi, utente nuovo, servizio grafico su tty1 e server locale che esegue azioni; snapshot prima, server solo su 127.0.0.1 con codice, ripiego al terminale, ssh verificato a ogni passo",
     "hold_invariants": "",
     "hold_plan": "",
     "gate_done": ""
@@ -280,6 +287,6 @@
     "objective": 15,
     "cycle": 5,
     "request": 6,
-    "note": 64
+    "note": 65
   }
 }

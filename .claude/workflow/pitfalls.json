@@ -115,6 +115,11 @@
       "id": "P23",
       "testo": "deck term non vede che gh (Go) aspetta input -> nei programmi Go il thread principale dorme in futex_do_wait e la lettura del terminale sta in un altro thread (wait_woken) -> proc_info legge anche /proc/<pid>/task/*/wchan e conta solo wait_woken o n_tty_read, mai epoll (rete di Go)",
       "creata": "2026-10-26 18:53"
+    },
+    {
+      "id": "P24",
+      "testo": "deck claude close risponde NOT_FOUND su una sessione appena aperta -> claude remote-control --spawn session crea prima una sessione senza bridgeSessionId e dopo circa 30 s la sostituisce con un processo nuovo registrato nell'app, con altro sessionId -> open aspetta bridgeSessionId e l'id delle sessioni aperte da deck viene dalla cartella",
+      "creata": "2026-10-27 23:10"
     }
   ]
 }

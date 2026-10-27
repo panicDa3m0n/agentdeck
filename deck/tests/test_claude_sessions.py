@@ -39,6 +39,7 @@ class FakeDeck:
         self.now = 1_000_000.0
         self.next_pid = 400000
         self.start_fails = False
+        self.later = []  # (quando, cosa): il server che sostituisce la prima sessione
         self.ignore = set()  # PID che non escono con SIGINT
         self.add_proc(ME, parent=308660)
         self.add_session(62371, "2954621b-0810-52b3-8314-fccf10da0520", "agentdeck-9d", "busy", "/home/agent/agentdeck",
@@ -73,14 +74,19 @@ class FakeDeck:
         if argv[:2] == ["tmux", "new-session"]:
             folder = argv[argv.index("-c") + 1]
             if not self.start_fails:
-                self.next_pid += 1
-                name = Path(folder).name
-                self.add_session(self.next_pid, f"cd{self.next_pid:06d}-0000-0000-0000-000000000000", name, None,
-                                 folder, "session_01JodkrQnmu7bZvk8HSwEfSy", proc_start="777")
+                # come sulla Deck: prima una sessione senza bridgeSessionId, poi il server la sostituisce
+                first = self.spawn(folder, bridge=None)
+                self.later.append((self.now + 3, lambda: (self.end(first), self.spawn(folder))))
             return ok
         if argv[:2] == ["tmux", "capture-pane"]:
             return subprocess.CompletedProcess(argv, 0, "\nError: " + INJECTION + "\n", "")
         return ok
+
+    def spawn(self, folder, bridge="session_01JodkrQnmu7bZvk8HSwEfSy"):
+        self.next_pid += 1
+        self.add_session(self.next_pid, f"cd{self.next_pid:06d}-0000-0000-0000-000000000000", Path(folder).name, None,
+                         folder, bridge, proc_start=str(self.next_pid))
+        return self.next_pid
 
     def kill(self, pid, sig):
         self.signals.append((pid, sig))
@@ -94,6 +100,9 @@ class FakeDeck:
 
     def sleep(self, seconds):
         self.now += seconds
+        for item in [i for i in self.later if i[0] <= self.now]:
+            self.later.remove(item)
+            item[1]()
 
 
 class SessionsTests(unittest.TestCase):
@@ -133,6 +142,8 @@ class SessionsTests(unittest.TestCase):
         self.assertEqual((s["folder"], s["opened_by_deck"]), (str(folder), True))
         self.assertEqual(s["app_url"], "https://claude.ai/code/session_01JodkrQnmu7bZvk8HSwEfSy")
         self.assertEqual(s["state"], "starting")
+        self.assertEqual(s["pid"], self.fake.next_pid)  # il processo registrato, non il primo
+        self.assertEqual(len([x for x in self.s.list() if x["opened_by_deck"]]), 1)
         new = next(c for c in self.fake.calls if c[:2] == ["tmux", "new-session"])
         self.assertEqual(new[new.index("-s") + 1], "rc-domus")
         self.assertIn("remote-control --name domus --spawn session", new[-1])
@@ -177,6 +188,15 @@ class SessionsTests(unittest.TestCase):
                 self.s.close(sid)
             self.assertEqual(e.exception.code, code)
         self.assertEqual(self.fake.signals, [])
+
+    def test_opened_session_keeps_its_id_when_the_server_replaces_it(self):
+        self.fake.later.clear()
+        self.fake.run(["tmux", "new-session", "-d", "-s", "rc-x", "-c", str(self.fake.opened / "x"), "cmd"])
+        before = next(s for s in self.s.list() if s["opened_by_deck"])
+        self.fake.sleep(5)
+        after = next(s for s in self.s.list() if s["opened_by_deck"])
+        self.assertNotEqual(before["pid"], after["pid"])
+        self.assertEqual(before["id"], after["id"])
 
     def test_close_of_an_opened_session_removes_its_window(self):
         sid = self.s.open("prova")["id"]

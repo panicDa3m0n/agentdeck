@@ -1,0 +1,308 @@
+<!doctype html>
+<!-- AgentDeck: la pagina dello schermo della Deck (O15.T3, ADR-0003). La serve `deck ui` su 127.0.0.1 e la mostra
+     Chromium in kiosk dentro cage. Le sette regole dello stile e il funzionamento: docs/interfacce.md.
+     Tutto il testo che arriva da deck (titoli delle sessioni compresi) entra solo con textContent: mai come HTML. -->
+<html lang="it" translate="no">
+<head>
+<meta charset="utf-8">
+<meta name="google" content="notranslate">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AgentDeck</title>
+<style>
+  :root {
+    --bg: #000; --panel: #0d1014; --card: #151a21; --line: #232a33; --text: #e8ecf1; --dim: #7d8794;
+    --accent: #5aa9ff; --accent-ink: #04121f; --busy: #f2b84b; --idle: #5fd08a; --start: #8fb8ff; --danger: #ff6b6b;
+    --focus: #ffffff;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text);
+    font: 24px/1.35 "Adwaita Sans", "Liberation Sans", sans-serif; overflow: hidden; user-select: none;
+    -webkit-tap-highlight-color: transparent; cursor: none; }
+  .view { position: fixed; inset: 0; display: none; }
+  .view.on { display: flex; }
+
+  /* Calma: schermo scuro, una sola riga di stato */
+  #calm { align-items: flex-end; justify-content: center; padding-bottom: 48px; }
+  #status { color: var(--dim); font-size: 22px; letter-spacing: .02em; opacity: .75; }
+
+  /* Sessioni */
+  #panel { flex-direction: column; background: var(--panel); padding: 32px 40px 24px; gap: 20px; }
+  header { display: flex; align-items: baseline; justify-content: space-between; }
+  h1 { margin: 0; font-size: 34px; font-weight: 600; }
+  #count { color: var(--dim); font-size: 22px; }
+  button { font: inherit; color: inherit; border: 0; border-radius: 18px; cursor: none; }
+  .primary { background: var(--accent); color: var(--accent-ink); font-weight: 650; font-size: 28px;
+    min-height: 92px; padding: 0 28px; width: 100%; }
+  #list { flex: 1; display: flex; flex-direction: column; gap: 14px; overflow: hidden; }
+  .card { display: flex; align-items: center; gap: 20px; background: var(--card); border: 1px solid var(--line);
+    border-radius: 18px; padding: 16px 16px 16px 24px; min-height: 104px; }
+  .card .info { flex: 1; min-width: 0; }
+  .card .title { font-size: 26px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .card .meta { color: var(--dim); font-size: 20px; margin-top: 4px; display: flex; gap: 14px; align-items: center; }
+  .chip { display: inline-flex; align-items: center; gap: 8px; }
+  .chip::before { content: ""; width: 12px; height: 12px; border-radius: 50%; background: currentColor; }
+  .busy { color: var(--busy); } .idle { color: var(--idle); } .starting { color: var(--start); }
+  .close { background: transparent; border: 2px solid var(--line); color: var(--text); min-width: 170px;
+    min-height: 72px; font-size: 24px; }
+  .close:disabled { opacity: .4; }
+  .close.armed { background: var(--danger); border-color: var(--danger); color: #1a0505; font-weight: 650; }
+  .card .warn { color: var(--danger); font-size: 20px; margin-top: 4px; }
+  .empty { color: var(--dim); text-align: center; margin-top: 40px; }
+  footer { display: flex; justify-content: space-between; color: var(--dim); font-size: 20px; }
+  .back { background: transparent; color: var(--dim); min-height: 56px; padding: 0 12px; font-size: 20px; }
+  .sel { outline: 4px solid var(--focus); outline-offset: 4px; }
+
+  /* Messaggio dopo una scelta */
+  #toast { align-items: center; justify-content: center; background: var(--panel); padding: 48px; }
+  #toast p { font-size: 32px; text-align: center; max-width: 900px; margin: 0; }
+  #toast p.err { color: var(--danger); }
+</style>
+</head>
+<body>
+<section id="calm" class="view on"><div id="status">AgentDeck</div></section>
+
+<section id="panel" class="view">
+  <header><h1>Sessioni Claude</h1><span id="count"></span></header>
+  <button id="open" class="primary" data-nav>Apri una sessione nuova</button>
+  <div id="list"></div>
+  <footer><button class="back" id="back" data-nav>Indietro</button><span id="timer"></span></footer>
+</section>
+
+<section id="toast" class="view"><p id="toast-text"></p></section>
+
+<script>
+"use strict";
+// Regole dello stile (docs/interfacce.md): calmo di base, effimero, interazione minima, le azioni di deck.
+const PANEL_IDLE_MS = 60000;   // l'interfaccia sparisce dopo 60 s senza tocchi
+const DIM_AFTER_MS = 120000;   // lo schermo calmo abbassa la luce dopo 2 minuti
+const ARM_MS = 10000;          // la seconda pressione per chiudere vale 10 s
+const TOAST_MS = 4000;
+const TOKEN = new URLSearchParams(location.hash.slice(1)).get("t") || "";
+const STATE = { busy: ["al lavoro", "busy"], idle: ["in attesa", "idle"], starting: ["in avvio", "starting"] };
+
+const $ = (id) => document.getElementById(id);
+let view = "calm", lastInput = Date.now(), dimmed = false, sel = 0, armed = null, busyCall = false;
+
+async function api(url, body) {
+  const r = await fetch(url, { method: body ? "POST" : "GET", body: body ? JSON.stringify(body) : undefined,
+    headers: { "X-Deck-Token": TOKEN, "Content-Type": "application/json" } });
+  if (!r.ok) throw new Error("http " + r.status);
+  return r.json();
+}
+
+function show(name) {
+  view = name;
+  for (const v of ["calm", "panel", "toast"]) $(v).classList.toggle("on", v === name);
+}
+
+// ---- Calma
+function time(iso) {
+  const d = iso ? new Date(iso) : new Date();
+  return d.toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" });
+}
+async function refreshStatus() {
+  try {
+    const h = await api("/api/home");
+    const c = h.sessions || { total: 0, busy: 0 };
+    const parts = [h.host || "agentdeck"];
+    if (h.address) parts.push(h.address);
+    parts.push((c.total === 1 ? "1 sessione" : c.total + " sessioni") + (c.busy ? ", " + c.busy + " al lavoro" : ""));
+    parts.push(time());
+    $("status").textContent = parts.join("  ·  ");
+  } catch (e) {
+    $("status").textContent = "AgentDeck  ·  schermo non collegato a deck  ·  " + time();
+  }
+}
+
+async function light(level) {
+  try { await api("/api/backlight", { level }); } catch (e) { /* la luce è un di più */ }
+}
+
+// ---- Sessioni
+function items() { return Array.from(document.querySelectorAll("#panel [data-nav]")); }
+function paintSel() {
+  const all = items();
+  sel = Math.max(0, Math.min(sel, all.length - 1));
+  all.forEach((el, i) => el.classList.toggle("sel", i === sel));
+}
+
+function render(screen) {
+  const list = $("list");
+  list.textContent = "";
+  const sessions = ((screen && screen.data) || {}).sessions || [];
+  $("count").textContent = sessions.length === 1 ? "1 attiva" : sessions.length + " attive";
+  if (!sessions.length) {
+    const p = document.createElement("p");
+    p.className = "empty";
+    p.textContent = "Nessuna sessione aperta.";
+    list.appendChild(p);
+  }
+  for (const s of sessions) {
+    const card = document.createElement("div");
+    card.className = "card";
+    const info = document.createElement("div");
+    info.className = "info";
+    const title = document.createElement("div");
+    title.className = "title";
+    title.textContent = s.title || "Sessione " + s.id;
+    const meta = document.createElement("div");
+    meta.className = "meta";
+    const [label, cls] = STATE[s.state] || ["stato sconosciuto", ""];
+    const chip = document.createElement("span");
+    chip.className = "chip " + cls;
+    chip.textContent = label;
+    const since = document.createElement("span");
+    since.textContent = "dalle " + time(s.started);
+    meta.append(chip, since);
+    info.append(title, meta);
+    const btn = document.createElement("button");
+    btn.className = "close";
+    btn.dataset.nav = "";
+    if (s.this_session) {
+      btn.disabled = true;
+      btn.textContent = "In uso";
+    } else {
+      btn.textContent = "Chiudi";
+      btn.addEventListener("click", () => closeSession(s, btn, info));
+    }
+    card.append(info, btn);
+    list.appendChild(card);
+  }
+  paintSel();
+}
+
+async function openPanel() {
+  show("panel");
+  sel = 0;
+  armed = null;
+  try { render(await api("/api/screen?path=/claude")); } catch (e) { toast("Non riesco a leggere le sessioni.", true); }
+}
+
+function toast(text, err) {
+  $("toast-text").textContent = text;
+  $("toast-text").className = err ? "err" : "";
+  show("toast");
+  setTimeout(() => { if (view === "toast") { show("calm"); refreshStatus(); } }, TOAST_MS);
+}
+
+function newName(attempt) {
+  const d = new Date(), p = (n) => String(n).padStart(2, "0");
+  return "sessione-" + p(d.getHours()) + p(d.getMinutes()) + (attempt ? "-" + (attempt + 1) : "");
+}
+
+async function openSession() {
+  if (busyCall) return;
+  busyCall = true;
+  $("open").textContent = "Apro la sessione…";
+  try {
+    for (let attempt = 0; attempt < 5; attempt++) {
+      const name = newName(attempt);
+      const r = await api("/api/action", { path: "/claude", action: "open", params: { name } });
+      if (r.status === "done") return toast("Sessione " + name + " aperta. La trovi nell'app Claude.");
+      if (!r.error || r.error.code !== "NOT_AVAILABLE" || !(r.data || {}).session) {
+        return toast("La sessione non si è aperta.", true);
+      }
+    }
+    toast("La sessione non si è aperta.", true);
+  } catch (e) {
+    toast("La sessione non si è aperta.", true);
+  } finally {
+    busyCall = false;
+    $("open").textContent = "Apri una sessione nuova";
+  }
+}
+
+async function closeSession(s, btn, info) {
+  if (busyCall) return;
+  busyCall = true;
+  try {
+    if (!armed || armed.id !== s.id || Date.now() > armed.until) {
+      const r = await api("/api/action", { path: "/claude", action: "close", params: { id: s.id } });
+      if (r.status !== "confirm") return toast("Non posso chiudere questa sessione.", true);
+      armed = { id: s.id, token: r.confirm.token, until: Date.now() + ARM_MS };
+      document.querySelectorAll(".close.armed").forEach((b) => { b.classList.remove("armed"); b.textContent = "Chiudi"; });
+      document.querySelectorAll(".card .warn").forEach((w) => w.remove());
+      btn.classList.add("armed");
+      btn.textContent = "Conferma";
+      const warn = document.createElement("div");
+      warn.className = "warn";
+      warn.textContent = s.state === "busy" ? "È al lavoro: premi di nuovo e il lavoro in corso si ferma."
+                                            : "Premi di nuovo entro 10 secondi per chiuderla.";
+      info.appendChild(warn);
+      return;
+    }
+    const r = await api("/api/action", { path: "/claude", action: "close", params: { id: s.id, confirm: armed.token } });
+    armed = null;
+    toast(r.status === "done" ? "Sessione chiusa." : "La sessione non si è chiusa.", r.status !== "done");
+  } catch (e) {
+    toast("La sessione non si è chiusa.", true);
+  } finally {
+    busyCall = false;
+  }
+}
+
+// ---- Comandi: tocco, tasti, gamepad della Deck
+function wake() {
+  lastInput = Date.now();
+  if (dimmed) { dimmed = false; light("full"); }
+}
+function press(cmd) {
+  wake();
+  if (view === "calm" || view === "toast") { if (cmd !== "back") openPanel(); else show("calm"); return; }
+  const all = items();
+  if (cmd === "up" || cmd === "left") { sel -= 1; paintSel(); }
+  else if (cmd === "down" || cmd === "right") { sel += 1; paintSel(); }
+  else if (cmd === "ok") { const el = all[sel]; if (el && !el.disabled) el.click(); }
+  else if (cmd === "back") { show("calm"); refreshStatus(); }
+}
+
+document.addEventListener("pointerdown", (e) => {
+  if (view !== "panel") { e.preventDefault(); press("open"); return; }
+  wake();
+  const nav = e.target.closest("[data-nav]");
+  if (nav) { sel = items().indexOf(nav); paintSel(); }
+}, { capture: true });
+document.addEventListener("click", (e) => { if (view !== "panel") e.preventDefault(); }, { capture: true });
+document.addEventListener("keydown", (e) => {
+  const map = { ArrowUp: "up", ArrowDown: "down", ArrowLeft: "left", ArrowRight: "right", Enter: "ok", " ": "ok",
+                Escape: "back", Backspace: "back" };
+  if (map[e.key]) { e.preventDefault(); press(map[e.key]); }
+});
+$("open").addEventListener("click", openSession);
+$("back").addEventListener("click", () => { show("calm"); refreshStatus(); });
+
+// Gamepad con la disposizione standard: A=0, B=1, Y=3, Menu=9, croce 12-15
+const PAD = { 0: "ok", 1: "back", 3: "open", 9: "open", 12: "up", 13: "down", 14: "left", 15: "right" };
+let padPrev = {};
+function pollPad() {
+  for (const pad of navigator.getGamepads ? navigator.getGamepads() : []) {
+    if (!pad) continue;
+    pad.buttons.forEach((b, i) => {
+      const key = pad.index + ":" + i;
+      if (b.pressed && !padPrev[key] && PAD[i]) press(PAD[i]);
+      padPrev[key] = b.pressed;
+    });
+  }
+  requestAnimationFrame(pollPad);
+}
+requestAnimationFrame(pollPad);
+
+// ---- Tempo: l'interfaccia sparisce, la luce cala
+setInterval(() => {
+  const idle = Date.now() - lastInput;
+  if (view === "panel") {
+    const left = Math.ceil((PANEL_IDLE_MS - idle) / 1000);
+    $("timer").textContent = left > 0 ? "si chiude tra " + left + " s" : "";
+    if (idle >= PANEL_IDLE_MS) { show("calm"); refreshStatus(); }
+    if (armed && Date.now() > armed.until) { armed = null; openPanel(); }
+  } else if (view === "calm" && !dimmed && idle >= DIM_AFTER_MS) {
+    dimmed = true;
+    light("dim");
+  }
+}, 1000);
+setInterval(() => { if (view === "calm") refreshStatus(); }, 30000);
+refreshStatus();
+light("full");
+</script>
+</body>
+</html>

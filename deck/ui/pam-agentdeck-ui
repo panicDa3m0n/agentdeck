@@ -1,0 +1,8 @@
+#%PAM-1.0
+# AgentDeck: sessione di logind per lo schermo grafico (utente deckui, tty1), così cage ha il seat, lo schermo
+# e i comandi. systemd non autentica un servizio: la riga auth serve solo a setcred, e deckui non ha password.
+# Installata come /etc/pam.d/agentdeck-ui. Documentazione: docs/interfacce.md
+auth     required  pam_unix.so
+account  required  pam_unix.so
+session  required  pam_unix.so
+session  required  pam_systemd.so

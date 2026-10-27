@@ -19,8 +19,9 @@ I principi completi sono in [PRINCIPI.md](PRINCIPI.md).
 - `deck`, l'interfaccia di sistema per agenti, installata sulla Deck: `ssh agentdeck deck`, e come server MCP
   per Claude Code con `deck mcp` (vedi [docs/deck.md](docs/deck.md) e il protocollo in
   [docs/protocollo.md](docs/protocollo.md)).
-- Lo schermo della Deck mostra, come un terminale, ogni comando dell'agente, la sua risposta e l'esito di `deck`
-  (vedi [docs/schermo.md](docs/schermo.md)).
+- Lo schermo della Deck è calmo e mostra interfacce effimere quando servono, per ora le sessioni Claude
+  (vedi [docs/interfacce.md](docs/interfacce.md)); i comandi dell'agente restano nel registro
+  ([docs/schermo.md](docs/schermo.md)).
 - Versione corrente nel file [VERSION](VERSION); storia delle versioni in [CHANGELOG.md](CHANGELOG.md).
 - Lavoro in corso: [ROADMAP.md](ROADMAP.md) (ciclo attuale) e [PROGETTO.md](PROGETTO.md) (dossier), generati
   dalla governance del progetto.

@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Installa o aggiorna deck sulla Deck, dal Mac. Ripetibile: ogni esecuzione porta la Deck allo stato del
 # repository. Fasi: test sul Mac, python sulla Deck (snap-pac fa gli snapshot), copia in /opt/agentdeck,
-# comando /usr/local/bin/deck, schermo della Deck (docs/schermo.md), test e prove sulla Deck.
+# comando /usr/local/bin/deck, registrazione dei comandi (docs/schermo.md), schermo grafico
+# (docs/interfacce.md), test e prove sulla Deck.
 #
 # Uso:  deck/install.sh            (host SSH predefinito: agentdeck)
 #       DECK_HOST=altro deck/install.sh
@@ -33,7 +34,7 @@ ssh "$HOST" "chmod +x $DEST/deck && sudo ln -sfn $DEST/deck /usr/local/bin/deck 
 step "Hook di pacman per gli obblighi (docs/obblighi.md)"
 ssh "$HOST" "sudo install -D -m 0755 -o root -g root $DEST/system/obligations-hook.sh /usr/local/lib/agentdeck/obligations-hook.sh && sudo install -D -m 0644 $DEST/system/95-agentdeck-obligations.hook /etc/pacman.d/hooks/95-agentdeck-obligations.hook && ls /etc/pacman.d/hooks/"
 
-step "Schermo della Deck"
+step "Registrazione dei comandi e terminale dell'agente (docs/schermo.md)"
 screen_out=$(ssh "$HOST" "sudo bash $DEST/screen/install-screen.sh")
 echo "$screen_out"
 if grep -q SSH_CHANGED <<<"$screen_out"; then
@@ -57,6 +58,9 @@ if grep -q SSH_CHANGED <<<"$screen_out"; then
   fi
   rm -f "$probe" "$probe.err"
 fi
+
+step "Schermo grafico con le interfacce effimere (docs/interfacce.md)"
+ssh "$HOST" "sudo bash $DEST/ui/install-ui.sh"
 
 step "Test sulla Deck"
 ssh "$HOST" "cd $DEST && python -m unittest discover -s tests -q"

@@ -6,8 +6,9 @@ all'agente per mostrare cosa fa), quindi i testi sono in italiano. Al posto di q
 il login di Linux, che non serviva a nessuno.
 Indice: [README.md](README.md).
 
-> **Sarà sostituito** dallo schermo grafico con le interfacce effimere (ADR-0003, O15.T3):
-> [interfacce.md](interfacce.md). La registrazione dei comandi nel registro resta.
+> **Dal 27/10/2026 lo schermo è grafico**, con le interfacce effimere (ADR-0003): [interfacce.md](interfacce.md).
+> Il terminale descritto qui resta installato ma spento, come ripiego che systemd riaccende se lo schermo grafico
+> non parte. La registrazione dei comandi nel registro resta com'è.
 
 ## Cosa si vede
 

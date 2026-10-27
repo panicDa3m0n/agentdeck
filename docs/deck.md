@@ -436,6 +436,8 @@ hanno ancora un'azione collegata.
 | [../deck/tests/test_claude_config.py](../deck/tests/test_claude_config.py) | Test della guardia, dell'hook di inizio sessione e del CLAUDE.md generato |
 | [../deck/tests/live_status_check.py](../deck/tests/live_status_check.py) | Controllo dal vivo sulla Deck: ogni valore di `deck status` contro una lettura indipendente |
 | [../deck/install.sh](../deck/install.sh) | Installazione e aggiornamento sulla Deck, schermo compreso |
+| [../deck/agentdeck/ui.py](../deck/agentdeck/ui.py) | `deck ui`: la pagina dello schermo e la sua API su 127.0.0.1:8790 ([interfacce.md](interfacce.md)) |
+| [../deck/ui/](../deck/ui/index.html) | Schermo grafico: pagina, servizi, PAM, avvio del kiosk, installazione ([interfacce.md](interfacce.md)) |
 | [../deck/screen/](../deck/screen/agentdeck_screen.py) | Schermo della Deck: registrazione dei comandi, visualizzatore, servizio ([schermo.md](schermo.md)) |
 | [../deck/tests/test_screen.py](../deck/tests/test_screen.py) | Test dello schermo: pulizia del testo, segreti oscurati, esiti di `deck` |
 
@@ -465,7 +467,11 @@ Lo script, ripetibile:
    al file `VERSION`;
 4. collega `/usr/local/bin/deck` a `/opt/agentdeck/deck`, e installa l'hook di pacman degli obblighi in
    `/etc/pacman.d/hooks/`, con il suo script in `/usr/local/lib/agentdeck/` ([obblighi.md](obblighi.md));
-5. lancia i test sulla Deck e prova `deck` e un indirizzo inesistente.
+5. installa la registrazione dei comandi e il terminale dell'agente, che resta come ripiego
+   ([schermo.md](schermo.md));
+6. installa lo schermo grafico con le interfacce effimere: pacchetti, utente `deckui`, servizi
+   ([interfacce.md](interfacce.md));
+7. lancia i test sulla Deck e prova `deck` e un indirizzo inesistente.
 
 Dopo modifiche a `/status`, il controllo dal vivo confronta ogni valore con gli strumenti classici:
 
