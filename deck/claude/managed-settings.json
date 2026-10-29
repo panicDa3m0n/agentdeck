@@ -27,13 +27,17 @@
       "Bash(*systemctl stop dbus*)",
       "Bash(*agentdeck-deny-canary*)"
     ],
-    "defaultMode": "bypassPermissions"
+    "defaultMode": "bypassPermissions",
+    "additionalDirectories": ["/"]
   },
   "skipDangerousModePermissionPrompt": true,
   "env": {
     "DISABLE_AUTOUPDATER": "1"
   },
   "hooks": {
+    "PermissionRequest": [
+      {"hooks": [{"type": "command", "command": "/usr/bin/python3 /opt/agentdeck/claude/permission_request.py"}]}
+    ],
     "SessionStart": [
       {"hooks": [{"type": "command", "command": "/usr/bin/python3 /opt/agentdeck/claude/session_start.py"}]}
     ],

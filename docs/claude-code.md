@@ -265,15 +265,35 @@ delle credenziali. La decisione è anche in [../PRINCIPI.md](../PRINCIPI.md).
 |---|---|
 | `permissions.allow` nelle impostazioni gestite | Permette Bash, le modifiche di file, letture e ricerche, il web, i subagenti, i messaggi alle altre sessioni (`SendMessage`: sulla Deck nessuno può confermare un clic) e gli strumenti `mcp__deck`: nessuna domanda per il lavoro di sistema |
 | [../deck/agentdeck/ownership.py](../deck/agentdeck/ownership.py) | Riconosce ciò che è dell'utente: percorsi dei servizi, unità `agentdeck-servizio@`, credenziali; distingue le letture dagli interventi |
-| [../deck/claude/guard.py](../deck/claude/guard.py), hook `PreToolUse` su Bash, modifiche di file e strumenti di `deck` | Quando un intervento tocca qualcosa dell'utente risponde `permissionDecision: "ask"`, e Claude Code chiede all'utente, con Remote Control sul telefono |
+| [../deck/claude/guard.py](../deck/claude/guard.py), hook `PreToolUse` su Bash, modifiche di file e strumenti di `deck` | Quando un intervento tocca qualcosa dell'utente risponde `permissionDecision: "deny"` con il motivo, e l'agente prosegue con altro e lo riporta (dal 29/10/2026; prima era `"ask"`, una domanda all'utente) |
 | `CLAUDE.md`, guardia, skill, prompt di `deck term` | Niente più "chiedi al proprietario" per modifiche di sistema; si chiede solo per servizi, credenziali e segreti |
 
 **Cosa resta com'è:**
 - i divieti che proteggono l'accesso (`deny` e guardia, INV-1): sono limiti del sistema, non permessi da chiedere;
 - le anteprime e i codici di conferma di `deck`: è il sistema che guida l'agente;
-- le domande sui servizi e le credenziali dell'utente: le genera la guardia con `permissionDecision: "ask"`, che
-  Claude Code rispetta anche nella modalità che salta i permessi (sezione "Sessioni sempre in bypass");
 - esporre un servizio su internet resta una decisione dell'utente (INV-5).
+
+### Nessuna richiesta all'umano (29/10/2026)
+
+**La decisione dell'utente, 29/10/2026** (piano punto 8): nessuna richiesta di permesso arriva all'utente come domanda
+che ferma la sessione, nemmeno per un `cd`. Le domande che restavano dopo il bypass venivano tutte dalla guardia:
+`"ask"` per i servizi e le credenziali, e falsi positivi. Il caso del 29/10: il corpo di un heredoc (documentazione
+passata a python) letto come comandi su un servizio, e `cd` in una cartella di servizio contato come modifica.
+
+| Pezzo | Cosa fa |
+|---|---|
+| guardia ([../deck/claude/guard.py](../deck/claude/guard.py)) | Per i servizi e le credenziali dell'utente risponde `deny` con il motivo, mai `ask`: l'agente non aspetta, prosegue e lo riporta. Deciderà l'arbitro agentico (O19.T3) |
+| [../deck/agentdeck/ownership.py](../deck/agentdeck/ownership.py) | Non analizza il corpo degli heredoc; i falsi positivi della sola lettura sono corretti (sotto) |
+| `permissions.additionalDirectories: ["/"]` nelle impostazioni gestite | Tutto il sistema è cartella consentita: nessun controllo "fuori dalle cartelle di lavoro" (richiesta dell'utente) |
+| hook `PermissionRequest`, [../deck/claude/permission_request.py](../deck/claude/permission_request.py) | Rete finale: se Claude Code sta per mostrare una richiesta per qualsiasi motivo, la approva e la registra in `~/.local/state/agentdeck/permission-requests.jsonl`. I limiti veri (deny, guardia) decidono prima, in `PreToolUse` |
+
+La prova degli agganci ([../deck/agentdeck/claude_probe.py](../deck/agentdeck/claude_probe.py)) fa anche un `cd /opt`
+da una cartella temporanea: in bypass passa senza domande (verificato sulla 2.1.310).
+
+**Falsi positivi corretti (O19.T1).** I reindirizzamenti verso `/dev/null` e fra canali (`2>&1`) non sono scritture;
+`cd`, `pwd`, `jq`, `sort`, `cut`, `uniq` e i comandi git di sola lettura (`log`, `status`, `diff`, `show`, …) sono
+letture. Più stretto dove serve: dopo un `cd` dentro un servizio i comandi che seguono nella stessa catena valgono per
+quel servizio; leggere i segreti di un servizio (`secrets/`, `*.key`, `config/env`) non è libero, come le credenziali.
 
 Test: [../deck/tests/test_ownership.py](../deck/tests/test_ownership.py). Controlla il lavoro di sistema libero, le
 domande per servizi e credenziali, la risposta dell'hook, e che i testi per l'agente chiedano al proprietario solo per

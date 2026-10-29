@@ -9,8 +9,10 @@ Se il comando passa e deck copre la stessa cosa, aggiunge al contesto l'azione d
 Versioni fisse (O18.T3): le installazioni senza versione fuori da pacman (agentdeck/pinning.py) si rifiutano, salvo il
 consenso motivato AGENTDECK_LATEST_OK="<motivo>" nel comando, registrato in ~/.local/state/agentdeck/latest-consents.jsonl.
 Permessi (ADR-0001, O12.T1): AgentDeck è dell'agente, che lavora sul sistema senza chiedere; quando uno strumento tocca
-un servizio o una credenziale dell'utente (agentdeck/ownership.py) l'hook risponde permissionDecision "ask" e Claude Code
-chiede all'utente. Vale per Bash, per le modifiche di file e per gli strumenti MCP di deck.
+un servizio o una credenziale dell'utente (agentdeck/ownership.py) l'hook risponde permissionDecision "deny" con il
+motivo, e l'agente prosegue con altro. Mai "ask": dal 29/10/2026 (decisione dell'utente, piano punto 8) nessuna
+richiesta arriva a un umano come domanda che ferma la sessione; deciderà l'arbitro agentico (O19.T3). Vale per Bash,
+per le modifiche di file e per gli strumenti MCP di deck.
 Installato da deck/install.sh in /opt/agentdeck/claude. Documentazione: docs/claude-code.md
 """
 from __future__ import annotations
@@ -51,8 +53,10 @@ PINNING = ("AgentDeck guard: refused because this installs software without a fi
            "characters>\": the consent is recorded.")
 CONSENTED = ("AgentDeck: install without a fixed version allowed by your recorded consent (AGENTDECK_LATEST_OK). "
              "Note in your report which version got installed.")
-ASK = ("AgentDeck: this needs the owner's permission because {reason}. Under ADR-0001 the agent works on AgentDeck "
-       "without asking, and asks only for the owner's services and credentials.")
+ASK = ("AgentDeck: not done, because {reason}: that belongs to the owner (ADR-0001). The owner is never asked through a "
+       "permission prompt that stops the session (owner decision of 29/10/2026). Do not wait: go on with the rest of "
+       "your work, and list this in your report so the owner can decide. If it is only a reading, rewrite it without "
+       "writes or redirections to files.")
 
 
 def hint(command: str):
@@ -101,7 +105,7 @@ def main() -> int:
             consented = CONSENTED
     owner = ownership.tool_reason(tool, tool_input)
     if owner:
-        print(json.dumps({"hookSpecificOutput": {"hookEventName": "PreToolUse", "permissionDecision": "ask",
+        print(json.dumps({"hookSpecificOutput": {"hookEventName": "PreToolUse", "permissionDecision": "deny",
                                                  "permissionDecisionReason": ASK.format(reason=owner)}}))
         return 0
     if tool != "Bash":

@@ -99,6 +99,8 @@ class BuildTests(unittest.TestCase):
         self.assertEqual(s["permissions"]["defaultMode"], "bypassPermissions")  # sessioni autonome, nessun prompt
         self.assertNotIn("disableBypassPermissionsMode", s["permissions"])
         self.assertEqual(s["env"]["DISABLE_AUTOUPDATER"], "1")  # versione fissa (O18.T2)
+        self.assertEqual(s["permissions"]["additionalDirectories"], ["/"])  # tutto il sistema è consentito (29/10)
+        self.assertIn("permission_request.py", json.dumps(s["hooks"]["PermissionRequest"]))  # mai una domanda
         commands = [h["command"] for e in s["hooks"].values() for m in e for h in m["hooks"]]
         for cmd in commands:
             script = cmd.split()[-1]

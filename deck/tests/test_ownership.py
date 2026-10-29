@@ -88,15 +88,23 @@ class GuardAskTests(unittest.TestCase):
     def test_ask_for_owner_service(self):
         code, out = self.run_guard({"tool_name": "Bash",
                                     "tool_input": {"command": "sudo systemctl restart agentdeck-servizio@blog"}})
-        self.assertEqual((code, out["permissionDecision"]), (0, "ask"))
+        # mai "ask": nessuna domanda che ferma la sessione (decisione del 29/10); deny con il motivo, l'agente prosegue
+        self.assertEqual((code, out["permissionDecision"]), (0, "deny"))
         self.assertIn("ADR-0001", out["permissionDecisionReason"])
+        self.assertIn("Do not wait", out["permissionDecisionReason"])
 
     def test_ask_for_mcp_and_writes(self):
         _, out = self.run_guard({"tool_name": "mcp__deck__service_stop",
                                  "tool_input": {"name": "agentdeck-servizio@blog"}})
-        self.assertEqual(out["permissionDecision"], "ask")
+        self.assertEqual(out["permissionDecision"], "deny")
         _, out = self.run_guard({"tool_name": "Edit", "tool_input": {"file_path": "/srv/servizi/blog/app/x.py"}})
-        self.assertEqual(out["permissionDecision"], "ask")
+        self.assertEqual(out["permissionDecision"], "deny")
+
+    def test_heredoc_body_is_not_a_command(self):
+        # il caso reale del 29/10: documentazione passata a python in un heredoc, presa per comandi su un servizio
+        doc = "python3 - <<'EOF'\ntesto = '''\n  (`cd /srv/servizi/blog && git pull` chiede);\n'''\nEOF\ngit status"
+        code, out = self.run_guard({"tool_name": "Bash", "tool_input": {"command": doc}})
+        self.assertEqual((code, out), (0, None))
 
     def test_system_work_passes_without_asking(self):
         code, out = self.run_guard({"tool_name": "Edit", "tool_input": {"file_path": "/etc/systemd/x.conf"}})
@@ -140,3 +148,43 @@ class AgentTextsTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class FalsePositivesTests(unittest.TestCase):
+    """O19.T1: catene di sola lettura che chiedevano (29/10) e interventi veri che devono continuare a chiedere."""
+
+    FREE = [
+        # il comando reale mandato al proprietario il 29/10: test, systemctl cat con 2>/dev/null, ls
+        "cd /opt/agentdeck; python3 -m unittest discover -s tests -q 2>&1 | tail -4; "
+        "systemctl cat agentdeck-servizio@domus.service 2>/dev/null | grep -E \"Description|ExecStart\"; "
+        "ls /opt/agentdeck/profiles",
+        "cd /srv/servizi/domus && git log --oneline -5",
+        "ls /srv/servizi/domus 2>/dev/null",
+        "systemctl status agentdeck-servizio@domus 2>&1 | head",
+        "cat /srv/servizi/domus/LEGGIMI.md",
+        "journalctl -u agentdeck-servizio@domus -n 50 --no-pager 2>&1",
+        "jq . /srv/servizi/domus/dati/stato.json",
+        "cd /srv/servizi/domus; ls; cd /tmp; rm x",
+    ]
+    ASK = [
+        "echo x > /srv/servizi/domus/config/env",
+        "rm -rf /srv/servizi/domus/dati",
+        "sed -i s/a/b/ /srv/servizi/domus/app/x.py",
+        "systemctl restart agentdeck-servizio@domus",
+        "cat /srv/servizi/domus/config/env",
+        "cat /srv/servizi/domus/dati/secrets/baxi_token.json",
+        "cd /srv/servizi/domus && git pull",
+        "cp x /srv/servizi/domus/app/",
+        "ls /srv/servizi/domus > /tmp/elenco",
+        "cat ~/.ssh/id_ed25519",
+        "gh auth token",
+    ]
+
+    def test_read_only_chains_do_not_ask(self):
+        self.assertEqual([c for c in self.FREE if ownership.command_reason(c)], [])
+
+    def test_real_interventions_still_ask(self):
+        self.assertEqual([c for c in self.ASK if not ownership.command_reason(c)], [])
+
+    def test_service_secrets_are_named(self):
+        self.assertIn("secrets", ownership.command_reason("cat /srv/servizi/domus/config/env"))

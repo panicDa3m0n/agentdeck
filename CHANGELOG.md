@@ -4,6 +4,22 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.5.8 — 2026-10-29
+
+Ciclo 05, obiettivo O19 (piano punti 8-9), task O19.T1: nessuna richiesta di permesso all'utente, falsi positivi
+della guardia corretti.
+
+- **Mai una domanda all'utente:** la guardia risponde `deny` con il motivo invece di `ask` per i servizi e le
+  credenziali del proprietario, e l'agente prosegue; `additionalDirectories: ["/"]` rende tutto il sistema cartella
+  consentita; l'hook `PermissionRequest` approva e registra qualunque richiesta residua di Claude Code.
+- **Falsi positivi:** il corpo degli heredoc non si analizza (caso reale: documentazione presa per comandi su un
+  servizio); `2>/dev/null` e `2>&1` non sono scritture; `cd`, `pwd`, `jq`, `sort`, `cut`, `uniq` e i comandi git di
+  lettura sono letture. Più stretto dove serve: dopo un `cd` in un servizio i comandi della catena valgono per
+  quel servizio; leggere i segreti di un servizio non è libero.
+- **Prova degli agganci:** ora fa anche un `cd` fuori dalla cartella di lavoro.
+- **Test:** 4 nuovi, 308 in tutto. **Documentazione:** `docs/claude-code.md` ("Nessuna richiesta all'umano",
+  "Permessi"); regola aggiornata nel `CLAUDE.md` generato.
+
 ## 0.5.7 — 2026-10-29
 
 Ciclo 05, obiettivo O18, task O18.T3: le installazioni senza versione sono un errore (piano punto 11).

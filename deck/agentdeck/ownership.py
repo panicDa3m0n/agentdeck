@@ -9,7 +9,9 @@ riguardano solo:
 I progetti che l'utente chiede all'agente (per esempio /home/agent/frugale) non sono in questo elenco: lì l'agente
 lavora libero. Leggere non è intervenire: elenchi, letture e stato restano liberi, tranne il contenuto delle credenziali.
 
-Lo usa l'hook PreToolUse di Claude Code (claude/guard.py), che in questi casi fa chiedere il permesso all'utente.
+Lo usa l'hook PreToolUse di Claude Code (claude/guard.py), che in questi casi non procede e lo dice all'agente
+(deny con il motivo, mai una domanda che ferma la sessione: decisione del 29/10/2026). Il corpo degli heredoc non si
+analizza: è testo passato a un programma.
 È un confine di proprietà, non un sandbox: in dubbio lascia passare. I vincoli che proteggono l'accesso stanno in
 access.py. Documentazione: docs/claude-code.md, "Permessi (ADR-0001)".
 """
@@ -18,6 +20,8 @@ from __future__ import annotations
 import re
 import shlex
 from typing import Optional
+
+from . import pinning
 
 SERVICE_NAME = r"[a-z][a-z0-9-]{0,27}"
 SERVICE_DIR = re.compile(rf"/srv/servizi/({SERVICE_NAME})(?![a-z0-9-])")
@@ -28,7 +32,12 @@ TOKEN_COMMANDS = re.compile(r"\bgh\s+auth\s+(?:token|status\b[^;&|\n]*--show-tok
 UNIT_VERBS = re.compile(r"\b(?:start|stop|restart|try-restart|reload|reload-or-restart|enable|disable|mask|unmask|kill|edit|"
                         r"revert|set-property)\b")
 READ_ONLY = {"ls", "cat", "head", "tail", "less", "more", "stat", "file", "wc", "grep", "rg", "find", "du", "diff", "cmp",
-             "sha256sum", "md5sum", "tree", "readlink", "realpath", "journalctl", "echo", "printf", "true", "test", "["}
+             "sha256sum", "md5sum", "tree", "readlink", "realpath", "journalctl", "echo", "printf", "true", "test", "[",
+             "cd", "pwd", "pushd", "popd", "jq", "sort", "uniq", "cut", "nl", "column", "basename", "dirname"}
+READ_ONLY_GIT = re.compile(r"\bgit\b(?:\s+-C\s+\S+)?\s+(?:log|status|diff|show|blame|branch|remote|rev-parse|ls-files)\b")
+# reindirizzamenti che non scrivono file: verso /dev/null o fra canali (O19.T1, falso positivo del 29/10)
+HARMLESS_REDIRECT = re.compile(r"(?:\d|&)?>{1,2}\s*/dev/null|\d?>&\d|<\s*/dev/null")
+SERVICE_SECRETS = re.compile(r"/srv/servizi/[a-z][a-z0-9-]*/(?:[^\s;&|]*/)?(?:\.?secrets?\b|[^\s;&|]*\.key\b|config/env\b)")
 READ_ONLY_SYSTEMCTL = re.compile(r"\bsystemctl\b[^;&|\n]*\b(?:status|show|is-active|is-enabled|is-failed|cat|list-units|"
                                  r"list-unit-files|list-dependencies)\b")
 SECRET_READERS = {"cat", "head", "tail", "less", "more", "grep", "rg", "cp", "scp", "base64", "xxd", "od"}
@@ -55,9 +64,10 @@ def _program(segment: str) -> str:
 
 
 def _reads_only(segment: str) -> bool:
+    segment = HARMLESS_REDIRECT.sub(" ", segment)
     if re.search(r">|\btee\b|-delete\b|-exec\b|\bsed\s+-i\b", segment):
         return False
-    if READ_ONLY_SYSTEMCTL.search(segment):
+    if READ_ONLY_SYSTEMCTL.search(segment) or READ_ONLY_GIT.search(segment):
         return True
     return _program(segment) in READ_ONLY
 
@@ -69,13 +79,19 @@ def _service(text: str) -> Optional[str]:
 
 def command_reason(command: str) -> Optional[str]:
     """Perché un comando Bash interviene su qualcosa dell'utente, o None se è lavoro di sistema libero."""
-    for segment in _segments(command):
+    inside = None  # il servizio in cui un cd ha portato la catena: i comandi dopo lavorano lì
+    for segment in _segments(pinning.strip_heredocs(command)):  # il corpo di un heredoc è testo, non comandi
         if TOKEN_COMMANDS.search(segment):
             return "it reads or changes the owner's credentials (GitHub login)"
         if CREDENTIALS.search(segment) and (not _reads_only(segment) or _program(segment) in SECRET_READERS):
             return "it touches the owner's credentials (Claude login, SSH keys or GitHub login)"
         name = _service(segment)
+        if _program(segment) in ("cd", "pushd"):
+            inside = name
+            continue
         if name is None:
+            if inside and _program(segment) != "deck" and not _reads_only(segment):
+                return f"it changes files of the owner's service {inside}"
             continue
         if SERVICE_UNIT.search(segment) and re.search(r"\bsystemctl\b", segment) and UNIT_VERBS.search(segment):
             return f"it starts, stops or changes the owner's service {name}"
@@ -83,6 +99,8 @@ def command_reason(command: str) -> Optional[str]:
             return f"it starts, stops or changes the owner's service {name}"
         if _program(segment) == "deck":
             continue  # le altre chiamate a deck leggono, e deck protegge da sé le sue azioni
+        if SERVICE_SECRETS.search(segment) and _program(segment) in SECRET_READERS:
+            return f"it reads the secrets of the owner's service {name}"
         if not _reads_only(segment):
             return f"it changes files of the owner's service {name}"
     return None

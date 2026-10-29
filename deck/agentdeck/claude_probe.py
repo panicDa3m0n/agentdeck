@@ -19,7 +19,7 @@ from pathlib import Path
 from typing import Optional
 
 CANARY = "echo agentdeck-deny-canary"   # bloccato da Bash(*agentdeck-deny-canary*) nelle impostazioni gestite
-ALLOWED = "echo agentdeck-probe-ok journalctl"  # journalctl: la guardia aggiunge il rimando a deck logs
+ALLOWED = "cd /opt && echo agentdeck-probe-ok journalctl"  # journalctl: la guardia aggiunge il rimando a deck logs
 PROMPT = "Sei la prova degli agganci di AgentDeck."
 TIMEOUT_S = 180
 
