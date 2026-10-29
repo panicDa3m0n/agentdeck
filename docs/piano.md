@@ -16,6 +16,16 @@ che parte dal punto 10. Indice: [README.md](README.md).
 6. Punti 4 e 5: nuovi componenti `deck` e sincronizzazione dei profili.
 7. Alla fine: punto 2-bis (safe mode), poi punto 2 (backup). Il punto 6 è fuori ambito.
 
+## Stato e parti da rivedere alla fine
+
+Aggiornato dall'agente durante lo sviluppo. L'utente ha chiesto (29/10/2026) di annotare qui le parti che l'agente non
+può gestire, per rivederle insieme alla fine.
+
+- **Fatti:** punto 10 e punto 11 (obiettivo O18, v0.5.5-0.5.7); dei punti 8 e 9 la parte "nessuna domanda all'utente"
+  (O19.T1, v0.5.8: deny con il motivo al posto delle domande, `/` consentita, hook `PermissionRequest` che registra).
+- **Da rivedere alla fine con l'utente:** la tabella delle richieste con `deck requests` (O19.T2) e l'arbitro agentico
+  (O19.T3). Non sviluppati dall'agente in questa sessione; restano annotati nella governance (O19.T2 bloccata, N69).
+
 ## Punto 10 — Sviluppo di AgentDeck sulla Deck (DECISO)
 
 Oggi il repository e `install.sh` stanno sul Mac: gli agenti della Deck non possono sviluppare il proprio sistema.

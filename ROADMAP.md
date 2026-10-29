@@ -10,10 +10,10 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O19` Le richieste di permesso vanno a un arbitro agentico e non bloccano mai l'agente; tabella delle richieste in dashboard (piano punti 8-9) — 3 task: 1 completate, 0 in corso, 2 da fare, 0 bloccate
+- **Obiettivo attivo:** `O19` Le richieste di permesso vanno a un arbitro agentico e non bloccano mai l'agente; tabella delle richieste in dashboard (piano punti 8-9) — 3 task: 1 completate, 0 in corso, 1 da fare, 1 bloccate
 - **Task attiva:** —
-- **Ultima task gestita:** `O19.T1` — completata — Mai più domande all'utente (deny al posto di ask, root consentita, hook PermissionRequest); heredoc e letture non più falsi positivi; v0.5.8
-- **Ultimo aggiornamento:** 2026-10-29 21:02
+- **Ultima task gestita:** `O19.T2` — bloccata — Non sviluppata dall'agente in questa sessione: da rivedere con l'utente alla fine del piano
+- **Ultimo aggiornamento:** 2026-10-29 21:29
 
 ## Richieste attive
 
@@ -122,10 +122,13 @@ _nessuna task. Aggiungile con `wf.sh task-add`._
 - [x] `O19.T1` Falsi positivi della guardia sui servizi e le credenziali dell'utente — *perimetro:* `deck/agentdeck/ownership.py, deck/claude/, deck/tests/, docs/`
   *gate previsto:* Le catene di sola lettura (cd, test, systemctl cat o status di agentdeck-servizio@) non chiedono più; gli interventi veri sì; test con i casi osservati il 29/10; documentazione. · *gate confermato:* ✔ Mai più domande all'utente (deny al posto di ask, root consentita, hook PermissionRequest); heredoc e letture non più falsi positivi; v0.5.8
   *rischio:* 25/100 — Allargare troppo farebbe passare senza domanda un intervento vero su un servizio o una credenziale del proprietario; test su entrambi i lati.
-- [ ] `O19.T2` Tabella delle richieste e deck requests, con il numero in deck status — *perimetro:* `deck/, docs/`
-  *gate previsto:* SQLite di sistema con id, stato, sessione, messaggio, comando, motivo, decisore, decisione, scadenza, solleciti; deck requests elenca, mostra, annulla, sollecita e attende con timeout, anche via MCP; avviso in deck status con le richieste attive; test; documentazione.
+- [!] `O19.T2` Tabella delle richieste e deck requests, con il numero in deck status — *perimetro:* `deck/, docs/`
+  *gate previsto:* SQLite di sistema con id, stato, sessione, messaggio, comando, motivo, decisore, decisione, scadenza, solleciti; deck requests elenca, mostra, annulla, sollecita e attende con timeout, anche via MCP; avviso in deck status con le richieste attive; test; documentazione. · *blocco:* ✖ Non sviluppata dall'agente in questa sessione: da rivedere con l'utente alla fine del piano
+  *rischio:* 25/100 — Componente nuovo e testato; la guardia in più scrive le richieste in un database: un errore lì non deve mai bloccare un comando.
+  *documenti:* [piano.md](docs/piano.md)
 - [ ] `O19.T3` L'arbitro agentico decide al posto dell'umano senza bloccare l'agente — *perimetro:* `deck/, docs/, servizi e impostazioni di Claude Code sulla Deck`
   *gate previsto:* La guardia e l'hook PermissionRequest mandano le richieste all'arbitro (istanza senza memorie, prompt del sistema, trascrizione come dato); via rapida di pochi secondi, poi differita con deny e ritorno della decisione, approvazione monouso legata al comando; inoltro al proprietario segnato in attesa finché non c'è Telegram; test; prova reale; documentazione.
+  *annotazioni:* `N69`
 
 ## Annotazioni
 
@@ -142,3 +145,4 @@ _Una riga per nota, sempre legata a una task. `wf.sh notes` per leggerle._
 - `N66` (`O15.T3`) Sulla Deck (28/10, sessione gestione-deck, decisione dell'utente): tutte le sessioni Claude Code in bypassPermissions (managed-settings senza disableBypassPermissionsMode, defaultMode e skipDangerousModePermissionPrompt) e ogni sessione aperta da deck claude è un servizio suo, agentdeck-sessione@<nome>. Fatto direttamente in /opt/agentdeck; portato nel repository il 29/10 dalla Deck, con docs/claude-code.md e docs/interfacce.md; 270 test verdi sulla Deck. — 2026-10-29 20:18
 - `N67` (`O15.T3`) Piano del 29/10 deciso con l'utente (docs/piano.md): sviluppo di AgentDeck sulla Deck con installazione e revert da qui, versioni fissate (Claude Code, niente installazioni latest senza consenso), arbitro agentico al posto delle domande della guardia senza mai bloccare l'agente, tabella delle richieste in dashboard, agente interno MiniMax con intermediario, Telegram, Brain. Da tradurre in obiettivi con un nuovo ciclo. O15.T3 resta aperta (prova al tocco). — 2026-10-29 20:18
 - `N68` (`O18.T3`) Falso positivo di claude/after.py (29/10): un comando che conteneva solo testo 'pacman -S' fra virgolette (casi di prova di O18.T3) ha fatto dire all'hook che erano stati installati pacchetti; non è stato installato nulla. Andrebbe controllato se pacman è davvero partito (log o database) invece del testo del comando. — 2026-10-29 20:52
+- `N69` (`O19.T3`) Da rivedere con l'utente alla fine del piano, insieme a O19.T2: non sviluppata dall'agente in questa sessione (29/10). Già fatto in O19.T1: nessuna domanda all'utente, deny con motivo, hook PermissionRequest che registra. — 2026-10-29 21:29

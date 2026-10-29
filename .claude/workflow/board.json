@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-26 11:36",
-  "updated": "2026-10-29 21:02",
+  "updated": "2026-10-29 21:29",
   "objectives": [
     {
       "id": "O12",
@@ -290,11 +290,13 @@
           "title": "Tabella delle richieste e deck requests, con il numero in deck status",
           "scope": "deck/, docs/",
           "gate_pre": "SQLite di sistema con id, stato, sessione, messaggio, comando, motivo, decisore, decisione, scadenza, solleciti; deck requests elenca, mostra, annulla, sollecita e attende con timeout, anche via MCP; avviso in deck status con le richieste attive; test; documentazione.",
-          "gate_post": "",
-          "state": "todo",
-          "risk": null,
-          "risk_why": "",
-          "docs": []
+          "gate_post": "Non sviluppata dall'agente in questa sessione: da rivedere con l'utente alla fine del piano",
+          "state": "blocked",
+          "risk": 25,
+          "risk_why": "Componente nuovo e testato; la guardia in più scrive le richieste in un database: un errore lì non deve mai bloccare un comando.",
+          "docs": [
+            "docs/piano.md"
+          ]
         },
         {
           "id": "O19.T3",
@@ -388,6 +390,13 @@
       "text": "Falso positivo di claude/after.py (29/10): un comando che conteneva solo testo 'pacman -S' fra virgolette (casi di prova di O18.T3) ha fatto dire all'hook che erano stati installati pacchetti; non è stato installato nulla. Andrebbe controllato se pacman è davvero partito (log o database) invece del testo del comando.",
       "docs": [],
       "created": "2026-10-29 20:52"
+    },
+    {
+      "id": "N69",
+      "task": "O19.T3",
+      "text": "Da rivedere con l'utente alla fine del piano, insieme a O19.T2: non sviluppata dall'agente in questa sessione (29/10). Già fatto in O19.T1: nessuna domanda all'utente, deny con motivo, hook PermissionRequest che registra.",
+      "docs": [],
+      "created": "2026-10-29 21:29"
     }
   ],
   "active": {
@@ -401,9 +410,9 @@
     "gate_done": ""
   },
   "previous": {
-    "task": "O19.T1",
-    "state": "done",
-    "note": "Mai più domande all'utente (deny al posto di ask, root consentita, hook PermissionRequest); heredoc e letture non più falsi positivi; v0.5.8"
+    "task": "O19.T2",
+    "state": "blocked",
+    "note": "Non sviluppata dall'agente in questa sessione: da rivedere con l'utente alla fine del piano"
   },
   "cycle": {
     "n": 5,
@@ -414,6 +423,6 @@
     "objective": 19,
     "cycle": 5,
     "request": 6,
-    "note": 68
+    "note": 69
   }
 }
