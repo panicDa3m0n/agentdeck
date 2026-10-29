@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-26 11:36",
-  "updated": "2026-10-29 22:46",
+  "updated": "2026-10-29 22:47",
   "objectives": [
     {
       "id": "O12",
@@ -376,6 +376,61 @@
       ],
       "closed_at": "2026-10-29 22:46",
       "closed_note": "Approvato dall'utente il 29/10: ponte Telegram installato e provato con un finto Telegram; manca la prova con il bot vero (token, R8)"
+    },
+    {
+      "id": "O22",
+      "title": "Il Brain: componente del sistema dedicato al cervello dell'agente, memorie e contesto automatico (piano punto 7)",
+      "gate": "Comando brain e server MCP brain separati da deck, a componenti isolati; memorie in SQLite come piccoli pacchetti JSON con provenienza (sessione, messaggio), ricerca, salvataggio, modifica, deprecazione, revisioni e accorpamenti; pacchetti di contesto automatici (bacheca, sessioni, memorie) iniettati dagli hook come dati; ricerca ibrida con embedding e reranker locali scelti dal proprietario (INV-7 aggiornata con ADR); manutenzione ciclica; test; documentazione; versione pubblicata.",
+      "state": "open",
+      "docs": [],
+      "tasks": [
+        {
+          "id": "O22.T1",
+          "title": "brain e la memoria: SQLite, pacchetti con provenienza, ricerca testuale, salvataggio, modifica e revisioni",
+          "scope": "deck/, docs/",
+          "gate_pre": "Comando brain e server MCP brain (strumenti mcp__brain__*) sul motore di deck; componente memory isolato: SQLite con FTS5, pacchetti JSON piccoli con id, tipo, testo, etichette, sessione e messaggio di origine, stato; search, show, save, edit, deprecate, supersede, merge con collegamenti per id; testi come dati (INV-4); test; documentazione.",
+          "gate_post": "Non sviluppata dall'agente in questa sessione: da rivedere con l'utente alla fine del piano",
+          "state": "blocked",
+          "risk": 15,
+          "risk_why": "Codice nuovo e isolato, un database nuovo dell'agente; non tocca sistema, rete né sessioni esistenti.",
+          "docs": [
+            "docs/piano.md"
+          ]
+        },
+        {
+          "id": "O22.T2",
+          "title": "Pacchetti di contesto automatici: bacheca, sessioni recenti, memorie richiamate",
+          "scope": "deck/, docs/",
+          "gate_pre": "Hook di inizio sessione e di turno che aggiungono come dati la bacheca compressa (ora leggibile, stato, avvisi), le ultime 3 sessioni (id, date, riassunto o titolo) e le memorie richiamate con il numero delle scartate; comandi brain per esplorare bacheca e sessioni; test; documentazione.",
+          "gate_post": "",
+          "state": "todo",
+          "risk": null,
+          "risk_why": "",
+          "docs": []
+        },
+        {
+          "id": "O22.T3",
+          "title": "Ricerca ibrida con embedding e reranker locali, scelti con il proprietario",
+          "scope": "deck/, docs/, modelli locali sulla Deck",
+          "gate_pre": "ADR che aggiorna INV-7 (modelli locali piccoli ammessi, ciascuno deciso con il proprietario); proposta di modelli con dimensioni e tempi misurati sulla Deck; dopo il sì: installazione a versione fissa, ricerca ibrida con fonte di provenienza, reranker che sceglie le N memorie; test; documentazione.",
+          "gate_post": "",
+          "state": "todo",
+          "risk": null,
+          "risk_why": "",
+          "docs": []
+        },
+        {
+          "id": "O22.T4",
+          "title": "Manutenzione ciclica del Brain",
+          "scope": "deck/, docs/, timer sulla Deck",
+          "gate_pre": "Timer che controlla integrità del database, propone accorpamenti di memorie simili e deprecazioni di memorie vecchie, e sincronizza nel repository i profili dell'adattatore scritti dagli agenti (punto 5); registro; test; documentazione.",
+          "gate_post": "",
+          "state": "todo",
+          "risk": null,
+          "risk_why": "",
+          "docs": []
+        }
+      ]
     }
   ],
   "requests": [
@@ -485,7 +540,7 @@
     }
   ],
   "active": {
-    "objective": "",
+    "objective": "O22",
     "task": "",
     "phase": "idle",
     "risk": null,
@@ -495,9 +550,9 @@
     "gate_done": ""
   },
   "previous": {
-    "task": "O21.T1",
-    "state": "done",
-    "note": "Ponte Telegram attivo: long polling, solo la chat del proprietario, compiti all'agente e rapporti in chat; deck telegram; finto Telegram; v0.5.12"
+    "task": "O22.T1",
+    "state": "blocked",
+    "note": "Non sviluppata dall'agente in questa sessione: da rivedere con l'utente alla fine del piano"
   },
   "cycle": {
     "n": 5,
@@ -505,7 +560,7 @@
     "slug": "il-sistema-dell-agente-permessi-servizi-"
   },
   "counters": {
-    "objective": 21,
+    "objective": 22,
     "cycle": 5,
     "request": 8,
     "note": 69

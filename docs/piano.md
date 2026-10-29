@@ -23,8 +23,11 @@ può gestire, per rivederle insieme alla fine.
 
 - **Fatti:** punto 10 e punto 11 (obiettivo O18, v0.5.5-0.5.7); dei punti 8 e 9 la parte "nessuna domanda all'utente"
   (O19.T1, v0.5.8: deny con il motivo al posto delle domande, `/` consentita, hook `PermissionRequest` che registra).
+- **Fatti dopo:** agente interno (O20, v0.5.9-0.5.11) e Telegram (O21, v0.5.12), chiusi come bloccati in attesa
+  della prova reale con la chiave MiniMax (R7) e con il bot (R8).
 - **Da rivedere alla fine con l'utente:** la tabella delle richieste con `deck requests` (O19.T2) e l'arbitro agentico
-  (O19.T3). Non sviluppati dall'agente in questa sessione; restano annotati nella governance (O19.T2 bloccata, N69).
+  (O19.T3); il Brain (O22: memoria, pacchetti di contesto, ricerca ibrida, manutenzione). Non sviluppati dall'agente
+  in questa sessione; restano annotati nella governance (O19.T2 e O22.T1 bloccate, N69).
 
 ## Punto 10 — Sviluppo di AgentDeck sulla Deck (DECISO)
 

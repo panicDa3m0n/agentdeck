@@ -1609,3 +1609,10 @@
 {"at": "2026-10-29 21:45", "testo": "VERSIONE 0.5.5 (O21.T1)"}
 {"at": "2026-10-29 21:45", "testo": "GATE OBIETTIVO APERTO O21"}
 {"at": "2026-10-29 22:46", "testo": "OBIETTIVO CHIUSO O21 (completo) — Approvato dall'utente il 29/10: ponte Telegram installato e provato con un finto Telegram; manca la prova con il bot vero (token, R8)"}
+{"at": "2026-10-29 22:46", "testo": "OBIETTIVO AGGIUNTO O22 — Il Brain: componente del sistema dedicato al cervello dell'agente, memorie e contesto automatico (piano punto 7)"}
+{"at": "2026-10-29 22:46", "testo": "TASK AGGIUNTA O22.T1 in O22 — brain e la memoria: SQLite, pacchetti con provenienza, ricerca testuale, salvataggio, modifica e revisioni"}
+{"at": "2026-10-29 22:46", "testo": "TASK AGGIUNTA O22.T2 in O22 — Pacchetti di contesto automatici: bacheca, sessioni recenti, memorie richiamate"}
+{"at": "2026-10-29 22:46", "testo": "TASK AGGIUNTA O22.T3 in O22 — Ricerca ibrida con embedding e reranker locali, scelti con il proprietario"}
+{"at": "2026-10-29 22:46", "testo": "TASK AGGIUNTA O22.T4 in O22 — Manutenzione ciclica del Brain"}
+{"at": "2026-10-29 22:46", "testo": "TASK APERTA O22.T1 — brain e la memoria: SQLite, pacchetti con provenienza, ricerca testuale, salvataggio, modifica e revisioni | perimetro: deck/, docs/ | gate: Comando brain e server MCP brain (strumenti mcp__brain__*) sul motore di deck; componente memory isolato: SQLite con FTS5, pacchetti JSON piccoli con id, tipo, testo, etichette, sessione e messaggio di origine, stato; search, show, save, edit, deprecate, supersede, merge con collegamenti per id; testi come dati (INV-4); test; documentazione. | rischio: 15"}
+{"at": "2026-10-29 22:47", "testo": "TASK CHIUSA O22.T1 — bloccata: Non sviluppata dall'agente in questa sessione: da rivedere con l'utente alla fine del piano [docs/piano.md]"}

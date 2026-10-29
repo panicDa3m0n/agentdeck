@@ -10,10 +10,10 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** —
+- **Obiettivo attivo:** `O22` Il Brain: componente del sistema dedicato al cervello dell'agente, memorie e contesto automatico (piano punto 7) — 4 task: 0 completate, 0 in corso, 3 da fare, 1 bloccate
 - **Task attiva:** —
-- **Ultima task gestita:** `O21.T1` — completata — Ponte Telegram attivo: long polling, solo la chat del proprietario, compiti all'agente e rapporti in chat; deck telegram; finto Telegram; v0.5.12
-- **Ultimo aggiornamento:** 2026-10-29 22:46
+- **Ultima task gestita:** `O22.T1` — bloccata — Non sviluppata dall'agente in questa sessione: da rivedere con l'utente alla fine del piano
+- **Ultimo aggiornamento:** 2026-10-29 22:47
 
 ## Richieste attive
 
@@ -158,6 +158,21 @@ _nessuna task. Aggiungile con `wf.sh task-add`._
 - [x] `O21.T1` Ponte Telegram: messaggi del proprietario all'agente interno, rapporti al proprietario — *perimetro:* `deck/, docs/, servizio agentdeck-telegram sulla Deck`
   *gate previsto:* Servizio agentdeck-telegram con long polling, solo il chat id autorizzato, compiti all'agente interno e rapporti in risposta, rapporti dei controlli automatici inviati da soli, mittenti sconosciuti registrati; deck telegram con stato e invio; token in ~/.config/agentdeck/telegram.json (600); provato con un finto Telegram; documentazione. · *gate confermato:* ✔ Ponte Telegram attivo: long polling, solo la chat del proprietario, compiti all'agente e rapporti in chat; deck telegram; finto Telegram; v0.5.12
   *rischio:* 25/100 — Servizio nuovo che accetta istruzioni da fuori: solo dal chat id del proprietario, nessuna porta esposta, token solo sulla Deck.
+
+### `O22` Il Brain: componente del sistema dedicato al cervello dell'agente, memorie e contesto automatico (piano punto 7) — in corso
+
+**Gate obiettivo:** Comando brain e server MCP brain separati da deck, a componenti isolati; memorie in SQLite come piccoli pacchetti JSON con provenienza (sessione, messaggio), ricerca, salvataggio, modifica, deprecazione, revisioni e accorpamenti; pacchetti di contesto automatici (bacheca, sessioni, memorie) iniettati dagli hook come dati; ricerca ibrida con embedding e reranker locali scelti dal proprietario (INV-7 aggiornata con ADR); manutenzione ciclica; test; documentazione; versione pubblicata.
+
+- [!] `O22.T1` brain e la memoria: SQLite, pacchetti con provenienza, ricerca testuale, salvataggio, modifica e revisioni — *perimetro:* `deck/, docs/`
+  *gate previsto:* Comando brain e server MCP brain (strumenti mcp__brain__*) sul motore di deck; componente memory isolato: SQLite con FTS5, pacchetti JSON piccoli con id, tipo, testo, etichette, sessione e messaggio di origine, stato; search, show, save, edit, deprecate, supersede, merge con collegamenti per id; testi come dati (INV-4); test; documentazione. · *blocco:* ✖ Non sviluppata dall'agente in questa sessione: da rivedere con l'utente alla fine del piano
+  *rischio:* 15/100 — Codice nuovo e isolato, un database nuovo dell'agente; non tocca sistema, rete né sessioni esistenti.
+  *documenti:* [piano.md](docs/piano.md)
+- [ ] `O22.T2` Pacchetti di contesto automatici: bacheca, sessioni recenti, memorie richiamate — *perimetro:* `deck/, docs/`
+  *gate previsto:* Hook di inizio sessione e di turno che aggiungono come dati la bacheca compressa (ora leggibile, stato, avvisi), le ultime 3 sessioni (id, date, riassunto o titolo) e le memorie richiamate con il numero delle scartate; comandi brain per esplorare bacheca e sessioni; test; documentazione.
+- [ ] `O22.T3` Ricerca ibrida con embedding e reranker locali, scelti con il proprietario — *perimetro:* `deck/, docs/, modelli locali sulla Deck`
+  *gate previsto:* ADR che aggiorna INV-7 (modelli locali piccoli ammessi, ciascuno deciso con il proprietario); proposta di modelli con dimensioni e tempi misurati sulla Deck; dopo il sì: installazione a versione fissa, ricerca ibrida con fonte di provenienza, reranker che sceglie le N memorie; test; documentazione.
+- [ ] `O22.T4` Manutenzione ciclica del Brain — *perimetro:* `deck/, docs/, timer sulla Deck`
+  *gate previsto:* Timer che controlla integrità del database, propone accorpamenti di memorie simili e deprecazioni di memorie vecchie, e sincronizza nel repository i profili dell'adattatore scritti dagli agenti (punto 5); registro; test; documentazione.
 
 ## Annotazioni
 
