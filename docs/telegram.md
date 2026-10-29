@@ -27,7 +27,9 @@ proprietario: per esempio un agente che vuole avvisarlo di qualcosa.
 
 ## Configurazione
 
-Il proprietario crea il bot con BotFather e scrive sulla Deck `~/.config/agentdeck/telegram.json`, permessi 600:
+Il proprietario crea il bot con BotFather e consegna token e chat id con il link monouso di
+`deck secret request name=telegram` ([segreti.md](segreti.md)), che scrive `~/.config/agentdeck/telegram.json`,
+permessi 600:
 
 ```json
 {"token": "<token del bot>", "chat_id": <il proprio chat id>}

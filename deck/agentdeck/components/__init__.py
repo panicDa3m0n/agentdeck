@@ -8,6 +8,7 @@ from .network import Network
 from .obligations import Obligations
 from .protocol_info import ProtocolInfo
 from .release import Release
+from .secret import Secret
 from .service import Service
 from .snapshot import Snapshot
 from .status import Status
@@ -19,4 +20,4 @@ from .update import Update
 def all_components() -> list:
     """I componenti attivi. Un componente nuovo si aggiunge qui."""
     return [Agent(), Claude(), ClaudeVersion(), Home(), Logs(), Network(), Obligations(), ProtocolInfo(), Release(),
-            Service(), Snapshot(), Status(), Telegram(), Term(), Update()]
+            Secret(), Service(), Snapshot(), Status(), Telegram(), Term(), Update()]

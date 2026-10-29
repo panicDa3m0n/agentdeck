@@ -37,7 +37,7 @@ durata: niente contenuti, niente chiave.
 
 **Configurazione**, `~/.config/agentdeck/agente.json`, tutta facoltativa: `upstream`, `model`, `key_file`, `port`,
 `strip_params`, `strip_headers`, `timeout_s`. **Chiave:** `~/.config/agentdeck/minimax.key`, permessi 600, scritta dal
-proprietario sulla Deck; letta a ogni richiesta, mai nel repository (INV-6), mai nei registri. Senza chiave
+proprietario sulla Deck con il link monouso di `deck secret request name=minimax` ([segreti.md](segreti.md)); letta a ogni richiesta, mai nel repository (INV-6), mai nei registri. Senza chiave
 l'intermediario risponde 401 con un messaggio chiaro.
 
 **Installazione:** `deck release install` installa l'unità, la abilita e la riavvia a ogni versione, e tra le

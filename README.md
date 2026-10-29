@@ -43,6 +43,7 @@ L'indice completo è in [docs/README.md](docs/README.md).
 | [docs/protocollo.md](docs/protocollo.md) | Protocollo dell'interfaccia agentica: schermate, azioni, conferme, autoprompting |
 | [docs/deck.md](docs/deck.md) | Il motore `deck`: uso, server MCP, codice, installazione, nuovi componenti |
 | [docs/brain.md](docs/brain.md) | Il Brain: la memoria dell'agente (`brain`), ricerca, revisioni, collegamenti |
+| [docs/segreti.md](docs/segreti.md) | Segreti del proprietario consegnati con un link monouso nella rete di casa (`deck secret`) |
 | [docs/adattatore.md](docs/adattatore.md) | L'adattatore dei programmi interattivi (`deck term`) e i profili |
 | [docs/obblighi.md](docs/obblighi.md) | Gli obblighi che il sistema dà all'agente (`deck obligations`) |
 | [docs/servizi.md](docs/servizi.md) | L'area dei servizi ospitati dalla Deck (`/srv/servizi`) |

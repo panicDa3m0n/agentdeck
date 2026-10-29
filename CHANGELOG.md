@@ -4,6 +4,20 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.5.14 — 2026-10-30
+
+Ciclo 05, nuovo obiettivo O23 (agenti di background via MiniMax, richiesta del proprietario del 30/10), task O23.T1:
+i segreti del proprietario arrivano sulla Deck senza passare dalla chat.
+
+- **`deck secret`:** mostra solo se la chiave MiniMax e la configurazione del bot Telegram ci sono (dimensione,
+  permessi, data); `request name=minimax|telegram` apre un link web monouso, `cancel` lo chiude.
+- **`agentdeck/secret_drop.py`**, unità a tempo `agentdeck-segreto`: server solo sull'indirizzo privato di casa
+  (INV-5), token da 192 bit, 15 minuti, un solo valore valido, al massimo 5 valori sbagliati e 20 indirizzi sbagliati;
+  scrittura atomica 600; il valore mai in schermate, registri, argomenti dei processi o chat (INV-4, INV-6).
+- **Regola degli agenti:** "Secrets of the owner" nel `CLAUDE.md` di sistema; `/secret` tra le schermate.
+- **Test:** 14 nuovi, con un server vero su 127.0.0.1; 372 in tutto. **Documentazione:** `docs/segreti.md`, nuovo,
+  nell'indice; `docs/deck.md`, `docs/agente-interno.md`, `docs/telegram.md`, `README.md`.
+
 ## 0.5.13 — 2026-10-29
 
 Ciclo 05, obiettivo O22 (piano punto 7), task O22.T1, ripresa su richiesta del proprietario: il Brain e la memoria.

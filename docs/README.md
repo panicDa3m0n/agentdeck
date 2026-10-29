@@ -47,6 +47,9 @@ documento (invariante INV-9). Quando si modifica il codice, si aggiorna il docum
 - [brain.md](brain.md): il Brain, la memoria dell'agente (`brain`, `brain mcp`): pacchetti piccoli in SQLite con
   provenienza, ricerca testuale, revisioni, sostituzioni e accorpamenti, nessun segreto. Codice:
   [../deck/agentdeck/brain/](../deck/agentdeck/brain/__init__.py).
+- [segreti.md](segreti.md): come il proprietario consegna i segreti (chiave MiniMax, bot Telegram) con un link web
+  monouso nella rete di casa, senza passare dalla chat (`deck secret`). Codice:
+  [../deck/agentdeck/secret_drop.py](../deck/agentdeck/secret_drop.py).
 - [obblighi.md](obblighi.md): gli obblighi che il sistema dà all'agente (`deck obligations`), dall'hook di pacman
   al campo `obligations` di ogni schermata. Codice: [../deck/agentdeck/obligations.py](../deck/agentdeck/obligations.py).
 - [interfacce.md](interfacce.md): le interfacce effimere sullo schermo della Deck: le sette regole dello stile,

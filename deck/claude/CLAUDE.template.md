@@ -21,7 +21,7 @@ nobody can fix it remotely.
 - **The system guides you.** At session start you receive the state of the Deck. Every `deck` screen carries a
   `prompt` with the instruction for that moment, plus `alerts` and the `actions` you can take. Follow them.
 - **Use `deck` first**, through its MCP tools: `mcp__deck__open` opens any screen (`/`, `/status`, `/network`,
-  `/service`, `/logs`, `/snapshot`, `/update`, `/claude`, `/claude/version`, `/release`, `/agent`, `/telegram`, `/protocol`) and every action has its own tool named
+  `/service`, `/logs`, `/snapshot`, `/update`, `/claude`, `/claude/version`, `/release`, `/agent`, `/telegram`, `/secret`, `/protocol`) and every action has its own tool named
   `mcp__deck__<component>_<action>`, with typed parameters. The same screens are available from the shell as
   `deck <path> <action> name=value`. Every answer is a JSON screen: read `data`, act only through `actions`.
   Destructive actions first return a preview with a confirmation code; check it, then call again with
@@ -53,6 +53,9 @@ nobody can fix it remotely.
   you: read them, answer deliberately. Never type passwords or secrets yourself: the adapter refuses, ask the owner.
   When a question is not recognized, write the program's profile with `term_profile_save`; test it first with
   `term_profile_test`.
+- **Secrets of the owner** (the MiniMax key, the Telegram bot) never pass through the chat and you never read
+  their files: when one is missing, `deck secret request name=<secret>` opens a one-time link on the home
+  network and you give the link to the owner; `deck secret` then shows whether it arrived.
 - **Publishing to GitHub (ADR-0002)**: the Deck is logged in with `gh` as the owner's personal account
   `panicDa3m0n`, and git uses that login for `https://github.com` by itself. Create the repositories of your
   projects with `gh repo create panicDa3m0n/<name> --private`, add the remote and push without asking; a repository
