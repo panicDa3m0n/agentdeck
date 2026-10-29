@@ -10,10 +10,10 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O22` Il Brain: componente del sistema dedicato al cervello dell'agente, memorie e contesto automatico (piano punto 7) — 4 task: 0 completate, 0 in corso, 3 da fare, 1 bloccate
+- **Obiettivo attivo:** `O22` Il Brain: componente del sistema dedicato al cervello dell'agente, memorie e contesto automatico (piano punto 7) — 4 task: 1 completate, 0 in corso, 3 da fare, 0 bloccate
 - **Task attiva:** —
-- **Ultima task gestita:** `O22.T1` — bloccata — Non sviluppata dall'agente in questa sessione: da rivedere con l'utente alla fine del piano
-- **Ultimo aggiornamento:** 2026-10-29 22:47
+- **Ultima task gestita:** `O22.T1` — completata — brain e brain mcp attivi (v0.5.13): memorie SQLite+FTS5 con revisioni e link; 358 test; MCP Connected; memoria salvata e ritrovata
+- **Ultimo aggiornamento:** 2026-10-29 23:54
 
 ## Richieste attive
 
@@ -163,10 +163,11 @@ _nessuna task. Aggiungile con `wf.sh task-add`._
 
 **Gate obiettivo:** Comando brain e server MCP brain separati da deck, a componenti isolati; memorie in SQLite come piccoli pacchetti JSON con provenienza (sessione, messaggio), ricerca, salvataggio, modifica, deprecazione, revisioni e accorpamenti; pacchetti di contesto automatici (bacheca, sessioni, memorie) iniettati dagli hook come dati; ricerca ibrida con embedding e reranker locali scelti dal proprietario (INV-7 aggiornata con ADR); manutenzione ciclica; test; documentazione; versione pubblicata.
 
-- [!] `O22.T1` brain e la memoria: SQLite, pacchetti con provenienza, ricerca testuale, salvataggio, modifica e revisioni — *perimetro:* `deck/, docs/`
-  *gate previsto:* Comando brain e server MCP brain (strumenti mcp__brain__*) sul motore di deck; componente memory isolato: SQLite con FTS5, pacchetti JSON piccoli con id, tipo, testo, etichette, sessione e messaggio di origine, stato; search, show, save, edit, deprecate, supersede, merge con collegamenti per id; testi come dati (INV-4); test; documentazione. · *blocco:* ✖ Non sviluppata dall'agente in questa sessione: da rivedere con l'utente alla fine del piano
-  *rischio:* 15/100 — Codice nuovo e isolato, un database nuovo dell'agente; non tocca sistema, rete né sessioni esistenti.
-  *documenti:* [piano.md](docs/piano.md)
+- [x] `O22.T1` brain e la memoria: SQLite, pacchetti con provenienza, ricerca testuale, salvataggio, modifica e revisioni — *perimetro:* `deck/, docs/`
+  *gate previsto:* Comando brain e server MCP brain (strumenti mcp__brain__*) sul motore di deck; componente memory isolato: SQLite con FTS5, pacchetti JSON piccoli con id, tipo, testo, etichette, sessione e messaggio di origine, stato; search, show, save, edit, deprecate, supersede, merge con collegamenti per id; testi come dati (INV-4); test; documentazione. · *gate confermato:* ✔ brain e brain mcp attivi (v0.5.13): memorie SQLite+FTS5 con revisioni e link; 358 test; MCP Connected; memoria salvata e ritrovata
+  *rischio:* 15/100 — Codice nuovo e isolato (comando brain, server MCP brain, database SQLite dell'agente); non tocca sistema, rete né sessioni esistenti. Ripresa su richiesta del proprietario (29/10 sera: ripartiamo dal brain).
+  *documenti:* [piano.md](docs/piano.md) · [brain.md](docs/brain.md)
+  *annotazioni:* `N70`, `N71`
 - [ ] `O22.T2` Pacchetti di contesto automatici: bacheca, sessioni recenti, memorie richiamate — *perimetro:* `deck/, docs/`
   *gate previsto:* Hook di inizio sessione e di turno che aggiungono come dati la bacheca compressa (ora leggibile, stato, avvisi), le ultime 3 sessioni (id, date, riassunto o titolo) e le memorie richiamate con il numero delle scartate; comandi brain per esplorare bacheca e sessioni; test; documentazione.
 - [ ] `O22.T3` Ricerca ibrida con embedding e reranker locali, scelti con il proprietario — *perimetro:* `deck/, docs/, modelli locali sulla Deck`
@@ -190,3 +191,5 @@ _Una riga per nota, sempre legata a una task. `wf.sh notes` per leggerle._
 - `N67` (`O15.T3`) Piano del 29/10 deciso con l'utente (docs/piano.md): sviluppo di AgentDeck sulla Deck con installazione e revert da qui, versioni fissate (Claude Code, niente installazioni latest senza consenso), arbitro agentico al posto delle domande della guardia senza mai bloccare l'agente, tabella delle richieste in dashboard, agente interno MiniMax con intermediario, Telegram, Brain. Da tradurre in obiettivi con un nuovo ciclo. O15.T3 resta aperta (prova al tocco). — 2026-10-29 20:18
 - `N68` (`O18.T3`) Falso positivo di claude/after.py (29/10): un comando che conteneva solo testo 'pacman -S' fra virgolette (casi di prova di O18.T3) ha fatto dire all'hook che erano stati installati pacchetti; non è stato installato nulla. Andrebbe controllato se pacman è davvero partito (log o database) invece del testo del comando. — 2026-10-29 20:52
 - `N69` (`O19.T3`) Da rivedere con l'utente alla fine del piano, insieme a O19.T2: non sviluppata dall'agente in questa sessione (29/10). Già fatto in O19.T1: nessuna domanda all'utente, deny con motivo, hook PermissionRequest che registra. — 2026-10-29 21:29
+- `N70` (`O22.T1`) Per O22.T2: la memoria a file di Claude Code (~/.claude/projects/<cartella>/memory/, MEMORY.md) resta attiva accanto a brain; quando i pacchetti di contesto porteranno le memorie da sé, decidere con il proprietario se importare quei file in brain e spegnere la memoria a file. — 2026-10-29 23:54
+- `N71` (`O22.T1`) Per O22.T4: il database del Brain (~/.local/share/agentdeck/brain/brain.db) sta in @home, che snapper non fotografa: rollback del sistema senza perdita di memorie, ma nessuna copia. Serve una copia periodica (sqlite3 .backup) o una configurazione snapper sua. — 2026-10-29 23:54

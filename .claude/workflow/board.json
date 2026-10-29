@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-26 11:36",
-  "updated": "2026-10-29 22:47",
+  "updated": "2026-10-29 23:54",
   "objectives": [
     {
       "id": "O12",
@@ -389,12 +389,13 @@
           "title": "brain e la memoria: SQLite, pacchetti con provenienza, ricerca testuale, salvataggio, modifica e revisioni",
           "scope": "deck/, docs/",
           "gate_pre": "Comando brain e server MCP brain (strumenti mcp__brain__*) sul motore di deck; componente memory isolato: SQLite con FTS5, pacchetti JSON piccoli con id, tipo, testo, etichette, sessione e messaggio di origine, stato; search, show, save, edit, deprecate, supersede, merge con collegamenti per id; testi come dati (INV-4); test; documentazione.",
-          "gate_post": "Non sviluppata dall'agente in questa sessione: da rivedere con l'utente alla fine del piano",
-          "state": "blocked",
+          "gate_post": "brain e brain mcp attivi (v0.5.13): memorie SQLite+FTS5 con revisioni e link; 358 test; MCP Connected; memoria salvata e ritrovata",
+          "state": "done",
           "risk": 15,
-          "risk_why": "Codice nuovo e isolato, un database nuovo dell'agente; non tocca sistema, rete né sessioni esistenti.",
+          "risk_why": "Codice nuovo e isolato (comando brain, server MCP brain, database SQLite dell'agente); non tocca sistema, rete né sessioni esistenti. Ripresa su richiesta del proprietario (29/10 sera: ripartiamo dal brain).",
           "docs": [
-            "docs/piano.md"
+            "docs/piano.md",
+            "docs/brain.md"
           ]
         },
         {
@@ -537,6 +538,20 @@
       "text": "Da rivedere con l'utente alla fine del piano, insieme a O19.T2: non sviluppata dall'agente in questa sessione (29/10). Già fatto in O19.T1: nessuna domanda all'utente, deny con motivo, hook PermissionRequest che registra.",
       "docs": [],
       "created": "2026-10-29 21:29"
+    },
+    {
+      "id": "N70",
+      "task": "O22.T1",
+      "text": "Per O22.T2: la memoria a file di Claude Code (~/.claude/projects/<cartella>/memory/, MEMORY.md) resta attiva accanto a brain; quando i pacchetti di contesto porteranno le memorie da sé, decidere con il proprietario se importare quei file in brain e spegnere la memoria a file.",
+      "docs": [],
+      "created": "2026-10-29 23:54"
+    },
+    {
+      "id": "N71",
+      "task": "O22.T1",
+      "text": "Per O22.T4: il database del Brain (~/.local/share/agentdeck/brain/brain.db) sta in @home, che snapper non fotografa: rollback del sistema senza perdita di memorie, ma nessuna copia. Serve una copia periodica (sqlite3 .backup) o una configurazione snapper sua.",
+      "docs": [],
+      "created": "2026-10-29 23:54"
     }
   ],
   "active": {
@@ -551,8 +566,8 @@
   },
   "previous": {
     "task": "O22.T1",
-    "state": "blocked",
-    "note": "Non sviluppata dall'agente in questa sessione: da rivedere con l'utente alla fine del piano"
+    "state": "done",
+    "note": "brain e brain mcp attivi (v0.5.13): memorie SQLite+FTS5 con revisioni e link; 358 test; MCP Connected; memoria salvata e ritrovata"
   },
   "cycle": {
     "n": 5,
@@ -563,6 +578,6 @@
     "objective": 22,
     "cycle": 5,
     "request": 8,
-    "note": 69
+    "note": 71
   }
 }
