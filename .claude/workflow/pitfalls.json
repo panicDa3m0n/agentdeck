@@ -120,6 +120,11 @@
       "id": "P24",
       "testo": "deck claude close risponde NOT_FOUND su una sessione appena aperta -> claude remote-control --spawn session crea prima una sessione senza bridgeSessionId e dopo circa 30 s la sostituisce con un processo nuovo registrato nell'app, con altro sessionId -> open aspetta bridgeSessionId e l'id delle sessioni aperte da deck viene dalla cartella",
       "creata": "2026-10-27 23:10"
+    },
+    {
+      "id": "P25",
+      "testo": "deck release: i passi di sistema devono girare dal codice della versione nuova, non da chi lancia l'installazione, altrimenti un passo aggiunto parte solo all'installazione dopo",
+      "creata": "2026-10-29 20:47"
     }
   ]
 }

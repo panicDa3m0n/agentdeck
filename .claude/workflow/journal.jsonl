@@ -1569,3 +1569,6 @@
 {"at": "2026-10-29 20:32", "testo": "TASK CHIUSA O18.T1 — completata: deck release installa un commit dalla Deck (test, snapshot, scambio atomico, verifica, ritorno automatico) e torna indietro; ciclo reale riuscito, v0.5.5"}
 {"at": "2026-10-29 20:32", "testo": "VERSIONE 0.5.4 (O18.T1)"}
 {"at": "2026-10-29 20:41", "testo": "TASK APERTA O18.T2 — Claude Code a versione fissa, aggiornamento manuale con prova degli agganci | perimetro: deck/, docs/, impostazioni di Claude Code sulla Deck | gate: Aggiornamenti automatici di Claude Code spenti e versione fissata; un comando o una procedura aggiorna a una versione scelta solo dopo una prova automatica di hook, flag e bypass, con ritorno alla precedente; documentazione. | rischio: 35"}
+{"at": "2026-10-29 20:47", "testo": "TRAPPOLA registrata: deck release: i passi di sistema devono girare dal codice della versione nuova, non da chi lancia l'installazione, altrimenti un passo aggiunto parte solo all'installazione dopo"}
+{"at": "2026-10-29 20:47", "testo": "TASK CHIUSA O18.T2 — completata: Aggiornamenti spenti e versione fissata (managed-settings.d); deck claude/version switch con prova degli agganci, provato 2.1.310→2.1.312→2.1.310; v0.5.6"}
+{"at": "2026-10-29 20:47", "testo": "VERSIONE 0.5.4 (O18.T2)"}

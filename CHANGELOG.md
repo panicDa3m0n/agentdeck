@@ -4,6 +4,24 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.5.6 — 2026-10-29
+
+Ciclo 05, obiettivo O18, task O18.T2: Claude Code a versione fissa (piano punto 11).
+
+- **Blocchi, solo impostazioni gestite:** `DISABLE_AUTOUPDATER=1` nelle impostazioni gestite; `requiredMaximumVersion`
+  in `/etc/claude-code/managed-settings.d/50-agentdeck-versione.json`. Verificato: con il limite a 2.1.310 il binario
+  2.1.312 si rifiuta di partire.
+- **`deck claude/version`:** versione attiva, fissata, sul disco e pubblicata (`latest`, `stable`); `pin`, `probe`,
+  `switch` con anteprima, snapshot, prova degli agganci e ritorno automatico se fallisce.
+- **Prova degli agganci** (`claude_probe.py`): `claude -p` contro un finto server API locale verifica hook di inizio
+  sessione, regola `deny`, guardia, evento `PermissionRequest`, bypass, `--system-prompt`, `--tools` e
+  `--strict-mcp-config`. 8 su 8 sulla 2.1.310 e sulla 2.1.312.
+- **Prova reale:** passaggio a 2.1.312 (scaricata, prova superata, snapshot 196) e ritorno a 2.1.310 (snapshot 197).
+  La Deck resta sulla 2.1.310, fissata.
+- **`deck release`:** i passi di sistema li esegue il codice della versione nuova, così un passo aggiunto vale
+  subito. Trovato quando il passo che fissa la versione non è partito alla prima installazione.
+- **Test:** 12 nuovi, 296 in tutto. **Documentazione:** `docs/claude-code.md`, `docs/deck.md`, `docs/sviluppo.md`.
+
 ## 0.5.5 — 2026-10-29
 
 Ciclo 05, nuovo obiettivo O18 dal piano del 29/10 ([docs/piano.md](docs/piano.md)), task O18.T1: AgentDeck si
