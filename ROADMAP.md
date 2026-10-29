@@ -10,10 +10,10 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O18` Lo sviluppo di AgentDeck sta sulla Deck: repository, installazione e revert da qui, versioni fissate (piano punti 10-11) — 3 task: 2 completate, 1 in corso, 0 da fare, 0 bloccate
-- **Task attiva:** `O18.T3` Installazioni senza versione o latest segnalate come errore, salvo consenso motivato — in corso · rischio 20/100
-- **Ultima task gestita:** `O18.T2` — completata — Aggiornamenti spenti e versione fissata (managed-settings.d); deck claude/version switch con prova degli agganci, provato 2.1.310→2.1.312→2.1.310; v0.5.6
-- **Fase:** `in_progress`
+- **Obiettivo attivo:** `O18` Lo sviluppo di AgentDeck sta sulla Deck: repository, installazione e revert da qui, versioni fissate (piano punti 10-11) — 3 task: 3 completate, 0 in corso, 0 da fare, 0 bloccate
+- **Task attiva:** —
+- **Ultima task gestita:** `O18.T3` — completata — La guardia e deck term rifiutano le installazioni senza versione fuori da pacman, salvo consenso registrato; 57 casi, prova dal vivo; v0.5.7
+- **Fase:** `objective_gate_pending`
 - **Ultimo aggiornamento:** 2026-10-29 20:52
 
 ## Richieste attive
@@ -110,8 +110,8 @@ _nessuna task. Aggiungile con `wf.sh task-add`._
 - [x] `O18.T2` Claude Code a versione fissa, aggiornamento manuale con prova degli agganci — *perimetro:* `deck/, docs/, impostazioni di Claude Code sulla Deck`
   *gate previsto:* Aggiornamenti automatici di Claude Code spenti e versione fissata; un comando o una procedura aggiorna a una versione scelta solo dopo una prova automatica di hook, flag e bypass, con ritorno alla precedente; documentazione. · *gate confermato:* ✔ Aggiornamenti spenti e versione fissata (managed-settings.d); deck claude/version switch con prova degli agganci, provato 2.1.310→2.1.312→2.1.310; v0.5.6
   *rischio:* 35/100 — Tocca il programma di tutte le sessioni: una versione rotta le fermerebbe. Versione precedente conservata, snapshot, prova degli agganci prima del cambio.
-- [~] `O18.T3` Installazioni senza versione o latest segnalate come errore, salvo consenso motivato — *perimetro:* `deck/, docs/`
-  *gate previsto:* La guardia riconosce le installazioni senza versione o latest fuori da pacman (npm, pip, cargo, curl | sh, immagini :latest, claude) e le rifiuta con il motivo; l'agente le può fare solo dichiarando un consenso motivato, registrato; test con casi veri e falsi positivi; documentazione.
+- [x] `O18.T3` Installazioni senza versione o latest segnalate come errore, salvo consenso motivato — *perimetro:* `deck/, docs/`
+  *gate previsto:* La guardia riconosce le installazioni senza versione o latest fuori da pacman (npm, pip, cargo, curl | sh, immagini :latest, claude) e le rifiuta con il motivo; l'agente le può fare solo dichiarando un consenso motivato, registrato; test con casi veri e falsi positivi; documentazione. · *gate confermato:* ✔ La guardia e deck term rifiutano le installazioni senza versione fuori da pacman, salvo consenso registrato; 57 casi, prova dal vivo; v0.5.7
   *rischio:* 20/100 — Cambia solo cosa la guardia lascia passare; il rischio è bloccare lavoro legittimo, coperto da test sui falsi positivi e dal consenso motivato.
   *annotazioni:* `N68`
 

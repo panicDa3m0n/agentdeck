@@ -4,6 +4,21 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.5.7 — 2026-10-29
+
+Ciclo 05, obiettivo O18, task O18.T3: le installazioni senza versione sono un errore (piano punto 11).
+
+- **`agentdeck/pinning.py`:** riconosce fuori da pacman le installazioni senza versione o "latest" di npm, pnpm, yarn,
+  bun, npx, pip, pipx, uv, cargo, go, gem, delle immagini di docker e podman, di `claude install` e `update`, e gli
+  script scaricati e passati a una shell. Restano liberi pacman, gli helper AUR, i lockfile, i percorsi locali e il
+  corpo degli heredoc.
+- **Guardia e `deck term`:** rifiutano con il motivo. Con il prefisso `AGENTDECK_LATEST_OK="<motivo>"` il comando
+  passa e il consenso va in `~/.local/state/agentdeck/latest-consents.jsonl`. Le regole dell'accesso vengono prima.
+  Regola nuova nel `CLAUDE.md` generato.
+- **Prova dal vivo:** in una sessione vera `npm install express` è stato rifiutato dalla guardia installata.
+- **Test:** 8 nuovi con 57 comandi veri e falsi positivi, 304 in tutto. **Documentazione:** `docs/claude-code.md`.
+- **Annotato (N68):** l'hook `after.py` scambia per un'installazione un testo `pacman -S` dentro un comando.
+
 ## 0.5.6 — 2026-10-29
 
 Ciclo 05, obiettivo O18, task O18.T2: Claude Code a versione fissa (piano punto 11).
