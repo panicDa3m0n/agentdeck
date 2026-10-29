@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-26 11:36",
-  "updated": "2026-10-29 21:45",
+  "updated": "2026-10-29 22:46",
   "objectives": [
     {
       "id": "O12",
@@ -359,7 +359,7 @@
       "id": "O21",
       "title": "Telegram, il canale a due vie fra il proprietario e AgentDeck (piano punto 3)",
       "gate": "Un ponte senza porte esposte (long polling) risponde solo al chat id del proprietario: i suoi messaggi diventano compiti dell'agente interno e il rapporto torna in chat; i rapporti dei controlli automatici arrivano da soli; gli altri mittenti sono ignorati e registrati; deck telegram mostra lo stato e manda un messaggio; token solo sulla Deck; prova con un finto Telegram e prova reale con il bot; documentazione; versione pubblicata.",
-      "state": "open",
+      "state": "closed",
       "docs": [],
       "tasks": [
         {
@@ -373,7 +373,9 @@
           "risk_why": "Servizio nuovo che accetta istruzioni da fuori: solo dal chat id del proprietario, nessuna porta esposta, token solo sulla Deck.",
           "docs": []
         }
-      ]
+      ],
+      "closed_at": "2026-10-29 22:46",
+      "closed_note": "Approvato dall'utente il 29/10: ponte Telegram installato e provato con un finto Telegram; manca la prova con il bot vero (token, R8)"
     }
   ],
   "requests": [
@@ -483,9 +485,9 @@
     }
   ],
   "active": {
-    "objective": "O21",
+    "objective": "",
     "task": "",
-    "phase": "objective_gate_pending",
+    "phase": "idle",
     "risk": null,
     "risk_why": "",
     "hold_invariants": "",

@@ -10,11 +10,10 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O21` Telegram, il canale a due vie fra il proprietario e AgentDeck (piano punto 3) — 1 task: 1 completate, 0 in corso, 0 da fare, 0 bloccate
+- **Obiettivo attivo:** —
 - **Task attiva:** —
 - **Ultima task gestita:** `O21.T1` — completata — Ponte Telegram attivo: long polling, solo la chat del proprietario, compiti all'agente e rapporti in chat; deck telegram; finto Telegram; v0.5.12
-- **Fase:** `objective_gate_pending`
-- **Ultimo aggiornamento:** 2026-10-29 21:45
+- **Ultimo aggiornamento:** 2026-10-29 22:46
 
 ## Richieste attive
 
@@ -151,9 +150,10 @@ _nessuna task. Aggiungile con `wf.sh task-add`._
   *gate previsto:* Timer e avvisi critici attivano l'agente interno; può fare da solo solo diagnosi e azioni a basso rischio, le altre le segnala; registro consultabile da deck agent; provato con un avviso simulato; documentazione. · *gate confermato:* ✔ Timer ogni 15 min con deck agent tick: agente solo per avvisi/obblighi nuovi o una volta al giorno; senza chiave salta e registra; v0.5.11
   *rischio:* 30/100 — Avvia un agente senza nessuno davanti; limitato da prompt, guardia, deny e dal partire solo per avvisi nuovi o una volta al giorno.
 
-### `O21` Telegram, il canale a due vie fra il proprietario e AgentDeck (piano punto 3) — in corso
+### `O21` Telegram, il canale a due vie fra il proprietario e AgentDeck (piano punto 3) — chiuso
 
 **Gate obiettivo:** Un ponte senza porte esposte (long polling) risponde solo al chat id del proprietario: i suoi messaggi diventano compiti dell'agente interno e il rapporto torna in chat; i rapporti dei controlli automatici arrivano da soli; gli altri mittenti sono ignorati e registrati; deck telegram mostra lo stato e manda un messaggio; token solo sulla Deck; prova con un finto Telegram e prova reale con il bot; documentazione; versione pubblicata.
+**Chiuso:** 2026-10-29 22:46 — Approvato dall'utente il 29/10: ponte Telegram installato e provato con un finto Telegram; manca la prova con il bot vero (token, R8)
 
 - [x] `O21.T1` Ponte Telegram: messaggi del proprietario all'agente interno, rapporti al proprietario — *perimetro:* `deck/, docs/, servizio agentdeck-telegram sulla Deck`
   *gate previsto:* Servizio agentdeck-telegram con long polling, solo il chat id autorizzato, compiti all'agente interno e rapporti in risposta, rapporti dei controlli automatici inviati da soli, mittenti sconosciuti registrati; deck telegram con stato e invio; token in ~/.config/agentdeck/telegram.json (600); provato con un finto Telegram; documentazione. · *gate confermato:* ✔ Ponte Telegram attivo: long polling, solo la chat del proprietario, compiti all'agente e rapporti in chat; deck telegram; finto Telegram; v0.5.12

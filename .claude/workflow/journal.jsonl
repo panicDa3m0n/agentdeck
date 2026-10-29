@@ -1607,3 +1607,5 @@
 {"at": "2026-10-29 21:42", "testo": "TASK APERTA O21.T1 — Ponte Telegram: messaggi del proprietario all'agente interno, rapporti al proprietario | perimetro: deck/, docs/, servizio agentdeck-telegram sulla Deck | gate: Servizio agentdeck-telegram con long polling, solo il chat id autorizzato, compiti all'agente interno e rapporti in risposta, rapporti dei controlli automatici inviati da soli, mittenti sconosciuti registrati; deck telegram con stato e invio; token in ~/.config/agentdeck/telegram.json (600); provato con un finto Telegram; documentazione. | rischio: 25"}
 {"at": "2026-10-29 21:45", "testo": "TASK CHIUSA O21.T1 — completata: Ponte Telegram attivo: long polling, solo la chat del proprietario, compiti all'agente e rapporti in chat; deck telegram; finto Telegram; v0.5.12"}
 {"at": "2026-10-29 21:45", "testo": "VERSIONE 0.5.5 (O21.T1)"}
+{"at": "2026-10-29 21:45", "testo": "GATE OBIETTIVO APERTO O21"}
+{"at": "2026-10-29 22:46", "testo": "OBIETTIVO CHIUSO O21 (completo) — Approvato dall'utente il 29/10: ponte Telegram installato e provato con un finto Telegram; manca la prova con il bot vero (token, R8)"}
