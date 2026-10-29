@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-26 11:36",
-  "updated": "2026-10-27 23:12",
+  "updated": "2026-10-29 20:18",
   "objectives": [
     {
       "id": "O12",
@@ -261,6 +261,20 @@
       "text": "Obblighi troppo larghi: l'installazione di cage + chromium (O15.T3) ha aperto 47 PROFILE_NEEDED, uno per ogni pacchetto con programmi, librerie trascinate comprese (avahi, gtk, spirv...); chiusi tutti con dismiss e motivo. L'hook dovrebbe considerare solo i pacchetti installati esplicitamente (pacman -Qe) o i programmi davvero interattivi.",
       "docs": [],
       "created": "2026-10-27 23:12"
+    },
+    {
+      "id": "N66",
+      "task": "O15.T3",
+      "text": "Sulla Deck (28/10, sessione gestione-deck, decisione dell'utente): tutte le sessioni Claude Code in bypassPermissions (managed-settings senza disableBypassPermissionsMode, defaultMode e skipDangerousModePermissionPrompt) e ogni sessione aperta da deck claude è un servizio suo, agentdeck-sessione@<nome>. Fatto direttamente in /opt/agentdeck; portato nel repository il 29/10 dalla Deck, con docs/claude-code.md e docs/interfacce.md; 270 test verdi sulla Deck.",
+      "docs": [],
+      "created": "2026-10-29 20:18"
+    },
+    {
+      "id": "N67",
+      "task": "O15.T3",
+      "text": "Piano del 29/10 deciso con l'utente (docs/piano.md): sviluppo di AgentDeck sulla Deck con installazione e revert da qui, versioni fissate (Claude Code, niente installazioni latest senza consenso), arbitro agentico al posto delle domande della guardia senza mai bloccare l'agente, tabella delle richieste in dashboard, agente interno MiniMax con intermediario, Telegram, Brain. Da tradurre in obiettivi con un nuovo ciclo. O15.T3 resta aperta (prova al tocco).",
+      "docs": [],
+      "created": "2026-10-29 20:18"
     }
   ],
   "active": {
@@ -287,6 +301,6 @@
     "objective": 15,
     "cycle": 5,
     "request": 6,
-    "note": 65
+    "note": 67
   }
 }

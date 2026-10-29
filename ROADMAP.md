@@ -14,7 +14,7 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 - **Task attiva:** `O15.T3` Lo schermo grafico calmo con l'interfaccia effimera delle sessioni, al posto del terminale — in corso · rischio 55/100
 - **Ultima task gestita:** `O15.T2` — completata — deck claude elenca, apre (Remote Control in ~/agentdeck/sessioni) e chiude con conferma; MCP; 259 test; prova sulla Deck, sessioni al lavoro intatte
 - **Fase:** `in_progress`
-- **Ultimo aggiornamento:** 2026-10-27 23:12
+- **Ultimo aggiornamento:** 2026-10-29 20:18
 
 ## Richieste attive
 
@@ -84,6 +84,7 @@ _nessuna richiesta in attesa._
 - [~] `O15.T3` Lo schermo grafico calmo con l'interfaccia effimera delle sessioni, al posto del terminale — *perimetro:* `deck/, docs/, pacchetti grafici e servizio dello schermo sulla Deck`
   *gate previsto:* Sulla Deck lo schermo grafico sostituisce il terminale: di base calmo, l'interfaccia delle sessioni compare con un tocco o un pulsante e sparisce dopo la scelta o il tempo; aprire e chiudere una sessione di prova funziona dal tocco; snapshot prima; ssh agentdeck intatto (INV-1); docs e versione pubblicata.
   *rischio:* 55/100 — 112 pacchetti nuovi, utente nuovo, servizio grafico su tty1 e server locale che esegue azioni; snapshot prima, server solo su 127.0.0.1 con codice, ripiego al terminale, ssh verificato a ogni passo
+  *annotazioni:* `N66`, `N67`
 
 ## Annotazioni
 
@@ -97,3 +98,5 @@ _Una riga per nota, sempre legata a una task. `wf.sh notes` per leggerle._
 - `N63` (`O12.T1`) Sulla Deck (27/10): SendMessage aggiunto a permissions.allow di /etc/claude-code/managed-settings.json (copia .bak-sendmessage), su richiesta dell'utente: l'agente non deve aspettare un clic per scrivere a un'altra chat. Sulla Deck è installato ancora solo mcp__deck: tutta la politica ADR-0001 resta da installare; stessa voce nel repository e in docs/claude-code.md. Copiato anche il token Baxi nei segreti di domus (600, srv-domus), su richiesta dell'utente. — 2026-10-27 18:44
 - `N64` (`O13.T1`) Servizio domus (27/10, su richiesta dell'utente dalla sessione della Deck): token Baxi copiato in /srv/servizi/domus/dati/secrets (600, srv-domus), /state funziona sulla Deck; motore Domus sul Mac (PID 35282, *:8777, avviato a mano, non da launchd) fermato con SIGINT, porta 8777 chiusa; resta sul Mac un'istanza di prova su 127.0.0.1:8778 (PID 46342), non toccata. — 2026-10-27 19:47
 - `N65` (`O12.T5`) Obblighi troppo larghi: l'installazione di cage + chromium (O15.T3) ha aperto 47 PROFILE_NEEDED, uno per ogni pacchetto con programmi, librerie trascinate comprese (avahi, gtk, spirv...); chiusi tutti con dismiss e motivo. L'hook dovrebbe considerare solo i pacchetti installati esplicitamente (pacman -Qe) o i programmi davvero interattivi. — 2026-10-27 23:12
+- `N66` (`O15.T3`) Sulla Deck (28/10, sessione gestione-deck, decisione dell'utente): tutte le sessioni Claude Code in bypassPermissions (managed-settings senza disableBypassPermissionsMode, defaultMode e skipDangerousModePermissionPrompt) e ogni sessione aperta da deck claude è un servizio suo, agentdeck-sessione@<nome>. Fatto direttamente in /opt/agentdeck; portato nel repository il 29/10 dalla Deck, con docs/claude-code.md e docs/interfacce.md; 270 test verdi sulla Deck. — 2026-10-29 20:18
+- `N67` (`O15.T3`) Piano del 29/10 deciso con l'utente (docs/piano.md): sviluppo di AgentDeck sulla Deck con installazione e revert da qui, versioni fissate (Claude Code, niente installazioni latest senza consenso), arbitro agentico al posto delle domande della guardia senza mai bloccare l'agente, tabella delle richieste in dashboard, agente interno MiniMax con intermediario, Telegram, Brain. Da tradurre in obiettivi con un nuovo ciclo. O15.T3 resta aperta (prova al tocco). — 2026-10-29 20:18

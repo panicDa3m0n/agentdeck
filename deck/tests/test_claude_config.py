@@ -96,7 +96,8 @@ class BuildTests(unittest.TestCase):
 
     def test_managed_settings(self):
         s = json.loads((CLAUDE / "managed-settings.json").read_text())
-        self.assertEqual(s["permissions"]["disableBypassPermissionsMode"], "disable")
+        self.assertEqual(s["permissions"]["defaultMode"], "bypassPermissions")  # sessioni autonome, nessun prompt
+        self.assertNotIn("disableBypassPermissionsMode", s["permissions"])
         commands = [h["command"] for e in s["hooks"].values() for m in e for h in m["hooks"]]
         for cmd in commands:
             script = cmd.split()[-1]

@@ -7,7 +7,7 @@
 # Strati:
 #   1. stile di output "AgentDeck"      -> ~/.claude/output-styles/agentdeck.md e outputStyle nelle impostazioni utente
 #   2. regole stabili (CLAUDE.md)       -> /etc/claude-code/CLAUDE.md, generato da modello e invarianti
-#   3. vincoli duri e hook              -> /etc/claude-code/managed-settings.json (deny, niente bypass, hook)
+#   3. vincoli duri e hook              -> /etc/claude-code/managed-settings.json (deny, bypass predefinito, hook)
 #   4. strumenti: il server MCP deck    -> `deck mcp` registrato per l'utente agent (~/.claude.json), i suoi
 #                                          strumenti permessi nelle impostazioni gestite (O10.T6)
 #   5. procedure: le skill di AgentDeck -> ~/.claude/skills/agentdeck-*, da deck/claude/skills (O10.T9); le altre

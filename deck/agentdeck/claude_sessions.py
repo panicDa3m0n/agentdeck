@@ -9,6 +9,9 @@ Fatti verificati sulla Deck il 27/10/2026, con Claude Code 2.1.310:
   sola sessione ed esce quando lei finisce (--spawn session). La fiducia nella cartella viene da ~/agentdeck;
 - SIGINT al processo della sessione la chiude in modo pulito, anche dentro il server con più sessioni, che resta
   pronto; SIGTERM la chiude come errore, e serve solo se SIGINT non basta;
+- le sessioni aperte da deck dentro la tmux di agentdeck-claude morivano con quel servizio (riavvio del servizio o
+  della Deck) e nessuno le riapriva. Dal 28/10/2026 ogni sessione è un servizio suo, agentdeck-sessione@<nome>
+  (claude/agentdeck-sessione@.service), abilitato all'avvio, sempre con Remote Control e in bypass;
 - una sessione appena aperta cambia processo: la prima nasce senza bridgeSessionId e dopo una trentina di secondi
   il server la sostituisce con un processo nuovo, registrato nell'app, con un altro sessionId. Per questo open aspetta
   la registrazione, e l'id delle sessioni aperte da deck viene dalla loro cartella, che non cambia (trappola P24).
@@ -22,7 +25,6 @@ import hashlib
 import json
 import os
 import re
-import shlex
 import signal
 import subprocess
 import time
@@ -36,6 +38,7 @@ OPENED = HOME / "agentdeck" / "sessioni"
 CLAUDE = HOME / ".local" / "bin" / "claude"
 PROC = Path("/proc")
 TMUX_PREFIX = "rc-"
+UNIT = "agentdeck-sessione@{}.service"
 NAME = re.compile(r"[a-z][a-z0-9-]{0,23}")
 ID = re.compile(r"[0-9a-f]{8}")
 BRIDGE = re.compile(r"session_[A-Za-z0-9]{10,64}")
@@ -43,7 +46,6 @@ STATES = ("busy", "idle")  # appena aperta la scheda non ha ancora lo stato: sta
 MAX_OPENED = 8
 OPEN_WAIT_S = 45
 CLOSE_WAIT_S = 10
-FAILED_PANE_S = 60  # se il server non parte, la finestra resta per leggere l'errore
 
 
 class SessionError(Exception):
@@ -164,14 +166,12 @@ class Sessions:
             raise SessionError("EXISTS", {"session": next(s for s in current if s["folder"] == str(folder))})
         if sum(1 for s in current if s["opened_by_deck"]) >= MAX_OPENED:
             raise SessionError("TOO_MANY", {"max": MAX_OPENED})
-        tmux_name = TMUX_PREFIX + name
-        if self.run(["tmux", "has-session", "-t", f"={tmux_name}"]).returncode == 0:
-            raise SessionError("EXISTS", {"tmux": tmux_name})
+        unit = UNIT.format(name)
+        if self.run(["systemctl", "is-active", "--quiet", unit]).returncode == 0:
+            raise SessionError("EXISTS", {"unit": unit})
         folder.mkdir(parents=True, exist_ok=True)
-        command = (f"{shlex.quote(str(self.claude))} remote-control --name {name} --spawn session "
-                   f"|| sleep {FAILED_PANE_S}")
-        started = self.run(["tmux", "new-session", "-d", "-s", tmux_name, "-x", "200", "-y", "50", "-c", str(folder),
-                            command])
+        # servizio suo, abilitato all'avvio: Remote Control e bypass stanno nell'unità (agentdeck-sessione@.service)
+        started = self.run(["sudo", "-n", "systemctl", "enable", "--now", unit])
         if started.returncode != 0:
             raise SessionError("FAILED", {"output": (started.stderr or started.stdout).strip()[-2000:]})
         deadline, seen = self.clock() + OPEN_WAIT_S, None
@@ -182,9 +182,9 @@ class Sessions:
             self.sleep(1)
         if seen:
             return seen  # viva ma non ancora registrata: il link arriverà nell'elenco
-        pane = self.run(["tmux", "capture-pane", "-p", "-t", f"={tmux_name}"]).stdout
-        self.run(["tmux", "kill-session", "-t", f"={tmux_name}"])
-        lines = [line.rstrip() for line in pane.splitlines() if line.strip()]
+        log = self.run(["sudo", "-n", "journalctl", "-u", unit, "-n", "15", "--no-pager", "-o", "cat"]).stdout
+        self.run(["sudo", "-n", "systemctl", "disable", "--now", unit])
+        lines = [line.rstrip() for line in log.splitlines() if line.strip()]
         raise SessionError("FAILED", {"output": "\n".join(lines[-15:])[-2000:]})
 
     def close(self, sid: str) -> dict:
@@ -201,8 +201,10 @@ class Sessions:
             if not self._wait_gone(pid, proc_start):
                 raise SessionError("STILL_RUNNING", {"session": public})
         if public["opened_by_deck"]:
-            # il server di una sessione aperta da deck esce da sé; se la sua finestra resta, si chiude
-            self.run(["tmux", "kill-session", "-t", f"={TMUX_PREFIX}{Path(internal['folder']).name}"])
+            # il server esce da sé; il servizio si disabilita perché la sessione non riparta all'avvio
+            name = Path(internal["folder"]).name
+            self.run(["sudo", "-n", "systemctl", "disable", "--now", UNIT.format(name)])
+            self.run(["tmux", "kill-session", "-t", f"={TMUX_PREFIX}{name}"])  # sessioni aperte prima dei servizi
         return {"session": public, "signal": how}
 
     def _wait_gone(self, pid: int, proc_start: str) -> bool:

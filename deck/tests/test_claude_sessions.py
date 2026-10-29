@@ -69,16 +69,17 @@ class FakeDeck:
     def run(self, argv):
         self.calls.append(argv)
         ok = subprocess.CompletedProcess(argv, 0, "", "")
-        if argv[:2] == ["tmux", "has-session"]:
-            return subprocess.CompletedProcess(argv, 1, "", "can't find session")
-        if argv[:2] == ["tmux", "new-session"]:
-            folder = argv[argv.index("-c") + 1]
+        if argv[:2] == ["systemctl", "is-active"]:
+            return subprocess.CompletedProcess(argv, 3, "", "")
+        if argv[:5] == ["sudo", "-n", "systemctl", "enable", "--now"] or argv[:2] == ["tmux", "new-session"]:
+            folder = (str(self.opened / argv[-1].split("@", 1)[1].removesuffix(".service")) if argv[0] == "sudo"
+                      else argv[argv.index("-c") + 1])
             if not self.start_fails:
                 # come sulla Deck: prima una sessione senza bridgeSessionId, poi il server la sostituisce
                 first = self.spawn(folder, bridge=None)
                 self.later.append((self.now + 3, lambda: (self.end(first), self.spawn(folder))))
             return ok
-        if argv[:2] == ["tmux", "capture-pane"]:
+        if "journalctl" in argv:
             return subprocess.CompletedProcess(argv, 0, "\nError: " + INJECTION + "\n", "")
         return ok
 
@@ -144,9 +145,14 @@ class SessionsTests(unittest.TestCase):
         self.assertEqual(s["state"], "starting")
         self.assertEqual(s["pid"], self.fake.next_pid)  # il processo registrato, non il primo
         self.assertEqual(len([x for x in self.s.list() if x["opened_by_deck"]]), 1)
-        new = next(c for c in self.fake.calls if c[:2] == ["tmux", "new-session"])
-        self.assertEqual(new[new.index("-s") + 1], "rc-domus")
-        self.assertIn("remote-control --name domus --spawn session", new[-1])
+        self.assertIn(["sudo", "-n", "systemctl", "enable", "--now", "agentdeck-sessione@domus.service"],
+                      self.fake.calls)
+
+    def test_session_unit_is_remote_bypass_and_survives_reboots(self):
+        unit = (Path(cs.__file__).resolve().parent.parent / "claude" / "agentdeck-sessione@.service").read_text()
+        self.assertIn("remote-control --name %i --spawn session --permission-mode bypassPermissions", unit)
+        self.assertIn("-L rc-%i", unit)  # tmux sua, fuori dal servizio agentdeck-claude
+        self.assertIn("WantedBy=multi-user.target", unit)
 
     def test_open_refuses_bad_names_duplicates_and_too_many(self):
         for name in ("Domus", "1x", "a b", "x;rm", "a" * 25, ""):
@@ -169,7 +175,8 @@ class SessionsTests(unittest.TestCase):
             self.s.open("domus")
         self.assertEqual(e.exception.code, "FAILED")
         self.assertIn(INJECTION, e.exception.detail["output"])
-        self.assertIn(["tmux", "kill-session", "-t", "=rc-domus"], self.fake.calls)
+        self.assertIn(["sudo", "-n", "systemctl", "disable", "--now", "agentdeck-sessione@domus.service"],
+                      self.fake.calls)
 
     def test_close_with_sigint(self):
         result = self.s.close("2954621b")
@@ -201,7 +208,8 @@ class SessionsTests(unittest.TestCase):
     def test_close_of_an_opened_session_removes_its_window(self):
         sid = self.s.open("prova")["id"]
         self.s.close(sid)
-        self.assertIn(["tmux", "kill-session", "-t", "=rc-prova"], self.fake.calls)
+        self.assertIn(["sudo", "-n", "systemctl", "disable", "--now", "agentdeck-sessione@prova.service"],
+                      self.fake.calls)
 
 
 class ClaudeScreenTests(unittest.TestCase):

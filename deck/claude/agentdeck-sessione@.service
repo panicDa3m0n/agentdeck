@@ -1,0 +1,25 @@
+# Una sessione Claude Code di AgentDeck, aperta da `deck claude open name=<nome>` (agentdeck/claude_sessions.py).
+# Ogni sessione è un servizio suo, con la sua tmux (socket rc-<nome>): non dipende da agentdeck-claude, che riavviandosi
+# chiudeva tutte le sessioni, e riparte da sola all'avvio della Deck. Sempre con Remote Control, sempre in bypass
+# (decisione del proprietario, 28/10/2026): le sessioni di Remote Control non leggono defaultMode.
+# Quando la sessione finisce il server esce e il servizio si ferma; `deck claude close` lo disabilita.
+# Documentazione: docs/claude-code.md
+[Unit]
+Description=AgentDeck: sessione Claude %i con Remote Control
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=forking
+User=agent
+Group=agent
+WorkingDirectory=/home/agent/agentdeck/sessioni/%i
+Environment=HOME=/home/agent
+Environment=PATH=/home/agent/.local/bin:/usr/local/bin:/usr/bin
+ExecStart=/usr/bin/tmux -L rc-%i new-session -d -s rc-%i -x 200 -y 50 "/home/agent/.local/bin/claude remote-control --name %i --spawn session --permission-mode bypassPermissions"
+ExecStop=-/usr/bin/tmux -L rc-%i kill-session -t rc-%i
+Restart=on-failure
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target

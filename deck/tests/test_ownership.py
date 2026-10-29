@@ -131,7 +131,8 @@ class AgentTextsTests(unittest.TestCase):
         s = json.loads((CLAUDE / "managed-settings.json").read_text())
         for tool in ("Bash", "Edit", "Write", "Read", "mcp__deck"):
             self.assertIn(tool, s["permissions"]["allow"])
-        self.assertEqual(s["permissions"]["disableBypassPermissionsMode"], "disable")
+        self.assertEqual(s["permissions"]["defaultMode"], "bypassPermissions")  # sessioni autonome, nessun prompt
+        self.assertNotIn("disableBypassPermissionsMode", s["permissions"])
         matcher = s["hooks"]["PreToolUse"][0]["matcher"]
         for tool in ("Bash", "Edit", "Write", "mcp__deck__"):
             self.assertIn(tool, matcher)

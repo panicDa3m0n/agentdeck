@@ -106,7 +106,9 @@ Codice: [../deck/agentdeck/claude_sessions.py](../deck/agentdeck/claude_sessions
 - **Apertura.** Remote Control accetta un solo server per cartella ("This folder is already served by a terminal
   `claude remote-control`"), e `~/agentdeck` ha già quello del servizio `agentdeck-claude`. Per questo ogni
   sessione nuova ha una sottocartella sua e un server che tiene una sola sessione ed esce quando lei finisce
-  (`claude remote-control --name <nome> --spawn session`, nella sessione tmux `rc-<nome>`). La fiducia nella
+  (`claude remote-control --name <nome> --spawn session --permission-mode bypassPermissions`). Dal 28/10/2026 ogni
+  sessione è un servizio suo, `agentdeck-sessione@<nome>` ([../deck/claude/agentdeck-sessione@.service](../deck/claude/agentdeck-sessione%40.service)),
+  abilitato all'avvio con la sua tmux `rc-<nome>`: prima moriva con il servizio `agentdeck-claude` e nessuno la riapriva. La fiducia nella
   cartella viene da `~/agentdeck`. Se il server non parte, `data.output` riporta le sue ultime righe.
   Riaprire con un nome già usato ha riportato lo stesso id nell'app (`session_…`).
 - **Chiusura.** SIGINT chiude la sessione in modo pulito, anche dentro il server con più sessioni di

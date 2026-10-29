@@ -12,6 +12,9 @@ documento (invariante INV-9). Quando si modifica il codice, si aggiorna il docum
 - [../PROGETTO.md](../PROGETTO.md) e [../ROADMAP.md](../ROADMAP.md): dossier e roadmap generati dalla
   governance; non si modificano a mano.
 
+- [piano.md](piano.md): il piano di sviluppo deciso con l'utente il 29/10/2026 (agente interno, approvazioni da
+  agente ad agente, richieste, Brain, sviluppo sulla Deck, versioni fissate) e l'ordine di lavoro.
+
 ## Architettura
 
 - [architettura.md](architettura.md): studio dell'architettura agent-first del ciclo 03, strato per strato:

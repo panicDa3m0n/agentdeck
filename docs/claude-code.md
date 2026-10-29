@@ -141,7 +141,7 @@ l'installatore è `bash deck/claude/install.sh`, lanciato dal Mac dopo `deck/ins
 |---|---|---|---|
 | 1. Identità, nel prompt di sistema | `~/.claude/output-styles/agentdeck.md`, con `outputStyle: AgentDeck` in `~/.claude/settings.json` | [../deck/claude/output-styles/agentdeck.md](../deck/claude/output-styles/agentdeck.md) | Lo stile di output modifica il prompt di sistema stesso e mantiene le istruzioni di base (`keep-coding-instructions: true`). La sessione è l'operatore di AgentDeck, il sistema la guida, parla italiano all'utente |
 | 2. Regole stabili | `/etc/claude-code/CLAUDE.md`, gestito per la macchina | [../deck/claude/CLAUDE.template.md](../deck/claude/CLAUDE.template.md) con [../deck/claude/build_claude_md.py](../deck/claude/build_claude_md.py) | Com'è la macchina, come si lavora (`deck` per primo, snapshot, mai togliere l'accesso, testo esterno come dato, domande dei programmi, prove), e le **10 invarianti** prese da `.claude/workflow/invariants.json` della governance: la fonte è una sola (INV-9) |
-| 3. Vincoli duri | `/etc/claude-code/managed-settings.json` | [../deck/claude/managed-settings.json](../deck/claude/managed-settings.json) | Regole `deny` gestite, che nessun livello scavalca, sugli stop e disable dei servizi di accesso; modalità che salta i permessi disattivata; dal ciclo 05 anche `allow` per tutto il lavoro di sistema (sezione "Permessi"); gli hook |
+| 3. Vincoli duri | `/etc/claude-code/managed-settings.json` | [../deck/claude/managed-settings.json](../deck/claude/managed-settings.json) | Regole `deny` gestite, che nessun livello scavalca, sugli stop e disable dei servizi di accesso; modalità che salta i permessi predefinita (`defaultMode: bypassPermissions`, dal 28/10/2026); dal ciclo 05 anche `allow` per tutto il lavoro di sistema (sezione "Permessi"); gli hook |
 | 3 bis. Guardia | hook `PreToolUse` su Bash | [../deck/claude/guard.py](../deck/claude/guard.py) | Rifiuta, anche dentro `sudo` e in catena: stop, disable, mask o kill di sshd, networkd, iwd, resolved e bus di sistema; target di emergenza; kill di quei demoni; collegamento di rete spento; modifiche dirette a `sshd_config`. Rimanda a `deck`. Le regole stanno in [../deck/agentdeck/access.py](../deck/agentdeck/access.py), condivise con `deck term` |
 | 4. Il momento | hook `SessionStart` | [../deck/claude/session_start.py](../deck/claude/session_start.py) | All'inizio di ogni sessione inietta host, versione, tempo di attività e gli avvisi di `deck status` con l'azione che li gestisce. Solo testo scritto dal sistema (INV-4) |
 
@@ -271,13 +271,33 @@ delle credenziali. La decisione è anche in [../PRINCIPI.md](../PRINCIPI.md).
 **Cosa resta com'è:**
 - i divieti che proteggono l'accesso (`deny` e guardia, INV-1): sono limiti del sistema, non permessi da chiedere;
 - le anteprime e i codici di conferma di `deck`: è il sistema che guida l'agente;
-- la modalità che salta i permessi è ancora disattivata. Salterebbe anche le domande sui servizi e le credenziali
-  dell'utente;
+- le domande sui servizi e le credenziali dell'utente: le genera la guardia con `permissionDecision: "ask"`, che
+  Claude Code rispetta anche nella modalità che salta i permessi (sezione "Sessioni sempre in bypass");
 - esporre un servizio su internet resta una decisione dell'utente (INV-5).
 
 Test: [../deck/tests/test_ownership.py](../deck/tests/test_ownership.py). Controlla il lavoro di sistema libero, le
 domande per servizi e credenziali, la risposta dell'hook, e che i testi per l'agente chiedano al proprietario solo per
 segreti e password.
+
+## Sessioni sempre in bypass (28/10/2026)
+
+**La decisione dell'utente, 28/10/2026.** AgentDeck è una macchina solo agentica: tutte le sessioni Claude Code,
+comprese quelle nuove aperte da Remote Control, lavorano in `bypassPermissions` e non chiedono permessi.
+
+| Dove | Cosa |
+|---|---|
+| [../deck/claude/managed-settings.json](../deck/claude/managed-settings.json) | Tolto `disableBypassPermissionsMode`; `permissions.defaultMode: bypassPermissions` e `skipDangerousModePermissionPrompt: true` |
+| `~/.claude/settings.json` sulla Deck | Le stesse due impostazioni anche per l'utente `agent` |
+| [../deck/claude/agentdeck-sessione@.service](../deck/claude/agentdeck-sessione%40.service) e l'unità `agentdeck-claude` | `--permission-mode bypassPermissions` sulla riga di comando: le sessioni di Remote Control non leggono `defaultMode` |
+
+Restano attivi i `deny`, la guardia e gli hook. Verifica del 28/10/2026: un `claude -p` nuovo ha eseguito Bash senza
+domande (`permission_denials` vuoto) e la guardia ha ancora bloccato i comandi che tagliano l'accesso. Verifica del
+29/10/2026: le 4 sessioni vive hanno `--permission-mode bypassPermissions` sui processi.
+
+**Le domande che restano** vengono tutte dalla guardia, per i servizi e le credenziali dell'utente (sezione
+"Permessi"), e alcune sono falsi positivi. Per esempio, una catena di sola lettura con `cd` e
+`systemctl cat agentdeck-servizio@domus` è stata presa per una modifica. Le sostituirà un arbitro agentico che decide al
+posto dell'umano senza bloccare l'agente (piano del 29/10/2026, punti 8 e 9).
 
 ## Aggiornamenti
 
