@@ -1552,3 +1552,15 @@
 {"at": "2026-10-27 23:12", "testo": "[O15.T3] bash: python3 - <<'EOF' from pathlib import Path def edit(path, old, new):     p = Path(path); t = p.read_text(); as"}
 {"at": "2026-10-29 20:18", "testo": "ANNOTAZIONE N66 su O15.T3 — Sulla Deck (28/10, sessione gestione-deck, decisione dell'utente): tutte le sessioni Claude Code in bypassPermissions (managed-settings senza disableBypassPermissionsMode, defaultMode e skipDangerousModePermissionPrompt) e ogni sessione aperta da deck claude è un servizio suo, agentdeck-sessione@<nome>. Fatto direttamente in /opt/agentdeck; portato nel repository il 29/10 dalla Deck, con docs/claude-code.md e docs/interfacce.md; 270 test verdi sulla Deck."}
 {"at": "2026-10-29 20:18", "testo": "ANNOTAZIONE N67 su O15.T3 — Piano del 29/10 deciso con l'utente (docs/piano.md): sviluppo di AgentDeck sulla Deck con installazione e revert da qui, versioni fissate (Claude Code, niente installazioni latest senza consenso), arbitro agentico al posto delle domande della guardia senza mai bloccare l'agente, tabella delle richieste in dashboard, agente interno MiniMax con intermediario, Telegram, Brain. Da tradurre in obiettivi con un nuovo ciclo. O15.T3 resta aperta (prova al tocco)."}
+{"at": "2026-10-29 20:22", "testo": "OBIETTIVO AGGIUNTO O16 — Lo sviluppo di AgentDeck sta sulla Deck: repository, installazione e revert da qui, versioni fissate (piano punti 10-11)"}
+{"at": "2026-10-29 20:22", "testo": "OBIETTIVO AGGIUNTO O17 — Le richieste di permesso vanno a un arbitro agentico e non bloccano mai l'agente; tabella delle richieste in dashboard (piano punti 8-9)"}
+{"at": "2026-10-29 20:22", "testo": "TASK CHIUSA O15.T3 — bloccata: Schermo grafico installato (N66, N67); manca la prova al tocco con l'utente alla Deck. Priorità al piano del 29/10 [docs/piano.md]"}
+{"at": "2026-10-29 20:22", "testo": "OBIETTIVO AGGIUNTO O18 — Lo sviluppo di AgentDeck sta sulla Deck: repository, installazione e revert da qui, versioni fissate (piano punti 10-11)"}
+{"at": "2026-10-29 20:23", "testo": "OBIETTIVO AGGIUNTO O19 — Le richieste di permesso vanno a un arbitro agentico e non bloccano mai l'agente; tabella delle richieste in dashboard (piano punti 8-9)"}
+{"at": "2026-10-29 20:23", "testo": "TASK AGGIUNTA O18.T1 in O18 — deck installa sulla Deck una versione del repository e torna indietro"}
+{"at": "2026-10-29 20:23", "testo": "TASK AGGIUNTA O18.T2 in O18 — Claude Code a versione fissa, aggiornamento manuale con prova degli agganci"}
+{"at": "2026-10-29 20:23", "testo": "TASK AGGIUNTA O18.T3 in O18 — Installazioni senza versione o latest segnalate come errore, salvo consenso motivato"}
+{"at": "2026-10-29 20:23", "testo": "TASK AGGIUNTA O19.T1 in O19 — Falsi positivi della guardia sui servizi e le credenziali dell'utente"}
+{"at": "2026-10-29 20:23", "testo": "TASK AGGIUNTA O19.T2 in O19 — Tabella delle richieste e deck requests, con il numero in deck status"}
+{"at": "2026-10-29 20:23", "testo": "TASK AGGIUNTA O19.T3 in O19 — L'arbitro agentico decide al posto dell'umano senza bloccare l'agente"}
+{"at": "2026-10-29 20:23", "testo": "GATE OBIETTIVO APERTO O15"}

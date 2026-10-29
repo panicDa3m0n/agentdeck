@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-26 11:36",
-  "updated": "2026-10-29 20:18",
+  "updated": "2026-10-29 20:23",
   "objectives": [
     {
       "id": "O12",
@@ -195,10 +195,112 @@
           "title": "Lo schermo grafico calmo con l'interfaccia effimera delle sessioni, al posto del terminale",
           "scope": "deck/, docs/, pacchetti grafici e servizio dello schermo sulla Deck",
           "gate_pre": "Sulla Deck lo schermo grafico sostituisce il terminale: di base calmo, l'interfaccia delle sessioni compare con un tocco o un pulsante e sparisce dopo la scelta o il tempo; aprire e chiudere una sessione di prova funziona dal tocco; snapshot prima; ssh agentdeck intatto (INV-1); docs e versione pubblicata.",
-          "gate_post": "",
-          "state": "doing",
+          "gate_post": "Schermo grafico installato (N66, N67); manca la prova al tocco con l'utente alla Deck. Priorità al piano del 29/10",
+          "state": "blocked",
           "risk": 55,
           "risk_why": "112 pacchetti nuovi, utente nuovo, servizio grafico su tty1 e server locale che esegue azioni; snapshot prima, server solo su 127.0.0.1 con codice, ripiego al terminale, ssh verificato a ogni passo",
+          "docs": [
+            "docs/piano.md"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "O16",
+      "title": "Lo sviluppo di AgentDeck sta sulla Deck: repository, installazione e revert da qui, versioni fissate (piano punti 10-11)",
+      "gate": "Il repository vive in /home/agent/agentdeck/repo e si pubblica da qui; un comando deck installa una versione del repository sulla Deck con test, snapshot prima e verifica, e torna alla versione precedente con anteprima; Claude Code a versione fissa senza aggiornamenti automatici; le installazioni senza versione o latest segnalate come errore salvo consenso motivato dell'agente; ssh agentdeck sempre funzionante (INV-1); test; documentazione; versione pubblicata.",
+      "state": "open",
+      "docs": [],
+      "tasks": []
+    },
+    {
+      "id": "O17",
+      "title": "Le richieste di permesso vanno a un arbitro agentico e non bloccano mai l'agente; tabella delle richieste in dashboard (piano punti 8-9)",
+      "gate": "Le domande della guardia e di Claude Code (hook PermissionRequest) vanno a un arbitro agentico che approva, rifiuta con motivazione o inoltra al proprietario; l'agente non resta mai fermo: via rapida o differita con ritorno della decisione; ogni richiesta in una tabella con stato, sessione e messaggio; deck requests mostra, annulla, sollecita e attende; il numero delle richieste attive in deck status; falsi positivi della guardia ridotti; test; prova reale; documentazione; versione pubblicata.",
+      "state": "open",
+      "docs": [],
+      "tasks": []
+    },
+    {
+      "id": "O18",
+      "title": "Lo sviluppo di AgentDeck sta sulla Deck: repository, installazione e revert da qui, versioni fissate (piano punti 10-11)",
+      "gate": "Il repository vive in /home/agent/agentdeck/repo e si pubblica da qui; un comando deck installa una versione del repository sulla Deck con test, snapshot prima e verifica, e torna alla precedente con anteprima; Claude Code a versione fissa senza aggiornamenti automatici; installazioni senza versione o latest segnalate come errore salvo consenso motivato dell'agente; ssh agentdeck sempre funzionante (INV-1); test; documentazione; versione pubblicata.",
+      "state": "open",
+      "docs": [],
+      "tasks": [
+        {
+          "id": "O18.T1",
+          "title": "deck installa sulla Deck una versione del repository e torna indietro",
+          "scope": "deck/, docs/, /opt/agentdeck sulla Deck",
+          "gate_pre": "Un comando deck installa da /home/agent/agentdeck/repo: test, snapshot prima, copia in /opt/agentdeck, impostazioni Claude (anche bypass nelle impostazioni utente), verifica; revert alla versione precedente con anteprima; provato installando la versione corrente e tornando indietro; ssh intatto; docs/sviluppo.md e deck.md aggiornati.",
+          "gate_post": "",
+          "state": "todo",
+          "risk": null,
+          "risk_why": "",
+          "docs": []
+        },
+        {
+          "id": "O18.T2",
+          "title": "Claude Code a versione fissa, aggiornamento manuale con prova degli agganci",
+          "scope": "deck/, docs/, impostazioni di Claude Code sulla Deck",
+          "gate_pre": "Aggiornamenti automatici di Claude Code spenti e versione fissata; un comando o una procedura aggiorna a una versione scelta solo dopo una prova automatica di hook, flag e bypass, con ritorno alla precedente; documentazione.",
+          "gate_post": "",
+          "state": "todo",
+          "risk": null,
+          "risk_why": "",
+          "docs": []
+        },
+        {
+          "id": "O18.T3",
+          "title": "Installazioni senza versione o latest segnalate come errore, salvo consenso motivato",
+          "scope": "deck/, docs/",
+          "gate_pre": "La guardia riconosce le installazioni senza versione o latest fuori da pacman (npm, pip, cargo, curl | sh, immagini :latest, claude) e le rifiuta con il motivo; l'agente le può fare solo dichiarando un consenso motivato, registrato; test con casi veri e falsi positivi; documentazione.",
+          "gate_post": "",
+          "state": "todo",
+          "risk": null,
+          "risk_why": "",
+          "docs": []
+        }
+      ]
+    },
+    {
+      "id": "O19",
+      "title": "Le richieste di permesso vanno a un arbitro agentico e non bloccano mai l'agente; tabella delle richieste in dashboard (piano punti 8-9)",
+      "gate": "Le domande della guardia e di Claude Code (hook PermissionRequest) vanno a un arbitro agentico che approva, rifiuta con motivazione o inoltra al proprietario; l'agente non resta mai fermo (via rapida o differita, decisione che torna); ogni richiesta in una tabella con stato, sessione e messaggio; deck requests mostra, annulla, sollecita e attende; richieste attive in deck status; falsi positivi della guardia ridotti; test; prova reale; documentazione; versione pubblicata.",
+      "state": "open",
+      "docs": [],
+      "tasks": [
+        {
+          "id": "O19.T1",
+          "title": "Falsi positivi della guardia sui servizi e le credenziali dell'utente",
+          "scope": "deck/agentdeck/ownership.py, deck/claude/, deck/tests/, docs/",
+          "gate_pre": "Le catene di sola lettura (cd, test, systemctl cat o status di agentdeck-servizio@) non chiedono più; gli interventi veri sì; test con i casi osservati il 29/10; documentazione.",
+          "gate_post": "",
+          "state": "todo",
+          "risk": null,
+          "risk_why": "",
+          "docs": []
+        },
+        {
+          "id": "O19.T2",
+          "title": "Tabella delle richieste e deck requests, con il numero in deck status",
+          "scope": "deck/, docs/",
+          "gate_pre": "SQLite di sistema con id, stato, sessione, messaggio, comando, motivo, decisore, decisione, scadenza, solleciti; deck requests elenca, mostra, annulla, sollecita e attende con timeout, anche via MCP; avviso in deck status con le richieste attive; test; documentazione.",
+          "gate_post": "",
+          "state": "todo",
+          "risk": null,
+          "risk_why": "",
+          "docs": []
+        },
+        {
+          "id": "O19.T3",
+          "title": "L'arbitro agentico decide al posto dell'umano senza bloccare l'agente",
+          "scope": "deck/, docs/, servizi e impostazioni di Claude Code sulla Deck",
+          "gate_pre": "La guardia e l'hook PermissionRequest mandano le richieste all'arbitro (istanza senza memorie, prompt del sistema, trascrizione come dato); via rapida di pochi secondi, poi differita con deny e ritorno della decisione, approvazione monouso legata al comando; inoltro al proprietario segnato in attesa finché non c'è Telegram; test; prova reale; documentazione.",
+          "gate_post": "",
+          "state": "todo",
+          "risk": null,
+          "risk_why": "",
           "docs": []
         }
       ]
@@ -279,18 +381,18 @@
   ],
   "active": {
     "objective": "O15",
-    "task": "O15.T3",
-    "phase": "in_progress",
-    "risk": 55,
-    "risk_why": "112 pacchetti nuovi, utente nuovo, servizio grafico su tty1 e server locale che esegue azioni; snapshot prima, server solo su 127.0.0.1 con codice, ripiego al terminale, ssh verificato a ogni passo",
+    "task": "",
+    "phase": "objective_gate_pending",
+    "risk": null,
+    "risk_why": "",
     "hold_invariants": "",
     "hold_plan": "",
-    "gate_done": ""
+    "gate_done": "O15"
   },
   "previous": {
-    "task": "O15.T2",
-    "state": "done",
-    "note": "deck claude elenca, apre (Remote Control in ~/agentdeck/sessioni) e chiude con conferma; MCP; 259 test; prova sulla Deck, sessioni al lavoro intatte"
+    "task": "O15.T3",
+    "state": "blocked",
+    "note": "Schermo grafico installato (N66, N67); manca la prova al tocco con l'utente alla Deck. Priorità al piano del 29/10"
   },
   "cycle": {
     "n": 5,
@@ -298,7 +400,7 @@
     "slug": "il-sistema-dell-agente-permessi-servizi-"
   },
   "counters": {
-    "objective": 15,
+    "objective": 19,
     "cycle": 5,
     "request": 6,
     "note": 67
