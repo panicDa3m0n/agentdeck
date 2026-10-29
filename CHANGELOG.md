@@ -4,6 +4,20 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.5.9 — 2026-10-29
+
+Ciclo 05, nuovo obiettivo O20 (piano punto 1, agente interno), task O20.T1: l'intermediario locale verso MiniMax.
+
+- **`agentdeck/minimax_proxy.py`**, servizio `agentdeck-agente-proxy` su `127.0.0.1:8791`: toglie dal prompt di
+  sistema la riga fissa "Claude agent" e l'intestazione di fatturazione, imposta il modello (`MiniMax-M3`), toglie
+  i parametri e le intestazioni che MiniMax non usa, inoltra con la chiave della Deck, restituisce lo streaming;
+  `count_tokens` stimato in locale; registro senza contenuti né chiave.
+- **`deck release`:** installa, abilita e riavvia l'intermediario, e verifica che risponda.
+- **Prove:** test con un MiniMax finto; `claude -p` vero → intermediario → MiniMax finto: arriva solo il prompt
+  AgentDeck, senza la riga Claude. Prova con MiniMax vero in attesa della chiave (richiesta R7).
+- **Test:** 6 nuovi, 314 in tutto. **Documentazione:** `docs/agente-interno.md`, nuovo, nell'indice.
+- **Annotato:** O19.T2 e O19.T3 (tabella delle richieste, arbitro) da rivedere con l'utente alla fine del piano.
+
 ## 0.5.8 — 2026-10-29
 
 Ciclo 05, obiettivo O19 (piano punti 8-9), task O19.T1: nessuna richiesta di permesso all'utente, falsi positivi

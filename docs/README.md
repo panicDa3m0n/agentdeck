@@ -14,6 +14,9 @@ documento (invariante INV-9). Quando si modifica il codice, si aggiorna il docum
 
 - [piano.md](piano.md): il piano di sviluppo deciso con l'utente il 29/10/2026 (agente interno, approvazioni da
   agente ad agente, richieste, Brain, sviluppo sulla Deck, versioni fissate) e l'ordine di lavoro.
+- [agente-interno.md](agente-interno.md): l'agente interno della Deck (MiniMax via Claude Code), l'intermediario
+  locale che toglie l'identità Claude, configurazione, chiave e prove. Codice:
+  [../deck/agentdeck/minimax_proxy.py](../deck/agentdeck/minimax_proxy.py).
 
 ## Architettura
 

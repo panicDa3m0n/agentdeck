@@ -249,6 +249,13 @@ class Releases:
             ("session unit", ["sudo", "-n", "sh", "-c",
                               f'install -m 0644 {cur}/claude/agentdeck-sessione@.service /etc/systemd/system/ '
                               f'&& systemctl daemon-reload']),
+            # l'intermediario dell'agente interno (O20.T1): riavviato perché usi il codice della versione attiva
+            ("agent proxy", ["sudo", "-n", "sh", "-c",
+                             f'test ! -f {cur}/claude/agentdeck-agente-proxy.service || '
+                             f'(install -d -o agent -g agent /home/agent/.local/state/agentdeck && '
+                             f'install -m 0644 {cur}/claude/agentdeck-agente-proxy.service /etc/systemd/system/ && '
+                             f'systemctl daemon-reload && systemctl enable agentdeck-agente-proxy.service && '
+                             f'systemctl restart agentdeck-agente-proxy.service)']),
             ("claude managed", ["sudo", "-n", "sh", "-c",
                                 f'python3 -m json.tool {cur}/claude/managed-settings.json >/dev/null && '
                                 f'install -d -m 0755 /etc/claude-code && '
@@ -304,6 +311,13 @@ class Releases:
                        "output": "" if guard.returncode == 2 else _tail(guard.stderr + guard.stdout)})
         sshd = self.sys.run(["systemctl", "is-active", "sshd"], timeout=30)
         checks.append({"check": "sshd active", "ok": sshd.stdout.strip() == "active", "output": sshd.stdout.strip()})
+        if (self.current / "claude" / "agentdeck-agente-proxy.service").is_file():
+            # l'intermediario dell'agente interno risponde (O20.T1); ritenta per qualche secondo dopo il riavvio
+            proxy = self.sys.run(["sh", "-c", 'for i in 1 2 3 4 5 6 7 8 9 10; do '
+                                              'curl -fsS -m 2 http://127.0.0.1:8791/health && exit 0; sleep 1; done; '
+                                              'exit 1'], timeout=30)
+            checks.append({"check": "agent proxy answers", "ok": proxy.returncode == 0,
+                           "output": "" if proxy.returncode == 0 else _tail(proxy.stderr + proxy.stdout)})
         return checks
 
     def prune(self) -> list:

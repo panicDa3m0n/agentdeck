@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-26 11:36",
-  "updated": "2026-10-29 21:29",
+  "updated": "2026-10-29 21:30",
   "objectives": [
     {
       "id": "O12",
@@ -310,9 +310,61 @@
           "docs": []
         }
       ]
+    },
+    {
+      "id": "O20",
+      "title": "L'agente interno di AgentDeck: MiniMax via Claude Code con un intermediario locale, identità AgentDeck (piano punto 1)",
+      "gate": "Un intermediario locale passa le richieste di Claude Code a MiniMax togliendo la riga fissa Claude e i parametri non supportati; prompt di sistema con l'identità AgentDeck di HoneyLabs; deck agent lancia l'agente su un compito con strumenti deck e guardia attiva; attivazione per eventi e a intervalli con autonomia a livelli (le azioni rischiose solo segnalate); registro delle attività; prova con un finto MiniMax e prova reale con la chiave; documentazione; versione pubblicata.",
+      "state": "open",
+      "docs": [],
+      "tasks": [
+        {
+          "id": "O20.T1",
+          "title": "Intermediario locale verso MiniMax: toglie la riga fissa Claude e adatta la richiesta",
+          "scope": "deck/, docs/, servizio dell'intermediario sulla Deck",
+          "gate_pre": "Servizio su 127.0.0.1 che riceve le richieste di Claude Code, toglie la riga fissa e l'intestazione di fatturazione, adatta modello, parametri e intestazioni, inoltra a MiniMax con la chiave letta dalla Deck e restituisce lo streaming; provato con un finto MiniMax e con claude -p; chiave mai nel repository; documentazione.",
+          "gate_post": "",
+          "state": "doing",
+          "risk": 20,
+          "risk_why": "Servizio solo locale su 127.0.0.1; la chiave sta solo sulla Deck; nessun cambiamento alle sessioni esistenti.",
+          "docs": []
+        },
+        {
+          "id": "O20.T2",
+          "title": "Prompt di sistema AgentDeck e deck agent per lanciare l'agente su un compito",
+          "scope": "deck/, docs/",
+          "gate_pre": "Prompt di sistema generato dal sistema con l'identità AgentDeck di HoneyLabs, regole e invarianti; deck agent run lancia claude -p con quel prompt, strumenti deck, guardia e intermediario, e registra esito e attività; provato con il finto MiniMax e, con la chiave, con un compito di sola lettura; documentazione.",
+          "gate_post": "",
+          "state": "todo",
+          "risk": null,
+          "risk_why": "",
+          "docs": []
+        },
+        {
+          "id": "O20.T3",
+          "title": "Attivazione per eventi e a intervalli, autonomia a livelli",
+          "scope": "deck/, docs/, timer e servizi sulla Deck",
+          "gate_pre": "Timer e avvisi critici attivano l'agente interno; può fare da solo solo diagnosi e azioni a basso rischio, le altre le segnala; registro consultabile da deck agent; provato con un avviso simulato; documentazione.",
+          "gate_post": "",
+          "state": "todo",
+          "risk": null,
+          "risk_why": "",
+          "docs": []
+        }
+      ]
     }
   ],
-  "requests": [],
+  "requests": [
+    {
+      "id": "R7",
+      "objective": "O19",
+      "title": "Chiave API MiniMax: il proprietario la scrive in ~/.config/agentdeck/minimax.key (permessi 600) sulla Deck",
+      "state": "open",
+      "doc": "",
+      "dettaglio": "",
+      "created": "2026-10-29 21:30"
+    }
+  ],
   "notes": [
     {
       "id": "N58",
@@ -400,11 +452,11 @@
     }
   ],
   "active": {
-    "objective": "O19",
-    "task": "",
-    "phase": "idle",
-    "risk": null,
-    "risk_why": "",
+    "objective": "O20",
+    "task": "O20.T1",
+    "phase": "in_progress",
+    "risk": 20,
+    "risk_why": "Servizio solo locale su 127.0.0.1; la chiave sta solo sulla Deck; nessun cambiamento alle sessioni esistenti.",
     "hold_invariants": "",
     "hold_plan": "",
     "gate_done": ""
@@ -420,9 +472,9 @@
     "slug": "il-sistema-dell-agente-permessi-servizi-"
   },
   "counters": {
-    "objective": 19,
+    "objective": 20,
     "cycle": 5,
-    "request": 6,
+    "request": 7,
     "note": 69
   }
 }

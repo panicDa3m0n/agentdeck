@@ -1,0 +1,29 @@
+# /etc/systemd/system/agentdeck-agente-proxy.service
+# AgentDeck: l'intermediario locale fra Claude Code e MiniMax per l'agente interno (task O20.T1), solo su 127.0.0.1.
+# Codice: /opt/agentdeck/agentdeck/minimax_proxy.py. Configurazione: ~/.config/agentdeck/agente.json; chiave in
+# ~/.config/agentdeck/minimax.key (600), letta a ogni richiesta e mai copiata. Installato da deck release.
+# Documentazione: docs/agente-interno.md
+[Unit]
+Description=AgentDeck: intermediario locale verso MiniMax (127.0.0.1:8791)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=agent
+Group=agent
+Environment=HOME=/home/agent
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHONDONTWRITEBYTECODE=1
+WorkingDirectory=/opt/agentdeck
+ExecStart=/usr/bin/python3 -m agentdeck.minimax_proxy
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/agent/.local/state/agentdeck
+
+[Install]
+WantedBy=multi-user.target

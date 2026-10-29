@@ -10,14 +10,17 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O19` Le richieste di permesso vanno a un arbitro agentico e non bloccano mai l'agente; tabella delle richieste in dashboard (piano punti 8-9) — 3 task: 1 completate, 0 in corso, 1 da fare, 1 bloccate
-- **Task attiva:** —
+- **Obiettivo attivo:** `O20` L'agente interno di AgentDeck: MiniMax via Claude Code con un intermediario locale, identità AgentDeck (piano punto 1) — 3 task: 0 completate, 1 in corso, 2 da fare, 0 bloccate
+- **Task attiva:** `O20.T1` Intermediario locale verso MiniMax: toglie la riga fissa Claude e adatta la richiesta — in corso · rischio 20/100
 - **Ultima task gestita:** `O19.T2` — bloccata — Non sviluppata dall'agente in questa sessione: da rivedere con l'utente alla fine del piano
-- **Ultimo aggiornamento:** 2026-10-29 21:29
+- **Fase:** `in_progress`
+- **Ultimo aggiornamento:** 2026-10-29 21:30
 
 ## Richieste attive
 
-_nessuna richiesta in attesa._
+_Mancanze di progetto che l'agente non può risolvere da solo. L'utente le conferma in chat, poi vengono chiuse con `req-resolve`._
+
+- `R7` (`O19`) Chiave API MiniMax: il proprietario la scrive in ~/.config/agentdeck/minimax.key (permessi 600) sulla Deck
 
 ## Obiettivi
 
@@ -118,6 +121,7 @@ _nessuna task. Aggiungile con `wf.sh task-add`._
 ### `O19` Le richieste di permesso vanno a un arbitro agentico e non bloccano mai l'agente; tabella delle richieste in dashboard (piano punti 8-9) — in corso
 
 **Gate obiettivo:** Le domande della guardia e di Claude Code (hook PermissionRequest) vanno a un arbitro agentico che approva, rifiuta con motivazione o inoltra al proprietario; l'agente non resta mai fermo (via rapida o differita, decisione che torna); ogni richiesta in una tabella con stato, sessione e messaggio; deck requests mostra, annulla, sollecita e attende; richieste attive in deck status; falsi positivi della guardia ridotti; test; prova reale; documentazione; versione pubblicata.
+**Richieste vincolanti:** `R7` Chiave API MiniMax: il proprietario la scrive in ~/.config/agentdeck/minimax.key (permessi 600) sulla Deck
 
 - [x] `O19.T1` Falsi positivi della guardia sui servizi e le credenziali dell'utente — *perimetro:* `deck/agentdeck/ownership.py, deck/claude/, deck/tests/, docs/`
   *gate previsto:* Le catene di sola lettura (cd, test, systemctl cat o status di agentdeck-servizio@) non chiedono più; gli interventi veri sì; test con i casi osservati il 29/10; documentazione. · *gate confermato:* ✔ Mai più domande all'utente (deny al posto di ask, root consentita, hook PermissionRequest); heredoc e letture non più falsi positivi; v0.5.8
@@ -129,6 +133,18 @@ _nessuna task. Aggiungile con `wf.sh task-add`._
 - [ ] `O19.T3` L'arbitro agentico decide al posto dell'umano senza bloccare l'agente — *perimetro:* `deck/, docs/, servizi e impostazioni di Claude Code sulla Deck`
   *gate previsto:* La guardia e l'hook PermissionRequest mandano le richieste all'arbitro (istanza senza memorie, prompt del sistema, trascrizione come dato); via rapida di pochi secondi, poi differita con deny e ritorno della decisione, approvazione monouso legata al comando; inoltro al proprietario segnato in attesa finché non c'è Telegram; test; prova reale; documentazione.
   *annotazioni:* `N69`
+
+### `O20` L'agente interno di AgentDeck: MiniMax via Claude Code con un intermediario locale, identità AgentDeck (piano punto 1) — in corso
+
+**Gate obiettivo:** Un intermediario locale passa le richieste di Claude Code a MiniMax togliendo la riga fissa Claude e i parametri non supportati; prompt di sistema con l'identità AgentDeck di HoneyLabs; deck agent lancia l'agente su un compito con strumenti deck e guardia attiva; attivazione per eventi e a intervalli con autonomia a livelli (le azioni rischiose solo segnalate); registro delle attività; prova con un finto MiniMax e prova reale con la chiave; documentazione; versione pubblicata.
+
+- [~] `O20.T1` Intermediario locale verso MiniMax: toglie la riga fissa Claude e adatta la richiesta — *perimetro:* `deck/, docs/, servizio dell'intermediario sulla Deck`
+  *gate previsto:* Servizio su 127.0.0.1 che riceve le richieste di Claude Code, toglie la riga fissa e l'intestazione di fatturazione, adatta modello, parametri e intestazioni, inoltra a MiniMax con la chiave letta dalla Deck e restituisce lo streaming; provato con un finto MiniMax e con claude -p; chiave mai nel repository; documentazione.
+  *rischio:* 20/100 — Servizio solo locale su 127.0.0.1; la chiave sta solo sulla Deck; nessun cambiamento alle sessioni esistenti.
+- [ ] `O20.T2` Prompt di sistema AgentDeck e deck agent per lanciare l'agente su un compito — *perimetro:* `deck/, docs/`
+  *gate previsto:* Prompt di sistema generato dal sistema con l'identità AgentDeck di HoneyLabs, regole e invarianti; deck agent run lancia claude -p con quel prompt, strumenti deck, guardia e intermediario, e registra esito e attività; provato con il finto MiniMax e, con la chiave, con un compito di sola lettura; documentazione.
+- [ ] `O20.T3` Attivazione per eventi e a intervalli, autonomia a livelli — *perimetro:* `deck/, docs/, timer e servizi sulla Deck`
+  *gate previsto:* Timer e avvisi critici attivano l'agente interno; può fare da solo solo diagnosi e azioni a basso rischio, le altre le segnala; registro consultabile da deck agent; provato con un avviso simulato; documentazione.
 
 ## Annotazioni
 
