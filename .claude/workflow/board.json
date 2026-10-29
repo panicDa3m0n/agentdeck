@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-26 11:36",
-  "updated": "2026-10-29 23:54",
+  "updated": "2026-10-30 00:36",
   "objectives": [
     {
       "id": "O12",
@@ -432,6 +432,28 @@
           "docs": []
         }
       ]
+    },
+    {
+      "id": "O23",
+      "title": "Agenti di background via MiniMax: manutenzione nei momenti di inattività e altre attività (richiesta del proprietario del 30/10)",
+      "gate": "La chiave MiniMax arriva sulla Deck senza passare dalla chat; prova reale dell'agente interno con MiniMax; agenti di background che lavorano quando la Deck è inattiva (manutenzione del Brain e altre attività decise con il proprietario), con registro e rapporti; test; documentazione; versione pubblicata.",
+      "state": "open",
+      "docs": [],
+      "tasks": [
+        {
+          "id": "O23.T1",
+          "title": "Richieste al proprietario con una pagina monouso esposta solo fino alla risposta: segreti (deck secret) e domande (deck ask)",
+          "scope": "deck/, docs/, cloudflared sulla Deck",
+          "gate_pre": "deck secret request (chiavi MiniMax, Telegram o qualunque altra) e deck ask create (domande con campi, risposta all'agente come dato) generano una pagina HTML semplice esposta con un tunnel temporaneo (o solo in casa), monouso, a tempo, con tentativi limitati, chiusa alla risposta; i segreti vanno nel file 600 e non compaiono mai in schermate, registri o chat; prova reale con la chiave MiniMax; test; documentazione",
+          "gate_post": "deck secret e deck ask via tunnel monouso (v0.5.14): chiave MiniMax arrivata, domanda di prova risposta da internet; 376 test",
+          "state": "done",
+          "risk": 20,
+          "risk_why": "Apre per qualche minuto una porta solo sulla rete di casa (non esposta su internet, INV-5) con token monouso, scadenza e tentativi limitati; scrive un file 600 dell'utente agent; nessun valore in chat, schermate o registri (INV-4, INV-6).",
+          "docs": [
+            "docs/richieste.md"
+          ]
+        }
+      ]
     }
   ],
   "requests": [
@@ -552,12 +574,26 @@
       "text": "Per O22.T4: il database del Brain (~/.local/share/agentdeck/brain/brain.db) sta in @home, che snapper non fotografa: rollback del sistema senza perdita di memorie, ma nessuna copia. Serve una copia periodica (sqlite3 .backup) o una configurazione snapper sua.",
       "docs": [],
       "created": "2026-10-29 23:54"
+    },
+    {
+      "id": "N72",
+      "task": "O23.T1",
+      "text": "Decisione del proprietario del 30/10/2026 (INV-5): le richieste al proprietario, segreti e domande, usano sempre una pagina HTML semplice e monouso esposta su internet con un tunnel temporaneo (cloudflared), solo per il tempo di ricevere il dato, poi si chiude. Vale come decisione esplicita per questo meccanismo; ogni altra esposizione resta da decidere.",
+      "docs": [],
+      "created": "2026-10-30 00:17"
+    },
+    {
+      "id": "N73",
+      "task": "O23.T1",
+      "text": "30/10 00:17: il timer agentdeck-agente, alla prima corsa vera con la chiave, ha lanciato l'agente interno MiniMax che ha fatto da solo deck update apply (8 pacchetti, snapshot 215-218) e il riavvio, contro il suo prompt (solo proporre). Sistema sano dopo il riavvio (deck update verify ok). Timer fermato e disabilitato; prima di riattivarlo servono limiti tecnici nella guardia per l'agente interno; il passo agent timer di deck release lo riabiliterebbe.",
+      "docs": [],
+      "created": "2026-10-30 00:21"
     }
   ],
   "active": {
-    "objective": "O22",
+    "objective": "O23",
     "task": "",
-    "phase": "idle",
+    "phase": "objective_gate_pending",
     "risk": null,
     "risk_why": "",
     "hold_invariants": "",
@@ -565,9 +601,9 @@
     "gate_done": ""
   },
   "previous": {
-    "task": "O22.T1",
+    "task": "O23.T1",
     "state": "done",
-    "note": "brain e brain mcp attivi (v0.5.13): memorie SQLite+FTS5 con revisioni e link; 358 test; MCP Connected; memoria salvata e ritrovata"
+    "note": "deck secret e deck ask via tunnel monouso (v0.5.14): chiave MiniMax arrivata, domanda di prova risposta da internet; 376 test"
   },
   "cycle": {
     "n": 5,
@@ -575,9 +611,9 @@
     "slug": "il-sistema-dell-agente-permessi-servizi-"
   },
   "counters": {
-    "objective": 22,
+    "objective": 23,
     "cycle": 5,
     "request": 8,
-    "note": 71
+    "note": 73
   }
 }

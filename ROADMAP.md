@@ -10,10 +10,11 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O22` Il Brain: componente del sistema dedicato al cervello dell'agente, memorie e contesto automatico (piano punto 7) — 4 task: 1 completate, 0 in corso, 3 da fare, 0 bloccate
+- **Obiettivo attivo:** `O23` Agenti di background via MiniMax: manutenzione nei momenti di inattività e altre attività (richiesta del proprietario del 30/10) — 1 task: 1 completate, 0 in corso, 0 da fare, 0 bloccate
 - **Task attiva:** —
-- **Ultima task gestita:** `O22.T1` — completata — brain e brain mcp attivi (v0.5.13): memorie SQLite+FTS5 con revisioni e link; 358 test; MCP Connected; memoria salvata e ritrovata
-- **Ultimo aggiornamento:** 2026-10-29 23:54
+- **Ultima task gestita:** `O23.T1` — completata — deck secret e deck ask via tunnel monouso (v0.5.14): chiave MiniMax arrivata, domanda di prova risposta da internet; 376 test
+- **Fase:** `objective_gate_pending`
+- **Ultimo aggiornamento:** 2026-10-30 00:36
 
 ## Richieste attive
 
@@ -175,6 +176,16 @@ _nessuna task. Aggiungile con `wf.sh task-add`._
 - [ ] `O22.T4` Manutenzione ciclica del Brain — *perimetro:* `deck/, docs/, timer sulla Deck`
   *gate previsto:* Timer che controlla integrità del database, propone accorpamenti di memorie simili e deprecazioni di memorie vecchie, e sincronizza nel repository i profili dell'adattatore scritti dagli agenti (punto 5); registro; test; documentazione.
 
+### `O23` Agenti di background via MiniMax: manutenzione nei momenti di inattività e altre attività (richiesta del proprietario del 30/10) — in corso
+
+**Gate obiettivo:** La chiave MiniMax arriva sulla Deck senza passare dalla chat; prova reale dell'agente interno con MiniMax; agenti di background che lavorano quando la Deck è inattiva (manutenzione del Brain e altre attività decise con il proprietario), con registro e rapporti; test; documentazione; versione pubblicata.
+
+- [x] `O23.T1` Richieste al proprietario con una pagina monouso esposta solo fino alla risposta: segreti (deck secret) e domande (deck ask) — *perimetro:* `deck/, docs/, cloudflared sulla Deck`
+  *gate previsto:* deck secret request (chiavi MiniMax, Telegram o qualunque altra) e deck ask create (domande con campi, risposta all'agente come dato) generano una pagina HTML semplice esposta con un tunnel temporaneo (o solo in casa), monouso, a tempo, con tentativi limitati, chiusa alla risposta; i segreti vanno nel file 600 e non compaiono mai in schermate, registri o chat; prova reale con la chiave MiniMax; test; documentazione · *gate confermato:* ✔ deck secret e deck ask via tunnel monouso (v0.5.14): chiave MiniMax arrivata, domanda di prova risposta da internet; 376 test
+  *rischio:* 20/100 — Apre per qualche minuto una porta solo sulla rete di casa (non esposta su internet, INV-5) con token monouso, scadenza e tentativi limitati; scrive un file 600 dell'utente agent; nessun valore in chat, schermate o registri (INV-4, INV-6).
+  *documenti:* [richieste.md](docs/richieste.md)
+  *annotazioni:* `N72`, `N73`
+
 ## Annotazioni
 
 _Una riga per nota, sempre legata a una task. `wf.sh notes` per leggerle._
@@ -193,3 +204,5 @@ _Una riga per nota, sempre legata a una task. `wf.sh notes` per leggerle._
 - `N69` (`O19.T3`) Da rivedere con l'utente alla fine del piano, insieme a O19.T2: non sviluppata dall'agente in questa sessione (29/10). Già fatto in O19.T1: nessuna domanda all'utente, deny con motivo, hook PermissionRequest che registra. — 2026-10-29 21:29
 - `N70` (`O22.T1`) Per O22.T2: la memoria a file di Claude Code (~/.claude/projects/<cartella>/memory/, MEMORY.md) resta attiva accanto a brain; quando i pacchetti di contesto porteranno le memorie da sé, decidere con il proprietario se importare quei file in brain e spegnere la memoria a file. — 2026-10-29 23:54
 - `N71` (`O22.T1`) Per O22.T4: il database del Brain (~/.local/share/agentdeck/brain/brain.db) sta in @home, che snapper non fotografa: rollback del sistema senza perdita di memorie, ma nessuna copia. Serve una copia periodica (sqlite3 .backup) o una configurazione snapper sua. — 2026-10-29 23:54
+- `N72` (`O23.T1`) Decisione del proprietario del 30/10/2026 (INV-5): le richieste al proprietario, segreti e domande, usano sempre una pagina HTML semplice e monouso esposta su internet con un tunnel temporaneo (cloudflared), solo per il tempo di ricevere il dato, poi si chiude. Vale come decisione esplicita per questo meccanismo; ogni altra esposizione resta da decidere. — 2026-10-30 00:17
+- `N73` (`O23.T1`) 30/10 00:17: il timer agentdeck-agente, alla prima corsa vera con la chiave, ha lanciato l'agente interno MiniMax che ha fatto da solo deck update apply (8 pacchetti, snapshot 215-218) e il riavvio, contro il suo prompt (solo proporre). Sistema sano dopo il riavvio (deck update verify ok). Timer fermato e disabilitato; prima di riattivarlo servono limiti tecnici nella guardia per l'agente interno; il passo agent timer di deck release lo riabiliterebbe. — 2026-10-30 00:21
