@@ -28,6 +28,7 @@ BASE = Path("/opt/agentdeck-versioni")
 CURRENT = Path("/opt/agentdeck")
 NEXT = Path("/opt/agentdeck.next")
 CLAUDE_BIN = HOME / ".local" / "bin" / "claude"
+INSTALLED_CLAUDE_MD = Path("/etc/claude-code/CLAUDE.md")
 KEEP = 5
 COMMIT = re.compile(r"[0-9a-f]{7,40}")
 RELEASE_ID = re.compile(r"[0-9A-Za-z._-]{1,64}")
@@ -62,9 +63,10 @@ class System:
 
 class Releases:
     def __init__(self, system: Optional[System] = None, repo: Path = REPO, base: Path = BASE,
-                 current: Path = CURRENT, next_link: Path = NEXT):
+                 current: Path = CURRENT, next_link: Path = NEXT, installed_claude_md: Path = INSTALLED_CLAUDE_MD):
         self.sys = system or System()
         self.repo, self.base, self.current, self.next = repo, base, current, next_link
+        self.installed_claude_md = installed_claude_md
 
     # ---- Lettura
 
@@ -199,11 +201,13 @@ class Releases:
     def switch(self, folder: Path) -> dict:
         """Rende attiva la cartella con uno scambio atomico; la cartella di prima di O18.T1 entra fra le versioni."""
         legacy = self.current.is_dir() and not self.current.is_symlink()
+        # la cartella di prima non ha il CLAUDE.md generato: si conserva quello installato, per poterci tornare
         script = ('set -e; rm -f "$2"; ln -s "$1" "$2"; mv -T --exchange "$2" "$3"; '
-                  'if [ -L "$2" ]; then rm -f "$2"; else mv -T "$2" "$4"; fi')
+                  'if [ -L "$2" ]; then rm -f "$2"; else mv -T "$2" "$4"; '
+                  'if [ -f "$5" ] && [ ! -f "$4/claude/CLAUDE.md" ]; then cp "$5" "$4/claude/CLAUDE.md"; fi; fi')
         legacy_dest = self.base / f"{self._info(self.current).get('version') or 'dev'}-prima"
         out = self.sys.run(["sudo", "-n", "sh", "-c", script, "sh", str(folder), str(self.next), str(self.current),
-                            str(legacy_dest)])
+                            str(legacy_dest), str(self.installed_claude_md)])
         if out.returncode != 0:
             raise ReleaseError("SWITCH_FAILED", {"output": _tail(out.stderr)})
         if legacy:

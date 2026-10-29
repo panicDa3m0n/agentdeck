@@ -45,7 +45,7 @@ class Fake(rel.Releases):
 
     def __init__(self, root: Path):
         super().__init__(NoSudo(), repo=root / "repo", base=root / "versioni", current=root / "agentdeck",
-                         next_link=root / "agentdeck.next")
+                         next_link=root / "agentdeck.next", installed_claude_md=root / "etc-CLAUDE.md")
         self.tests_ok, self.checks_fail_for = True, set()
         self.applied = []
 
@@ -84,6 +84,8 @@ class Fixture(unittest.TestCase):
         # la cartella di prima di O18.T1, come sulla Deck
         legacy = root / "agentdeck"
         (legacy / "screen").mkdir(parents=True)
+        (legacy / "claude").mkdir()
+        (root / "etc-CLAUDE.md").write_text("# CLAUDE.md installato prima\n")
         (legacy / "screen" / "a.conf").write_text("uno\n")
         (legacy / "VERSION").write_text("0.5.4\n")
         self.root, self.repo = root, repo
@@ -121,6 +123,8 @@ class ReleasesTests(Fixture):
         prev = self.r.previous()
         self.assertEqual(prev["id"], "0.5.4-prima")  # la cartella di prima resta, per revert
         self.assertEqual(prev["source"], "legacy")
+        # senza il CLAUDE.md installato non ci si potrebbe tornare (revert reale del 29/10)
+        self.assertEqual((Path(prev["path"]) / "claude" / "CLAUDE.md").read_text(), "# CLAUDE.md installato prima\n")
         self.assertEqual(len(self.snaps), 1)
         self.assertFalse(self.r.next.exists())
 
