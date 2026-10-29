@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-26 11:36",
-  "updated": "2026-10-29 20:52",
+  "updated": "2026-10-29 20:55",
   "objectives": [
     {
       "id": "O12",
@@ -227,7 +227,7 @@
       "id": "O18",
       "title": "Lo sviluppo di AgentDeck sta sulla Deck: repository, installazione e revert da qui, versioni fissate (piano punti 10-11)",
       "gate": "Il repository vive in /home/agent/agentdeck/repo e si pubblica da qui; un comando deck installa una versione del repository sulla Deck con test, snapshot prima e verifica, e torna alla precedente con anteprima; Claude Code a versione fissa senza aggiornamenti automatici; installazioni senza versione o latest segnalate come errore salvo consenso motivato dell'agente; ssh agentdeck sempre funzionante (INV-1); test; documentazione; versione pubblicata.",
-      "state": "open",
+      "state": "closed",
       "docs": [],
       "tasks": [
         {
@@ -263,7 +263,9 @@
           "risk_why": "Cambia solo cosa la guardia lascia passare; il rischio è bloccare lavoro legittimo, coperto da test sui falsi positivi e dal consenso motivato.",
           "docs": []
         }
-      ]
+      ],
+      "closed_at": "2026-10-29 20:55",
+      "closed_note": "Approvato dall'utente il 29/10: deck release, Claude Code fisso con prova degli agganci, installazioni a versione fissa; v0.5.5-0.5.7"
     },
     {
       "id": "O19",
@@ -389,9 +391,9 @@
     }
   ],
   "active": {
-    "objective": "O18",
+    "objective": "",
     "task": "",
-    "phase": "objective_gate_pending",
+    "phase": "idle",
     "risk": null,
     "risk_why": "",
     "hold_invariants": "",

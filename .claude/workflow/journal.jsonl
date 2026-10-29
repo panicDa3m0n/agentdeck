@@ -1576,3 +1576,5 @@
 {"at": "2026-10-29 20:52", "testo": "ANNOTAZIONE N68 su O18.T3 — Falso positivo di claude/after.py (29/10): un comando che conteneva solo testo 'pacman -S' fra virgolette (casi di prova di O18.T3) ha fatto dire all'hook che erano stati installati pacchetti; non è stato installato nulla. Andrebbe controllato se pacman è davvero partito (log o database) invece del testo del comando."}
 {"at": "2026-10-29 20:52", "testo": "TASK CHIUSA O18.T3 — completata: La guardia e deck term rifiutano le installazioni senza versione fuori da pacman, salvo consenso registrato; 57 casi, prova dal vivo; v0.5.7"}
 {"at": "2026-10-29 20:52", "testo": "VERSIONE 0.5.4 (O18.T3)"}
+{"at": "2026-10-29 20:53", "testo": "GATE OBIETTIVO APERTO O18"}
+{"at": "2026-10-29 20:55", "testo": "OBIETTIVO CHIUSO O18 (completo) — Approvato dall'utente il 29/10: deck release, Claude Code fisso con prova degli agganci, installazioni a versione fissa; v0.5.5-0.5.7"}

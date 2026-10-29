@@ -10,11 +10,10 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O18` Lo sviluppo di AgentDeck sta sulla Deck: repository, installazione e revert da qui, versioni fissate (piano punti 10-11) — 3 task: 3 completate, 0 in corso, 0 da fare, 0 bloccate
+- **Obiettivo attivo:** —
 - **Task attiva:** —
 - **Ultima task gestita:** `O18.T3` — completata — La guardia e deck term rifiutano le installazioni senza versione fuori da pacman, salvo consenso registrato; 57 casi, prova dal vivo; v0.5.7
-- **Fase:** `objective_gate_pending`
-- **Ultimo aggiornamento:** 2026-10-29 20:52
+- **Ultimo aggiornamento:** 2026-10-29 20:55
 
 ## Richieste attive
 
@@ -100,9 +99,10 @@ _nessuna task. Aggiungile con `wf.sh task-add`._
 
 _nessuna task. Aggiungile con `wf.sh task-add`._
 
-### `O18` Lo sviluppo di AgentDeck sta sulla Deck: repository, installazione e revert da qui, versioni fissate (piano punti 10-11) — in corso
+### `O18` Lo sviluppo di AgentDeck sta sulla Deck: repository, installazione e revert da qui, versioni fissate (piano punti 10-11) — chiuso
 
 **Gate obiettivo:** Il repository vive in /home/agent/agentdeck/repo e si pubblica da qui; un comando deck installa una versione del repository sulla Deck con test, snapshot prima e verifica, e torna alla precedente con anteprima; Claude Code a versione fissa senza aggiornamenti automatici; installazioni senza versione o latest segnalate come errore salvo consenso motivato dell'agente; ssh agentdeck sempre funzionante (INV-1); test; documentazione; versione pubblicata.
+**Chiuso:** 2026-10-29 20:55 — Approvato dall'utente il 29/10: deck release, Claude Code fisso con prova degli agganci, installazioni a versione fissa; v0.5.5-0.5.7
 
 - [x] `O18.T1` deck installa sulla Deck una versione del repository e torna indietro — *perimetro:* `deck/, docs/, /opt/agentdeck sulla Deck`
   *gate previsto:* Un comando deck installa da /home/agent/agentdeck/repo: test, snapshot prima, copia in /opt/agentdeck, impostazioni Claude (anche bypass nelle impostazioni utente), verifica; revert alla versione precedente con anteprima; provato installando la versione corrente e tornando indietro; ssh intatto; docs/sviluppo.md e deck.md aggiornati. · *gate confermato:* ✔ deck release installa un commit dalla Deck (test, snapshot, scambio atomico, verifica, ritorno automatico) e torna indietro; ciclo reale riuscito, v0.5.5
