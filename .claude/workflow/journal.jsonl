@@ -1578,3 +1578,6 @@
 {"at": "2026-10-29 20:52", "testo": "VERSIONE 0.5.4 (O18.T3)"}
 {"at": "2026-10-29 20:53", "testo": "GATE OBIETTIVO APERTO O18"}
 {"at": "2026-10-29 20:55", "testo": "OBIETTIVO CHIUSO O18 (completo) — Approvato dall'utente il 29/10: deck release, Claude Code fisso con prova degli agganci, installazioni a versione fissa; v0.5.5-0.5.7"}
+{"at": "2026-10-29 20:55", "testo": "TASK APERTA O19.T1 — Falsi positivi della guardia sui servizi e le credenziali dell'utente | perimetro: deck/agentdeck/ownership.py, deck/claude/, deck/tests/, docs/ | gate: Le catene di sola lettura (cd, test, systemctl cat o status di agentdeck-servizio@) non chiedono più; gli interventi veri sì; test con i casi osservati il 29/10; documentazione. | rischio: 25"}
+{"at": "2026-10-29 21:02", "testo": "TASK CHIUSA O19.T1 — completata: Mai più domande all'utente (deny al posto di ask, root consentita, hook PermissionRequest); heredoc e letture non più falsi positivi; v0.5.8"}
+{"at": "2026-10-29 21:02", "testo": "VERSIONE 0.5.5 (O19.T1)"}

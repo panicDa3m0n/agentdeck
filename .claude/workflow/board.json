@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-26 11:36",
-  "updated": "2026-10-29 20:55",
+  "updated": "2026-10-29 21:02",
   "objectives": [
     {
       "id": "O12",
@@ -279,10 +279,10 @@
           "title": "Falsi positivi della guardia sui servizi e le credenziali dell'utente",
           "scope": "deck/agentdeck/ownership.py, deck/claude/, deck/tests/, docs/",
           "gate_pre": "Le catene di sola lettura (cd, test, systemctl cat o status di agentdeck-servizio@) non chiedono più; gli interventi veri sì; test con i casi osservati il 29/10; documentazione.",
-          "gate_post": "",
-          "state": "todo",
-          "risk": null,
-          "risk_why": "",
+          "gate_post": "Mai più domande all'utente (deny al posto di ask, root consentita, hook PermissionRequest); heredoc e letture non più falsi positivi; v0.5.8",
+          "state": "done",
+          "risk": 25,
+          "risk_why": "Allargare troppo farebbe passare senza domanda un intervento vero su un servizio o una credenziale del proprietario; test su entrambi i lati.",
           "docs": []
         },
         {
@@ -391,7 +391,7 @@
     }
   ],
   "active": {
-    "objective": "",
+    "objective": "O19",
     "task": "",
     "phase": "idle",
     "risk": null,
@@ -401,9 +401,9 @@
     "gate_done": ""
   },
   "previous": {
-    "task": "O18.T3",
+    "task": "O19.T1",
     "state": "done",
-    "note": "La guardia e deck term rifiutano le installazioni senza versione fuori da pacman, salvo consenso registrato; 57 casi, prova dal vivo; v0.5.7"
+    "note": "Mai più domande all'utente (deny al posto di ask, root consentita, hook PermissionRequest); heredoc e letture non più falsi positivi; v0.5.8"
   },
   "cycle": {
     "n": 5,

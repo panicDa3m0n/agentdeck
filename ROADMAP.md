@@ -10,10 +10,10 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** —
+- **Obiettivo attivo:** `O19` Le richieste di permesso vanno a un arbitro agentico e non bloccano mai l'agente; tabella delle richieste in dashboard (piano punti 8-9) — 3 task: 1 completate, 0 in corso, 2 da fare, 0 bloccate
 - **Task attiva:** —
-- **Ultima task gestita:** `O18.T3` — completata — La guardia e deck term rifiutano le installazioni senza versione fuori da pacman, salvo consenso registrato; 57 casi, prova dal vivo; v0.5.7
-- **Ultimo aggiornamento:** 2026-10-29 20:55
+- **Ultima task gestita:** `O19.T1` — completata — Mai più domande all'utente (deny al posto di ask, root consentita, hook PermissionRequest); heredoc e letture non più falsi positivi; v0.5.8
+- **Ultimo aggiornamento:** 2026-10-29 21:02
 
 ## Richieste attive
 
@@ -119,8 +119,9 @@ _nessuna task. Aggiungile con `wf.sh task-add`._
 
 **Gate obiettivo:** Le domande della guardia e di Claude Code (hook PermissionRequest) vanno a un arbitro agentico che approva, rifiuta con motivazione o inoltra al proprietario; l'agente non resta mai fermo (via rapida o differita, decisione che torna); ogni richiesta in una tabella con stato, sessione e messaggio; deck requests mostra, annulla, sollecita e attende; richieste attive in deck status; falsi positivi della guardia ridotti; test; prova reale; documentazione; versione pubblicata.
 
-- [ ] `O19.T1` Falsi positivi della guardia sui servizi e le credenziali dell'utente — *perimetro:* `deck/agentdeck/ownership.py, deck/claude/, deck/tests/, docs/`
-  *gate previsto:* Le catene di sola lettura (cd, test, systemctl cat o status di agentdeck-servizio@) non chiedono più; gli interventi veri sì; test con i casi osservati il 29/10; documentazione.
+- [x] `O19.T1` Falsi positivi della guardia sui servizi e le credenziali dell'utente — *perimetro:* `deck/agentdeck/ownership.py, deck/claude/, deck/tests/, docs/`
+  *gate previsto:* Le catene di sola lettura (cd, test, systemctl cat o status di agentdeck-servizio@) non chiedono più; gli interventi veri sì; test con i casi osservati il 29/10; documentazione. · *gate confermato:* ✔ Mai più domande all'utente (deny al posto di ask, root consentita, hook PermissionRequest); heredoc e letture non più falsi positivi; v0.5.8
+  *rischio:* 25/100 — Allargare troppo farebbe passare senza domanda un intervento vero su un servizio o una credenziale del proprietario; test su entrambi i lati.
 - [ ] `O19.T2` Tabella delle richieste e deck requests, con il numero in deck status — *perimetro:* `deck/, docs/`
   *gate previsto:* SQLite di sistema con id, stato, sessione, messaggio, comando, motivo, decisore, decisione, scadenza, solleciti; deck requests elenca, mostra, annulla, sollecita e attende con timeout, anche via MCP; avviso in deck status con le richieste attive; test; documentazione.
 - [ ] `O19.T3` L'arbitro agentico decide al posto dell'umano senza bloccare l'agente — *perimetro:* `deck/, docs/, servizi e impostazioni di Claude Code sulla Deck`
