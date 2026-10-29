@@ -4,7 +4,8 @@ Ogni versione si estrae da un commit di ~/agentdeck/repo in una cartella sua, /o
 e /opt/agentdeck diventa un collegamento simbolico a quella attiva: installare e tornare indietro sono lo scambio
 atomico del collegamento (mv --exchange), così guardia e hook delle sessioni, che girano da /opt/agentdeck, non
 vedono mai una cartella a metà. Installare: estrazione, test nella copia, snapshot, scambio, passi di sistema
-(comando deck, hook di pacman, unità delle sessioni, configurazione di Claude Code), verifica; se la verifica
+(comando deck, hook di pacman, unità delle sessioni, configurazione di Claude Code), eseguiti dal codice della
+versione nuova, verifica; se la verifica
 fallisce si torna da soli alla versione di prima. agentdeck-claude non si riavvia: la configurazione nuova vale per
 le sessioni aperte dopo. Schermo (screen/) e interfaccia grafica (ui/) non si installano da qui: install-screen.sh
 tocca la configurazione SSH e serve una procedura con verifica dell'accesso (INV-1); se cambiano, l'installazione
@@ -270,6 +271,22 @@ class Releases:
                 break
         return results
 
+    def apply_active(self) -> list:
+        """I passi di sistema eseguiti dal codice della versione attiva, così valgono subito anche i passi nuovi;
+        una versione senza release.py (la cartella di prima di O18.T1) usa quelli di chi chiama."""
+        if not (self.current / "agentdeck" / "release.py").is_file():
+            return self.apply()
+        code = ("import json, sys; sys.path.insert(0, sys.argv[1]); from agentdeck import release; "
+                "print(json.dumps(release.Releases().apply()))")
+        out = self.sys.run(["python3", "-c", code, str(self.current)], timeout=900)
+        try:
+            steps = json.loads(out.stdout.strip().splitlines()[-1])
+            if isinstance(steps, list):
+                return steps
+        except (ValueError, IndexError):
+            pass
+        return [{"step": "apply from the active version", "ok": False, "output": _tail(out.stderr + out.stdout)}]
+
     def verify(self) -> list:
         """Dopo lo scambio: deck risponde, il server MCP parte, la guardia rifiuta, sshd è attivo (INV-1)."""
         checks = []
@@ -307,13 +324,13 @@ class Releases:
 
     def _switch_apply_verify(self, folder: Path, back_to: Optional[Path]) -> dict:
         switched = self.switch(folder)
-        steps = self.apply()
+        steps = self.apply_active()
         checks = self.verify() if all(s["ok"] for s in steps) else []
         ok = bool(checks) and all(c["ok"] for c in checks)
         result = {"switch": switched, "steps": steps, "checks": checks, "ok": ok, "reverted": None}
         if not ok and back_to is not None:
             self.switch(back_to)
-            back_steps = self.apply()
+            back_steps = self.apply_active()
             back_checks = self.verify()
             result["reverted"] = {"to": str(back_to), "steps": back_steps, "checks": back_checks,
                                   "ok": all(s["ok"] for s in back_steps) and all(c["ok"] for c in back_checks)}

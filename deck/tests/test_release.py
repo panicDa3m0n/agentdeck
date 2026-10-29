@@ -52,6 +52,9 @@ class Fake(rel.Releases):
     def test(self, folder):
         return {"ok": self.tests_ok, "output": "" if self.tests_ok else "FAILED " + INJECTION}
 
+    def apply_active(self):
+        return self.apply()
+
     def apply(self):
         self.applied.append(Path(rel.os.readlink(self.current)).name)
         return [{"step": "fake", "ok": True, "output": ""}]

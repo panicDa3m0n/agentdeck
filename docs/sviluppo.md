@@ -56,7 +56,10 @@ installate più di recente, sempre l'attiva e la precedente.
 4. passi di sistema: comando `deck`, hook di pacman degli obblighi, unità `agentdeck-sessione@`, configurazione di
    Claude Code (`/etc/claude-code/CLAUDE.md` e `managed-settings.json`, stile di output, impostazioni utente con
    `outputStyle`, `defaultMode: bypassPermissions` e `skipDangerousModePermissionPrompt`, skill, server MCP se
-   manca). `agentdeck-claude` non si riavvia: la configurazione nuova vale per le sessioni aperte dopo;
+   manca, versione di Claude Code fissata se non lo è, [claude-code.md](claude-code.md#aggiornamenti-versione-fissa-o18t2)).
+   I passi li esegue il codice della versione nuova, così un passo aggiunto vale già alla sua prima installazione
+   (la cartella di prima di O18.T1, che non ha `release.py`, usa quelli di chi chiama). `agentdeck-claude` non si
+   riavvia: la configurazione nuova vale per le sessioni aperte dopo;
 5. verifica: `deck status` risponde, `deck mcp` parte, la guardia rifiuta ancora un comando che taglia l'accesso,
    `sshd` è attivo. Se una verifica fallisce, torna da solo alla versione di prima e rifà i suoi passi di sistema.
 
