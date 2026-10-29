@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-26 11:36",
-  "updated": "2026-10-29 21:39",
+  "updated": "2026-10-29 21:41",
   "objectives": [
     {
       "id": "O12",
@@ -345,8 +345,8 @@
           "title": "Attivazione per eventi e a intervalli, autonomia a livelli",
           "scope": "deck/, docs/, timer e servizi sulla Deck",
           "gate_pre": "Timer e avvisi critici attivano l'agente interno; può fare da solo solo diagnosi e azioni a basso rischio, le altre le segnala; registro consultabile da deck agent; provato con un avviso simulato; documentazione.",
-          "gate_post": "",
-          "state": "doing",
+          "gate_post": "Timer ogni 15 min con deck agent tick: agente solo per avvisi/obblighi nuovi o una volta al giorno; senza chiave salta e registra; v0.5.11",
+          "state": "done",
           "risk": 30,
           "risk_why": "Avvia un agente senza nessuno davanti; limitato da prompt, guardia, deny e dal partire solo per avvisi nuovi o una volta al giorno.",
           "docs": []
@@ -453,18 +453,18 @@
   ],
   "active": {
     "objective": "O20",
-    "task": "O20.T3",
-    "phase": "in_progress",
-    "risk": 30,
-    "risk_why": "Avvia un agente senza nessuno davanti; limitato da prompt, guardia, deny e dal partire solo per avvisi nuovi o una volta al giorno.",
+    "task": "",
+    "phase": "objective_gate_pending",
+    "risk": null,
+    "risk_why": "",
     "hold_invariants": "",
     "hold_plan": "",
     "gate_done": ""
   },
   "previous": {
-    "task": "O20.T2",
+    "task": "O20.T3",
     "state": "done",
-    "note": "Prompt AgentDeck (AGENTE.md) e deck agent run con prompt, strumenti deck, guardia e intermediario; corsa vera con MiniMax finto; v0.5.10"
+    "note": "Timer ogni 15 min con deck agent tick: agente solo per avvisi/obblighi nuovi o una volta al giorno; senza chiave salta e registra; v0.5.11"
   },
   "cycle": {
     "n": 5,

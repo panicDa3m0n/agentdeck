@@ -1597,3 +1597,5 @@
 {"at": "2026-10-29 21:38", "testo": "TASK CHIUSA O20.T2 — completata: Prompt AgentDeck (AGENTE.md) e deck agent run con prompt, strumenti deck, guardia e intermediario; corsa vera con MiniMax finto; v0.5.10"}
 {"at": "2026-10-29 21:38", "testo": "VERSIONE 0.5.5 (O20.T2)"}
 {"at": "2026-10-29 21:39", "testo": "TASK APERTA O20.T3 — Attivazione per eventi e a intervalli, autonomia a livelli | perimetro: deck/, docs/, timer e servizi sulla Deck | gate: Timer e avvisi critici attivano l'agente interno; può fare da solo solo diagnosi e azioni a basso rischio, le altre le segnala; registro consultabile da deck agent; provato con un avviso simulato; documentazione. | rischio: 30"}
+{"at": "2026-10-29 21:41", "testo": "TASK CHIUSA O20.T3 — completata: Timer ogni 15 min con deck agent tick: agente solo per avvisi/obblighi nuovi o una volta al giorno; senza chiave salta e registra; v0.5.11"}
+{"at": "2026-10-29 21:41", "testo": "VERSIONE 0.5.5 (O20.T3)"}
