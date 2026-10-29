@@ -71,6 +71,7 @@ Verifiche del 26/10/2026:
 | `/update` | [../deck/agentdeck/components/update.py](../deck/agentdeck/components/update.py) | Aggiornamenti del sistema: controllo, applicazione con snapshot e verifica, riavvio (vedi sotto) |
 | `/obligations` | [../deck/agentdeck/components/obligations.py](../deck/agentdeck/components/obligations.py) | Obblighi del sistema verso l'agente: aperti, chiusi, done e dismiss; nascono dall'hook di pacman ([obblighi.md](obblighi.md)) |
 | `/claude` | [../deck/agentdeck/components/claude.py](../deck/agentdeck/components/claude.py) | Sessioni Claude della Deck: elenco con titolo, stato e link per l'app, apertura di una sessione nuova, chiusura con conferma ([interfacce.md](interfacce.md)) |
+| `/release` | [../deck/agentdeck/components/release.py](../deck/agentdeck/components/release.py) | Versioni di AgentDeck installate dal repository della Deck: installazione di un commit con test, snapshot, scambio atomico e verifica, ritorno alla precedente ([sviluppo.md](sviluppo.md#installare-dalla-deck-deck-release-o18t1)) |
 | `/term` | [../deck/agentdeck/components/term.py](../deck/agentdeck/components/term.py) | Adattatore dei programmi interattivi: un programma in tmux come schermata, domande riconosciute, profili scritti dall'agente ([adattatore.md](adattatore.md)) |
 
 ### `/network`: rete
@@ -454,6 +455,11 @@ Solo libreria standard di Python, compatibile da Python 3.10 (Mac) in su (Deck: 
   diventa un errore `FAILED`, con i problemi elencati nei dati.
 
 ## Installazione e aggiornamento
+
+Dal 29/10/2026 AgentDeck si installa dalla Deck stessa, con `deck release install` dal repository
+`~/agentdeck/repo` ([sviluppo.md](sviluppo.md#installare-dalla-deck-deck-release-o18t1)). Lo script dal Mac
+qui sotto resta per una Deck nuova e per le parti che `deck release` non installa: schermo (`screen/`) e
+interfaccia grafica (`ui/`).
 
 ```bash
 deck/install.sh

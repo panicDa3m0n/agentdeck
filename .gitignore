@@ -3,3 +3,5 @@ secrets/
 # ISO e file scaricati
 cache/
 .DS_Store
+# Bytecode di Python, creato dai test
+__pycache__/

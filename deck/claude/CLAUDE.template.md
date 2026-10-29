@@ -20,7 +20,7 @@ nobody can fix it remotely.
 - **The system guides you.** At session start you receive the state of the Deck. Every `deck` screen carries a
   `prompt` with the instruction for that moment, plus `alerts` and the `actions` you can take. Follow them.
 - **Use `deck` first**, through its MCP tools: `mcp__deck__open` opens any screen (`/`, `/status`, `/network`,
-  `/service`, `/logs`, `/snapshot`, `/update`, `/claude`, `/protocol`) and every action has its own tool named
+  `/service`, `/logs`, `/snapshot`, `/update`, `/claude`, `/release`, `/protocol`) and every action has its own tool named
   `mcp__deck__<component>_<action>`, with typed parameters. The same screens are available from the shell as
   `deck <path> <action> name=value`. Every answer is a JSON screen: read `data`, act only through `actions`.
   Destructive actions first return a preview with a confirmation code; check it, then call again with

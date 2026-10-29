@@ -5,7 +5,12 @@ guidano ogni modifica. Indice: [README.md](README.md).
 
 ## Repository
 
-- **Locale:** `/Users/snj/linuxai-steamdeck` sul Mac. Struttura in [../README.md](../README.md).
+- **Sulla Deck, dal 29/10/2026:** `/home/agent/agentdeck/repo`. Qui gli agenti sviluppano AgentDeck, fanno
+  commit e tag e pubblicano, con il login GitHub della Deck (sezione "GitHub dalla Deck"); l'identità dei commit è
+  impostata con `git config --local`. Decisione dell'utente del 29/10/2026, piano punto 10 ([piano.md](piano.md)).
+  La governance si usa da qui con `~/claude-rules/bin/wf.sh` (clone di `panicDa3m0n/claude-rules`).
+- **Sul Mac:** `/Users/snj/linuxai-steamdeck`. Prima di lavorarci va aggiornato con `git pull`: la copia di
+  riferimento è quella della Deck. Struttura in [../README.md](../README.md).
 - **Remote:** <https://github.com/panicDa3m0n/agentdeck>, **privato**, account personale `panicDa3m0n`.
 - **Identità dei commit:** Davide `<davideditrani94@gmail.com>`, impostata solo per questo repository
   (`git config --local`). L'identità globale del Mac resta quella SNJ.
@@ -27,6 +32,42 @@ git config --local --add credential.https://github.com.helper \
 
 Così `git push` pubblica sempre come `panicDa3m0n`, qualunque sia l'account attivo in `gh`. Non va rimosso
 (trappola P1 della governance).
+
+## Installare dalla Deck: `deck release` (O18.T1)
+
+Il codice di [../deck/agentdeck/release.py](../deck/agentdeck/release.py) e la schermata
+[../deck/agentdeck/components/release.py](../deck/agentdeck/components/release.py) installano sulla Deck un commit
+del repository, e tornano indietro.
+
+**Come sono tenute le versioni.** Ogni versione è una cartella sua, `/opt/agentdeck-versioni/<versione>-<commit>`,
+estratta con `git archive` (solo il lavoro nel commit, mai le modifiche non salvate), con `VERSION`, il
+`claude/CLAUDE.md` generato con le invarianti di quel commit e un `RELEASE.json` (versione, commit, quando è stata
+installata). `/opt/agentdeck` è un collegamento simbolico alla versione attiva. Si cambia con uno scambio atomico
+(`mv -T --exchange`), così guardia e hook delle sessioni, che girano da `/opt/agentdeck`, non vedono mai una
+cartella a metà. La prima installazione sposta la vecchia cartella `/opt/agentdeck` in
+`/opt/agentdeck-versioni/<versione>-prima`, che resta disponibile per tornare indietro. Si tengono le 5 versioni
+installate più di recente, sempre l'attiva e la precedente.
+
+**`deck release install [commit=<ref>]`**, di norma `HEAD`, con anteprima e codice di conferma:
+1. estrae il commit e lancia i test nella copia; se falliscono non cambia nulla;
+2. rifiuta se cambiano `screen/` o `ui/`: `install-screen.sh` tocca la configurazione SSH e serve una procedura
+   con verifica dell'accesso (INV-1), per ora con `deck/install.sh` dal Mac;
+3. snapshot del sistema, poi scambio del collegamento;
+4. passi di sistema: comando `deck`, hook di pacman degli obblighi, unità `agentdeck-sessione@`, configurazione di
+   Claude Code (`/etc/claude-code/CLAUDE.md` e `managed-settings.json`, stile di output, impostazioni utente con
+   `outputStyle`, `defaultMode: bypassPermissions` e `skipDangerousModePermissionPrompt`, skill, server MCP se
+   manca). `agentdeck-claude` non si riavvia: la configurazione nuova vale per le sessioni aperte dopo;
+5. verifica: `deck status` risponde, `deck mcp` parte, la guardia rifiuta ancora un comando che taglia l'accesso,
+   `sshd` è attivo. Se una verifica fallisce, torna da solo alla versione di prima e rifà i suoi passi di sistema.
+
+**`deck release revert [id=<versione>]`**, di norma la precedente: snapshot, scambio, passi di sistema e verifica,
+con lo stesso ritorno automatico. Un revert fatto due volte torna avanti.
+
+**Il giro di lavoro:** modifica in `~/agentdeck/repo`, test, commit, `deck release install`, verifica, poi versione
+e tag nella governance e `git push` (INV-8).
+
+Test: [../deck/tests/test_release.py](../deck/tests/test_release.py), su un repository git e cartelle temporanee
+veri, senza `sudo` e con passi di sistema finti.
 
 ## GitHub dalla Deck (ADR-0002, O14.T2)
 

@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-26 11:36",
-  "updated": "2026-10-29 20:24",
+  "updated": "2026-10-29 20:25",
   "objectives": [
     {
       "id": "O12",
@@ -236,9 +236,9 @@
           "scope": "deck/, docs/, /opt/agentdeck sulla Deck",
           "gate_pre": "Un comando deck installa da /home/agent/agentdeck/repo: test, snapshot prima, copia in /opt/agentdeck, impostazioni Claude (anche bypass nelle impostazioni utente), verifica; revert alla versione precedente con anteprima; provato installando la versione corrente e tornando indietro; ssh intatto; docs/sviluppo.md e deck.md aggiornati.",
           "gate_post": "",
-          "state": "todo",
-          "risk": null,
-          "risk_why": "",
+          "state": "doing",
+          "risk": 45,
+          "risk_why": "Guardia e hook di tutte le sessioni girano da /opt/agentdeck: una versione rotta le bloccherebbe. Snapshot, test prima del cambio, cambio atomico, ritorno automatico se la verifica fallisce.",
           "docs": []
         },
         {
@@ -382,11 +382,11 @@
     }
   ],
   "active": {
-    "objective": "",
-    "task": "",
-    "phase": "idle",
-    "risk": null,
-    "risk_why": "",
+    "objective": "O18",
+    "task": "O18.T1",
+    "phase": "in_progress",
+    "risk": 45,
+    "risk_why": "Guardia e hook di tutte le sessioni girano da /opt/agentdeck: una versione rotta le bloccherebbe. Snapshot, test prima del cambio, cambio atomico, ritorno automatico se la verifica fallisce.",
     "hold_invariants": "",
     "hold_plan": "",
     "gate_done": ""

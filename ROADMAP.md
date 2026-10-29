@@ -10,10 +10,11 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** —
-- **Task attiva:** —
+- **Obiettivo attivo:** `O18` Lo sviluppo di AgentDeck sta sulla Deck: repository, installazione e revert da qui, versioni fissate (piano punti 10-11) — 3 task: 0 completate, 1 in corso, 2 da fare, 0 bloccate
+- **Task attiva:** `O18.T1` deck installa sulla Deck una versione del repository e torna indietro — in corso · rischio 45/100
 - **Ultima task gestita:** `O15.T3` — bloccata — Schermo grafico installato (N66, N67); manca la prova al tocco con l'utente alla Deck. Priorità al piano del 29/10
-- **Ultimo aggiornamento:** 2026-10-29 20:24
+- **Fase:** `in_progress`
+- **Ultimo aggiornamento:** 2026-10-29 20:25
 
 ## Richieste attive
 
@@ -103,8 +104,9 @@ _nessuna task. Aggiungile con `wf.sh task-add`._
 
 **Gate obiettivo:** Il repository vive in /home/agent/agentdeck/repo e si pubblica da qui; un comando deck installa una versione del repository sulla Deck con test, snapshot prima e verifica, e torna alla precedente con anteprima; Claude Code a versione fissa senza aggiornamenti automatici; installazioni senza versione o latest segnalate come errore salvo consenso motivato dell'agente; ssh agentdeck sempre funzionante (INV-1); test; documentazione; versione pubblicata.
 
-- [ ] `O18.T1` deck installa sulla Deck una versione del repository e torna indietro — *perimetro:* `deck/, docs/, /opt/agentdeck sulla Deck`
+- [~] `O18.T1` deck installa sulla Deck una versione del repository e torna indietro — *perimetro:* `deck/, docs/, /opt/agentdeck sulla Deck`
   *gate previsto:* Un comando deck installa da /home/agent/agentdeck/repo: test, snapshot prima, copia in /opt/agentdeck, impostazioni Claude (anche bypass nelle impostazioni utente), verifica; revert alla versione precedente con anteprima; provato installando la versione corrente e tornando indietro; ssh intatto; docs/sviluppo.md e deck.md aggiornati.
+  *rischio:* 45/100 — Guardia e hook di tutte le sessioni girano da /opt/agentdeck: una versione rotta le bloccherebbe. Snapshot, test prima del cambio, cambio atomico, ritorno automatico se la verifica fallisce.
 - [ ] `O18.T2` Claude Code a versione fissa, aggiornamento manuale con prova degli agganci — *perimetro:* `deck/, docs/, impostazioni di Claude Code sulla Deck`
   *gate previsto:* Aggiornamenti automatici di Claude Code spenti e versione fissata; un comando o una procedura aggiorna a una versione scelta solo dopo una prova automatica di hook, flag e bypass, con ritorno alla precedente; documentazione.
 - [ ] `O18.T3` Installazioni senza versione o latest segnalate come errore, salvo consenso motivato — *perimetro:* `deck/, docs/`
