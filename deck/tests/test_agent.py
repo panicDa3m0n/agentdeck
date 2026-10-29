@@ -94,6 +94,74 @@ class AgentTests(Fixture):
         self.assertEqual(len(self.a.runs()), 1)
 
 
+class TickSystem(FakeSystem):
+    """Risponde anche a deck status e deck obligations, con avvisi e obblighi scelti dal test."""
+
+    def __init__(self):
+        super().__init__()
+        self.alerts = [{"level": "info", "code": "FAN_UNREADABLE"}]
+        self.open = []
+        self.clock = "2026-10-29T22:00:00+01:00"
+
+    def run(self, argv, env, cwd, timeout):
+        if argv[0] == ag.DECK:
+            data = {"status": {"alerts": self.alerts, "data": {}},
+                    "obligations": {"data": {"open": self.open}}}[argv[1]]
+            return subprocess.CompletedProcess(argv, 0, json.dumps(data), "")
+        return super().run(argv, env, cwd, timeout)
+
+    def now(self):
+        return self.clock
+
+
+class TickTests(Fixture):
+    def setUp(self):
+        super().setUp()
+        self.sys = TickSystem()
+        self.a.sys = self.sys
+
+    def agent_runs(self):
+        return [c for c in self.sys.calls if c["argv"][0] != ag.DECK]
+
+    def test_first_tick_is_the_daily_check_then_quiet(self):
+        first = self.a.tick()
+        self.assertTrue(first["ran"])
+        self.assertEqual(first["reasons"], ["daily check"])
+        second = self.a.tick()
+        self.assertFalse(second["ran"])
+        self.assertEqual(second["reasons"], [])
+        self.assertEqual(len(self.agent_runs()), 1)
+
+    def test_new_warning_or_obligation_starts_the_agent_once(self):
+        self.a.tick()
+        self.sys.alerts = self.sys.alerts + [{"level": "critical", "code": "SERVICES_FAILED"}]
+        t = self.a.tick()
+        self.assertTrue(t["ran"])
+        self.assertEqual(t["reasons"], ["new alerts: SERVICES_FAILED"])
+        task = self.agent_runs()[-1]["argv"][2]
+        self.assertIn("SERVICES_FAILED", task)
+        self.assertFalse(self.a.tick()["ran"])  # lo stesso avviso non riparte
+        self.sys.open = [{"id": "a1b2"}]
+        self.assertEqual(self.a.tick()["reasons"], ["new obligations: a1b2"])
+
+    def test_info_alerts_do_not_start_it(self):
+        self.a.tick()
+        self.sys.alerts = self.sys.alerts + [{"level": "info", "code": "LLMNR_LISTENING"}]
+        self.assertFalse(self.a.tick()["ran"])
+
+    def test_without_key_it_skips_and_retries_later(self):
+        self.sys.h = {"ok": True, "key_present": False}
+        t = self.a.tick()
+        self.assertEqual((t["ran"], t["skipped"]), (False, "NO_KEY"))
+        self.sys.h = {"ok": True, "model": "MiniMax-M3", "key_present": True}
+        self.assertTrue(self.a.tick()["ran"])  # la chiave arriva: il controllo mancato parte
+
+    def test_daily_check_again_after_a_day(self):
+        self.a.tick()
+        self.sys.clock = "2026-10-30T22:00:01+01:00"
+        self.assertEqual(self.a.tick()["reasons"], ["daily check"])
+
+
 class ScreenTests(Fixture):
     def setUp(self):
         super().setUp()

@@ -6,6 +6,8 @@ gestiti attivi: guardia, regole deny, avvisi. Il modello è MiniMax, attraverso 
 (agentdeck/minimax_proxy.py): Claude Code parla con 127.0.0.1 e la chiave vera la mette l'intermediario. Lavora in
 ~/agentdeck/agente. Ogni corsa finisce in ~/.local/state/agentdeck/agente-runs.jsonl: ora, compito, esito, rapporto,
 durata. Compito e rapporto sono testo esterno: solo nei dati (INV-4).
+Attivazione automatica (O20.T3): `deck agent tick`, dal timer agentdeck-agente.timer ogni 15 minuti, lancia l'agente
+solo per avvisi o obblighi nuovi o una volta al giorno; i tick vanno in agente-ticks.jsonl.
 Schermata: agentdeck/components/agent.py. Documentazione: docs/agente-interno.md.
 """
 from __future__ import annotations
@@ -31,6 +33,7 @@ TOOLS = "Bash,Read,Grep,Glob"
 TIMEOUT_S, TIMEOUT_MAX_S = 600, 1800
 TASK_MAX = 4000
 REPORT_MAX = 20000
+DAILY_S = 24 * 3600  # il controllo giornaliero del timer (O20.T3)
 
 
 def state_dir() -> Path:
@@ -105,6 +108,65 @@ class Agent:
         return [str(CLAUDE_BIN), "-p", task, "--output-format", "json", "--permission-mode", "bypassPermissions",
                 "--system-prompt", self.prompt.read_text(), "--tools", TOOLS, "--mcp-config", mcp,
                 "--strict-mcp-config"]
+
+    # ---- Attivazione automatica (O20.T3)
+
+    def _screen(self, path: str) -> Optional[dict]:
+        out = self.sys.run([DECK, path], dict(os.environ), self.workdir if self.workdir.is_dir() else HOME, 60)
+        try:
+            return json.loads(out.stdout)
+        except ValueError:
+            return None
+
+    def _tick_state(self) -> dict:
+        try:
+            return json.loads((self.runs_file.parent / "agente-tick.json").read_text())
+        except (OSError, ValueError):
+            return {}
+
+    def tick(self, timeout: int = TIMEOUT_S) -> dict:
+        """Il controllo del timer: lancia l'agente solo per avvisi o obblighi nuovi, o una volta al giorno.
+
+        Avvisi e obblighi si riconoscono per codice e id, scritti dal sistema; il compito per l'agente si compone solo
+        con quelli (INV-4). Senza chiave o senza intermediario non parte e lo registra.
+        """
+        status, obligations = self._screen("status"), self._screen("obligations")
+        codes = sorted({a["code"] for a in (status or {}).get("alerts", []) if a.get("level") in ("warning",
+                                                                                                 "critical")})
+        open_ids = sorted(str(o.get("id")) for o in ((obligations or {}).get("data") or {}).get("open", []))
+        state = self._tick_state()
+        new_codes = [c for c in codes if c not in state.get("codes", [])]
+        new_ids = [i for i in open_ids if i not in state.get("obligations", [])]
+        now = self.sys.now()
+        last_daily = state.get("daily")
+        daily_due = not last_daily or (datetime.fromisoformat(now) - datetime.fromisoformat(last_daily)).total_seconds() \
+            >= DAILY_S
+        reasons = ([f"new alerts: {', '.join(new_codes)}"] if new_codes else []) + \
+            ([f"new obligations: {', '.join(new_ids)}"] if new_ids else []) + (["daily check"] if daily_due else [])
+        tick = {"time": now, "kind": "tick", "alerts": codes, "obligations": open_ids, "reasons": reasons,
+                "ran": False, "skipped": None}
+        if status is None:
+            tick["skipped"] = "deck status unreadable"
+        elif reasons:
+            task = ("Controllo automatico di AgentDeck, avviato dal timer. Motivo: " + "; ".join(reasons) + ". "
+                    "Apri deck status e deck obligations, diagnostica, fai solo ciò che le tue regole ti permettono "
+                    "di fare da solo e scrivi il rapporto.")
+            try:
+                record = self.run(task, timeout)
+                tick.update(ran=True, ok=record["ok"])
+                state["daily"] = now if daily_due else last_daily
+            except AgentError as err:
+                tick["skipped"] = err.code
+        if not tick["skipped"]:
+            state.update(codes=codes, obligations=open_ids)
+        try:
+            self.runs_file.parent.mkdir(parents=True, exist_ok=True)
+            (self.runs_file.parent / "agente-tick.json").write_text(json.dumps(state) + "\n")
+            with (self.runs_file.parent / "agente-ticks.jsonl").open("a") as f:
+                f.write(json.dumps(tick) + "\n")
+        except OSError:
+            pass
+        return tick
 
     def run(self, task: str, timeout: int = TIMEOUT_S) -> dict:
         if not task.strip():

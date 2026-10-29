@@ -10,10 +10,11 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O20` L'agente interno di AgentDeck: MiniMax via Claude Code con un intermediario locale, identità AgentDeck (piano punto 1) — 3 task: 2 completate, 0 in corso, 1 da fare, 0 bloccate
-- **Task attiva:** —
+- **Obiettivo attivo:** `O20` L'agente interno di AgentDeck: MiniMax via Claude Code con un intermediario locale, identità AgentDeck (piano punto 1) — 3 task: 2 completate, 1 in corso, 0 da fare, 0 bloccate
+- **Task attiva:** `O20.T3` Attivazione per eventi e a intervalli, autonomia a livelli — in corso · rischio 30/100
 - **Ultima task gestita:** `O20.T2` — completata — Prompt AgentDeck (AGENTE.md) e deck agent run con prompt, strumenti deck, guardia e intermediario; corsa vera con MiniMax finto; v0.5.10
-- **Ultimo aggiornamento:** 2026-10-29 21:38
+- **Fase:** `in_progress`
+- **Ultimo aggiornamento:** 2026-10-29 21:39
 
 ## Richieste attive
 
@@ -143,8 +144,9 @@ _nessuna task. Aggiungile con `wf.sh task-add`._
 - [x] `O20.T2` Prompt di sistema AgentDeck e deck agent per lanciare l'agente su un compito — *perimetro:* `deck/, docs/`
   *gate previsto:* Prompt di sistema generato dal sistema con l'identità AgentDeck di HoneyLabs, regole e invarianti; deck agent run lancia claude -p con quel prompt, strumenti deck, guardia e intermediario, e registra esito e attività; provato con il finto MiniMax e, con la chiave, con un compito di sola lettura; documentazione. · *gate confermato:* ✔ Prompt AgentDeck (AGENTE.md) e deck agent run con prompt, strumenti deck, guardia e intermediario; corsa vera con MiniMax finto; v0.5.10
   *rischio:* 30/100 — Lancia un agente con strumenti veri; guardia, deny e snapshot restano, le azioni rischiose solo proposte.
-- [ ] `O20.T3` Attivazione per eventi e a intervalli, autonomia a livelli — *perimetro:* `deck/, docs/, timer e servizi sulla Deck`
+- [~] `O20.T3` Attivazione per eventi e a intervalli, autonomia a livelli — *perimetro:* `deck/, docs/, timer e servizi sulla Deck`
   *gate previsto:* Timer e avvisi critici attivano l'agente interno; può fare da solo solo diagnosi e azioni a basso rischio, le altre le segnala; registro consultabile da deck agent; provato con un avviso simulato; documentazione.
+  *rischio:* 30/100 — Avvia un agente senza nessuno davanti; limitato da prompt, guardia, deny e dal partire solo per avvisi nuovi o una volta al giorno.
 
 ## Annotazioni
 

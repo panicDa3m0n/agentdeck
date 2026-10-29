@@ -4,6 +4,17 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.5.11 — 2026-10-29
+
+Ciclo 05, obiettivo O20, task O20.T3: l'agente interno si attiva da solo.
+
+- **`deck agent tick`** e timer `agentdeck-agente.timer` ogni 15 minuti: l'agente parte solo per avvisi `warning` o
+  `critical` nuovi, per obblighi nuovi, o una volta al giorno; altrimenti nessuna chiamata al modello. Compito
+  composto solo con codici e id del sistema. Senza chiave il tick salta e lo registra.
+- **Autonomia a livelli** nel prompt: da solo diagnosi e azioni a basso rischio, il resto proposto nel rapporto.
+- **`deck release`:** installa e abilita servizio e timer.
+- **Test:** 5 nuovi, 325 in tutto. **Documentazione:** `docs/agente-interno.md`.
+
 ## 0.5.10 — 2026-10-29
 
 Ciclo 05, obiettivo O20, task O20.T2: il prompt di sistema dell'agente interno e `deck agent`.

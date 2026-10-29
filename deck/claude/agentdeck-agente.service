@@ -1,0 +1,19 @@
+# /etc/systemd/system/agentdeck-agente.service
+# AgentDeck: il controllo dell'agente interno (task O20.T3), lanciato da agentdeck-agente.timer. `deck agent tick`
+# avvia l'agente solo per avvisi o obblighi nuovi o una volta al giorno; senza chiave MiniMax registra e non parte.
+# Un solo controllo alla volta (Type=oneshot). Installato da deck release. Documentazione: docs/agente-interno.md
+[Unit]
+Description=AgentDeck: controllo dell'agente interno
+After=network-online.target agentdeck-agente-proxy.service
+Wants=agentdeck-agente-proxy.service
+
+[Service]
+Type=oneshot
+User=agent
+Group=agent
+Environment=HOME=/home/agent
+Environment=PATH=/home/agent/.local/bin:/usr/local/bin:/usr/bin
+WorkingDirectory=/home/agent
+ExecStart=/usr/local/bin/deck agent tick
+TimeoutStartSec=2000
+Nice=10

@@ -1,0 +1,13 @@
+# /etc/systemd/system/agentdeck-agente.timer
+# AgentDeck: ogni 15 minuti il controllo dell'agente interno (agentdeck-agente.service, task O20.T3).
+# Installato e abilitato da deck release. Documentazione: docs/agente-interno.md
+[Unit]
+Description=AgentDeck: controllo dell'agente interno ogni 15 minuti
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=15min
+RandomizedDelaySec=60
+
+[Install]
+WantedBy=timers.target

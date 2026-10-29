@@ -265,6 +265,12 @@ class Releases:
                              f'install -m 0644 {cur}/claude/agentdeck-agente-proxy.service /etc/systemd/system/ && '
                              f'systemctl daemon-reload && systemctl enable agentdeck-agente-proxy.service && '
                              f'systemctl restart agentdeck-agente-proxy.service)']),
+            # il controllo dell'agente interno ogni 15 minuti (O20.T3)
+            ("agent timer", ["sudo", "-n", "sh", "-c",
+                             f'test ! -f {cur}/claude/agentdeck-agente.timer || '
+                             f'(install -m 0644 {cur}/claude/agentdeck-agente.service {cur}/claude/agentdeck-agente.timer '
+                             f'/etc/systemd/system/ && systemctl daemon-reload && '
+                             f'systemctl enable --now agentdeck-agente.timer)']),
             ("claude managed", ["sudo", "-n", "sh", "-c",
                                 f'python3 -m json.tool {cur}/claude/managed-settings.json >/dev/null && '
                                 f'install -d -m 0755 /etc/claude-code && '

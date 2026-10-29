@@ -24,7 +24,9 @@ class Agent(Component):
                        params={"task": param("string", max_length=ag.TASK_MAX, description=sys_text(
                            "What the agent should do, in plain words")),
                                "timeout_s": param("int", required=False, description=sys_text(
-                                   "Maximum seconds for the run, 30 to 1800; default 600"))})]
+                                   "Maximum seconds for the run, 30 to 1800; default 600"))}),
+                action("tick", label=sys_text("Run the timer check: start the agent only for new alerts or obligations, "
+                                              "or once a day"), effect="safe")]
 
     def view(self, ctx: Context) -> dict:
         s = self.agent.status()
@@ -47,6 +49,12 @@ class Agent(Component):
                           "proposes the rest."))
 
     def run(self, ctx: Context, action_id: str, params: dict) -> dict:
+        if action_id == "tick":
+            tick = self.agent.tick()
+            return screen(screen="agent.tick", path=self.path, title=sys_text("Internal agent check"), status="done",
+                          back=self.path, data=tick, actions=self.actions(ctx),
+                          prompt=sys_text("data.reasons says why the agent was started, if it was; data.skipped why it "
+                                          "could not start. The run, if any, is in `deck agent` data.recent_runs."))
         try:
             record = self.agent.run(params["task"], params.get("timeout_s", ag.TIMEOUT_S))
         except ag.AgentError as err:

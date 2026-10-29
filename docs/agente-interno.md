@@ -82,7 +82,25 @@ l'identità "You are AgentDeck, built by HoneyLabs", il modello `MiniMax-M3`, gl
 di `deck`, il contesto dell'hook di inizio sessione, e nessuna riga "Claude agent". Rapporto registrato. Test:
 [../deck/tests/test_agent.py](../deck/tests/test_agent.py).
 
-## Da fare
+## Attivazione automatica (O20.T3)
 
-- **O20.T3:** attivazione per eventi e a intervalli, autonomia a livelli (da solo solo diagnosi e azioni a basso
-  rischio, le altre segnalate), registro.
+**Timer.** [../deck/claude/agentdeck-agente.timer](../deck/claude/agentdeck-agente.timer) ogni 15 minuti, 5 minuti
+dopo l'avvio, lancia [../deck/claude/agentdeck-agente.service](../deck/claude/agentdeck-agente.service): `deck agent
+tick`, come utente `agent`, un controllo alla volta. `deck release install` installa e abilita entrambi.
+
+**Quando parte l'agente.** `tick` legge `deck status` e `deck obligations` e lancia l'agente solo se:
+- c'è un avviso **nuovo** di livello `warning` o `critical`, riconosciuto per codice (gli `info` non contano);
+- c'è un obbligo **nuovo**, riconosciuto per id;
+- è passato un giorno dall'ultimo controllo giornaliero.
+
+Altrimenti registra "niente da fare" senza chiamare il modello. Il compito per l'agente si compone solo con i codici
+e gli id scritti dal sistema (INV-4). Lo stato del controllo sta in `~/.local/state/agentdeck/agente-tick.json`, ogni
+tick in `agente-ticks.jsonl`, le corse in `agente-runs.jsonl` (`deck agent`, `data.recent_runs`). Senza chiave o
+senza intermediario il tick non parte e lo registra (`skipped`), poi riprova al giro dopo.
+
+**Autonomia a livelli.** Sta nel prompt di sistema (sopra): da solo l'agente fa diagnosi, snapshot, riavvio di
+servizi di sistema falliti e obblighi; il resto lo propone nel rapporto. Guardia e regole `deny` restano attive
+come nelle sessioni. Il rapporto arriverà al proprietario su Telegram (piano punto 3); per ora sta nel registro.
+
+Test: [../deck/tests/test_agent.py](../deck/tests/test_agent.py) (primo controllo, avvisi e obblighi nuovi, `info`
+ignorati, chiave mancante, controllo giornaliero).
