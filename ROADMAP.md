@@ -10,11 +10,10 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O15` Interfacce effimere sullo schermo della Deck: lo stile e la prima interfaccia, le sessioni Claude — 3 task: 2 completate, 0 in corso, 0 da fare, 1 bloccate
+- **Obiettivo attivo:** —
 - **Task attiva:** —
 - **Ultima task gestita:** `O15.T3` — bloccata — Schermo grafico installato (N66, N67); manca la prova al tocco con l'utente alla Deck. Priorità al piano del 29/10
-- **Fase:** `objective_gate_pending`
-- **Ultimo aggiornamento:** 2026-10-29 20:23
+- **Ultimo aggiornamento:** 2026-10-29 20:24
 
 ## Richieste attive
 
@@ -69,9 +68,10 @@ _nessuna richiesta in attesa._
   *rischio:* 25/100 — Pacchetto nuovo e credenziale dell'account personale sulla Deck esposta via SSH (solo chiave): il token apre i repository personali. Snapshot prima, nessun riavvio di agentdeck-claude, nessun file di lavoro di frugale toccato.
   *annotazioni:* `N61`, `N62`
 
-### `O15` Interfacce effimere sullo schermo della Deck: lo stile e la prima interfaccia, le sessioni Claude — in corso
+### `O15` Interfacce effimere sullo schermo della Deck: lo stile e la prima interfaccia, le sessioni Claude — BLOCCATO
 
 **Gate obiettivo:** Lo schermo della Deck, al posto del terminale, resta calmo e mostra un'interfaccia grafica effimera solo quando serve; con il tocco o i pulsanti si vedono, si aprono e si chiudono le sessioni Claude; stile deciso come ADR e documentato; versione pubblicata.
+**Blocco:** 2026-10-29 20:24 — Approvato dall'utente il 29/10: stile e deck claude fatti; schermo grafico installato, manca la prova al tocco con l'utente alla Deck
 **Documenti:** `ADR-0003`
 
 - [x] `O15.T1` Lo stile delle interfacce effimere e la tecnologia grafica dello schermo, decisi con l'utente — *perimetro:* `docs/, PRINCIPI.md`

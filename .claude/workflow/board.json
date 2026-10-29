@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-26 11:36",
-  "updated": "2026-10-29 20:23",
+  "updated": "2026-10-29 20:24",
   "objectives": [
     {
       "id": "O12",
@@ -161,7 +161,7 @@
       "id": "O15",
       "title": "Interfacce effimere sullo schermo della Deck: lo stile e la prima interfaccia, le sessioni Claude",
       "gate": "Lo schermo della Deck, al posto del terminale, resta calmo e mostra un'interfaccia grafica effimera solo quando serve; con il tocco o i pulsanti si vedono, si aprono e si chiudono le sessioni Claude; stile deciso come ADR e documentato; versione pubblicata.",
-      "state": "open",
+      "state": "blocked",
       "docs": [
         "ADR-0003"
       ],
@@ -203,7 +203,9 @@
             "docs/piano.md"
           ]
         }
-      ]
+      ],
+      "closed_at": "2026-10-29 20:24",
+      "closed_note": "Approvato dall'utente il 29/10: stile e deck claude fatti; schermo grafico installato, manca la prova al tocco con l'utente alla Deck"
     },
     {
       "id": "O16",
@@ -380,14 +382,14 @@
     }
   ],
   "active": {
-    "objective": "O15",
+    "objective": "",
     "task": "",
-    "phase": "objective_gate_pending",
+    "phase": "idle",
     "risk": null,
     "risk_why": "",
     "hold_invariants": "",
     "hold_plan": "",
-    "gate_done": "O15"
+    "gate_done": ""
   },
   "previous": {
     "task": "O15.T3",
