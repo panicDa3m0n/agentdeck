@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-26 11:36",
-  "updated": "2026-10-29 21:42",
+  "updated": "2026-10-29 21:45",
   "objectives": [
     {
       "id": "O12",
@@ -367,8 +367,8 @@
           "title": "Ponte Telegram: messaggi del proprietario all'agente interno, rapporti al proprietario",
           "scope": "deck/, docs/, servizio agentdeck-telegram sulla Deck",
           "gate_pre": "Servizio agentdeck-telegram con long polling, solo il chat id autorizzato, compiti all'agente interno e rapporti in risposta, rapporti dei controlli automatici inviati da soli, mittenti sconosciuti registrati; deck telegram con stato e invio; token in ~/.config/agentdeck/telegram.json (600); provato con un finto Telegram; documentazione.",
-          "gate_post": "",
-          "state": "doing",
+          "gate_post": "Ponte Telegram attivo: long polling, solo la chat del proprietario, compiti all'agente e rapporti in chat; deck telegram; finto Telegram; v0.5.12",
+          "state": "done",
           "risk": 25,
           "risk_why": "Servizio nuovo che accetta istruzioni da fuori: solo dal chat id del proprietario, nessuna porta esposta, token solo sulla Deck.",
           "docs": []
@@ -484,18 +484,18 @@
   ],
   "active": {
     "objective": "O21",
-    "task": "O21.T1",
-    "phase": "in_progress",
-    "risk": 25,
-    "risk_why": "Servizio nuovo che accetta istruzioni da fuori: solo dal chat id del proprietario, nessuna porta esposta, token solo sulla Deck.",
+    "task": "",
+    "phase": "objective_gate_pending",
+    "risk": null,
+    "risk_why": "",
     "hold_invariants": "",
     "hold_plan": "",
     "gate_done": ""
   },
   "previous": {
-    "task": "O20.T3",
+    "task": "O21.T1",
     "state": "done",
-    "note": "Timer ogni 15 min con deck agent tick: agente solo per avvisi/obblighi nuovi o una volta al giorno; senza chiave salta e registra; v0.5.11"
+    "note": "Ponte Telegram attivo: long polling, solo la chat del proprietario, compiti all'agente e rapporti in chat; deck telegram; finto Telegram; v0.5.12"
   },
   "cycle": {
     "n": 5,
