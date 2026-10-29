@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-26 11:36",
-  "updated": "2026-10-29 20:25",
+  "updated": "2026-10-29 20:32",
   "objectives": [
     {
       "id": "O12",
@@ -235,8 +235,8 @@
           "title": "deck installa sulla Deck una versione del repository e torna indietro",
           "scope": "deck/, docs/, /opt/agentdeck sulla Deck",
           "gate_pre": "Un comando deck installa da /home/agent/agentdeck/repo: test, snapshot prima, copia in /opt/agentdeck, impostazioni Claude (anche bypass nelle impostazioni utente), verifica; revert alla versione precedente con anteprima; provato installando la versione corrente e tornando indietro; ssh intatto; docs/sviluppo.md e deck.md aggiornati.",
-          "gate_post": "",
-          "state": "doing",
+          "gate_post": "deck release installa un commit dalla Deck (test, snapshot, scambio atomico, verifica, ritorno automatico) e torna indietro; ciclo reale riuscito, v0.5.5",
+          "state": "done",
           "risk": 45,
           "risk_why": "Guardia e hook di tutte le sessioni girano da /opt/agentdeck: una versione rotta le bloccherebbe. Snapshot, test prima del cambio, cambio atomico, ritorno automatico se la verifica fallisce.",
           "docs": []
@@ -383,18 +383,18 @@
   ],
   "active": {
     "objective": "O18",
-    "task": "O18.T1",
-    "phase": "in_progress",
-    "risk": 45,
-    "risk_why": "Guardia e hook di tutte le sessioni girano da /opt/agentdeck: una versione rotta le bloccherebbe. Snapshot, test prima del cambio, cambio atomico, ritorno automatico se la verifica fallisce.",
+    "task": "",
+    "phase": "idle",
+    "risk": null,
+    "risk_why": "",
     "hold_invariants": "",
     "hold_plan": "",
     "gate_done": ""
   },
   "previous": {
-    "task": "O15.T3",
-    "state": "blocked",
-    "note": "Schermo grafico installato (N66, N67); manca la prova al tocco con l'utente alla Deck. Priorità al piano del 29/10"
+    "task": "O18.T1",
+    "state": "done",
+    "note": "deck release installa un commit dalla Deck (test, snapshot, scambio atomico, verifica, ritorno automatico) e torna indietro; ciclo reale riuscito, v0.5.5"
   },
   "cycle": {
     "n": 5,

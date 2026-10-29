@@ -4,6 +4,26 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.5.5 — 2026-10-29
+
+Ciclo 05, nuovo obiettivo O18 dal piano del 29/10 ([docs/piano.md](docs/piano.md)), task O18.T1: AgentDeck si
+sviluppa e si installa dalla Deck. Prima versione chiusa interamente dalla Deck.
+
+- **Repository sulla Deck:** `~/agentdeck/repo`, pubblicato da qui come `panicDa3m0n`; governance con
+  `~/claude-rules/bin/wf.sh`. Portate nel repository le modifiche fatte il 28/10 in `/opt/agentdeck`: sessioni
+  sempre in bypass e sessioni come servizi `agentdeck-sessione@`.
+- **`deck release`:** ogni versione in `/opt/agentdeck-versioni/<versione>-<commit>`, `/opt/agentdeck` collegamento
+  alla versione attiva, scambio atomico. `install` estrae un commit, lancia i test nella copia, fa uno snapshot,
+  scambia, applica i passi di sistema (comando, hook di pacman, unità delle sessioni, configurazione di Claude Code
+  con il bypass anche nelle impostazioni utente) e verifica: `deck status`, `deck mcp`, la guardia, `sshd`. Se una
+  verifica fallisce torna da solo indietro. `revert` torna alla precedente. `screen/` e `ui/` rifiutati.
+- **Prova sulla Deck:** installata `cdf1eea` (la vecchia cartella resta come `0.5.4-prima`). Il primo ritorno a
+  `0.5.4-prima` è fallito per il `CLAUDE.md` mancante, e il sistema è tornato da solo a `cdf1eea` con tutte le
+  verifiche passate. Corretto in `dd0880a`; poi install, revert, revert, revert a `0.5.4-prima` e ritorno, tutti
+  riusciti (snapshot 186-192).
+- **Test:** 14 nuovi, 284 in tutto, verdi sulla Deck. **Documentazione:** `docs/sviluppo.md`, `docs/deck.md`,
+  `docs/claude-code.md`, `docs/piano.md`.
+
 ## 0.5.4 — 2026-10-27
 
 Ciclo 05, task O15.T2: la schermata `deck claude`, base dell'interfaccia delle sessioni.
