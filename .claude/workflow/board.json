@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-26 11:36",
-  "updated": "2026-10-29 21:41",
+  "updated": "2026-10-29 21:42",
   "objectives": [
     {
       "id": "O12",
@@ -315,7 +315,7 @@
       "id": "O20",
       "title": "L'agente interno di AgentDeck: MiniMax via Claude Code con un intermediario locale, identità AgentDeck (piano punto 1)",
       "gate": "Un intermediario locale passa le richieste di Claude Code a MiniMax togliendo la riga fissa Claude e i parametri non supportati; prompt di sistema con l'identità AgentDeck di HoneyLabs; deck agent lancia l'agente su un compito con strumenti deck e guardia attiva; attivazione per eventi e a intervalli con autonomia a livelli (le azioni rischiose solo segnalate); registro delle attività; prova con un finto MiniMax e prova reale con la chiave; documentazione; versione pubblicata.",
-      "state": "open",
+      "state": "blocked",
       "docs": [],
       "tasks": [
         {
@@ -351,6 +351,28 @@
           "risk_why": "Avvia un agente senza nessuno davanti; limitato da prompt, guardia, deny e dal partire solo per avvisi nuovi o una volta al giorno.",
           "docs": []
         }
+      ],
+      "closed_at": "2026-10-29 21:42",
+      "closed_note": "Approvato dall'utente il 29/10: intermediario, deck agent e timer fatti e provati con MiniMax finto; manca la prova con MiniMax vero (chiave, R7)"
+    },
+    {
+      "id": "O21",
+      "title": "Telegram, il canale a due vie fra il proprietario e AgentDeck (piano punto 3)",
+      "gate": "Un ponte senza porte esposte (long polling) risponde solo al chat id del proprietario: i suoi messaggi diventano compiti dell'agente interno e il rapporto torna in chat; i rapporti dei controlli automatici arrivano da soli; gli altri mittenti sono ignorati e registrati; deck telegram mostra lo stato e manda un messaggio; token solo sulla Deck; prova con un finto Telegram e prova reale con il bot; documentazione; versione pubblicata.",
+      "state": "open",
+      "docs": [],
+      "tasks": [
+        {
+          "id": "O21.T1",
+          "title": "Ponte Telegram: messaggi del proprietario all'agente interno, rapporti al proprietario",
+          "scope": "deck/, docs/, servizio agentdeck-telegram sulla Deck",
+          "gate_pre": "Servizio agentdeck-telegram con long polling, solo il chat id autorizzato, compiti all'agente interno e rapporti in risposta, rapporti dei controlli automatici inviati da soli, mittenti sconosciuti registrati; deck telegram con stato e invio; token in ~/.config/agentdeck/telegram.json (600); provato con un finto Telegram; documentazione.",
+          "gate_post": "",
+          "state": "doing",
+          "risk": 25,
+          "risk_why": "Servizio nuovo che accetta istruzioni da fuori: solo dal chat id del proprietario, nessuna porta esposta, token solo sulla Deck.",
+          "docs": []
+        }
       ]
     }
   ],
@@ -363,6 +385,15 @@
       "doc": "",
       "dettaglio": "",
       "created": "2026-10-29 21:30"
+    },
+    {
+      "id": "R8",
+      "objective": "O20",
+      "title": "Bot Telegram: il proprietario crea il bot con BotFather e scrive token e proprio chat id in ~/.config/agentdeck/telegram.json (600) sulla Deck",
+      "state": "open",
+      "doc": "",
+      "dettaglio": "",
+      "created": "2026-10-29 21:41"
     }
   ],
   "notes": [
@@ -452,11 +483,11 @@
     }
   ],
   "active": {
-    "objective": "O20",
-    "task": "",
-    "phase": "objective_gate_pending",
-    "risk": null,
-    "risk_why": "",
+    "objective": "O21",
+    "task": "O21.T1",
+    "phase": "in_progress",
+    "risk": 25,
+    "risk_why": "Servizio nuovo che accetta istruzioni da fuori: solo dal chat id del proprietario, nessuna porta esposta, token solo sulla Deck.",
     "hold_invariants": "",
     "hold_plan": "",
     "gate_done": ""
@@ -472,9 +503,9 @@
     "slug": "il-sistema-dell-agente-permessi-servizi-"
   },
   "counters": {
-    "objective": 20,
+    "objective": 21,
     "cycle": 5,
-    "request": 7,
+    "request": 8,
     "note": 69
   }
 }

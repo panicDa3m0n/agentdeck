@@ -10,17 +10,18 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O20` L'agente interno di AgentDeck: MiniMax via Claude Code con un intermediario locale, identità AgentDeck (piano punto 1) — 3 task: 3 completate, 0 in corso, 0 da fare, 0 bloccate
-- **Task attiva:** —
+- **Obiettivo attivo:** `O21` Telegram, il canale a due vie fra il proprietario e AgentDeck (piano punto 3) — 1 task: 0 completate, 1 in corso, 0 da fare, 0 bloccate
+- **Task attiva:** `O21.T1` Ponte Telegram: messaggi del proprietario all'agente interno, rapporti al proprietario — in corso · rischio 25/100
 - **Ultima task gestita:** `O20.T3` — completata — Timer ogni 15 min con deck agent tick: agente solo per avvisi/obblighi nuovi o una volta al giorno; senza chiave salta e registra; v0.5.11
-- **Fase:** `objective_gate_pending`
-- **Ultimo aggiornamento:** 2026-10-29 21:41
+- **Fase:** `in_progress`
+- **Ultimo aggiornamento:** 2026-10-29 21:42
 
 ## Richieste attive
 
 _Mancanze di progetto che l'agente non può risolvere da solo. L'utente le conferma in chat, poi vengono chiuse con `req-resolve`._
 
 - `R7` (`O19`) Chiave API MiniMax: il proprietario la scrive in ~/.config/agentdeck/minimax.key (permessi 600) sulla Deck
+- `R8` (`O20`) Bot Telegram: il proprietario crea il bot con BotFather e scrive token e proprio chat id in ~/.config/agentdeck/telegram.json (600) sulla Deck
 
 ## Obiettivi
 
@@ -134,9 +135,11 @@ _nessuna task. Aggiungile con `wf.sh task-add`._
   *gate previsto:* La guardia e l'hook PermissionRequest mandano le richieste all'arbitro (istanza senza memorie, prompt del sistema, trascrizione come dato); via rapida di pochi secondi, poi differita con deny e ritorno della decisione, approvazione monouso legata al comando; inoltro al proprietario segnato in attesa finché non c'è Telegram; test; prova reale; documentazione.
   *annotazioni:* `N69`
 
-### `O20` L'agente interno di AgentDeck: MiniMax via Claude Code con un intermediario locale, identità AgentDeck (piano punto 1) — in corso
+### `O20` L'agente interno di AgentDeck: MiniMax via Claude Code con un intermediario locale, identità AgentDeck (piano punto 1) — BLOCCATO
 
 **Gate obiettivo:** Un intermediario locale passa le richieste di Claude Code a MiniMax togliendo la riga fissa Claude e i parametri non supportati; prompt di sistema con l'identità AgentDeck di HoneyLabs; deck agent lancia l'agente su un compito con strumenti deck e guardia attiva; attivazione per eventi e a intervalli con autonomia a livelli (le azioni rischiose solo segnalate); registro delle attività; prova con un finto MiniMax e prova reale con la chiave; documentazione; versione pubblicata.
+**Blocco:** 2026-10-29 21:42 — Approvato dall'utente il 29/10: intermediario, deck agent e timer fatti e provati con MiniMax finto; manca la prova con MiniMax vero (chiave, R7)
+**Richieste vincolanti:** `R8` Bot Telegram: il proprietario crea il bot con BotFather e scrive token e proprio chat id in ~/.config/agentdeck/telegram.json (600) sulla Deck
 
 - [x] `O20.T1` Intermediario locale verso MiniMax: toglie la riga fissa Claude e adatta la richiesta — *perimetro:* `deck/, docs/, servizio dell'intermediario sulla Deck`
   *gate previsto:* Servizio su 127.0.0.1 che riceve le richieste di Claude Code, toglie la riga fissa e l'intestazione di fatturazione, adatta modello, parametri e intestazioni, inoltra a MiniMax con la chiave letta dalla Deck e restituisce lo streaming; provato con un finto MiniMax e con claude -p; chiave mai nel repository; documentazione. · *gate confermato:* ✔ Intermediario su 127.0.0.1:8791: toglie la riga Claude, adatta modello e parametri, inoltra con la chiave; provato con claude -p e MiniMax finto; v0.5.9
@@ -147,6 +150,14 @@ _nessuna task. Aggiungile con `wf.sh task-add`._
 - [x] `O20.T3` Attivazione per eventi e a intervalli, autonomia a livelli — *perimetro:* `deck/, docs/, timer e servizi sulla Deck`
   *gate previsto:* Timer e avvisi critici attivano l'agente interno; può fare da solo solo diagnosi e azioni a basso rischio, le altre le segnala; registro consultabile da deck agent; provato con un avviso simulato; documentazione. · *gate confermato:* ✔ Timer ogni 15 min con deck agent tick: agente solo per avvisi/obblighi nuovi o una volta al giorno; senza chiave salta e registra; v0.5.11
   *rischio:* 30/100 — Avvia un agente senza nessuno davanti; limitato da prompt, guardia, deny e dal partire solo per avvisi nuovi o una volta al giorno.
+
+### `O21` Telegram, il canale a due vie fra il proprietario e AgentDeck (piano punto 3) — in corso
+
+**Gate obiettivo:** Un ponte senza porte esposte (long polling) risponde solo al chat id del proprietario: i suoi messaggi diventano compiti dell'agente interno e il rapporto torna in chat; i rapporti dei controlli automatici arrivano da soli; gli altri mittenti sono ignorati e registrati; deck telegram mostra lo stato e manda un messaggio; token solo sulla Deck; prova con un finto Telegram e prova reale con il bot; documentazione; versione pubblicata.
+
+- [~] `O21.T1` Ponte Telegram: messaggi del proprietario all'agente interno, rapporti al proprietario — *perimetro:* `deck/, docs/, servizio agentdeck-telegram sulla Deck`
+  *gate previsto:* Servizio agentdeck-telegram con long polling, solo il chat id autorizzato, compiti all'agente interno e rapporti in risposta, rapporti dei controlli automatici inviati da soli, mittenti sconosciuti registrati; deck telegram con stato e invio; token in ~/.config/agentdeck/telegram.json (600); provato con un finto Telegram; documentazione.
+  *rischio:* 25/100 — Servizio nuovo che accetta istruzioni da fuori: solo dal chat id del proprietario, nessuna porta esposta, token solo sulla Deck.
 
 ## Annotazioni
 
