@@ -585,19 +585,35 @@ class LaunchError(Exception):
 
 
 def probe(url: str) -> bool:
-    """La pagina risponde da quell'indirizzo? Una GET non consuma la richiesta."""
+    """La pagina risponde dal tunnel? Una GET non consuma la richiesta.
+
+    Il nome *.trycloudflare.com esiste solo qualche secondo dopo l'avvio del tunnel (circa 18 s il 30/10/2026): se
+    il resolver della Deck lo chiede troppo presto, systemd-resolved ricorda la risposta negativa e il controllo
+    fallirebbe per minuti. Per questo il nome si chiede a Cloudflare in DNS su HTTPS (1.1.1.1) e la pagina si prova
+    con curl --resolve, senza toccare la cache della Deck.
+    """
+    m = re.match(r"https://([a-z0-9-]+\.trycloudflare\.com)/", url or "")
+    if not m:
+        return False
+    host = m.group(1)
     try:
-        with urllib.request.urlopen(url, timeout=5) as r:
-            return r.status == 200
+        q = urllib.request.Request(f"https://1.1.1.1/dns-query?name={host}&type=A",
+                                   headers={"accept": "application/dns-json"})
+        with urllib.request.urlopen(q, timeout=5) as r:
+            answers = json.load(r).get("Answer") or []
+        ip = next(a["data"] for a in answers if a.get("type") == 1)
+        out = subprocess.run(["curl", "-s", "-o", "/dev/null", "-w", "%{http_code}", "--max-time", "8",
+                              "--resolve", f"{host}:443:{ip}", url], capture_output=True, text=True, timeout=15)
     except Exception:
         return False
+    return out.stdout.strip() == "200"
 
 
 class Launcher:
     """Prepara la richiesta, avvia l'unità a tempo e aspetta che la pagina risponda; chiude quella aperta prima."""
 
     def __init__(self, sh: Callable = subprocess.run, lan: Callable[[], Optional[str]] = lan_address,
-                 check: Callable[[str], bool] = probe, wait_s: float = 5.0, tunnel_wait_s: float = 60.0,
+                 check: Callable[[str], bool] = probe, wait_s: float = 5.0, tunnel_wait_s: float = 90.0,
                  has_cloudflared: Callable[[], Optional[str]] = cloudflared):
         self.sh, self.lan, self.check = sh, lan, check
         self.wait_s, self.tunnel_wait_s, self.has_cloudflared = wait_s, tunnel_wait_s, has_cloudflared

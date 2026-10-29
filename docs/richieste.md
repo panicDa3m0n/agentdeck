@@ -33,7 +33,9 @@ dispositivo o nel router. Il tunnel funziona da ovunque, anche col 4G, ed è in 
    server**: quando il server si ferma, ferma cloudflared, e systemd chiude comunque tutta l'unità. Con `via=home` il
    server ascolta sull'indirizzo privato della Deck in casa e non c'è tunnel.
 5. La schermata risponde solo quando la pagina risponde davvero dall'indirizzo del link (una GET, che non consuma la
-   richiesta), con `data.request.link`. L'agente lo dà al proprietario.
+   richiesta), con `data.request.link`, di solito in 20-30 secondi. Il nome `*.trycloudflare.com` esiste solo dopo
+   circa 18 secondi: per non far ricordare a `systemd-resolved` una risposta negativa, il controllo chiede il nome a
+   Cloudflare in DNS su HTTPS (1.1.1.1) e prova la pagina con `curl --resolve`. L'agente dà il link al proprietario.
 6. Il proprietario apre il link, compila e invia. Il server controlla i valori e poi chiude tutto, tunnel compreso:
    - **segreto:** il valore va nel file con permessi 600 e l'agente non lo vede mai;
    - **domanda:** la risposta va in `~/.local/state/agentdeck/answers/<id>.json` (600) e l'agente la legge con
