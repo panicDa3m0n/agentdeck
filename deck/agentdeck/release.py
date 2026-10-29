@@ -186,10 +186,19 @@ class Releases:
         claude_md = self.sys.run(["python3", str(staging / "deck" / "claude" / "build_claude_md.py"), str(staging)])
         if claude_md.returncode != 0:
             raise ReleaseError("EXTRACT_FAILED", {"step": "build_claude_md.py", "output": _tail(claude_md.stderr)})
+        agent_md = ""  # il prompt di sistema dell'agente interno (O20.T2), se la versione ha il suo modello
+        if (staging / "deck" / "claude" / "AGENTE.template.md").is_file():
+            built = self.sys.run(["python3", str(staging / "deck" / "claude" / "build_claude_md.py"), str(staging),
+                                  "AGENTE.template.md"])
+            if built.returncode != 0:
+                raise ReleaseError("EXTRACT_FAILED", {"step": "AGENTE.md", "output": _tail(built.stderr)})
+            agent_md = built.stdout
         info = {"version": version, "commit": commit, "installed_at": None, "source": str(self.repo)}
         script = ('set -e; cd "$1"; cp VERSION deck/VERSION; printf "%s" "$3" > deck/claude/CLAUDE.md; '
+                  'if [ -n "$5" ]; then printf "%s" "$5" > deck/claude/AGENTE.md; fi; '
                   'printf "%s\\n" "$4" > deck/RELEASE.json; rm -rf "$2"; mv deck "$2"; cd /; rm -rf "$1"')
-        out = self.sys.run(["sh", "-c", script, "sh", str(staging), str(folder), claude_md.stdout, json.dumps(info)])
+        out = self.sys.run(["sh", "-c", script, "sh", str(staging), str(folder), claude_md.stdout, json.dumps(info),
+                            agent_md])
         if out.returncode != 0:
             raise ReleaseError("EXTRACT_FAILED", {"step": "move", "output": _tail(out.stderr)})
         return folder

@@ -335,9 +335,9 @@
           "scope": "deck/, docs/",
           "gate_pre": "Prompt di sistema generato dal sistema con l'identità AgentDeck di HoneyLabs, regole e invarianti; deck agent run lancia claude -p con quel prompt, strumenti deck, guardia e intermediario, e registra esito e attività; provato con il finto MiniMax e, con la chiave, con un compito di sola lettura; documentazione.",
           "gate_post": "",
-          "state": "todo",
-          "risk": null,
-          "risk_why": "",
+          "state": "doing",
+          "risk": 30,
+          "risk_why": "Lancia un agente con strumenti veri; guardia, deny e snapshot restano, le azioni rischiose solo proposte.",
           "docs": []
         },
         {
@@ -453,10 +453,10 @@
   ],
   "active": {
     "objective": "O20",
-    "task": "",
-    "phase": "idle",
-    "risk": null,
-    "risk_why": "",
+    "task": "O20.T2",
+    "phase": "in_progress",
+    "risk": 30,
+    "risk_why": "Lancia un agente con strumenti veri; guardia, deny e snapshot restano, le azioni rischiose solo proposte.",
     "hold_invariants": "",
     "hold_plan": "",
     "gate_done": ""

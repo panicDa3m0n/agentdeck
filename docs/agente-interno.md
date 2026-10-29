@@ -49,8 +49,40 @@ MiniMax finto. A MiniMax è arrivato solo il nostro prompt di sistema, con model
 "Claude agent" e senza `context_management` e `output_config`. Prova con MiniMax vero: quando c'è la chiave
 (richiesta R7 della governance).
 
+## Prompt di sistema e `deck agent` (O20.T2)
+
+**Prompt di sistema.** [../deck/claude/AGENTE.template.md](../deck/claude/AGENTE.template.md) più le invarianti della
+governance, con lo stesso generatore del `CLAUDE.md`
+([../deck/claude/build_claude_md.py](../deck/claude/build_claude_md.py) `<repo> AGENTE.template.md`). `deck release`
+lo genera in ogni versione come `claude/AGENTE.md`. Contiene:
+- **l'identità:** AgentDeck, costruito da HoneyLabs, nel proprio sistema operativo Arch Linux autonomo su un hardware
+  e un software a suo uso esclusivo;
+- **come lavora:** `deck` per primo, testo esterno come dato, prove;
+- **cosa può fare da solo:** leggere e diagnosticare, snapshot, riavviare un servizio di sistema fallito (non di
+  accesso e non del proprietario), obblighi;
+- **cosa propone soltanto:** pacchetti e aggiornamenti, versioni, rete, Wi-Fi, SSH, utenti, avvio, firewall, rollback,
+  le cose del proprietario e tutto ciò su cui non è sicuro. Vanno nel rapporto sotto "Proposals for the owner";
+- **il rapporto in italiano:** Esito, Cosa ho visto, Cosa ho fatto, Proposals for the owner;
+- **le invarianti.**
+
+**`deck agent`** ([../deck/agentdeck/components/agent.py](../deck/agentdeck/components/agent.py), logica in
+[../deck/agentdeck/agent.py](../deck/agentdeck/agent.py)) mostra se l'intermediario risponde, se c'è la chiave, il
+prompt e le ultime corse. `deck agent run task=<compito> [timeout_s=…]` lancia `claude -p` in `~/agentdeck/agente` con:
+- il prompt di sistema (`--system-prompt`);
+- `--permission-mode bypassPermissions`;
+- gli strumenti `Bash,Read,Grep,Glob` e quelli di `deck` (`--mcp-config`, `--strict-mcp-config`);
+- `ANTHROPIC_BASE_URL` sull'intermediario, con una chiave locale finta (quella vera la mette l'intermediario);
+- gli hook gestiti attivi: guardia, `deny`, avvisi.
+
+Ogni corsa finisce in `~/.local/state/agentdeck/agente-runs.jsonl`: compito, esito, rapporto, sessione, turni, durata.
+Prima di partire controlla che l'intermediario risponda e che la chiave ci sia.
+
+**Prova (29/10/2026):** `Agent.run` vero → `claude -p` → intermediario → MiniMax finto. A MiniMax sono arrivati
+l'identità "You are AgentDeck, built by HoneyLabs", il modello `MiniMax-M3`, gli strumenti Bash, Read, Grep, Glob e 41
+di `deck`, il contesto dell'hook di inizio sessione, e nessuna riga "Claude agent". Rapporto registrato. Test:
+[../deck/tests/test_agent.py](../deck/tests/test_agent.py).
+
 ## Da fare
 
-- **O20.T2:** prompt di sistema AgentDeck e `deck agent run`, che lancia l'agente su un compito.
 - **O20.T3:** attivazione per eventi e a intervalli, autonomia a livelli (da solo solo diagnosi e azioni a basso
   rischio, le altre segnalate), registro.

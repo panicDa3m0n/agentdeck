@@ -10,9 +10,10 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O20` L'agente interno di AgentDeck: MiniMax via Claude Code con un intermediario locale, identità AgentDeck (piano punto 1) — 3 task: 1 completate, 0 in corso, 2 da fare, 0 bloccate
-- **Task attiva:** —
+- **Obiettivo attivo:** `O20` L'agente interno di AgentDeck: MiniMax via Claude Code con un intermediario locale, identità AgentDeck (piano punto 1) — 3 task: 1 completate, 1 in corso, 1 da fare, 0 bloccate
+- **Task attiva:** `O20.T2` Prompt di sistema AgentDeck e deck agent per lanciare l'agente su un compito — in corso · rischio 30/100
 - **Ultima task gestita:** `O20.T1` — completata — Intermediario su 127.0.0.1:8791: toglie la riga Claude, adatta modello e parametri, inoltra con la chiave; provato con claude -p e MiniMax finto; v0.5.9
+- **Fase:** `in_progress`
 - **Ultimo aggiornamento:** 2026-10-29 21:34
 
 ## Richieste attive
@@ -140,8 +141,9 @@ _nessuna task. Aggiungile con `wf.sh task-add`._
 - [x] `O20.T1` Intermediario locale verso MiniMax: toglie la riga fissa Claude e adatta la richiesta — *perimetro:* `deck/, docs/, servizio dell'intermediario sulla Deck`
   *gate previsto:* Servizio su 127.0.0.1 che riceve le richieste di Claude Code, toglie la riga fissa e l'intestazione di fatturazione, adatta modello, parametri e intestazioni, inoltra a MiniMax con la chiave letta dalla Deck e restituisce lo streaming; provato con un finto MiniMax e con claude -p; chiave mai nel repository; documentazione. · *gate confermato:* ✔ Intermediario su 127.0.0.1:8791: toglie la riga Claude, adatta modello e parametri, inoltra con la chiave; provato con claude -p e MiniMax finto; v0.5.9
   *rischio:* 20/100 — Servizio solo locale su 127.0.0.1; la chiave sta solo sulla Deck; nessun cambiamento alle sessioni esistenti.
-- [ ] `O20.T2` Prompt di sistema AgentDeck e deck agent per lanciare l'agente su un compito — *perimetro:* `deck/, docs/`
+- [~] `O20.T2` Prompt di sistema AgentDeck e deck agent per lanciare l'agente su un compito — *perimetro:* `deck/, docs/`
   *gate previsto:* Prompt di sistema generato dal sistema con l'identità AgentDeck di HoneyLabs, regole e invarianti; deck agent run lancia claude -p con quel prompt, strumenti deck, guardia e intermediario, e registra esito e attività; provato con il finto MiniMax e, con la chiave, con un compito di sola lettura; documentazione.
+  *rischio:* 30/100 — Lancia un agente con strumenti veri; guardia, deny e snapshot restano, le azioni rischiose solo proposte.
 - [ ] `O20.T3` Attivazione per eventi e a intervalli, autonomia a livelli — *perimetro:* `deck/, docs/, timer e servizi sulla Deck`
   *gate previsto:* Timer e avvisi critici attivano l'agente interno; può fare da solo solo diagnosi e azioni a basso rischio, le altre le segnala; registro consultabile da deck agent; provato con un avviso simulato; documentazione.
 

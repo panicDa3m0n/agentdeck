@@ -4,6 +4,21 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.5.10 — 2026-10-29
+
+Ciclo 05, obiettivo O20, task O20.T2: il prompt di sistema dell'agente interno e `deck agent`.
+
+- **Prompt di sistema** `claude/AGENTE.template.md`, generato con le invarianti come `claude/AGENTE.md` in ogni
+  versione: identità AgentDeck di HoneyLabs, regole, cosa fa da solo (diagnosi, snapshot, servizi falliti, obblighi) e
+  cosa propone soltanto (pacchetti, versioni, rete, SSH, rollback, cose del proprietario), rapporto in italiano.
+- **`deck agent`:** stato dell'intermediario e della chiave, prompt, ultime corse; `run task=…` lancia `claude -p`
+  con prompt, bypass, strumenti `deck` e Bash, Read, Grep, Glob, guardia attiva, attraverso l'intermediario, e
+  registra la corsa.
+- **Prova:** corsa vera con un MiniMax finto: identità AgentDeck, modello `MiniMax-M3`, strumenti e hook giusti,
+  nessuna riga Claude. Prova con MiniMax vero in attesa della chiave (R7).
+- **Test:** 6 nuovi, 320 in tutto. **Documentazione:** `docs/agente-interno.md`, `docs/deck.md`; `/agent` nel
+  `CLAUDE.md` generato.
+
 ## 0.5.9 — 2026-10-29
 
 Ciclo 05, nuovo obiettivo O20 (piano punto 1, agente interno), task O20.T1: l'intermediario locale verso MiniMax.
