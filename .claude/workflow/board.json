@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-26 11:36",
-  "updated": "2026-10-29 20:32",
+  "updated": "2026-10-29 20:41",
   "objectives": [
     {
       "id": "O12",
@@ -247,9 +247,9 @@
           "scope": "deck/, docs/, impostazioni di Claude Code sulla Deck",
           "gate_pre": "Aggiornamenti automatici di Claude Code spenti e versione fissata; un comando o una procedura aggiorna a una versione scelta solo dopo una prova automatica di hook, flag e bypass, con ritorno alla precedente; documentazione.",
           "gate_post": "",
-          "state": "todo",
-          "risk": null,
-          "risk_why": "",
+          "state": "doing",
+          "risk": 35,
+          "risk_why": "Tocca il programma di tutte le sessioni: una versione rotta le fermerebbe. Versione precedente conservata, snapshot, prova degli agganci prima del cambio.",
           "docs": []
         },
         {
@@ -383,10 +383,10 @@
   ],
   "active": {
     "objective": "O18",
-    "task": "",
-    "phase": "idle",
-    "risk": null,
-    "risk_why": "",
+    "task": "O18.T2",
+    "phase": "in_progress",
+    "risk": 35,
+    "risk_why": "Tocca il programma di tutte le sessioni: una versione rotta le fermerebbe. Versione precedente conservata, snapshot, prova degli agganci prima del cambio.",
     "hold_invariants": "",
     "hold_plan": "",
     "gate_done": ""

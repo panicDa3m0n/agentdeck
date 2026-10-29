@@ -29,6 +29,7 @@ CURRENT = Path("/opt/agentdeck")
 NEXT = Path("/opt/agentdeck.next")
 CLAUDE_BIN = HOME / ".local" / "bin" / "claude"
 INSTALLED_CLAUDE_MD = Path("/etc/claude-code/CLAUDE.md")
+PIN = Path("/etc/claude-code/managed-settings.d/50-agentdeck-versione.json")  # agentdeck/claude_version.py
 KEEP = 5
 COMMIT = re.compile(r"[0-9a-f]{7,40}")
 RELEASE_ID = re.compile(r"[0-9A-Za-z._-]{1,64}")
@@ -256,6 +257,7 @@ class Releases:
                                                  f'"$HOME/.claude/output-styles/agentdeck.md"']),
             ("claude user settings", ["python3", "-c", settings]),
             ("claude skills", ["sh", "-c", skills, "sh", cur]),
+            ("claude version pin", ["sh", "-c", f'test -f {PIN} || {cur}/deck claude/version pin >/dev/null']),
             ("claude mcp", ["sh", "-c", f'"$1" mcp get deck >/dev/null 2>&1 || '
                                         f'"$1" mcp add --transport stdio --scope user deck -- /usr/local/bin/deck mcp',
                             "sh", str(CLAUDE_BIN)]),

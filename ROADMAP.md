@@ -10,10 +10,11 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O18` Lo sviluppo di AgentDeck sta sulla Deck: repository, installazione e revert da qui, versioni fissate (piano punti 10-11) — 3 task: 1 completate, 0 in corso, 2 da fare, 0 bloccate
-- **Task attiva:** —
+- **Obiettivo attivo:** `O18` Lo sviluppo di AgentDeck sta sulla Deck: repository, installazione e revert da qui, versioni fissate (piano punti 10-11) — 3 task: 1 completate, 1 in corso, 1 da fare, 0 bloccate
+- **Task attiva:** `O18.T2` Claude Code a versione fissa, aggiornamento manuale con prova degli agganci — in corso · rischio 35/100
 - **Ultima task gestita:** `O18.T1` — completata — deck release installa un commit dalla Deck (test, snapshot, scambio atomico, verifica, ritorno automatico) e torna indietro; ciclo reale riuscito, v0.5.5
-- **Ultimo aggiornamento:** 2026-10-29 20:32
+- **Fase:** `in_progress`
+- **Ultimo aggiornamento:** 2026-10-29 20:41
 
 ## Richieste attive
 
@@ -106,8 +107,9 @@ _nessuna task. Aggiungile con `wf.sh task-add`._
 - [x] `O18.T1` deck installa sulla Deck una versione del repository e torna indietro — *perimetro:* `deck/, docs/, /opt/agentdeck sulla Deck`
   *gate previsto:* Un comando deck installa da /home/agent/agentdeck/repo: test, snapshot prima, copia in /opt/agentdeck, impostazioni Claude (anche bypass nelle impostazioni utente), verifica; revert alla versione precedente con anteprima; provato installando la versione corrente e tornando indietro; ssh intatto; docs/sviluppo.md e deck.md aggiornati. · *gate confermato:* ✔ deck release installa un commit dalla Deck (test, snapshot, scambio atomico, verifica, ritorno automatico) e torna indietro; ciclo reale riuscito, v0.5.5
   *rischio:* 45/100 — Guardia e hook di tutte le sessioni girano da /opt/agentdeck: una versione rotta le bloccherebbe. Snapshot, test prima del cambio, cambio atomico, ritorno automatico se la verifica fallisce.
-- [ ] `O18.T2` Claude Code a versione fissa, aggiornamento manuale con prova degli agganci — *perimetro:* `deck/, docs/, impostazioni di Claude Code sulla Deck`
+- [~] `O18.T2` Claude Code a versione fissa, aggiornamento manuale con prova degli agganci — *perimetro:* `deck/, docs/, impostazioni di Claude Code sulla Deck`
   *gate previsto:* Aggiornamenti automatici di Claude Code spenti e versione fissata; un comando o una procedura aggiorna a una versione scelta solo dopo una prova automatica di hook, flag e bypass, con ritorno alla precedente; documentazione.
+  *rischio:* 35/100 — Tocca il programma di tutte le sessioni: una versione rotta le fermerebbe. Versione precedente conservata, snapshot, prova degli agganci prima del cambio.
 - [ ] `O18.T3` Installazioni senza versione o latest segnalate come errore, salvo consenso motivato — *perimetro:* `deck/, docs/`
   *gate previsto:* La guardia riconosce le installazioni senza versione o latest fuori da pacman (npm, pip, cargo, curl | sh, immagini :latest, claude) e le rifiuta con il motivo; l'agente le può fare solo dichiarando un consenso motivato, registrato; test con casi veri e falsi positivi; documentazione.
 

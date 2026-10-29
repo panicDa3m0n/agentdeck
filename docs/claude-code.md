@@ -299,11 +299,40 @@ domande (`permission_denials` vuoto) e la guardia ha ancora bloccato i comandi c
 `systemctl cat agentdeck-servizio@domus` è stata presa per una modifica. Le sostituirà un arbitro agentico che decide al
 posto dell'umano senza bloccare l'agente (piano del 29/10/2026, punti 8 e 9).
 
-## Aggiornamenti
+## Aggiornamenti: versione fissa (O18.T2)
 
-L'installazione nativa si aggiorna da sola in background, e la nuova versione parte al riavvio successivo di
-Claude Code. Il canale (`latest` o `stable`, circa una settimana indietro) si sceglie con l'impostazione
-`autoUpdatesChannel` nella configurazione (O10.T3). Per aggiornare subito: `claude update`.
+**La decisione dell'utente, 29/10/2026** (piano punto 11, [piano.md](piano.md)): Claude Code non si aggiorna da solo;
+si aggiorna a mano ogni tanto, perché gli aggiornamenti continui destabilizzano. AgentDeck dipende da dettagli di
+Claude Code (hook, regole `deny`, bypass, opzioni della riga di comando, evento `PermissionRequest` per O19), quindi
+ogni versione nuova passa prima da una prova.
+
+**Due blocchi, entrambi impostazioni gestite** (nessuna modifica al programma, INV-10):
+- `env.DISABLE_AUTOUPDATER = "1"` in [../deck/claude/managed-settings.json](../deck/claude/managed-settings.json):
+  niente aggiornamenti in background in nessuna sessione;
+- `requiredMaximumVersion` in `/etc/claude-code/managed-settings.d/50-agentdeck-versione.json`, scritto da `deck`:
+  Claude Code rifiuta di aggiornarsi oltre quella versione e di partire in una più nuova. `deck release install`
+  lo crea con la versione attiva se manca.
+
+**`deck claude/version`** ([../deck/agentdeck/components/claude_version.py](../deck/agentdeck/components/claude_version.py),
+logica in [../deck/agentdeck/claude_version.py](../deck/agentdeck/claude_version.py)) mostra la versione attiva, quella
+fissata, le versioni sul disco e quelle pubblicate (`latest` e `stable`, da `downloads.claude.ai`). Avvisa se gli
+aggiornamenti automatici sono accesi, se la versione attiva non è quella fissata, se ne esiste una più nuova.
+- `pin`: fissa la versione attiva;
+- `probe`: lancia la prova degli agganci sulla versione attiva;
+- `switch version=<x.y.z>`, con anteprima: snapshot, nuovo limite, `claude install <versione>` (o solo il
+  collegamento, se è già sul disco), prova degli agganci sul binario nuovo. Se l'installazione o la prova
+  falliscono, tornano da soli il binario e il limite di prima. Le sessioni aperte tengono il loro binario fino al
+  riavvio.
+
+**La prova degli agganci** ([../deck/agentdeck/claude_probe.py](../deck/agentdeck/claude_probe.py)) lancia `claude -p`
+contro un finto server dell'API su `127.0.0.1`, senza rete e senza chiavi. Il server risponde con un copione: chiede
+il comando "canarino" `echo agentdeck-deny-canary`, che la regola `deny` gestita deve bloccare, poi un `echo` con
+`journalctl`, che in bypass deve passare e a cui la guardia aggiunge il rimando a `deck logs`. Verifica: uscita e
+risultato JSON, il nostro `--system-prompt` al posto di quello di Claude Code, l'hook di inizio sessione, `--tools`
+e `--strict-mcp-config` con gli strumenti di `deck`, la regola `deny`, la guardia, l'evento `PermissionRequest` nel
+binario, il bypass senza richieste. Sulla 2.1.310 passa tutto (29/10/2026).
+
+Test: [../deck/tests/test_claude_version.py](../deck/tests/test_claude_version.py).
 
 ## Rimozione
 

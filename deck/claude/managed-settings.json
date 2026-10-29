@@ -30,6 +30,9 @@
     "defaultMode": "bypassPermissions"
   },
   "skipDangerousModePermissionPrompt": true,
+  "env": {
+    "DISABLE_AUTOUPDATER": "1"
+  },
   "hooks": {
     "SessionStart": [
       {"hooks": [{"type": "command", "command": "/usr/bin/python3 /opt/agentdeck/claude/session_start.py"}]}
