@@ -265,6 +265,12 @@ class Releases:
                              f'install -m 0644 {cur}/claude/agentdeck-agente-proxy.service /etc/systemd/system/ && '
                              f'systemctl daemon-reload && systemctl enable agentdeck-agente-proxy.service && '
                              f'systemctl restart agentdeck-agente-proxy.service)']),
+            # il ponte Telegram con il proprietario (O21.T1): riavviato perché usi il codice della versione attiva
+            ("telegram bridge", ["sudo", "-n", "sh", "-c",
+                                 f'test ! -f {cur}/claude/agentdeck-telegram.service || '
+                                 f'(install -m 0644 {cur}/claude/agentdeck-telegram.service /etc/systemd/system/ && '
+                                 f'systemctl daemon-reload && systemctl enable agentdeck-telegram.service && '
+                                 f'systemctl restart agentdeck-telegram.service)']),
             # il controllo dell'agente interno ogni 15 minuti (O20.T3)
             ("agent timer", ["sudo", "-n", "sh", "-c",
                              f'test ! -f {cur}/claude/agentdeck-agente.timer || '

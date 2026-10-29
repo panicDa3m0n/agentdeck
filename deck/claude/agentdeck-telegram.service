@@ -1,0 +1,25 @@
+# /etc/systemd/system/agentdeck-telegram.service
+# AgentDeck: il ponte Telegram fra il proprietario e l'agente interno (task O21.T1). Long polling verso Telegram,
+# nessuna porta esposta (INV-5). Senza ~/.config/agentdeck/telegram.json aspetta e riprova ogni minuto.
+# Niente NoNewPrivileges: i compiti dell'agente interno usano deck, che chiama sudo. Installato da deck release.
+# Documentazione: docs/telegram.md
+[Unit]
+Description=AgentDeck: ponte Telegram con il proprietario
+After=network-online.target agentdeck-agente-proxy.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=agent
+Group=agent
+Environment=HOME=/home/agent
+Environment=PATH=/home/agent/.local/bin:/usr/local/bin:/usr/bin
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHONDONTWRITEBYTECODE=1
+WorkingDirectory=/opt/agentdeck
+ExecStart=/usr/bin/python3 -m agentdeck.telegram
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

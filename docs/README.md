@@ -17,6 +17,8 @@ documento (invariante INV-9). Quando si modifica il codice, si aggiorna il docum
 - [agente-interno.md](agente-interno.md): l'agente interno della Deck (MiniMax via Claude Code), l'intermediario
   locale che toglie l'identità Claude, configurazione, chiave e prove. Codice:
   [../deck/agentdeck/minimax_proxy.py](../deck/agentdeck/minimax_proxy.py).
+- [telegram.md](telegram.md): il canale Telegram con il proprietario: ponte senza porte esposte, solo il suo chat
+  id, compiti all'agente interno e rapporti in chat. Codice: [../deck/agentdeck/telegram.py](../deck/agentdeck/telegram.py).
 
 ## Architettura
 

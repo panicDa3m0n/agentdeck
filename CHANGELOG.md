@@ -4,6 +4,20 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.5.12 — 2026-10-29
+
+Ciclo 05, nuovo obiettivo O21 (piano punto 3), task O21.T1: il ponte Telegram con il proprietario.
+
+- **`agentdeck/telegram.py`**, servizio `agentdeck-telegram`: long polling senza porte esposte; solo il chat id del
+  proprietario; i suoi messaggi diventano compiti dell'agente interno e il rapporto torna in chat; `/stato` e
+  `/help`; i rapporti dei controlli automatici arrivano da soli; mittenti sconosciuti ignorati e registrati; token
+  mai in registri ed errori.
+- **`deck telegram`:** stato del bot e del ponte, mittenti sconosciuti, `send` per scrivere al proprietario.
+- **`deck release`:** installa, abilita e riavvia il ponte, che aspetta la configurazione se manca.
+- **Annotato:** O20 chiuso come bloccato, approvato dall'utente: manca la prova con MiniMax vero (chiave, R7).
+- **Test:** 9 nuovi contro un finto Telegram, 334 in tutto. **Documentazione:** `docs/telegram.md`, nuovo,
+  nell'indice; `docs/deck.md`; `/telegram` nel `CLAUDE.md` generato.
+
 ## 0.5.11 — 2026-10-29
 
 Ciclo 05, obiettivo O20, task O20.T3: l'agente interno si attiva da solo.

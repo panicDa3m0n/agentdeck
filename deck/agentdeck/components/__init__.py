@@ -11,6 +11,7 @@ from .release import Release
 from .service import Service
 from .snapshot import Snapshot
 from .status import Status
+from .telegram import Telegram
 from .term import Term
 from .update import Update
 
@@ -18,4 +19,4 @@ from .update import Update
 def all_components() -> list:
     """I componenti attivi. Un componente nuovo si aggiunge qui."""
     return [Agent(), Claude(), ClaudeVersion(), Home(), Logs(), Network(), Obligations(), ProtocolInfo(), Release(),
-            Service(), Snapshot(), Status(), Term(), Update()]
+            Service(), Snapshot(), Status(), Telegram(), Term(), Update()]
