@@ -1590,3 +1590,5 @@
 {"at": "2026-10-29 21:30", "testo": "TASK AGGIUNTA O20.T3 in O20 — Attivazione per eventi e a intervalli, autonomia a livelli"}
 {"at": "2026-10-29 21:30", "testo": "RICHIESTA R7 aperta (O19) — Chiave API MiniMax: il proprietario la scrive in ~/.config/agentdeck/minimax.key (permessi 600) sulla Deck"}
 {"at": "2026-10-29 21:30", "testo": "TASK APERTA O20.T1 — Intermediario locale verso MiniMax: toglie la riga fissa Claude e adatta la richiesta | perimetro: deck/, docs/, servizio dell'intermediario sulla Deck | gate: Servizio su 127.0.0.1 che riceve le richieste di Claude Code, toglie la riga fissa e l'intestazione di fatturazione, adatta modello, parametri e intestazioni, inoltra a MiniMax con la chiave letta dalla Deck e restituisce lo streaming; provato con un finto MiniMax e con claude -p; chiave mai nel repository; documentazione. | rischio: 20"}
+{"at": "2026-10-29 21:34", "testo": "TASK CHIUSA O20.T1 — completata: Intermediario su 127.0.0.1:8791: toglie la riga Claude, adatta modello e parametri, inoltra con la chiave; provato con claude -p e MiniMax finto; v0.5.9"}
+{"at": "2026-10-29 21:34", "testo": "VERSIONE 0.5.5 (O20.T1)"}

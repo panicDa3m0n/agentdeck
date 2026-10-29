@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-26 11:36",
-  "updated": "2026-10-29 21:30",
+  "updated": "2026-10-29 21:34",
   "objectives": [
     {
       "id": "O12",
@@ -323,8 +323,8 @@
           "title": "Intermediario locale verso MiniMax: toglie la riga fissa Claude e adatta la richiesta",
           "scope": "deck/, docs/, servizio dell'intermediario sulla Deck",
           "gate_pre": "Servizio su 127.0.0.1 che riceve le richieste di Claude Code, toglie la riga fissa e l'intestazione di fatturazione, adatta modello, parametri e intestazioni, inoltra a MiniMax con la chiave letta dalla Deck e restituisce lo streaming; provato con un finto MiniMax e con claude -p; chiave mai nel repository; documentazione.",
-          "gate_post": "",
-          "state": "doing",
+          "gate_post": "Intermediario su 127.0.0.1:8791: toglie la riga Claude, adatta modello e parametri, inoltra con la chiave; provato con claude -p e MiniMax finto; v0.5.9",
+          "state": "done",
           "risk": 20,
           "risk_why": "Servizio solo locale su 127.0.0.1; la chiave sta solo sulla Deck; nessun cambiamento alle sessioni esistenti.",
           "docs": []
@@ -453,18 +453,18 @@
   ],
   "active": {
     "objective": "O20",
-    "task": "O20.T1",
-    "phase": "in_progress",
-    "risk": 20,
-    "risk_why": "Servizio solo locale su 127.0.0.1; la chiave sta solo sulla Deck; nessun cambiamento alle sessioni esistenti.",
+    "task": "",
+    "phase": "idle",
+    "risk": null,
+    "risk_why": "",
     "hold_invariants": "",
     "hold_plan": "",
     "gate_done": ""
   },
   "previous": {
-    "task": "O19.T2",
-    "state": "blocked",
-    "note": "Non sviluppata dall'agente in questa sessione: da rivedere con l'utente alla fine del piano"
+    "task": "O20.T1",
+    "state": "done",
+    "note": "Intermediario su 127.0.0.1:8791: toglie la riga Claude, adatta modello e parametri, inoltra con la chiave; provato con claude -p e MiniMax finto; v0.5.9"
   },
   "cycle": {
     "n": 5,
