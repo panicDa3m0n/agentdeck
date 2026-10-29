@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-26 11:36",
-  "updated": "2026-10-29 20:47",
+  "updated": "2026-10-29 20:52",
   "objectives": [
     {
       "id": "O12",
@@ -258,9 +258,9 @@
           "scope": "deck/, docs/",
           "gate_pre": "La guardia riconosce le installazioni senza versione o latest fuori da pacman (npm, pip, cargo, curl | sh, immagini :latest, claude) e le rifiuta con il motivo; l'agente le può fare solo dichiarando un consenso motivato, registrato; test con casi veri e falsi positivi; documentazione.",
           "gate_post": "",
-          "state": "todo",
-          "risk": null,
-          "risk_why": "",
+          "state": "doing",
+          "risk": 20,
+          "risk_why": "Cambia solo cosa la guardia lascia passare; il rischio è bloccare lavoro legittimo, coperto da test sui falsi positivi e dal consenso motivato.",
           "docs": []
         }
       ]
@@ -379,14 +379,21 @@
       "text": "Piano del 29/10 deciso con l'utente (docs/piano.md): sviluppo di AgentDeck sulla Deck con installazione e revert da qui, versioni fissate (Claude Code, niente installazioni latest senza consenso), arbitro agentico al posto delle domande della guardia senza mai bloccare l'agente, tabella delle richieste in dashboard, agente interno MiniMax con intermediario, Telegram, Brain. Da tradurre in obiettivi con un nuovo ciclo. O15.T3 resta aperta (prova al tocco).",
       "docs": [],
       "created": "2026-10-29 20:18"
+    },
+    {
+      "id": "N68",
+      "task": "O18.T3",
+      "text": "Falso positivo di claude/after.py (29/10): un comando che conteneva solo testo 'pacman -S' fra virgolette (casi di prova di O18.T3) ha fatto dire all'hook che erano stati installati pacchetti; non è stato installato nulla. Andrebbe controllato se pacman è davvero partito (log o database) invece del testo del comando.",
+      "docs": [],
+      "created": "2026-10-29 20:52"
     }
   ],
   "active": {
     "objective": "O18",
-    "task": "",
-    "phase": "idle",
-    "risk": null,
-    "risk_why": "",
+    "task": "O18.T3",
+    "phase": "in_progress",
+    "risk": 20,
+    "risk_why": "Cambia solo cosa la guardia lascia passare; il rischio è bloccare lavoro legittimo, coperto da test sui falsi positivi e dal consenso motivato.",
     "hold_invariants": "",
     "hold_plan": "",
     "gate_done": ""
@@ -405,6 +412,6 @@
     "objective": 19,
     "cycle": 5,
     "request": 6,
-    "note": 67
+    "note": 68
   }
 }

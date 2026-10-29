@@ -15,7 +15,7 @@ import json
 from pathlib import Path
 from typing import Optional
 
-from .. import access, term
+from .. import access, pinning, term
 from ..engine import Component, Context, DeckError, Preview
 from ..protocol import SysText, action, alert, param, screen, sys_text
 
@@ -266,6 +266,15 @@ class Term(Component):
         return self._session(ctx, data, done=True)
 
     def _guard_access(self, text: str, field: str) -> None:
+        unpinned = pinning.check(text) if field == "command" else None
+        if unpinned is not None and pinning.consent(text) is None:
+            raise DeckError("NOT_AVAILABLE", sys_text("This installs software without a fixed version: see "
+                                                      "data.refused_because."),
+                            title=sys_text("Refused: version not fixed"), path=self.path, back=self.path,
+                            field_name=field, data={"refused_because": unpinned},
+                            prompt=sys_text("Name the version in the command (pkg@1.2.3, pkg==1.2.3, image:tag). If "
+                                            "that is not possible, prefix the command with AGENTDECK_LATEST_OK=\"<why, "
+                                            "at least 10 characters>\" (O18.T3)."))
         reason = access.check(text)
         if reason is not None:
             raise DeckError("NOT_AVAILABLE", sys_text("This could cut the agent's access to the Deck (INV-1): see "

@@ -10,10 +10,11 @@ _Dossier di progetto: [PROGETTO.md](PROGETTO.md)_
 
 ## Stato corrente
 
-- **Obiettivo attivo:** `O18` Lo sviluppo di AgentDeck sta sulla Deck: repository, installazione e revert da qui, versioni fissate (piano punti 10-11) — 3 task: 2 completate, 0 in corso, 1 da fare, 0 bloccate
-- **Task attiva:** —
+- **Obiettivo attivo:** `O18` Lo sviluppo di AgentDeck sta sulla Deck: repository, installazione e revert da qui, versioni fissate (piano punti 10-11) — 3 task: 2 completate, 1 in corso, 0 da fare, 0 bloccate
+- **Task attiva:** `O18.T3` Installazioni senza versione o latest segnalate come errore, salvo consenso motivato — in corso · rischio 20/100
 - **Ultima task gestita:** `O18.T2` — completata — Aggiornamenti spenti e versione fissata (managed-settings.d); deck claude/version switch con prova degli agganci, provato 2.1.310→2.1.312→2.1.310; v0.5.6
-- **Ultimo aggiornamento:** 2026-10-29 20:47
+- **Fase:** `in_progress`
+- **Ultimo aggiornamento:** 2026-10-29 20:52
 
 ## Richieste attive
 
@@ -109,8 +110,10 @@ _nessuna task. Aggiungile con `wf.sh task-add`._
 - [x] `O18.T2` Claude Code a versione fissa, aggiornamento manuale con prova degli agganci — *perimetro:* `deck/, docs/, impostazioni di Claude Code sulla Deck`
   *gate previsto:* Aggiornamenti automatici di Claude Code spenti e versione fissata; un comando o una procedura aggiorna a una versione scelta solo dopo una prova automatica di hook, flag e bypass, con ritorno alla precedente; documentazione. · *gate confermato:* ✔ Aggiornamenti spenti e versione fissata (managed-settings.d); deck claude/version switch con prova degli agganci, provato 2.1.310→2.1.312→2.1.310; v0.5.6
   *rischio:* 35/100 — Tocca il programma di tutte le sessioni: una versione rotta le fermerebbe. Versione precedente conservata, snapshot, prova degli agganci prima del cambio.
-- [ ] `O18.T3` Installazioni senza versione o latest segnalate come errore, salvo consenso motivato — *perimetro:* `deck/, docs/`
+- [~] `O18.T3` Installazioni senza versione o latest segnalate come errore, salvo consenso motivato — *perimetro:* `deck/, docs/`
   *gate previsto:* La guardia riconosce le installazioni senza versione o latest fuori da pacman (npm, pip, cargo, curl | sh, immagini :latest, claude) e le rifiuta con il motivo; l'agente le può fare solo dichiarando un consenso motivato, registrato; test con casi veri e falsi positivi; documentazione.
+  *rischio:* 20/100 — Cambia solo cosa la guardia lascia passare; il rischio è bloccare lavoro legittimo, coperto da test sui falsi positivi e dal consenso motivato.
+  *annotazioni:* `N68`
 
 ### `O19` Le richieste di permesso vanno a un arbitro agentico e non bloccano mai l'agente; tabella delle richieste in dashboard (piano punti 8-9) — in corso
 
@@ -137,3 +140,4 @@ _Una riga per nota, sempre legata a una task. `wf.sh notes` per leggerle._
 - `N65` (`O12.T5`) Obblighi troppo larghi: l'installazione di cage + chromium (O15.T3) ha aperto 47 PROFILE_NEEDED, uno per ogni pacchetto con programmi, librerie trascinate comprese (avahi, gtk, spirv...); chiusi tutti con dismiss e motivo. L'hook dovrebbe considerare solo i pacchetti installati esplicitamente (pacman -Qe) o i programmi davvero interattivi. — 2026-10-27 23:12
 - `N66` (`O15.T3`) Sulla Deck (28/10, sessione gestione-deck, decisione dell'utente): tutte le sessioni Claude Code in bypassPermissions (managed-settings senza disableBypassPermissionsMode, defaultMode e skipDangerousModePermissionPrompt) e ogni sessione aperta da deck claude è un servizio suo, agentdeck-sessione@<nome>. Fatto direttamente in /opt/agentdeck; portato nel repository il 29/10 dalla Deck, con docs/claude-code.md e docs/interfacce.md; 270 test verdi sulla Deck. — 2026-10-29 20:18
 - `N67` (`O15.T3`) Piano del 29/10 deciso con l'utente (docs/piano.md): sviluppo di AgentDeck sulla Deck con installazione e revert da qui, versioni fissate (Claude Code, niente installazioni latest senza consenso), arbitro agentico al posto delle domande della guardia senza mai bloccare l'agente, tabella delle richieste in dashboard, agente interno MiniMax con intermediario, Telegram, Brain. Da tradurre in obiettivi con un nuovo ciclo. O15.T3 resta aperta (prova al tocco). — 2026-10-29 20:18
+- `N68` (`O18.T3`) Falso positivo di claude/after.py (29/10): un comando che conteneva solo testo 'pacman -S' fra virgolette (casi di prova di O18.T3) ha fatto dire all'hook che erano stati installati pacchetti; non è stato installato nulla. Andrebbe controllato se pacman è davvero partito (log o database) invece del testo del comando. — 2026-10-29 20:52

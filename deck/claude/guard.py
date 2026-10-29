@@ -6,6 +6,8 @@ torna all'agente. È il secondo strato dopo le regole deny delle impostazioni ge
 catene di comandi e varianti che un prefisso non coglie. In dubbio lascia passare: è una guardia, non un sandbox.
 Se il comando passa e deck copre la stessa cosa, aggiunge al contesto l'azione di deck da preferire, senza bloccare
 (politica sui comandi grezzi, O10.T8); per i programmi che fanno domande indica l'adattatore, deck term.
+Versioni fisse (O18.T3): le installazioni senza versione fuori da pacman (agentdeck/pinning.py) si rifiutano, salvo il
+consenso motivato AGENTDECK_LATEST_OK="<motivo>" nel comando, registrato in ~/.local/state/agentdeck/latest-consents.jsonl.
 Permessi (ADR-0001, O12.T1): AgentDeck è dell'agente, che lavora sul sistema senza chiedere; quando uno strumento tocca
 un servizio o una credenziale dell'utente (agentdeck/ownership.py) l'hook risponde permissionDecision "ask" e Claude Code
 chiede all'utente. Vale per Bash, per le modifiche di file e per gli strumenti MCP di deck.
@@ -21,7 +23,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))  # /opt/agentdeck o deck/ del repository
 
 from agentdeck.access import RULES, check  # noqa: E402,F401  le regole stanno con deck: le usa anche deck term
-from agentdeck import ownership, term  # noqa: E402
+from agentdeck import ownership, pinning, term  # noqa: E402
+from agentdeck.system import deck_state_dir  # noqa: E402
 
 HINTS = [
     (re.compile(r"\bjournalctl\b"), "`deck logs query` (unit=, since=, priority=, lines=) returns journal lines as data"),
@@ -41,6 +44,13 @@ MESSAGE = ("AgentDeck guard: refused because this command could cut the agent's 
            "INV-1). This is a limit of the system, not a permission to ask for. Use deck instead: `deck service` and "
            "`deck network` preview the change and protect access; if they do not cover it, make the change with a "
            "safety net that reverts by itself.")
+PINNING = ("AgentDeck guard: refused because this installs software without a fixed version ({reason}). Since O18.T3 "
+           "every install outside pacman names its version (npm i pkg@1.2.3, pip install pkg==1.2.3, cargo install "
+           "crate@1.2.3, image:tag, `deck claude/version switch` for Claude Code). If a fixed version is not possible "
+           "or this is a false positive, repeat the command with the prefix AGENTDECK_LATEST_OK=\"<why, at least 10 "
+           "characters>\": the consent is recorded.")
+CONSENTED = ("AgentDeck: install without a fixed version allowed by your recorded consent (AGENTDECK_LATEST_OK). "
+             "Note in your report which version got installed.")
 ASK = ("AgentDeck: this needs the owner's permission because {reason}. Under ADR-0001 the agent works on AgentDeck "
        "without asking, and asks only for the owner's services and credentials.")
 
@@ -74,11 +84,21 @@ def main() -> int:
     tool = str(event.get("tool_name", ""))
     tool_input = event.get("tool_input") if isinstance(event.get("tool_input"), dict) else {}
     command = str(tool_input.get("command", "")) if tool == "Bash" else ""
+    consented = None
     if tool == "Bash":
         reason = check(command)
         if reason is not None:
             print(MESSAGE.format(reason=reason), file=sys.stderr)
             return 2
+        unpinned = pinning.check(command)
+        if unpinned is not None:
+            why = pinning.consent(command)
+            if why is None:
+                print(PINNING.format(reason=unpinned), file=sys.stderr)
+                return 2
+            pinning.record(deck_state_dir() / "latest-consents.jsonl", command, why, unpinned,
+                           str(event.get("session_id") or "") or None)
+            consented = CONSENTED
     owner = ownership.tool_reason(tool, tool_input)
     if owner:
         print(json.dumps({"hookSpecificOutput": {"hookEventName": "PreToolUse", "permissionDecision": "ask",
@@ -86,7 +106,7 @@ def main() -> int:
         return 0
     if tool != "Bash":
         return 0
-    text = hint(command)
+    text = " ".join(x for x in (consented, hint(command)) if x)
     if text:
         print(json.dumps({"hookSpecificOutput": {"hookEventName": "PreToolUse", "additionalContext": text}}))
     return 0

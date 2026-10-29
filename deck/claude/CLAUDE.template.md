@@ -29,6 +29,10 @@ nobody can fix it remotely.
   programs a new package installed. They arrive in the `obligations` field of every `deck` screen and in hook
   messages. Fulfil each as its message says, then close it with `deck obligations done id=<id>` and a note, or
   dismiss it with the reason it does not apply. For now they only warn; treat them as part of the job.
+- **Fixed versions**: outside pacman every install names its version (`npm i pkg@1.2.3`, `pip install pkg==1.2.3`,
+  `cargo install crate@1.2.3`, `image:tag`; Claude Code only with `deck claude/version switch`). The guard refuses
+  installs without a version and scripts piped into a shell. When a fixed version is not possible, prefix the command
+  with `AGENTDECK_LATEST_OK="<why>"`: the consent is recorded, so give the real reason.
 - **Snapshots before risky changes** that `deck` does not protect: `deck snapshot create description=<what you
   are about to change>`. Undo with `deck snapshot rollback id=<n>`, which shows a preview first.
 - **Never cut access**: do not stop, disable, mask or kill `sshd`, `systemd-networkd`, `iwd`, `systemd-resolved`

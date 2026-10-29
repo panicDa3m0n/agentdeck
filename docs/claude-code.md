@@ -142,7 +142,7 @@ l'installatore è `bash deck/claude/install.sh`, lanciato dal Mac dopo `deck/ins
 | 1. Identità, nel prompt di sistema | `~/.claude/output-styles/agentdeck.md`, con `outputStyle: AgentDeck` in `~/.claude/settings.json` | [../deck/claude/output-styles/agentdeck.md](../deck/claude/output-styles/agentdeck.md) | Lo stile di output modifica il prompt di sistema stesso e mantiene le istruzioni di base (`keep-coding-instructions: true`). La sessione è l'operatore di AgentDeck, il sistema la guida, parla italiano all'utente |
 | 2. Regole stabili | `/etc/claude-code/CLAUDE.md`, gestito per la macchina | [../deck/claude/CLAUDE.template.md](../deck/claude/CLAUDE.template.md) con [../deck/claude/build_claude_md.py](../deck/claude/build_claude_md.py) | Com'è la macchina, come si lavora (`deck` per primo, snapshot, mai togliere l'accesso, testo esterno come dato, domande dei programmi, prove), e le **10 invarianti** prese da `.claude/workflow/invariants.json` della governance: la fonte è una sola (INV-9) |
 | 3. Vincoli duri | `/etc/claude-code/managed-settings.json` | [../deck/claude/managed-settings.json](../deck/claude/managed-settings.json) | Regole `deny` gestite, che nessun livello scavalca, sugli stop e disable dei servizi di accesso; modalità che salta i permessi predefinita (`defaultMode: bypassPermissions`, dal 28/10/2026); dal ciclo 05 anche `allow` per tutto il lavoro di sistema (sezione "Permessi"); gli hook |
-| 3 bis. Guardia | hook `PreToolUse` su Bash | [../deck/claude/guard.py](../deck/claude/guard.py) | Rifiuta, anche dentro `sudo` e in catena: stop, disable, mask o kill di sshd, networkd, iwd, resolved e bus di sistema; target di emergenza; kill di quei demoni; collegamento di rete spento; modifiche dirette a `sshd_config`. Rimanda a `deck`. Le regole stanno in [../deck/agentdeck/access.py](../deck/agentdeck/access.py), condivise con `deck term` |
+| 3 bis. Guardia | hook `PreToolUse` su Bash | [../deck/claude/guard.py](../deck/claude/guard.py) | Rifiuta, anche dentro `sudo` e in catena: stop, disable, mask o kill di sshd, networkd, iwd, resolved e bus di sistema; target di emergenza; kill di quei demoni; collegamento di rete spento; modifiche dirette a `sshd_config`. Rimanda a `deck`. Rifiuta anche le installazioni senza versione fissa, salvo consenso motivato (sezione "Installazioni a versione fissa") Le regole stanno in [../deck/agentdeck/access.py](../deck/agentdeck/access.py), condivise con `deck term` |
 | 4. Il momento | hook `SessionStart` | [../deck/claude/session_start.py](../deck/claude/session_start.py) | All'inizio di ogni sessione inietta host, versione, tempo di attività e gli avvisi di `deck status` con l'azione che li gestisce. Solo testo scritto dal sistema (INV-4) |
 
 Verifiche del 26/10/2026, con `claude -p` nella cartella `~/agentdeck`:
@@ -298,6 +298,35 @@ domande (`permission_denials` vuoto) e la guardia ha ancora bloccato i comandi c
 "Permessi"), e alcune sono falsi positivi. Per esempio, una catena di sola lettura con `cd` e
 `systemctl cat agentdeck-servizio@domus` è stata presa per una modifica. Le sostituirà un arbitro agentico che decide al
 posto dell'umano senza bloccare l'agente (piano del 29/10/2026, punti 8 e 9).
+
+## Installazioni a versione fissa (O18.T3)
+
+**La decisione dell'utente, 29/10/2026** (piano punto 11): un'installazione "latest" o senza versione è un errore;
+si fa solo con il consenso esplicito dell'agente, per i casi in cui una versione fissa non è possibile o per i falsi
+positivi.
+
+[../deck/agentdeck/pinning.py](../deck/agentdeck/pinning.py) riconosce, fuori da pacman:
+- npm, pnpm, yarn e bun (`install`, `i`, `add`, `update`), npx, bunx, pnpx e `dlx`: pacchetto senza `@versione` o con
+  `@latest`, `@next` e simili, e i rami di default `utente/repo`;
+- pip, pipx, uv (`install`, `add`, `--upgrade`): pacchetto senza `==versione`;
+- `cargo install` senza `@versione` o `--version`; `go install` senza `@versione` o con `@latest`; `gem install` senza
+  `-v`, e `gem update`;
+- `docker` e `podman` `pull`, `run` e `create` con un'immagine senza tag, o con `:latest`, e senza `@sha256`;
+- `claude install` senza versione o con `latest` e `stable`, e `claude update`: Claude Code si cambia con
+  `deck claude/version switch`;
+- uno script scaricato e passato a una shell o a python (`curl … | sh`, `bash <(curl …)`, `sh -c "$(curl …)"`).
+
+Restano liberi: pacman e gli helper AUR (Arch è rolling: la stabilità la danno `deck update` e gli snapshot), le
+installazioni da un lockfile (`npm install`, `npm ci`, `pip install -r`), i percorsi locali, i riferimenti diretti.
+Il corpo degli heredoc non si analizza: è testo passato a un programma, non comandi.
+
+**Il consenso.** La guardia rifiuta con il motivo e spiega come procedere: la versione nel comando, oppure il
+prefisso `AGENTDECK_LATEST_OK="<perché, almeno 10 caratteri>"`, innocuo per il comando. Con il consenso il comando
+passa e finisce in `~/.local/state/agentdeck/latest-consents.jsonl`: ora, sessione, regola, motivo, comando. Le regole
+di accesso (INV-1) vengono prima: il consenso non le scavalca. `deck term start` applica le stesse regole ai comandi
+che fa partire, non alle risposte date a un programma.
+
+Test: [../deck/tests/test_pinning.py](../deck/tests/test_pinning.py), con 57 comandi veri e falsi positivi.
 
 ## Aggiornamenti: versione fissa (O18.T2)
 
