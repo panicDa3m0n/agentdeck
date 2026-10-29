@@ -37,7 +37,7 @@ durata: niente contenuti, niente chiave.
 
 **Configurazione**, `~/.config/agentdeck/agente.json`, tutta facoltativa: `upstream`, `model`, `key_file`, `port`,
 `strip_params`, `strip_headers`, `timeout_s`. **Chiave:** `~/.config/agentdeck/minimax.key`, permessi 600, scritta dal
-proprietario sulla Deck con il link monouso di `deck secret request name=minimax` ([segreti.md](segreti.md)); letta a ogni richiesta, mai nel repository (INV-6), mai nei registri. Senza chiave
+proprietario sulla Deck con la pagina monouso di `deck secret request name=minimax` ([richieste.md](richieste.md)); letta a ogni richiesta, mai nel repository (INV-6), mai nei registri. Senza chiave
 l'intermediario risponde 401 con un messaggio chiaro.
 
 **Installazione:** `deck release install` installa l'unità, la abilita e la riavvia a ogni versione, e tra le
@@ -46,8 +46,13 @@ verifiche controlla che risponda ([sviluppo.md](sviluppo.md#installare-dalla-dec
 **Prove (29/10/2026):** test con un MiniMax finto, cioè il server della prova degli agganci
 ([../deck/tests/test_minimax_proxy.py](../deck/tests/test_minimax_proxy.py)); poi `claude -p` vero → intermediario →
 MiniMax finto. A MiniMax è arrivato solo il nostro prompt di sistema, con modello `MiniMax-M3`, senza la riga
-"Claude agent" e senza `context_management` e `output_config`. Prova con MiniMax vero: quando c'è la chiave
-(richiesta R7 della governance).
+"Claude agent" e senza `context_management` e `output_config`.
+
+**Prova con MiniMax vero (30/10/2026, O23.T1).** La chiave è arrivata con il link monouso di `deck secret`
+([richieste.md](richieste.md)). `deck agent run` con un compito di sola lettura (stato della Deck, una ricerca in
+`brain`): esito ok, 5 turni, 17 s, modello `MiniMax-M3`. Il registro dell'intermediario riporta le chiamate a
+`/v1/messages` con stato 200. L'agente ha usato `deck` e `brain` e ha trovato la memoria cercata. Nel rapporto si è
+detto "Claude Opus 5.5": l'identità che un modello dichiara non è una prova, lo è il registro dell'intermediario.
 
 ## Prompt di sistema e `deck agent` (O20.T2)
 
@@ -88,6 +93,14 @@ di `deck`, il contesto dell'hook di inizio sessione, e nessuna riga "Claude agen
 **Timer.** [../deck/claude/agentdeck-agente.timer](../deck/claude/agentdeck-agente.timer) ogni 15 minuti, 5 minuti
 dopo l'avvio, lancia [../deck/claude/agentdeck-agente.service](../deck/claude/agentdeck-agente.service): `deck agent
 tick`, come utente `agent`, un controllo alla volta. `deck release install` installa e abilita entrambi.
+
+**Incidente del 30/10/2026 e timer spento.** Alle 00:17, alla prima corsa vera dopo l'arrivo della chiave, il
+controllo giornaliero ha lanciato l'agente, che da solo ha eseguito `deck update apply` (8 pacchetti, snapshot 215 e
+218) e `deck update reboot`: il prompt glielo permetteva solo come proposta. Il sistema dopo il riavvio era sano
+(`deck update verify` ok), ma la corsa interrotta non era registrata e il timer l'avrebbe rilanciata. Il timer è stato
+fermato e disabilitato. Da allora `deck release install` installa servizio e timer ma **non li accende**: si
+riaccendono solo con una decisione esplicita, dopo che la guardia limiterà tecnicamente l'agente interno (O23). Lezione
+in `brain` (memoria 4): con MiniMax il prompt non basta.
 
 **Quando parte l'agente.** `tick` legge `deck status` e `deck obligations` e lancia l'agente solo se:
 - c'è un avviso **nuovo** di livello `warning` o `critical`, riconosciuto per codice (gli `info` non contano);

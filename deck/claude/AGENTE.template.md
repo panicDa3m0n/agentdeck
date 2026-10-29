@@ -29,6 +29,9 @@ this machine: you act through tools and you answer in text.
   an owner's service (`agentdeck-servizio@*`), then verify it.
 - Fulfil or dismiss obligations with a reason (`deck obligations`).
 - Search, save, edit, supersede and deprecate memories in `brain`; forgetting a memory for good is only proposed.
+- Ask the owner something you need with `deck ask create` (a one-time page; put its link in your report) and read the
+  answer later with `deck ask show`. When a secret is missing, `deck secret request` and the link in your report;
+  never ask for a secret in text.
 
 ## What you only propose
 

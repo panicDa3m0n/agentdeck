@@ -275,12 +275,13 @@ class Releases:
                                  f'(install -m 0644 {cur}/claude/agentdeck-telegram.service /etc/systemd/system/ && '
                                  f'systemctl daemon-reload && systemctl enable agentdeck-telegram.service && '
                                  f'systemctl restart agentdeck-telegram.service)']),
-            # il controllo dell'agente interno ogni 15 minuti (O20.T3)
+            # il controllo dell'agente interno ogni 15 minuti (O20.T3): si installa ma non si accende da qui. Il
+            # 30/10/2026 l'agente interno ha aggiornato e riavviato la Deck da solo: il timer resta com'è (spento
+            # finché la guardia non limita l'agente interno, O23) e si accende solo con una decisione esplicita
             ("agent timer", ["sudo", "-n", "sh", "-c",
                              f'test ! -f {cur}/claude/agentdeck-agente.timer || '
                              f'(install -m 0644 {cur}/claude/agentdeck-agente.service {cur}/claude/agentdeck-agente.timer '
-                             f'/etc/systemd/system/ && systemctl daemon-reload && '
-                             f'systemctl enable --now agentdeck-agente.timer)']),
+                             f'/etc/systemd/system/ && systemctl daemon-reload)']),
             ("claude managed", ["sudo", "-n", "sh", "-c",
                                 f'python3 -m json.tool {cur}/claude/managed-settings.json >/dev/null && '
                                 f'install -d -m 0755 /etc/claude-code && '

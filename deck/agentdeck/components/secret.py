@@ -1,125 +1,110 @@
-"""Schermata "/secret": i segreti che il proprietario consegna alla Deck senza passare dalla chat (O23.T1).
+"""Schermata "/secret": i segreti che il proprietario consegna alla Deck con una pagina monouso (O23.T1).
 
-Mostra solo se ogni segreto c'è (dimensione, permessi, data), mai il contenuto; request apre una richiesta web
-monouso nella rete di casa, eseguita dall'unità a tempo agentdeck-segreto; cancel la chiude. Logica e server:
-agentdeck/secret_drop.py. Documentazione: docs/segreti.md.
+Mostra solo se ogni segreto c'è (dimensione, permessi, data), mai il contenuto; request genera la pagina, esposta
+con il tunnel temporaneo (decisione del proprietario del 30/10/2026, INV-5) o solo in casa, e chiusa alla
+consegna; cancel la chiude prima. Il valore va nel file con permessi 600 e l'agente non lo vede. Motore:
+agentdeck/owner_page.py. Documentazione: docs/richieste.md.
 """
 from __future__ import annotations
 
-import os
-import pwd
-import subprocess
-import sys
 import time
 from datetime import datetime
-from pathlib import Path
-from typing import Callable, Optional
+from typing import Optional
 
-from .. import secret_drop as sd
+from .. import owner_page as op
 from ..engine import Component, Context, DeckError
 from ..protocol import action, param, screen, sys_text
 
-SERVER = Path(sd.__file__).resolve()
 
-
-def _iso(ts: float) -> str:
+def iso(ts: float) -> str:
     return datetime.fromtimestamp(ts).astimezone().isoformat(timespec="seconds")
+
+
+def via_param() -> dict:
+    return param("enum", required=False, values=op.VIAS, description=sys_text(
+        "internet (default): a temporary tunnel, reachable from anywhere until the answer; home: only from the home "
+        "network"))
+
+
+def open_request(launcher: op.Launcher) -> Optional[dict]:
+    """La richiesta aperta, senza token per i segreti; con il link solo se il server gira."""
+    req = op.load_request()
+    if req is None:
+        return None
+    out = {"kind": req["kind"], "name": op.label(req), "via": req["via"], "expires": iso(req["expires_at"]),
+           "expired": time.time() >= req["expires_at"], "server_running": launcher.running(), "link": op.link(req)}
+    return out
+
+
+def launch_error(e: op.LaunchError, path: str) -> DeckError:
+    messages = {
+        "no_cloudflared": ("cloudflared is not installed, so the page cannot be reached from the internet.",
+                           "Install cloudflared (skill agentdeck-install-package), or use via=home."),
+        "no_home_network": ("The Deck has no private address on the home network.",
+                            "Check the network with `deck network`, or use via=internet."),
+        "not_started": ("The page server did not start.",
+                        "Read data.output and `deck logs query unit=agentdeck-pagina`, fix the cause, then retry."),
+        "no_tunnel": ("The tunnel did not answer in time, so the request was closed.",
+                      "Retry once; if it fails again, use via=home or read `deck logs query unit=agentdeck-pagina`."),
+    }
+    message, prompt = messages.get(e.code, ("The request could not start.", "Retry, or use via=home."))
+    return DeckError("NOT_AVAILABLE" if e.code in ("no_cloudflared", "no_home_network") else "FAILED",
+                     sys_text(message), title=sys_text("Request not started"), path=path, back=path,
+                     data={"reason": e.code, "output": e.output}, prompt=sys_text(prompt))
 
 
 class Secret(Component):
     path = "/secret"
     title = sys_text("Secrets")
-    summary = sys_text("Secrets the owner hands to the Deck through a one-time web link, never through the chat")
+    summary = sys_text("Secrets the owner hands to the Deck through a one-time page, never through the chat")
 
-    def __init__(self, sh: Callable = subprocess.run, lan: Callable[[], Optional[str]] = sd.lan_address,
-                 wait_s: float = 5.0):
-        self.sh, self.lan, self.wait_s = sh, lan, wait_s
+    def __init__(self, launcher: Optional[op.Launcher] = None):
+        self.launcher = launcher or op.Launcher()
 
     def actions(self, ctx: Context) -> list:
         return [
-            action("request", label=sys_text("Open a one-time web link for the owner to hand over a secret"),
-                   effect="safe", params={"name": param("enum", values=list(sd.SLOTS), description=sys_text(
-                       "Which secret: minimax (the MiniMax API key) or telegram (bot token and chat id)"))}),
-            action("cancel", label=sys_text("Close the open request before it expires"), effect="safe"),
+            action("request", label=sys_text("Open a one-time page for the owner to hand over a secret"),
+                   effect="safe", params={
+                       "name": param("string", max_length=32, description=sys_text(
+                           "Which secret: minimax (MiniMax API key), telegram (bot token and chat id), or another "
+                           "lowercase name for any other key, kept in ~/.config/agentdeck/secrets/<name>")),
+                       "via": via_param()}),
+            action("cancel", label=sys_text("Close the open request before it is answered"), effect="safe"),
         ]
-
-    def _cmd(self, argv: list):
-        return self.sh(argv, capture_output=True, text=True, timeout=30)
-
-    def _running(self) -> bool:
-        return self._cmd(["systemctl", "is-active", sd.UNIT]).stdout.strip() in ("active", "activating")
-
-    def _request_data(self) -> Optional[dict]:
-        req = sd.load_request()
-        if req is None:
-            return None
-        return {"name": req["name"], "url": sd.url(req), "expires": _iso(req["expires_at"]),
-                "expired": time.time() >= req["expires_at"], "server_running": self._running()}
 
     def view(self, ctx: Context) -> dict:
         return screen(
             screen="secret", path=self.path, title=sys_text("Secrets"), back="/", actions=self.actions(ctx),
-            data={"slots": [sd.presence(n) for n in sd.SLOTS], "request": self._request_data(),
-                  "recent": sd.history()},
+            data={"secrets": [op.presence(n) for n in op.known_secrets()], "request": open_request(self.launcher),
+                  "recent": op.history()},
             prompt=sys_text(
-                "data.slots says which secrets are on the Deck, never their value. When one is missing and needed, "
-                "open a link with `deck secret request name=<secret>` and give it to the owner: they paste the "
-                "value in the page and it goes straight to the file. Never ask for a secret in the chat and never "
-                "read the files."))
-
-    def _stop(self) -> None:
-        self._cmd(["sudo", "-n", "systemctl", "stop", sd.UNIT])
-        self._cmd(["sudo", "-n", "systemctl", "reset-failed", sd.UNIT])
+                "data.secrets says which secrets are on the Deck, never their value. When one is missing and needed, "
+                "run `deck secret request name=<secret>` and give the link to the owner: the page closes when the "
+                "value arrives. Never ask for a secret in the chat and never read the files."))
 
     def run(self, ctx: Context, action_id: str, params: dict) -> dict:
         if action_id == "cancel":
-            req = sd.load_request()
-            self._stop()
-            if req is not None:
-                sd.clear_request()
-                sd.record(req["name"], "cancelled")
+            req = self.launcher.cancel()
             return screen(screen="secret.cancelled", path=self.path, title=sys_text("Request closed"),
                           status="done", back=self.path, actions=self.actions(ctx),
-                          data={"cancelled": req["name"] if req else None, "server_running": self._running()},
-                          prompt=sys_text("No request is open now: the link no longer works."))
-
+                          data={"cancelled": {"kind": req["kind"], "name": op.label(req)} if req else None},
+                          prompt=sys_text("No request is open now: the page no longer works."))
         name = params["name"]
-        host = self.lan()
-        if host is None:
-            raise DeckError("NOT_AVAILABLE", sys_text("The Deck has no private address on the home network, so "
-                                                      "the link cannot be opened without exposing it."),
-                            title=sys_text("No home network"), path=self.path, back=self.path,
-                            prompt=sys_text("Check the network with `deck network`. The owner can still write the "
-                                            "file over SSH; never ask for the value in the chat."))
-        self._stop()  # una richiesta alla volta: la nuova sostituisce quella aperta
-        req = sd.new_request(name, host)
-        user = pwd.getpwuid(os.getuid()).pw_name
-        env = [f"--setenv=HOME={Path.home()}"] + [f"--setenv={k}={os.environ[k]}" for k in
-                                                   ("XDG_STATE_HOME", "XDG_CONFIG_HOME") if os.environ.get(k)]
-        started = self._cmd(["sudo", "-n", "systemd-run", f"--unit={sd.UNIT}", f"--uid={user}", f"--gid={user}",
-                             f"--property=RuntimeMaxSec={sd.TTL_S + 60}", "--collect", "--quiet", *env,
-                             sys.executable, str(SERVER)])
-        running = started.returncode == 0
-        deadline = time.monotonic() + self.wait_s
-        while running and not self._running() and time.monotonic() < deadline:
-            time.sleep(0.2)
-        running = running and self._running()
-        if not running:
-            sd.clear_request()
-            sd.record(name, "not_started")
-            raise DeckError("FAILED", sys_text("The one-time server did not start."), title=sys_text("Not started"),
-                            path=self.path, back=self.path,
-                            data={"unit": sd.UNIT, "output": (started.stderr or started.stdout or "")[-1000:]},
-                            prompt=sys_text("Read data.output and the unit's log with `deck logs query "
-                                            "unit={unit}`, fix the cause, then request again.", unit=sd.UNIT))
+        if not op.SLUG.fullmatch(name):
+            raise DeckError("BAD_PARAM", sys_text("A secret name is lowercase letters, digits and dashes."),
+                            title=sys_text("Invalid parameters"), path=self.path, back=self.path, field_name="name",
+                            prompt=sys_text("Use minimax, telegram or a short lowercase name such as openai-key."))
+        try:
+            req = self.launcher.start("secret", params.get("via", "internet"), name=name)
+        except op.LaunchError as e:
+            raise launch_error(e, self.path) from None
         return screen(
-            screen="secret.requested", path=self.path, title=sys_text("Link ready for {name}", name=name),
+            screen="secret.requested", path=self.path, title=sys_text("Page ready for {name}", name=name),
             status="done", back=self.path, actions=self.actions(ctx),
-            data={"request": {"name": name, "url": sd.url(req), "expires": _iso(req["expires_at"]),
-                              "server_running": True, "unit": sd.UNIT},
-                  "slot": sd.presence(name)},
+            data={"request": {"name": name, "via": req["via"], "link": op.link(req), "expires": iso(req["expires_at"]),
+                              "unit": op.UNIT},
+                  "secret": op.presence(name)},
             prompt=sys_text(
-                "Give data.request.url to the owner. It works only from the home network, once, until "
-                "data.request.expires; the value goes straight to the file and you never see it. Do not ask for the "
-                "value in the chat. When the owner says it is done, check with `deck secret` that data.slots shows "
-                "it present and data.recent shows received."))
+                "Give data.request.link to the owner: it works once, until data.request.expires, and closes when the "
+                "value arrives; you never see the value. Do not ask for it in the chat. When the owner says it is "
+                "done, check with `deck secret` that it is present and that data.recent shows received."))

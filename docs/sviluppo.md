@@ -62,7 +62,8 @@ installate più di recente, sempre l'attiva e la precedente.
    riavvia: la configurazione nuova vale per le sessioni aperte dopo;
 5. verifica: `deck status` risponde, `deck mcp` parte, la guardia rifiuta ancora un comando che taglia l'accesso,
    `sshd` è attivo; se la versione li ha, `brain` e `brain mcp` partono (non si guarda il database delle memorie,
-   così un suo problema non fa tornare indietro il sistema) e l'intermediario dell'agente interno risponde. Se una verifica fallisce, torna da solo alla versione di prima e rifà i suoi passi di sistema.
+   così un suo problema non fa tornare indietro il sistema) e l'intermediario dell'agente interno risponde. Il timer dell'agente interno si installa ma non si accende
+   ([agente-interno.md](agente-interno.md)). Se una verifica fallisce, torna da solo alla versione di prima e rifà i suoi passi di sistema.
 
 **`deck release revert [id=<versione>]`**, di norma la precedente: snapshot, scambio, passi di sistema e verifica,
 con lo stesso ritorno automatico. Un revert fatto due volte torna avanti.

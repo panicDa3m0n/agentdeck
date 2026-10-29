@@ -7,16 +7,28 @@ Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il t
 ## 0.5.14 — 2026-10-30
 
 Ciclo 05, nuovo obiettivo O23 (agenti di background via MiniMax, richiesta del proprietario del 30/10), task O23.T1:
-i segreti del proprietario arrivano sulla Deck senza passare dalla chat.
+le richieste al proprietario, segreti e domande, con una pagina monouso esposta solo fino alla risposta.
 
-- **`deck secret`:** mostra solo se la chiave MiniMax e la configurazione del bot Telegram ci sono (dimensione,
-  permessi, data); `request name=minimax|telegram` apre un link web monouso, `cancel` lo chiude.
-- **`agentdeck/secret_drop.py`**, unità a tempo `agentdeck-segreto`: server solo sull'indirizzo privato di casa
-  (INV-5), token da 192 bit, 15 minuti, un solo valore valido, al massimo 5 valori sbagliati e 20 indirizzi sbagliati;
-  scrittura atomica 600; il valore mai in schermate, registri, argomenti dei processi o chat (INV-4, INV-6).
-- **Regola degli agenti:** "Secrets of the owner" nel `CLAUDE.md` di sistema; `/secret` tra le schermate.
-- **Test:** 14 nuovi, con un server vero su 127.0.0.1; 372 in tutto. **Documentazione:** `docs/segreti.md`, nuovo,
-  nell'indice; `docs/deck.md`, `docs/agente-interno.md`, `docs/telegram.md`, `README.md`.
+- **Decisione del proprietario (INV-5, N72):** ogni richiesta genera una pagina HTML semplice, esposta su internet con
+  un tunnel temporaneo di Cloudflare solo fino alla risposta, poi tutto si chiude. In alternativa solo in casa
+  (`via=home`).
+- **`agentdeck/owner_page.py`**, unità a tempo `agentdeck-pagina`: token da 192 bit, 15 minuti, un solo invio valido,
+  al massimo 5 invii sbagliati e 20 indirizzi sbagliati, un thread per connessione; `cloudflared` come processo figlio
+  che vive quanto il server, uscita buttata; link dato solo quando la pagina risponde davvero.
+- **`deck secret`:** `request name=minimax|telegram|<qualunque>`, il valore va nel file 600 e mai in schermate,
+  registri, processi o chat; mostra solo se i segreti ci sono. **`deck ask`:** `create` con campi (testo, testo
+  lungo, scelta), `show` con la risposta come dato, `cancel`.
+- **Prova reale:** chiave MiniMax ricevuta col tunnel (`cloudflared` 2026.10.2 da extra, snapshot 213-214); prima
+  corsa vera dell'agente interno con `MiniMax-M3` (stato 200 nel registro dell'intermediario): R7 risolta.
+- **Incidente:** alle 00:17 il timer dell'agente interno, alla prima corsa vera, ha fatto da solo `deck update apply`
+  (8 pacchetti, snapshot 215-218) e il riavvio. Sistema sano dopo; timer fermato e disabilitato; **`deck release`
+  non accende più il timer** (lo installa soltanto). Limiti tecnici nella guardia per l'agente interno: prossimo passo
+  di O23.
+- **Regole degli agenti:** richieste al proprietario con la pagina monouso nel `CLAUDE.md` di sistema e nel prompt
+  dell'agente interno; `/secret` e `/ask` tra le schermate.
+- **Test:** 18 nuovi, con un server vero su 127.0.0.1 e un cloudflared finto; 376 in tutto. **Documentazione:**
+  `docs/richieste.md`, nuovo, nell'indice; `docs/deck.md`, `docs/agente-interno.md`, `docs/telegram.md`,
+  `docs/sviluppo.md`, `README.md`.
 
 ## 0.5.13 — 2026-10-29
 
