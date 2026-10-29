@@ -53,15 +53,16 @@ installate più di recente, sempre l'attiva e la precedente.
 2. rifiuta se cambiano `screen/` o `ui/`: `install-screen.sh` tocca la configurazione SSH e serve una procedura
    con verifica dell'accesso (INV-1), per ora con `deck/install.sh` dal Mac;
 3. snapshot del sistema, poi scambio del collegamento;
-4. passi di sistema: comando `deck`, hook di pacman degli obblighi, unità `agentdeck-sessione@`, configurazione di
+4. passi di sistema: comandi `deck` e `brain` ([brain.md](brain.md)), hook di pacman degli obblighi, unità `agentdeck-sessione@`, configurazione di
    Claude Code (`/etc/claude-code/CLAUDE.md` e `managed-settings.json`, stile di output, impostazioni utente con
-   `outputStyle`, `defaultMode: bypassPermissions` e `skipDangerousModePermissionPrompt`, skill, server MCP se
-   manca, versione di Claude Code fissata se non lo è, [claude-code.md](claude-code.md#aggiornamenti-versione-fissa-o18t2)).
+   `outputStyle`, `defaultMode: bypassPermissions` e `skipDangerousModePermissionPrompt`, skill, server MCP `deck` e
+   `brain` se mancano, versione di Claude Code fissata se non lo è, [claude-code.md](claude-code.md#aggiornamenti-versione-fissa-o18t2)).
    I passi li esegue il codice della versione nuova, così un passo aggiunto vale già alla sua prima installazione
    (la cartella di prima di O18.T1, che non ha `release.py`, usa quelli di chi chiama). `agentdeck-claude` non si
    riavvia: la configurazione nuova vale per le sessioni aperte dopo;
 5. verifica: `deck status` risponde, `deck mcp` parte, la guardia rifiuta ancora un comando che taglia l'accesso,
-   `sshd` è attivo. Se una verifica fallisce, torna da solo alla versione di prima e rifà i suoi passi di sistema.
+   `sshd` è attivo; se la versione li ha, `brain` e `brain mcp` partono (non si guarda il database delle memorie,
+   così un suo problema non fa tornare indietro il sistema) e l'intermediario dell'agente interno risponde. Se una verifica fallisce, torna da solo alla versione di prima e rifà i suoi passi di sistema.
 
 **`deck release revert [id=<versione>]`**, di norma la precedente: snapshot, scambio, passi di sistema e verifica,
 con lo stesso ritorno automatico. Un revert fatto due volte torna avanti.

@@ -4,6 +4,24 @@ Storia delle versioni di AgentDeck. Schema MAJOR.MINOR.PATCH gestito dalla gover
 sale a ogni task completata, il secondo a ogni ciclo chiuso, il primo solo con il sì dell'utente.
 Ogni versione è pubblicata su https://github.com/panicDa3m0n/agentdeck con il tag `v<versione>`.
 
+## 0.5.13 — 2026-10-29
+
+Ciclo 05, obiettivo O22 (piano punto 7), task O22.T1, ripresa su richiesta del proprietario: il Brain e la memoria.
+
+- **`brain`**, comando e server MCP (`brain mcp`, strumenti `mcp__brain__*`) separati da `deck` ma sullo stesso
+  motore: il motore prende il nome del comando per i suoi testi e se portare gli obblighi; il server MCP prende
+  nome e istruzioni.
+- **`brain /memory`:** memorie come pacchetti JSON piccoli in SQLite con FTS5 (id, tipo, testo, etichette, stato,
+  origine, revisione); `search`, `show`, `save` con l'origine presa dalla sessione e dalla sua trascrizione e con le
+  memorie simili, `edit` con revisioni, `deprecate`, `restore`, `supersede`, `merge` collegati per id, `forget`
+  distruttiva con conferma e senza tracce nel file. Testi solo nei dati (INV-4), segreti rifiutati (INV-6).
+- **`deck release`:** installa `/usr/local/bin/brain`, registra il server MCP `brain`, verifica che `brain` e
+  `brain mcp` partano. Impostazioni gestite: strumenti `mcp__brain` permessi. Agente interno: anche il server `brain`.
+- **Regole degli agenti:** "Memory is `brain`" nel `CLAUDE.md` di sistema e nel prompt dell'agente interno.
+- **Test:** 24 nuovi, 358 in tutto. **Documentazione:** `docs/brain.md`, nuovo, nell'indice; `docs/deck.md`,
+  `docs/protocollo.md`, `docs/sviluppo.md`, `docs/claude-code.md`, `docs/agente-interno.md`, `docs/schermo.md`,
+  `docs/piano.md`, `README.md`.
+
 ## 0.5.12 — 2026-10-29
 
 Ciclo 05, nuovo obiettivo O21 (piano punto 3), task O21.T1: il ponte Telegram con il proprietario.

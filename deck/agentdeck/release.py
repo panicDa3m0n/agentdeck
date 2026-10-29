@@ -251,6 +251,10 @@ class Releases:
         steps = [
             ("deck command", ["sudo", "-n", "sh", "-c",
                               f'chmod +x {cur}/deck && ln -sfn {cur}/deck /usr/local/bin/deck']),
+            # il comando del Brain (O22.T1), dalle versioni che lo hanno
+            ("brain command", ["sudo", "-n", "sh", "-c",
+                               f'test ! -f {cur}/brain || (chmod +x {cur}/brain && '
+                               f'ln -sfn {cur}/brain /usr/local/bin/brain)']),
             ("pacman hook", ["sudo", "-n", "sh", "-c",
                              f'install -D -m 0755 -o root -g root {cur}/system/obligations-hook.sh '
                              f'/usr/local/lib/agentdeck/obligations-hook.sh && install -D -m 0644 '
@@ -290,6 +294,9 @@ class Releases:
             ("claude mcp", ["sh", "-c", f'"$1" mcp get deck >/dev/null 2>&1 || '
                                         f'"$1" mcp add --transport stdio --scope user deck -- /usr/local/bin/deck mcp',
                             "sh", str(CLAUDE_BIN)]),
+            ("claude mcp brain", ["sh", "-c", f'test ! -f {cur}/brain || "$1" mcp get brain >/dev/null 2>&1 || '
+                                              f'"$1" mcp add --transport stdio --scope user brain -- '
+                                              f'/usr/local/bin/brain mcp', "sh", str(CLAUDE_BIN)]),
         ]
         results = []
         for name, argv in steps:
@@ -316,7 +323,8 @@ class Releases:
         return [{"step": "apply from the active version", "ok": False, "output": _tail(out.stderr + out.stdout)}]
 
     def verify(self) -> list:
-        """Dopo lo scambio: deck risponde, il server MCP parte, la guardia rifiuta, sshd è attivo (INV-1)."""
+        """Dopo lo scambio: deck risponde, il server MCP parte, la guardia rifiuta, sshd è attivo (INV-1); brain e
+        l'intermediario dell'agente interno, se la versione li ha."""
         checks = []
         status = self.sys.run(["/usr/local/bin/deck", "status"], timeout=60)
         try:
@@ -332,6 +340,17 @@ class Releases:
                        "output": "" if guard.returncode == 2 else _tail(guard.stderr + guard.stdout)})
         sshd = self.sys.run(["systemctl", "is-active", "sshd"], timeout=30)
         checks.append({"check": "sshd active", "ok": sshd.stdout.strip() == "active", "output": sshd.stdout.strip()})
+        if (self.current / "brain").is_file():
+            # il Brain (O22.T1): solo che il comando e il server partano, non lo stato del suo database, perché un
+            # problema della memoria non deve far tornare indietro il sistema
+            home = self.sys.run(["/usr/local/bin/brain"], timeout=30)
+            try:
+                ok = json.loads(home.stdout).get("screen") == "brain.home"
+            except ValueError:
+                ok = False
+            checks.append({"check": "brain", "ok": ok, "output": "" if ok else _tail(home.stdout + home.stderr)})
+            served = self.sys.run(["/usr/local/bin/brain", "mcp"], timeout=30, stdin="")
+            checks.append({"check": "brain mcp", "ok": served.returncode == 0, "output": _tail(served.stderr)})
         if (self.current / "claude" / "agentdeck-agente-proxy.service").is_file():
             # l'intermediario dell'agente interno risponde (O20.T1); ritenta per qualche secondo dopo il riavvio
             proxy = self.sys.run(["sh", "-c", 'for i in 1 2 3 4 5 6 7 8 9 10; do '

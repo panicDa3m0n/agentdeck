@@ -50,6 +50,10 @@ Dove è registrato:
 - **sul Mac**, per le sessioni in questo repository: [../.mcp.json](../.mcp.json) avvia `ssh agentdeck deck mcp`.
   Claude Code chiede di approvarlo alla prima apertura.
 
+**Lo stesso server per `brain`.** `mcp.Server` prende nome, titolo, istruzioni e punto di partenza: `brain mcp` lo
+usa con i componenti del Brain, così i suoi strumenti si chiamano `mcp__brain__<componente>_<azione>` e le risorse
+`brain:<indirizzo>` ([brain.md](brain.md)).
+
 Verifiche del 26/10/2026:
 - dal Mac, con un client JSON-RPC via SSH: inizializzazione, 19 strumenti, `open /status`, `service_show`,
   errore `NOT_FOUND` come risultato di errore, lettura di una risorsa, tutto in 1,7 secondi;
@@ -405,7 +409,7 @@ hanno ancora un'azione collegata.
 |---|---|
 | [../deck/deck](../deck/deck) | Comando eseguibile: avvia la riga di comando |
 | [../deck/agentdeck/cli.py](../deck/agentdeck/cli.py) | Legge la chiamata, aggiunge `meta`, valida la schermata, stampa il JSON, imposta l'uscita |
-| [../deck/agentdeck/engine.py](../deck/agentdeck/engine.py) | Motore: indirizzi, componenti, validazione dei parametri, conferme, schermate di errore |
+| [../deck/agentdeck/engine.py](../deck/agentdeck/engine.py) | Motore: indirizzi, componenti, validazione dei parametri, conferme, schermate di errore. `Deck(componenti, command=..., obligations=...)`: il nome del comando citato nei testi e se le schermate portano gli obblighi; `brain` lo usa con `command="brain"` e senza obblighi ([brain.md](brain.md)) |
 | [../deck/agentdeck/protocol.py](../deck/agentdeck/protocol.py) | Costruzione e validazione delle schermate; `SysText` e `sys_text()` per il canale istruzioni |
 | [../deck/agentdeck/confirm.py](../deck/agentdeck/confirm.py) | Codici di conferma: una azione, quei parametri, 5 minuti, una volta sola |
 | [../deck/agentdeck/mcp.py](../deck/agentdeck/mcp.py) | Server MCP: strumenti dalle azioni, risorse, JSON-RPC su stdio (`deck mcp`) |

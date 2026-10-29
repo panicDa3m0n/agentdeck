@@ -164,7 +164,10 @@ Oltre ai quattro strati, la sessione ha `deck` come strumento nativo:
 - espone `mcp__deck__open` per qualunque schermata e uno strumento per ogni azione, ad esempio
   `mcp__deck__snapshot_create` e `mcp__deck__service_restart`; dettagli in [deck.md](deck.md), "Server MCP";
 - le impostazioni gestite li permettono tutti, senza chiedere a una persona (sezione "Permessi"), salvo le azioni sui
-  servizi dell'utente.
+  servizi dell'utente;
+- allo stesso modo c'è il server MCP `brain`, la memoria dell'agente (O22.T1): registrato da `deck release install`
+  (passo "claude mcp brain") con `/usr/local/bin/brain mcp`, strumenti `mcp__brain__*` permessi dalle impostazioni
+  gestite, regola "Memory is `brain`" nel `CLAUDE.md` di sistema ([brain.md](brain.md)).
   Le azioni distruttive restano protette da `deck` stesso: prima l'anteprima, poi il codice di conferma;
 - `CLAUDE.md` indica gli strumenti MCP come via principale e la riga di comando `deck` come alternativa;
 - i programmi interattivi passano dall'adattatore, gli strumenti `mcp__deck__term_*` ([adattatore.md](adattatore.md)):
@@ -263,7 +266,7 @@ delle credenziali. La decisione è anche in [../PRINCIPI.md](../PRINCIPI.md).
 
 | Pezzo | Cosa fa |
 |---|---|
-| `permissions.allow` nelle impostazioni gestite | Permette Bash, le modifiche di file, letture e ricerche, il web, i subagenti, i messaggi alle altre sessioni (`SendMessage`: sulla Deck nessuno può confermare un clic) e gli strumenti `mcp__deck`: nessuna domanda per il lavoro di sistema |
+| `permissions.allow` nelle impostazioni gestite | Permette Bash, le modifiche di file, letture e ricerche, il web, i subagenti, i messaggi alle altre sessioni (`SendMessage`: sulla Deck nessuno può confermare un clic) e gli strumenti `mcp__deck` e `mcp__brain`: nessuna domanda per il lavoro di sistema |
 | [../deck/agentdeck/ownership.py](../deck/agentdeck/ownership.py) | Riconosce ciò che è dell'utente: percorsi dei servizi, unità `agentdeck-servizio@`, credenziali; distingue le letture dagli interventi |
 | [../deck/claude/guard.py](../deck/claude/guard.py), hook `PreToolUse` su Bash, modifiche di file e strumenti di `deck` | Quando un intervento tocca qualcosa dell'utente risponde `permissionDecision: "deny"` con il motivo, e l'agente prosegue con altro e lo riporta (dal 29/10/2026; prima era `"ask"`, una domanda all'utente) |
 | `CLAUDE.md`, guardia, skill, prompt di `deck term` | Niente più "chiedi al proprietario" per modifiche di sistema; si chiede solo per servizi, credenziali e segreti |

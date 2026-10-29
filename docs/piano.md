@@ -26,8 +26,11 @@ può gestire, per rivederle insieme alla fine.
 - **Fatti dopo:** agente interno (O20, v0.5.9-0.5.11) e Telegram (O21, v0.5.12), chiusi come bloccati in attesa
   della prova reale con la chiave MiniMax (R7) e con il bot (R8).
 - **Da rivedere alla fine con l'utente:** la tabella delle richieste con `deck requests` (O19.T2) e l'arbitro agentico
-  (O19.T3); il Brain (O22: memoria, pacchetti di contesto, ricerca ibrida, manutenzione). Non sviluppati dall'agente
-  in questa sessione; restano annotati nella governance (O19.T2 e O22.T1 bloccate, N69).
+  (O19.T3). Non sviluppati dall'agente nella sessione `gestione-deck-2`; restano annotati nella governance (O19.T2
+  bloccata, N69).
+- **Brain (O22), ripreso su richiesta del proprietario il 29/10 sera** (sessione `gestione-deck-3`): O22.T1 fatto,
+  comando e server MCP `brain` con la memoria in SQLite e ricerca testuale ([brain.md](brain.md)). Restano O22.T2
+  (pacchetti di contesto), O22.T3 (ricerca ibrida, modelli locali da scegliere insieme) e O22.T4 (manutenzione).
 
 ## Punto 10 — Sviluppo di AgentDeck sulla Deck (DECISO)
 
@@ -210,6 +213,9 @@ Due famiglie di comandi distinte:
 - **Tabelle**: su Arch si può usare SQLite (un file, nessun server) con FTS5 per la ricerca testuale e
   `sqlite-vec` per i vettori, oppure PostgreSQL con pgvector. È più pesante ma ha un server dedicato.
   Proposta: SQLite, un database del brain in una cartella propria, coperto dagli snapshot Btrfs.
+  **Fatto in O22.T1:** SQLite con FTS5 in `~/.local/share/agentdeck/brain/` ([brain.md](brain.md)). `/home` sta nel
+  sottovolume `@home`, che snapper non fotografa: un rollback del sistema non tocca le memorie, ma la loro copia
+  (snapshot o backup propri) resta da fare in O22.T4.
 - **INV-7 e modello di embedding**: risolto dalla modifica di INV-7 descritta sopra. Ogni modello locale
   (embedding, reranker, Laya) va proposto e approvato prima dell'installazione.
 - **Hardware**: la Deck ha una APU AMD e niente CUDA. Prestazioni da misurare su CPU, ed eventualmente sulla GPU

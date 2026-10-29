@@ -70,7 +70,8 @@ lo genera in ogni versione come `claude/AGENTE.md`. Contiene:
 prompt e le ultime corse. `deck agent run task=<compito> [timeout_s=…]` lancia `claude -p` in `~/agentdeck/agente` con:
 - il prompt di sistema (`--system-prompt`);
 - `--permission-mode bypassPermissions`;
-- gli strumenti `Bash,Read,Grep,Glob` e quelli di `deck` (`--mcp-config`, `--strict-mcp-config`);
+- gli strumenti `Bash,Read,Grep,Glob` e quelli di `deck` e di `brain`, la memoria ([brain.md](brain.md))
+  (`--mcp-config`, `--strict-mcp-config`);
 - `ANTHROPIC_BASE_URL` sull'intermediario, con una chiave locale finta (quella vera la mette l'intermediario);
 - gli hook gestiti attivi: guardia, `deny`, avvisi.
 

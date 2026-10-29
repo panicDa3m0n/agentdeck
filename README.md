@@ -19,6 +19,8 @@ I principi completi sono in [PRINCIPI.md](PRINCIPI.md).
 - `deck`, l'interfaccia di sistema per agenti, installata sulla Deck: `ssh agentdeck deck`, e come server MCP
   per Claude Code con `deck mcp` (vedi [docs/deck.md](docs/deck.md) e il protocollo in
   [docs/protocollo.md](docs/protocollo.md)).
+- `brain`, la memoria dell'agente, separata da `deck` ma sullo stesso protocollo: `brain /memory`, e come server MCP
+  con `brain mcp` (vedi [docs/brain.md](docs/brain.md)).
 - Lo schermo della Deck è calmo e mostra interfacce effimere quando servono, per ora le sessioni Claude
   (vedi [docs/interfacce.md](docs/interfacce.md)); i comandi dell'agente restano nel registro
   ([docs/schermo.md](docs/schermo.md)).
@@ -40,6 +42,7 @@ L'indice completo è in [docs/README.md](docs/README.md).
 | [docs/accesso.md](docs/accesso.md) | Come l'agente raggiunge la Deck, sicurezza e recupero |
 | [docs/protocollo.md](docs/protocollo.md) | Protocollo dell'interfaccia agentica: schermate, azioni, conferme, autoprompting |
 | [docs/deck.md](docs/deck.md) | Il motore `deck`: uso, server MCP, codice, installazione, nuovi componenti |
+| [docs/brain.md](docs/brain.md) | Il Brain: la memoria dell'agente (`brain`), ricerca, revisioni, collegamenti |
 | [docs/adattatore.md](docs/adattatore.md) | L'adattatore dei programmi interattivi (`deck term`) e i profili |
 | [docs/obblighi.md](docs/obblighi.md) | Gli obblighi che il sistema dà all'agente (`deck obligations`) |
 | [docs/servizi.md](docs/servizi.md) | L'area dei servizi ospitati dalla Deck (`/srv/servizi`) |

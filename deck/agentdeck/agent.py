@@ -29,6 +29,7 @@ PROMPT = ROOT / "claude" / "AGENTE.md"
 WORKDIR = HOME / "agentdeck" / "agente"
 CLAUDE_BIN = HOME / ".local" / "bin" / "claude"
 DECK = "/usr/local/bin/deck"
+BRAIN = "/usr/local/bin/brain"
 TOOLS = "Bash,Read,Grep,Glob"
 TIMEOUT_S, TIMEOUT_MAX_S = 600, 1800
 TASK_MAX = 4000
@@ -104,7 +105,8 @@ class Agent:
                 "workdir": str(self.workdir), "runs_file": str(self.runs_file), "recent_runs": self.runs(5)}
 
     def _argv(self, task: str) -> list:
-        mcp = json.dumps({"mcpServers": {"deck": {"type": "stdio", "command": DECK, "args": ["mcp"]}}})
+        mcp = json.dumps({"mcpServers": {"deck": {"type": "stdio", "command": DECK, "args": ["mcp"]},
+                                         "brain": {"type": "stdio", "command": BRAIN, "args": ["mcp"]}}})
         return [str(CLAUDE_BIN), "-p", task, "--output-format", "json", "--permission-mode", "bypassPermissions",
                 "--system-prompt", self.prompt.read_text(), "--tools", TOOLS, "--mcp-config", mcp,
                 "--strict-mcp-config"]

@@ -126,6 +126,9 @@ pacchetto, scrivere il profilo dell'adattatore dei programmi nuovi. Deciso nella
 obblighi aperti, al più 5 più un riepilogo, nel campo facoltativo `obligations`. Manca del tutto quando non ce ne
 sono, quindi le schermate di prima restano identiche.
 
+Il campo `obligations` è di `deck`: le schermate di `brain`, che usa lo stesso protocollo per la memoria
+dell'agente, non lo portano ([brain.md](brain.md)).
+
 ```json
 "obligations": [{"id": "1adb3d", "code": "PROFILE_NEEDED", "level": "warning",
                  "message": "Package cowsay installed programs without an adapter profile (obligation 1adb3d). ...",

@@ -13,7 +13,8 @@
       "WebSearch",
       "Task",
       "SendMessage",
-      "mcp__deck"
+      "mcp__deck",
+      "mcp__brain"
     ],
     "deny": [
       "Bash(*systemctl stop sshd*)",

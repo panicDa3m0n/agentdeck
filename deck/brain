@@ -1,0 +1,15 @@
+#!/usr/bin/env python3
+"""brain: il Brain di AgentDeck, i processi interni dell'agente a partire dalla memoria. Risponde con schermate JSON.
+
+Uso: brain [indirizzo] [azione] [nome=valore ...] [--pretty]
+     brain mcp   (server MCP su stdio)
+Documentazione: docs/brain.md. Specifica del protocollo, comune a deck: docs/protocollo.md.
+"""
+import os
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)))
+
+from agentdeck.brain.cli import main  # noqa: E402
+
+sys.exit(main())

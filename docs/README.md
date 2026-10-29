@@ -44,6 +44,9 @@ documento (invariante INV-9). Quando si modifica il codice, si aggiorna il docum
   un componente. Codice: [../deck/](../deck/deck), [../deck/agentdeck/mcp.py](../deck/agentdeck/mcp.py).
 - [adattatore.md](adattatore.md): l'adattatore dei programmi interattivi, `deck term`: un programma in tmux come
   schermata JSON, domande riconosciute, profili scritti dall'agente. Codice: [../deck/agentdeck/term.py](../deck/agentdeck/term.py).
+- [brain.md](brain.md): il Brain, la memoria dell'agente (`brain`, `brain mcp`): pacchetti piccoli in SQLite con
+  provenienza, ricerca testuale, revisioni, sostituzioni e accorpamenti, nessun segreto. Codice:
+  [../deck/agentdeck/brain/](../deck/agentdeck/brain/__init__.py).
 - [obblighi.md](obblighi.md): gli obblighi che il sistema dà all'agente (`deck obligations`), dall'hook di pacman
   al campo `obligations` di ogni schermata. Codice: [../deck/agentdeck/obligations.py](../deck/agentdeck/obligations.py).
 - [interfacce.md](interfacce.md): le interfacce effimere sullo schermo della Deck: le sette regole dello stile,

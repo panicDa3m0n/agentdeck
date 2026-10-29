@@ -59,6 +59,8 @@ Indice: [README.md](README.md).
 3. **Esiti di `deck`.** Ogni chiamata scrive nel journal, con identificatore `agentdeck`, una riga
    `indirizzo|azione|stato|codice|avvisi` (funzione `call_summary` in
    [../deck/agentdeck/cli.py](../deck/agentdeck/cli.py)). Non succede durante i test (`AGENTDECK_NO_LOG`).
+   Le chiamate di `brain` scrivono la stessa riga con il comando davanti all'indirizzo, `brain /memory|search|…`,
+   senza parametri: i testi delle memorie non finiscono nel journal ([brain.md](brain.md)).
 4. **Lo schermo.** Il servizio [../deck/screen/agentdeck-screen.service](../deck/screen/agentdeck-screen.service)
    prende il posto del login su `tty1` (`getty@tty1` è mascherato) e avvia
    [../deck/screen/agentdeck_screen.py](../deck/screen/agentdeck_screen.py), che segue il journal e stampa le

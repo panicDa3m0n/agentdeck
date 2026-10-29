@@ -88,10 +88,16 @@ class Component:
 
 
 class Deck:
-    """L'insieme dei componenti e le regole comuni per usarli."""
+    """L'insieme dei componenti e le regole comuni per usarli.
 
-    def __init__(self, components: list):
+    command è il comando che serve queste schermate, citato nei testi: deck, oppure brain per il Brain
+    (docs/brain.md), che usa lo stesso motore con componenti suoi. obligations dice se le schermate portano con sé
+    gli obblighi aperti del sistema (protocollo, sezione 6 bis): sì per deck, no per brain.
+    """
+
+    def __init__(self, components: list, command: str = "deck", obligations: bool = True):
         self.components = {c.path: c for c in components}
+        self.command, self.obligations = command, obligations
 
     def home_children(self) -> list:
         return [child(c.path, title=c.title, summary=c.summary)
@@ -105,12 +111,13 @@ class Deck:
             raise DeckError("NOT_FOUND", sys_text("There is no screen at this address."),
                             title=sys_text("Address not found"), path=path if is_path(path) else "/",
                             children=self.home_children(),
-                            prompt=sys_text("Open one of the components listed in nav.children, or run `deck` "
-                                            "to start from the home screen."))
+                            prompt=sys_text("Open one of the components listed in nav.children, or run `{cmd}` "
+                                            "to start from the home screen.", cmd=self.command))
         if action_id is None:
             if raw:
                 raise self._bad_param(component, None, sys_text("Parameters need an action: "
-                                                                "`deck <path> <action> name=value`."))
+                                                                "`{cmd} <path> <action> name=value`.",
+                                                                cmd=self.command))
             return component.view(ctx)
 
         specs = {a["id"]: a for a in component.actions(ctx)}
@@ -119,13 +126,14 @@ class Deck:
             raise DeckError("NOT_FOUND", sys_text("This screen has no such action."),
                             title=sys_text("Action not found"), path=path, back=path,
                             data={"available_actions": sorted(specs)},
-                            prompt=sys_text("Use one of data.available_actions, or open `deck {path}` to see "
-                                            "each action with its parameters.", path=path))
+                            prompt=sys_text("Use one of data.available_actions, or open `{cmd} {path}` to see "
+                                            "each action with its parameters.", cmd=self.command, path=path))
         if not spec["available"]:
             raise DeckError("NOT_AVAILABLE", spec["reason"], title=sys_text("Action not available"),
                             path=path, back=path,
                             prompt=sys_text("This action cannot run now: the message explains why. Open "
-                                            "`deck {path}` to check the current state.", path=path))
+                                            "`{cmd} {path}` to check the current state.", cmd=self.command,
+                                            path=path))
 
         raw = dict(raw)
         token = raw.pop("confirm", None) if spec["confirm"] else None
@@ -160,8 +168,8 @@ class Deck:
                          back=component.path,
                          field_name=name if name and _NAME.fullmatch(name) else None,
                          prompt=sys_text("Fix the parameter named in error.field and repeat the call. Open "
-                                         "`deck {path}` to see each action with its parameters.",
-                                         path=component.path))
+                                         "`{cmd} {path}` to see each action with its parameters.",
+                                         cmd=self.command, path=component.path))
 
     def _parse(self, component: Component, spec: dict, raw: dict) -> dict:
         """Valida i parametri nome=valore contro la specifica dell'azione (sezione 5)."""
@@ -206,13 +214,14 @@ class Deck:
         data.update(extra or {})
         return screen(screen="error", path="/", title=sys_text("Internal error"), status="error", data=data,
                       back=None, children=self.home_children(),
-                      prompt=sys_text("deck failed internally. Report data.exception and data.detail; do not "
-                                      "repeat the same call unchanged."),
-                      error=error_info("FAILED", sys_text("The operation failed inside deck.")))
+                      prompt=sys_text("{cmd} failed internally. Report data.exception and data.detail; do not "
+                                      "repeat the same call unchanged.", cmd=self.command),
+                      error=error_info("FAILED", sys_text("The operation failed inside {cmd}.", cmd=self.command)))
 
 
 def call_tokens(args: list) -> tuple:
-    """Divide gli argomenti in indirizzo, azione e parametri: deck [indirizzo] [azione] [nome=valore ...]."""
+    """Divide gli argomenti in indirizzo, azione e parametri: deck [indirizzo] [azione] [nome=valore ...]
+    (lo stesso per brain)."""
     words = [a for a in args if "=" not in a]
     raw: dict = {}
     for a in args:
