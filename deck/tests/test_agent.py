@@ -115,8 +115,13 @@ class ScreenTests(Fixture):
 
 class PromptTests(unittest.TestCase):
     def test_agent_prompt_has_identity_rules_and_invariants(self):
-        out = subprocess.run([sys.executable, str(ROOT / "claude" / "build_claude_md.py"), str(ROOT.parent),
-                              "AGENTE.template.md"], capture_output=True, text=True, check=True).stdout
+        # invarianti di prova: i test girano anche nella versione installata, dove .claude/ del repository non c'è
+        with tempfile.TemporaryDirectory() as repo:
+            inv = Path(repo) / ".claude" / "workflow" / "invariants.json"
+            inv.parent.mkdir(parents=True)
+            inv.write_text(json.dumps({"items": [{"id": "INV-1", "testo": "L'accesso remoto non si perde mai."}]}))
+            out = subprocess.run([sys.executable, str(ROOT / "claude" / "build_claude_md.py"), repo,
+                                  "AGENTE.template.md"], capture_output=True, text=True, check=True).stdout
         self.assertIn("You are AgentDeck, built by HoneyLabs", out)
         self.assertNotIn("Claude agent", out)
         self.assertIn("Proposals for the owner", out)
