@@ -1593,3 +1593,6 @@
 {"at": "2026-10-29 21:34", "testo": "TASK CHIUSA O20.T1 — completata: Intermediario su 127.0.0.1:8791: toglie la riga Claude, adatta modello e parametri, inoltra con la chiave; provato con claude -p e MiniMax finto; v0.5.9"}
 {"at": "2026-10-29 21:34", "testo": "VERSIONE 0.5.5 (O20.T1)"}
 {"at": "2026-10-29 21:34", "testo": "TASK APERTA O20.T2 — Prompt di sistema AgentDeck e deck agent per lanciare l'agente su un compito | perimetro: deck/, docs/ | gate: Prompt di sistema generato dal sistema con l'identità AgentDeck di HoneyLabs, regole e invarianti; deck agent run lancia claude -p con quel prompt, strumenti deck, guardia e intermediario, e registra esito e attività; provato con il finto MiniMax e, con la chiave, con un compito di sola lettura; documentazione. | rischio: 30"}
+{"at": "2026-10-29 21:38", "testo": "TRAPPOLA registrata: deck release: anche l'estrazione (CLAUDE.md, AGENTE.md) la esegue la versione che lancia l'installazione: un file generato nuovo compare solo dalla seconda installazione"}
+{"at": "2026-10-29 21:38", "testo": "TASK CHIUSA O20.T2 — completata: Prompt AgentDeck (AGENTE.md) e deck agent run con prompt, strumenti deck, guardia e intermediario; corsa vera con MiniMax finto; v0.5.10"}
+{"at": "2026-10-29 21:38", "testo": "VERSIONE 0.5.5 (O20.T2)"}

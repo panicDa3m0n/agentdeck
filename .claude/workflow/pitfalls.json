@@ -125,6 +125,11 @@
       "id": "P25",
       "testo": "deck release: i passi di sistema devono girare dal codice della versione nuova, non da chi lancia l'installazione, altrimenti un passo aggiunto parte solo all'installazione dopo",
       "creata": "2026-10-29 20:47"
+    },
+    {
+      "id": "P26",
+      "testo": "deck release: anche l'estrazione (CLAUDE.md, AGENTE.md) la esegue la versione che lancia l'installazione: un file generato nuovo compare solo dalla seconda installazione",
+      "creata": "2026-10-29 21:38"
     }
   ]
 }

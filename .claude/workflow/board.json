@@ -3,7 +3,7 @@
   "project": "linuxai-steamdeck",
   "mode": "cycle",
   "created": "2026-10-26 11:36",
-  "updated": "2026-10-29 21:34",
+  "updated": "2026-10-29 21:38",
   "objectives": [
     {
       "id": "O12",
@@ -334,8 +334,8 @@
           "title": "Prompt di sistema AgentDeck e deck agent per lanciare l'agente su un compito",
           "scope": "deck/, docs/",
           "gate_pre": "Prompt di sistema generato dal sistema con l'identità AgentDeck di HoneyLabs, regole e invarianti; deck agent run lancia claude -p con quel prompt, strumenti deck, guardia e intermediario, e registra esito e attività; provato con il finto MiniMax e, con la chiave, con un compito di sola lettura; documentazione.",
-          "gate_post": "",
-          "state": "doing",
+          "gate_post": "Prompt AgentDeck (AGENTE.md) e deck agent run con prompt, strumenti deck, guardia e intermediario; corsa vera con MiniMax finto; v0.5.10",
+          "state": "done",
           "risk": 30,
           "risk_why": "Lancia un agente con strumenti veri; guardia, deny e snapshot restano, le azioni rischiose solo proposte.",
           "docs": []
@@ -453,18 +453,18 @@
   ],
   "active": {
     "objective": "O20",
-    "task": "O20.T2",
-    "phase": "in_progress",
-    "risk": 30,
-    "risk_why": "Lancia un agente con strumenti veri; guardia, deny e snapshot restano, le azioni rischiose solo proposte.",
+    "task": "",
+    "phase": "idle",
+    "risk": null,
+    "risk_why": "",
     "hold_invariants": "",
     "hold_plan": "",
     "gate_done": ""
   },
   "previous": {
-    "task": "O20.T1",
+    "task": "O20.T2",
     "state": "done",
-    "note": "Intermediario su 127.0.0.1:8791: toglie la riga Claude, adatta modello e parametri, inoltra con la chiave; provato con claude -p e MiniMax finto; v0.5.9"
+    "note": "Prompt AgentDeck (AGENTE.md) e deck agent run con prompt, strumenti deck, guardia e intermediario; corsa vera con MiniMax finto; v0.5.10"
   },
   "cycle": {
     "n": 5,
