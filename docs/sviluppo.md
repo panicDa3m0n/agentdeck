@@ -121,6 +121,11 @@ git push origin main && git push origin v0.1.3
 
 ## Governance
 
+**Spenta dal 30/10/2026**, per decisione del proprietario: lo sviluppo si organizza per componenti, con
+[componenti/README.md](componenti/README.md). I file della governance (`.claude/workflow/`, `PROGETTO.md`,
+`ROADMAP.md`) restano nel repository solo per controllo e per un'eventuale riattivazione
+(`~/claude-rules/bin/wf.sh bg --attiva`). Quello che segue descrive come funzionava.
+
 Il progetto usa Behaviour Governance: roadmap per cicli, obiettivi e task con un gate verificabile,
 invarianti controllate a ogni passo.
 

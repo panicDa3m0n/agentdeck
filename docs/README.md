@@ -5,6 +5,9 @@ documento (invariante INV-9). Quando si modifica il codice, si aggiorna il docum
 
 ## Progetto
 
+- [componenti/README.md](componenti/README.md): **l'indice dei componenti di AgentDeck** (gli organi del sistema),
+  con stato, funzionamento, comandi, previsto e fatto, issue e obiettivi di ciascuno. Dal 30/10/2026 è il modo in cui
+  si organizza lo sviluppo.
 - [../README.md](../README.md): panoramica di AgentDeck e struttura del repository.
 - [../PRINCIPI.md](../PRINCIPI.md): principi (agent-first, sviluppo incrementale, livello di intervento),
   visione e decisioni prese.

@@ -35,6 +35,7 @@ L'indice completo è in [docs/README.md](docs/README.md).
 | Documento | Contenuto |
 |---|---|
 | [PRINCIPI.md](PRINCIPI.md) | Principi, visione e decisioni prese |
+| [docs/componenti/README.md](docs/componenti/README.md) | **Indice dei componenti**: stato, comandi, previsto e fatto, issue di ogni organo di AgentDeck |
 | [docs/architettura.md](docs/architettura.md) | Studio dell'architettura agent-first: strati del sistema, presupposti umani, proposte |
 | [docs/hardware.md](docs/hardware.md) | La Steam Deck: componenti, dischi, rete, limiti noti |
 | [docs/chiavetta-live.md](docs/chiavetta-live.md) | Chiavetta di avvio con Wi-Fi e SSH automatici, anche per il recupero |

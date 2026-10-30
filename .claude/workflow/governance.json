@@ -1,7 +1,7 @@
 {
-  "governance": "on",
+  "governance": "off",
   "system_version": 3,
   "created": "2026-10-25 15:28",
-  "decided": "2026-10-25 15:45",
-  "why": ""
+  "decided": "2026-10-30 11:56",
+  "why": "Decisione del proprietario del 30/10/2026: da oggi si lavora per componenti di sviluppo (organi di AgentDeck) con un indice documentale in docs/componenti/; i file della governance restano nel repository solo per controllo e per un'eventuale riattivazione."
 }
